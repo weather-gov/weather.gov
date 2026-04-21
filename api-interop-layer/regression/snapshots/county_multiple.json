@@ -1,0 +1,2813 @@
+{
+  "county": {
+    "state": "FL",
+    "county": "Columbia",
+    "primarywfo": "JAX",
+    "timezone": "America/New_York",
+    "shape": {
+      "type": "Polygon",
+      "coordinates": [
+        [
+          [
+            -82.583999634,
+            30.591812134
+          ],
+          [
+            -82.459495544,
+            30.584312439
+          ],
+          [
+            -82.457099915,
+            30.445713043
+          ],
+          [
+            -82.458396912,
+            30.136411667
+          ],
+          [
+            -82.458198547,
+            30.129711151
+          ],
+          [
+            -82.452697754,
+            30.122812271
+          ],
+          [
+            -82.457893372,
+            30.102712631
+          ],
+          [
+            -82.467895508,
+            30.097112656
+          ],
+          [
+            -82.497795105,
+            30.089111328
+          ],
+          [
+            -82.521896362,
+            30.072612762
+          ],
+          [
+            -82.535194397,
+            30.05531311
+          ],
+          [
+            -82.538993835,
+            30.04401207
+          ],
+          [
+            -82.538497925,
+            30.033811569
+          ],
+          [
+            -82.534797668,
+            30.031612396
+          ],
+          [
+            -82.536499023,
+            30.026012421
+          ],
+          [
+            -82.543395996,
+            30.020812988
+          ],
+          [
+            -82.563194275,
+            30.015611649
+          ],
+          [
+            -82.572898865,
+            30.010412216
+          ],
+          [
+            -82.572097778,
+            29.999912262
+          ],
+          [
+            -82.575294495,
+            29.991413116
+          ],
+          [
+            -82.569000244,
+            29.975511551
+          ],
+          [
+            -82.557495117,
+            29.969312668
+          ],
+          [
+            -82.554595947,
+            29.963912964
+          ],
+          [
+            -82.541496277,
+            29.963111877
+          ],
+          [
+            -82.530899048,
+            29.955812454
+          ],
+          [
+            -82.528594971,
+            29.941612244
+          ],
+          [
+            -82.530799866,
+            29.93221283
+          ],
+          [
+            -82.541694641,
+            29.926012039
+          ],
+          [
+            -82.547798157,
+            29.925611496
+          ],
+          [
+            -82.554496765,
+            29.928611755
+          ],
+          [
+            -82.567596436,
+            29.918012619
+          ],
+          [
+            -82.578094482,
+            29.91601181
+          ],
+          [
+            -82.575897217,
+            29.89491272
+          ],
+          [
+            -82.579994202,
+            29.89481163
+          ],
+          [
+            -82.579994202,
+            29.887611389
+          ],
+          [
+            -82.592597961,
+            29.887512207
+          ],
+          [
+            -82.592300415,
+            29.874212265
+          ],
+          [
+            -82.586799622,
+            29.867212296
+          ],
+          [
+            -82.606300354,
+            29.853111267
+          ],
+          [
+            -82.610595703,
+            29.85241127
+          ],
+          [
+            -82.619895935,
+            29.858812332
+          ],
+          [
+            -82.622497559,
+            29.85351181
+          ],
+          [
+            -82.617996216,
+            29.847911835
+          ],
+          [
+            -82.631195068,
+            29.848711014
+          ],
+          [
+            -82.63469696,
+            29.834211349
+          ],
+          [
+            -82.641296387,
+            29.827911377
+          ],
+          [
+            -82.649795532,
+            29.826313019
+          ],
+          [
+            -82.654998779,
+            29.829612732
+          ],
+          [
+            -82.673896786,
+            29.833412167
+          ],
+          [
+            -82.695396423,
+            29.835111618
+          ],
+          [
+            -82.704193115,
+            29.839511871
+          ],
+          [
+            -82.711196899,
+            29.847812653
+          ],
+          [
+            -82.732093811,
+            29.856712341
+          ],
+          [
+            -82.753295898,
+            29.881412506
+          ],
+          [
+            -82.753295898,
+            29.893011093
+          ],
+          [
+            -82.758895874,
+            29.89891243
+          ],
+          [
+            -82.768196106,
+            29.897613525
+          ],
+          [
+            -82.765693665,
+            29.908212662
+          ],
+          [
+            -82.772697449,
+            29.910112381
+          ],
+          [
+            -82.773895264,
+            29.912912369
+          ],
+          [
+            -82.770492554,
+            29.927211761
+          ],
+          [
+            -82.780296326,
+            29.926412582
+          ],
+          [
+            -82.784294128,
+            29.933012009
+          ],
+          [
+            -82.791694641,
+            29.935411453
+          ],
+          [
+            -82.794395447,
+            29.932012558
+          ],
+          [
+            -82.79940033,
+            29.932912827
+          ],
+          [
+            -82.785598755,
+            29.954912186
+          ],
+          [
+            -82.76309967,
+            29.964511871
+          ],
+          [
+            -82.759399414,
+            29.977111816
+          ],
+          [
+            -82.760398865,
+            29.985712051
+          ],
+          [
+            -82.76309967,
+            29.98661232
+          ],
+          [
+            -82.793998718,
+            29.986211777
+          ],
+          [
+            -82.794692993,
+            30.322113037
+          ],
+          [
+            -82.793197632,
+            30.326911926
+          ],
+          [
+            -82.775894165,
+            30.324012756
+          ],
+          [
+            -82.762199402,
+            30.330211639
+          ],
+          [
+            -82.759895325,
+            30.328012466
+          ],
+          [
+            -82.761192322,
+            30.325111389
+          ],
+          [
+            -82.747299194,
+            30.317512512
+          ],
+          [
+            -82.740196228,
+            30.321512222
+          ],
+          [
+            -82.736999512,
+            30.327913284
+          ],
+          [
+            -82.723899841,
+            30.333612442
+          ],
+          [
+            -82.72480011,
+            30.329011917
+          ],
+          [
+            -82.717597961,
+            30.321613312
+          ],
+          [
+            -82.7029953,
+            30.332712173
+          ],
+          [
+            -82.689697266,
+            30.333812714
+          ],
+          [
+            -82.681800842,
+            30.342111588
+          ],
+          [
+            -82.686698914,
+            30.3536129
+          ],
+          [
+            -82.675796509,
+            30.363111496
+          ],
+          [
+            -82.664794922,
+            30.36781311
+          ],
+          [
+            -82.662895203,
+            30.371212006
+          ],
+          [
+            -82.665794373,
+            30.378112793
+          ],
+          [
+            -82.658493042,
+            30.383712769
+          ],
+          [
+            -82.658096313,
+            30.390413284
+          ],
+          [
+            -82.647293091,
+            30.394712448
+          ],
+          [
+            -82.645797729,
+            30.407312393
+          ],
+          [
+            -82.650794983,
+            30.413011551
+          ],
+          [
+            -82.649497986,
+            30.418611526
+          ],
+          [
+            -82.653694153,
+            30.422012329
+          ],
+          [
+            -82.65259552,
+            30.429111481
+          ],
+          [
+            -82.659393311,
+            30.44021225
+          ],
+          [
+            -82.661392212,
+            30.438812256
+          ],
+          [
+            -82.67099762,
+            30.444711685
+          ],
+          [
+            -82.671798706,
+            30.448411942
+          ],
+          [
+            -82.668800354,
+            30.447011948
+          ],
+          [
+            -82.666297913,
+            30.450813293
+          ],
+          [
+            -82.662895203,
+            30.44931221
+          ],
+          [
+            -82.663093567,
+            30.451612473
+          ],
+          [
+            -82.671195984,
+            30.453212738
+          ],
+          [
+            -82.680099487,
+            30.461112976
+          ],
+          [
+            -82.680793762,
+            30.463611603
+          ],
+          [
+            -82.676597595,
+            30.465011597
+          ],
+          [
+            -82.677696228,
+            30.471511841
+          ],
+          [
+            -82.698699951,
+            30.475212097
+          ],
+          [
+            -82.70199585,
+            30.483112335
+          ],
+          [
+            -82.697898865,
+            30.484212875
+          ],
+          [
+            -82.697097778,
+            30.489612579
+          ],
+          [
+            -82.705299377,
+            30.492412567
+          ],
+          [
+            -82.707496643,
+            30.506113052
+          ],
+          [
+            -82.71509552,
+            30.506313324
+          ],
+          [
+            -82.718994141,
+            30.521112442
+          ],
+          [
+            -82.722496033,
+            30.517911911
+          ],
+          [
+            -82.72819519,
+            30.525712967
+          ],
+          [
+            -82.726997375,
+            30.530813217
+          ],
+          [
+            -82.714294434,
+            30.532411575
+          ],
+          [
+            -82.716697693,
+            30.540912628
+          ],
+          [
+            -82.722496033,
+            30.548311234
+          ],
+          [
+            -82.720794678,
+            30.552812576
+          ],
+          [
+            -82.725997925,
+            30.559211731
+          ],
+          [
+            -82.71559906,
+            30.565412521
+          ],
+          [
+            -82.717292786,
+            30.569313049
+          ],
+          [
+            -82.705299377,
+            30.576011658
+          ],
+          [
+            -82.703796387,
+            30.582212448
+          ],
+          [
+            -82.70639801,
+            30.583711624
+          ],
+          [
+            -82.695999146,
+            30.592611313
+          ],
+          [
+            -82.697296143,
+            30.594711304
+          ],
+          [
+            -82.691398621,
+            30.595012665
+          ],
+          [
+            -82.689598083,
+            30.597312927
+          ],
+          [
+            -82.583999634,
+            30.591812134
+          ]
+        ]
+      ]
+    },
+    "statename": "Florida",
+    "wfos": [],
+    "countyfips": "12023",
+    "statefips": "12"
+  },
+  "riskOverview": {
+    "wfo": "jax",
+    "days": [
+      {
+        "risks": {
+          "Lightning": {
+            "color": "#ededed",
+            "category": 0,
+            "levelName": "None",
+            "definition": "Little to no Lightning Risk."
+          },
+          "FireWeather": {
+            "color": "yellow",
+            "category": 1,
+            "levelName": "Limited",
+            "definition": "Limited Fire Weather Risk. Low relative humidity values possible, which may increase fire danger."
+          }
+        },
+        "composite": {
+          "max": 1,
+          "scaled": 0.25
+        },
+        "dayNumber": 1,
+        "timestamp": "2026-04-21T09:00:00-04:00"
+      },
+      {
+        "risks": {
+          "Lightning": {
+            "color": "#ededed",
+            "category": 0,
+            "levelName": "None",
+            "definition": "Little to no Lightning Risk."
+          },
+          "FireWeather": {
+            "color": "yellow",
+            "category": 1,
+            "levelName": "Limited",
+            "definition": "Limited Fire Weather Risk. Low relative humidity values possible, which may increase fire danger."
+          }
+        },
+        "composite": {
+          "max": 1,
+          "scaled": 0.25
+        },
+        "dayNumber": 2,
+        "timestamp": "2026-04-22T08:00:00-04:00"
+      },
+      {
+        "risks": {
+          "Lightning": {
+            "color": "#ededed",
+            "category": 0,
+            "levelName": "None",
+            "definition": "Little to no Lightning Risk."
+          },
+          "FireWeather": {
+            "color": "yellow",
+            "category": 1,
+            "levelName": "Limited",
+            "definition": "Limited Fire Weather Risk. Low relative humidity values possible, which may increase fire danger."
+          }
+        },
+        "composite": {
+          "max": 1,
+          "scaled": 0.25
+        },
+        "dayNumber": 3,
+        "timestamp": "2026-04-23T08:00:00-04:00"
+      },
+      {
+        "risks": {
+          "Lightning": {
+            "color": "#ededed",
+            "category": 0,
+            "levelName": "None",
+            "definition": "Little to no Lightning Risk."
+          },
+          "FireWeather": {
+            "color": "yellow",
+            "category": 1,
+            "levelName": "Limited",
+            "definition": "Limited Fire Weather Risk. Low relative humidity values possible, which may increase fire danger."
+          }
+        },
+        "composite": {
+          "max": 1,
+          "scaled": 0.25
+        },
+        "dayNumber": 4,
+        "timestamp": "2026-04-24T08:00:00-04:00"
+      },
+      {
+        "risks": {
+          "Lightning": {
+            "color": "yellow",
+            "category": 1,
+            "levelName": "Limited",
+            "definition": "Limited Lightning Risk. Isolated to scattered thunderstorms possible. Be aware of thunderstorms in your area and be prepared to take shelter."
+          },
+          "FireWeather": {
+            "color": "yellow",
+            "category": 1,
+            "levelName": "Limited",
+            "definition": "Limited Fire Weather Risk. Low relative humidity values possible, which may increase fire danger."
+          }
+        },
+        "composite": {
+          "max": 1,
+          "scaled": 0.33
+        },
+        "dayNumber": 5,
+        "timestamp": "2026-04-25T08:00:00-04:00"
+      },
+      {
+        "risks": {
+          "Lightning": {
+            "color": "yellow",
+            "category": 1,
+            "levelName": "Limited",
+            "definition": "Limited Lightning Risk. Isolated to scattered thunderstorms possible. Be aware of thunderstorms in your area and be prepared to take shelter."
+          },
+          "FireWeather": {
+            "color": "#ededed",
+            "category": 0,
+            "levelName": "None",
+            "definition": "No Fire Weather Risk."
+          }
+        },
+        "composite": {
+          "max": 1,
+          "scaled": 0.33
+        },
+        "dayNumber": 6,
+        "timestamp": "2026-04-26T08:00:00-04:00"
+      },
+      {
+        "risks": {
+          "Lightning": {
+            "color": "yellow",
+            "category": 1,
+            "levelName": "Limited",
+            "definition": "Limited Lightning Risk. Isolated to scattered thunderstorms possible. Be aware of thunderstorms in your area and be prepared to take shelter."
+          },
+          "FireWeather": {
+            "color": "#ededed",
+            "category": 0,
+            "levelName": "None",
+            "definition": "No Fire Weather Risk."
+          }
+        },
+        "composite": {
+          "max": 1,
+          "scaled": 0.33
+        },
+        "dayNumber": 7,
+        "timestamp": "2026-04-27T08:00:00-04:00"
+      }
+    ],
+    "fips": "12023",
+    "risks": {
+      "Lightning": {
+        "days": [
+          {
+            "color": "#ededed",
+            "image": "https://www.weather.gov/images/jax/ghwo/LightningDay1.jpg",
+            "category": 0,
+            "levelName": "None",
+            "timestamp": "2026-04-21T09:00:00-04:00",
+            "definition": "Little to no Lightning Risk."
+          },
+          {
+            "color": "#ededed",
+            "image": "https://www.weather.gov/images/jax/ghwo/LightningDay2.jpg",
+            "category": 0,
+            "levelName": "None",
+            "timestamp": "2026-04-22T08:00:00-04:00",
+            "definition": "Little to no Lightning Risk."
+          },
+          {
+            "color": "#ededed",
+            "image": "https://www.weather.gov/images/jax/ghwo/LightningDay3.jpg",
+            "category": 0,
+            "levelName": "None",
+            "timestamp": "2026-04-23T08:00:00-04:00",
+            "definition": "Little to no Lightning Risk."
+          },
+          {
+            "color": "#ededed",
+            "image": "https://www.weather.gov/images/jax/ghwo/LightningDay4.jpg",
+            "category": 0,
+            "levelName": "None",
+            "timestamp": "2026-04-24T08:00:00-04:00",
+            "definition": "Little to no Lightning Risk."
+          },
+          {
+            "color": "yellow",
+            "image": "https://www.weather.gov/images/jax/ghwo/LightningDay5.jpg",
+            "category": 1,
+            "levelName": "Limited",
+            "timestamp": "2026-04-25T08:00:00-04:00",
+            "definition": "Limited Lightning Risk. Isolated to scattered thunderstorms possible. Be aware of thunderstorms in your area and be prepared to take shelter."
+          },
+          {
+            "color": "yellow",
+            "image": "https://www.weather.gov/images/jax/ghwo/LightningDay6.jpg",
+            "category": 1,
+            "levelName": "Limited",
+            "timestamp": "2026-04-26T08:00:00-04:00",
+            "definition": "Limited Lightning Risk. Isolated to scattered thunderstorms possible. Be aware of thunderstorms in your area and be prepared to take shelter."
+          },
+          {
+            "color": "yellow",
+            "image": "https://www.weather.gov/images/jax/ghwo/LightningDay7.jpg",
+            "category": 1,
+            "levelName": "Limited",
+            "timestamp": "2026-04-27T08:00:00-04:00",
+            "definition": "Limited Lightning Risk. Isolated to scattered thunderstorms possible. Be aware of thunderstorms in your area and be prepared to take shelter."
+          }
+        ],
+        "name": "Lightning Risk",
+        "legend": {
+          "name": "Lightning Risk",
+          "scale": 3,
+          "category": {
+            "0": {
+              "color": "#ededed",
+              "category": 0,
+              "levelName": "None",
+              "definition": "Little to no Lightning Risk."
+            },
+            "1": {
+              "color": "yellow",
+              "category": 1,
+              "levelName": "Limited",
+              "definition": "Limited Lightning Risk. Isolated to scattered thunderstorms possible. Be aware of thunderstorms in your area and be prepared to take shelter."
+            },
+            "2": {
+              "color": "orange",
+              "category": 2,
+              "levelName": "Elevated",
+              "definition": "Elevated Lightning Risk. Numerous thunderstorms possible. Plan to stop all outdoor activity and move to shelters."
+            },
+            "3": {
+              "color": "red",
+              "category": 3,
+              "levelName": "Significant",
+              "definition": "Significant Lightning Risk. Widespread thunderstorms possible. Plan to stop all outdoor activity and move to shelters."
+            }
+          }
+        }
+      },
+      "FireWeather": {
+        "days": [
+          {
+            "color": "yellow",
+            "image": "https://www.weather.gov/images/jax/ghwo/FireWeatherDay1.jpg",
+            "category": 1,
+            "levelName": "Limited",
+            "timestamp": "2026-04-21T09:00:00-04:00",
+            "definition": "Limited Fire Weather Risk. Low relative humidity values possible, which may increase fire danger."
+          },
+          {
+            "color": "yellow",
+            "image": "https://www.weather.gov/images/jax/ghwo/FireWeatherDay2.jpg",
+            "category": 1,
+            "levelName": "Limited",
+            "timestamp": "2026-04-22T08:00:00-04:00",
+            "definition": "Limited Fire Weather Risk. Low relative humidity values possible, which may increase fire danger."
+          },
+          {
+            "color": "yellow",
+            "image": "https://www.weather.gov/images/jax/ghwo/FireWeatherDay3.jpg",
+            "category": 1,
+            "levelName": "Limited",
+            "timestamp": "2026-04-23T08:00:00-04:00",
+            "definition": "Limited Fire Weather Risk. Low relative humidity values possible, which may increase fire danger."
+          },
+          {
+            "color": "yellow",
+            "image": "https://www.weather.gov/images/jax/ghwo/FireWeatherDay4.jpg",
+            "category": 1,
+            "levelName": "Limited",
+            "timestamp": "2026-04-24T08:00:00-04:00",
+            "definition": "Limited Fire Weather Risk. Low relative humidity values possible, which may increase fire danger."
+          },
+          {
+            "color": "yellow",
+            "image": "https://www.weather.gov/images/jax/ghwo/FireWeatherDay5.jpg",
+            "category": 1,
+            "levelName": "Limited",
+            "timestamp": "2026-04-25T08:00:00-04:00",
+            "definition": "Limited Fire Weather Risk. Low relative humidity values possible, which may increase fire danger."
+          },
+          {
+            "color": "#ededed",
+            "image": "https://www.weather.gov/images/jax/ghwo/FireWeatherDay6.jpg",
+            "category": 0,
+            "levelName": "None",
+            "timestamp": "2026-04-26T08:00:00-04:00",
+            "definition": "No Fire Weather Risk."
+          },
+          {
+            "color": "#ededed",
+            "image": "https://www.weather.gov/images/jax/ghwo/FireWeatherDay7.jpg",
+            "category": 0,
+            "levelName": "None",
+            "timestamp": "2026-04-27T08:00:00-04:00",
+            "definition": "No Fire Weather Risk."
+          }
+        ],
+        "name": "Fire Weather Risk",
+        "legend": {
+          "name": "Fire Weather Risk",
+          "scale": 4,
+          "category": {
+            "0": {
+              "color": "#ededed",
+              "category": 0,
+              "levelName": "None",
+              "definition": "No Fire Weather Risk."
+            },
+            "1": {
+              "color": "yellow",
+              "category": 1,
+              "levelName": "Limited",
+              "definition": "Limited Fire Weather Risk. Low relative humidity values possible, which may increase fire danger."
+            },
+            "2": {
+              "color": "orange",
+              "category": 2,
+              "levelName": "Elevated",
+              "definition": "Elevated Fire Weather Risk. Increasing wind, lower humidity, and/or dry fuels may lead to high fire danger."
+            },
+            "3": {
+              "color": "red",
+              "category": 3,
+              "levelName": "Significant",
+              "definition": "Significant Fire Weather Risk. Possibility of low humidity, strong wind, and dry fuels leading to dangerous fire behavior."
+            },
+            "4": {
+              "color": "purple",
+              "category": 4,
+              "levelName": "Extreme",
+              "definition": "Extreme Fire Weather Risk. Possibility of low humidity and strong winds leading to red flag warning conditions."
+            }
+          }
+        }
+      }
+    },
+    "legend": {
+      "Lightning": {
+        "name": "Lightning Risk",
+        "scale": 3,
+        "category": {
+          "0": {
+            "color": "#ededed",
+            "category": 0,
+            "levelName": "None",
+            "definition": "Little to no Lightning Risk."
+          },
+          "1": {
+            "color": "yellow",
+            "category": 1,
+            "levelName": "Limited",
+            "definition": "Limited Lightning Risk. Isolated to scattered thunderstorms possible. Be aware of thunderstorms in your area and be prepared to take shelter."
+          },
+          "2": {
+            "color": "orange",
+            "category": 2,
+            "levelName": "Elevated",
+            "definition": "Elevated Lightning Risk. Numerous thunderstorms possible. Plan to stop all outdoor activity and move to shelters."
+          },
+          "3": {
+            "color": "red",
+            "category": 3,
+            "levelName": "Significant",
+            "definition": "Significant Lightning Risk. Widespread thunderstorms possible. Plan to stop all outdoor activity and move to shelters."
+          }
+        }
+      },
+      "FireWeather": {
+        "name": "Fire Weather Risk",
+        "scale": 4,
+        "category": {
+          "0": {
+            "color": "#ededed",
+            "category": 0,
+            "levelName": "None",
+            "definition": "No Fire Weather Risk."
+          },
+          "1": {
+            "color": "yellow",
+            "category": 1,
+            "levelName": "Limited",
+            "definition": "Limited Fire Weather Risk. Low relative humidity values possible, which may increase fire danger."
+          },
+          "2": {
+            "color": "orange",
+            "category": 2,
+            "levelName": "Elevated",
+            "definition": "Elevated Fire Weather Risk. Increasing wind, lower humidity, and/or dry fuels may lead to high fire danger."
+          },
+          "3": {
+            "color": "red",
+            "category": 3,
+            "levelName": "Significant",
+            "definition": "Significant Fire Weather Risk. Possibility of low humidity, strong wind, and dry fuels leading to dangerous fire behavior."
+          },
+          "4": {
+            "color": "purple",
+            "category": 4,
+            "levelName": "Extreme",
+            "definition": "Extreme Fire Weather Risk. Possibility of low humidity and strong winds leading to red flag warning conditions."
+          }
+        }
+      }
+    },
+    "noRisks": [
+      "Severe Thunderstorm Risk",
+      "Tornado Risk",
+      "Thunderstorm Wind Risk",
+      "Hail Risk",
+      "Excessive Rainfall Risk",
+      "Extreme Heat Risk",
+      "Wind Risk",
+      "Fog Risk",
+      "High Surf Risk",
+      "Rip Current Risk",
+      "Coastal Flood Risk"
+    ],
+    "composite": {
+      "days": [
+        {
+          "max": 1,
+          "scaled": 0.25,
+          "timestamp": "2026-04-21T09:00:00-04:00"
+        },
+        {
+          "max": 1,
+          "scaled": 0.25,
+          "timestamp": "2026-04-22T08:00:00-04:00"
+        },
+        {
+          "max": 1,
+          "scaled": 0.25,
+          "timestamp": "2026-04-23T08:00:00-04:00"
+        },
+        {
+          "max": 1,
+          "scaled": 0.25,
+          "timestamp": "2026-04-24T08:00:00-04:00"
+        },
+        {
+          "max": 1,
+          "scaled": 0.33,
+          "timestamp": "2026-04-25T08:00:00-04:00"
+        },
+        {
+          "max": 1,
+          "scaled": 0.33,
+          "timestamp": "2026-04-26T08:00:00-04:00"
+        },
+        {
+          "max": 1,
+          "scaled": 0.33,
+          "timestamp": "2026-04-27T08:00:00-04:00"
+        }
+      ]
+    }
+  },
+  "alerts": {
+    "items": [
+      {
+        "id": "fa5be94e955ce1902d4fb4a2602fde62c9612e38_001_1",
+        "area": [
+          "Baker",
+          "Inland Nassau",
+          "Union",
+          "Bradford",
+          "Gilchrist",
+          "Eastern Clay",
+          "Eastern Alachua",
+          "Eastern Putnam",
+          "Eastern Marion",
+          "Trout River",
+          "Western Clay",
+          "Western Alachua",
+          "Western Putnam",
+          "Central Marion",
+          "Northern Columbia",
+          "Western Marion",
+          "Southeastern Columbia",
+          "Western Duval",
+          "Southwestern Columbia"
+        ],
+        "ends": "2026-04-22T00:00:00.000Z",
+        "hash": "T3coZ9OtIczT7R2NXzgbdZctUDe9yUsVPp3F+d8xp1E=",
+        "sent": "2026-04-21T05:52:00.000Z",
+        "event": "Red Flag Warning",
+        "onset": "2026-04-21T15:00:00.000Z",
+        "finish": "2026-04-22T00:00:00.000Z",
+        "sender": "NWS Jacksonville FL",
+        "expires": "2026-04-21T21:00:00.000Z",
+        "geometry": {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [
+                -82.749794006,
+                29.562511444
+              ],
+              [
+                -82.756492615,
+                29.562612534
+              ],
+              [
+                -82.756896973,
+                29.577713013
+              ],
+              [
+                -82.772994995,
+                29.577611923
+              ],
+              [
+                -82.772895813,
+                29.584911346
+              ],
+              [
+                -82.856498718,
+                29.584211349
+              ],
+              [
+                -82.856597896,
+                29.591312145
+              ],
+              [
+                -82.930397034,
+                29.590711594
+              ],
+              [
+                -82.940093994,
+                29.592912674
+              ],
+              [
+                -82.951095581,
+                29.584411621
+              ],
+              [
+                -82.95489502,
+                29.585111618
+              ],
+              [
+                -82.960594177,
+                29.591911316
+              ],
+              [
+                -82.962295532,
+                29.600313187
+              ],
+              [
+                -82.972099304,
+                29.609012604
+              ],
+              [
+                -82.972694397,
+                29.613212585
+              ],
+              [
+                -82.968299866,
+                29.616811752
+              ],
+              [
+                -82.973297119,
+                29.624212265
+              ],
+              [
+                -82.969596863,
+                29.630111694
+              ],
+              [
+                -82.956794739,
+                29.639812469
+              ],
+              [
+                -82.957099915,
+                29.656112671
+              ],
+              [
+                -82.952400208,
+                29.659511566
+              ],
+              [
+                -82.95929718,
+                29.670810699
+              ],
+              [
+                -82.954795837,
+                29.677812576
+              ],
+              [
+                -82.959594727,
+                29.683311462
+              ],
+              [
+                -82.956794739,
+                29.701812744
+              ],
+              [
+                -82.951393127,
+                29.703912735
+              ],
+              [
+                -82.943199158,
+                29.70041275
+              ],
+              [
+                -82.937599182,
+                29.703712463
+              ],
+              [
+                -82.943199158,
+                29.704711914
+              ],
+              [
+                -82.956794739,
+                29.718412399
+              ],
+              [
+                -82.95489502,
+                29.722112656
+              ],
+              [
+                -82.945495605,
+                29.715112686
+              ],
+              [
+                -82.943595886,
+                29.716712952
+              ],
+              [
+                -82.943695068,
+                29.721212387
+              ],
+              [
+                -82.949493408,
+                29.723213196
+              ],
+              [
+                -82.949996948,
+                29.726011276
+              ],
+              [
+                -82.938697815,
+                29.746511459
+              ],
+              [
+                -82.941596985,
+                29.75381279
+              ],
+              [
+                -82.949394226,
+                29.75381279
+              ],
+              [
+                -82.950393677,
+                29.756813049
+              ],
+              [
+                -82.93699646,
+                29.784711838
+              ],
+              [
+                -82.920394897,
+                29.796112061
+              ],
+              [
+                -82.934494019,
+                29.802911758
+              ],
+              [
+                -82.935699463,
+                29.808412552
+              ],
+              [
+                -82.931594849,
+                29.817012787
+              ],
+              [
+                -82.924797058,
+                29.823711395
+              ],
+              [
+                -82.915298462,
+                29.823612213
+              ],
+              [
+                -82.912796021,
+                29.821212769
+              ],
+              [
+                -82.893997192,
+                29.826713562
+              ],
+              [
+                -82.888397217,
+                29.850112915
+              ],
+              [
+                -82.875595093,
+                29.867311478
+              ],
+              [
+                -82.875595093,
+                29.881511688
+              ],
+              [
+                -82.879196167,
+                29.88791275
+              ],
+              [
+                -82.871696472,
+                29.898012161
+              ],
+              [
+                -82.867095947,
+                29.899211884
+              ],
+              [
+                -82.861297607,
+                29.911611557
+              ],
+              [
+                -82.849395752,
+                29.914012909
+              ],
+              [
+                -82.841995239,
+                29.912311554
+              ],
+              [
+                -82.839698792,
+                29.914611816
+              ],
+              [
+                -82.831497192,
+                29.913211823
+              ],
+              [
+                -82.814094543,
+                29.930110931
+              ],
+              [
+                -82.79940033,
+                29.932912827
+              ],
+              [
+                -82.785598755,
+                29.954912186
+              ],
+              [
+                -82.76309967,
+                29.964511871
+              ],
+              [
+                -82.760192871,
+                29.970911026
+              ],
+              [
+                -82.760398865,
+                29.985712051
+              ],
+              [
+                -82.793998718,
+                29.986211777
+              ],
+              [
+                -82.794692993,
+                30.322113037
+              ],
+              [
+                -82.793197632,
+                30.326911926
+              ],
+              [
+                -82.775894165,
+                30.324012756
+              ],
+              [
+                -82.762199402,
+                30.330211639
+              ],
+              [
+                -82.759895325,
+                30.328012466
+              ],
+              [
+                -82.761192322,
+                30.325111389
+              ],
+              [
+                -82.747299194,
+                30.317512512
+              ],
+              [
+                -82.740196228,
+                30.321512222
+              ],
+              [
+                -82.736999512,
+                30.327913284
+              ],
+              [
+                -82.723899841,
+                30.333612442
+              ],
+              [
+                -82.72480011,
+                30.329011917
+              ],
+              [
+                -82.717597961,
+                30.321613312
+              ],
+              [
+                -82.7029953,
+                30.332712173
+              ],
+              [
+                -82.689697266,
+                30.333812714
+              ],
+              [
+                -82.681800842,
+                30.342111588
+              ],
+              [
+                -82.686698914,
+                30.3536129
+              ],
+              [
+                -82.675796509,
+                30.363111496
+              ],
+              [
+                -82.664794922,
+                30.36781311
+              ],
+              [
+                -82.662895203,
+                30.371212006
+              ],
+              [
+                -82.665794373,
+                30.378112793
+              ],
+              [
+                -82.658493042,
+                30.383712769
+              ],
+              [
+                -82.658096313,
+                30.390413284
+              ],
+              [
+                -82.649299622,
+                30.392412186
+              ],
+              [
+                -82.64679718,
+                30.397312164
+              ],
+              [
+                -82.645797729,
+                30.407312393
+              ],
+              [
+                -82.650794983,
+                30.413011551
+              ],
+              [
+                -82.649497986,
+                30.418611526
+              ],
+              [
+                -82.653694153,
+                30.422012329
+              ],
+              [
+                -82.65259552,
+                30.429111481
+              ],
+              [
+                -82.659393311,
+                30.44021225
+              ],
+              [
+                -82.661392212,
+                30.438812256
+              ],
+              [
+                -82.67099762,
+                30.444711685
+              ],
+              [
+                -82.671798706,
+                30.448411942
+              ],
+              [
+                -82.668800354,
+                30.447011948
+              ],
+              [
+                -82.666297913,
+                30.450813293
+              ],
+              [
+                -82.662895203,
+                30.44931221
+              ],
+              [
+                -82.663093567,
+                30.451612473
+              ],
+              [
+                -82.671195984,
+                30.453212738
+              ],
+              [
+                -82.680099487,
+                30.461112976
+              ],
+              [
+                -82.680793762,
+                30.463611603
+              ],
+              [
+                -82.676597595,
+                30.465011597
+              ],
+              [
+                -82.677696228,
+                30.471511841
+              ],
+              [
+                -82.698699951,
+                30.475212097
+              ],
+              [
+                -82.70199585,
+                30.483112335
+              ],
+              [
+                -82.697898865,
+                30.484212875
+              ],
+              [
+                -82.697097778,
+                30.489612579
+              ],
+              [
+                -82.705299377,
+                30.492412567
+              ],
+              [
+                -82.707496643,
+                30.506113052
+              ],
+              [
+                -82.71509552,
+                30.506313324
+              ],
+              [
+                -82.718994141,
+                30.521112442
+              ],
+              [
+                -82.722496033,
+                30.517911911
+              ],
+              [
+                -82.72819519,
+                30.525712967
+              ],
+              [
+                -82.726997375,
+                30.530813217
+              ],
+              [
+                -82.714294434,
+                30.532411575
+              ],
+              [
+                -82.716697693,
+                30.540912628
+              ],
+              [
+                -82.722496033,
+                30.548311234
+              ],
+              [
+                -82.720794678,
+                30.552812576
+              ],
+              [
+                -82.725997925,
+                30.559211731
+              ],
+              [
+                -82.71559906,
+                30.565412521
+              ],
+              [
+                -82.717292786,
+                30.569313049
+              ],
+              [
+                -82.705299377,
+                30.576011658
+              ],
+              [
+                -82.703796387,
+                30.582212448
+              ],
+              [
+                -82.70639801,
+                30.583711624
+              ],
+              [
+                -82.695999146,
+                30.592611313
+              ],
+              [
+                -82.697296143,
+                30.594711304
+              ],
+              [
+                -82.691398621,
+                30.595012665
+              ],
+              [
+                -82.689598083,
+                30.597312927
+              ],
+              [
+                -82.67099762,
+                30.596712112
+              ],
+              [
+                -82.214797974,
+                30.568613052
+              ],
+              [
+                -82.217597961,
+                30.565412521
+              ],
+              [
+                -82.225593567,
+                30.564311981
+              ],
+              [
+                -82.23299408,
+                30.558113098
+              ],
+              [
+                -82.240196228,
+                30.537412643
+              ],
+              [
+                -82.23059845,
+                30.525812149
+              ],
+              [
+                -82.226799011,
+                30.510112762
+              ],
+              [
+                -82.212593079,
+                30.499412537
+              ],
+              [
+                -82.202095032,
+                30.485811234
+              ],
+              [
+                -82.201194763,
+                30.475112915
+              ],
+              [
+                -82.207595825,
+                30.460512161
+              ],
+              [
+                -82.204399109,
+                30.445411682
+              ],
+              [
+                -82.210296631,
+                30.425512314
+              ],
+              [
+                -82.201698303,
+                30.395811081
+              ],
+              [
+                -82.19329834,
+                30.38681221
+              ],
+              [
+                -82.191398621,
+                30.377511978
+              ],
+              [
+                -82.190093994,
+                30.376111984
+              ],
+              [
+                -82.186195374,
+                30.3787117
+              ],
+              [
+                -82.172393799,
+                30.361412048
+              ],
+              [
+                -82.164398193,
+                30.358211517
+              ],
+              [
+                -82.140098572,
+                30.364812851
+              ],
+              [
+                -82.134094238,
+                30.362211227
+              ],
+              [
+                -82.127998352,
+                30.366611481
+              ],
+              [
+                -82.119094849,
+                30.364912033
+              ],
+              [
+                -82.11529541,
+                30.367712021
+              ],
+              [
+                -82.105293274,
+                30.368312836
+              ],
+              [
+                -82.095794678,
+                30.36161232
+              ],
+              [
+                -82.081199646,
+                30.358911514
+              ],
+              [
+                -82.071594238,
+                30.360912323
+              ],
+              [
+                -82.065597534,
+                30.357011795
+              ],
+              [
+                -82.043197632,
+                30.36571312
+              ],
+              [
+                -82.044296265,
+                30.367412567
+              ],
+              [
+                -82.038093567,
+                30.37181282
+              ],
+              [
+                -82.03629303,
+                30.385511398
+              ],
+              [
+                -82.043395996,
+                30.400411606
+              ],
+              [
+                -82.042999268,
+                30.413911819
+              ],
+              [
+                -82.034492493,
+                30.420211792
+              ],
+              [
+                -82.034698486,
+                30.428512573
+              ],
+              [
+                -82.039199829,
+                30.435913086
+              ],
+              [
+                -82.028198242,
+                30.447412491
+              ],
+              [
+                -82.023498535,
+                30.467412949
+              ],
+              [
+                -82.017097473,
+                30.475412369
+              ],
+              [
+                -82.018699646,
+                30.483013153
+              ],
+              [
+                -82.016593933,
+                30.484712601
+              ],
+              [
+                -82.014900208,
+                30.51291275
+              ],
+              [
+                -82.017700195,
+                30.533611298
+              ],
+              [
+                -82.005996704,
+                30.565912247
+              ],
+              [
+                -82.008293152,
+                30.569612503
+              ],
+              [
+                -82.006996155,
+                30.578912735
+              ],
+              [
+                -82.015594482,
+                30.601411819
+              ],
+              [
+                -82.026794434,
+                30.607112885
+              ],
+              [
+                -82.027297974,
+                30.617012024
+              ],
+              [
+                -82.031700134,
+                30.620111465
+              ],
+              [
+                -82.029998779,
+                30.622411728
+              ],
+              [
+                -82.039894104,
+                30.634412766
+              ],
+              [
+                -82.040496826,
+                30.645412445
+              ],
+              [
+                -82.0493927,
+                30.657512665
+              ],
+              [
+                -82.047599792,
+                30.666311264
+              ],
+              [
+                -82.050300598,
+                30.676311493
+              ],
+              [
+                -82.043800354,
+                30.685012817
+              ],
+              [
+                -82.0440979,
+                30.697912216
+              ],
+              [
+                -82.036895752,
+                30.705911636
+              ],
+              [
+                -82.039299011,
+                30.722112656
+              ],
+              [
+                -82.045593262,
+                30.727912903
+              ],
+              [
+                -82.039894104,
+                30.737312317
+              ],
+              [
+                -82.039199829,
+                30.750211716
+              ],
+              [
+                -82.037094116,
+                30.753911972
+              ],
+              [
+                -82.032493591,
+                30.750812531
+              ],
+              [
+                -82.017997742,
+                30.75561142
+              ],
+              [
+                -82.020599365,
+                30.757612228
+              ],
+              [
+                -82.011795044,
+                30.763711929
+              ],
+              [
+                -82.023796082,
+                30.782911301
+              ],
+              [
+                -82.023292542,
+                30.78711319
+              ],
+              [
+                -82.01789856,
+                30.787912369
+              ],
+              [
+                -82.017799377,
+                30.790912628
+              ],
+              [
+                -82.006996155,
+                30.791612625
+              ],
+              [
+                -81.995651245,
+                30.786149979
+              ],
+              [
+                -81.989120483,
+                30.779850006
+              ],
+              [
+                -81.97756958,
+                30.776348114
+              ],
+              [
+                -81.97202301,
+                30.780382156
+              ],
+              [
+                -81.968795776,
+                30.791215897
+              ],
+              [
+                -81.96207428,
+                30.796312332
+              ],
+              [
+                -81.961410522,
+                30.800943375
+              ],
+              [
+                -81.964790344,
+                30.806270599
+              ],
+              [
+                -81.961761475,
+                30.808254242
+              ],
+              [
+                -81.960884094,
+                30.814142227
+              ],
+              [
+                -81.963798523,
+                30.816612244
+              ],
+              [
+                -81.958999634,
+                30.821201324
+              ],
+              [
+                -81.950180054,
+                30.826698303
+              ],
+              [
+                -81.941871643,
+                30.824962616
+              ],
+              [
+                -81.942405701,
+                30.827987671
+              ],
+              [
+                -81.938850403,
+                30.826635361
+              ],
+              [
+                -81.938850403,
+                30.829362869
+              ],
+              [
+                -81.93422699,
+                30.8228302
+              ],
+              [
+                -81.936088562,
+                30.820859909
+              ],
+              [
+                -81.928993225,
+                30.817079544
+              ],
+              [
+                -81.909240723,
+                30.815099716
+              ],
+              [
+                -81.904434204,
+                30.818414688
+              ],
+              [
+                -81.907310486,
+                30.825912476
+              ],
+              [
+                -81.901611328,
+                30.829084396
+              ],
+              [
+                -81.891845703,
+                30.822618484
+              ],
+              [
+                -81.892196655,
+                30.816225052
+              ],
+              [
+                -81.885452271,
+                30.810813904
+              ],
+              [
+                -81.883651733,
+                30.799720764
+              ],
+              [
+                -81.871452332,
+                30.797218323
+              ],
+              [
+                -81.868873596,
+                30.792360306
+              ],
+              [
+                -81.85307312,
+                30.794042587
+              ],
+              [
+                -81.846733093,
+                30.790351868
+              ],
+              [
+                -81.840927124,
+                30.790912628
+              ],
+              [
+                -81.842643738,
+                30.787212372
+              ],
+              [
+                -81.84046936,
+                30.786022186
+              ],
+              [
+                -81.830909729,
+                30.788589478
+              ],
+              [
+                -81.824172974,
+                30.786161423
+              ],
+              [
+                -81.819442749,
+                30.789188385
+              ],
+              [
+                -81.806991577,
+                30.789348602
+              ],
+              [
+                -81.798049927,
+                30.78086853
+              ],
+              [
+                -81.793617249,
+                30.786504745
+              ],
+              [
+                -81.784591675,
+                30.772867203
+              ],
+              [
+                -81.787513733,
+                30.76931572
+              ],
+              [
+                -81.782814026,
+                30.760904312
+              ],
+              [
+                -81.771141052,
+                30.763696671
+              ],
+              [
+                -81.773048401,
+                30.767799377
+              ],
+              [
+                -81.769439697,
+                30.776254654
+              ],
+              [
+                -81.761474609,
+                30.77450943
+              ],
+              [
+                -81.753700256,
+                30.767311096
+              ],
+              [
+                -81.741867065,
+                30.76442337
+              ],
+              [
+                -81.743721001,
+                30.759679787
+              ],
+              [
+                -81.732704163,
+                30.754365921
+              ],
+              [
+                -81.732673645,
+                30.749141693
+              ],
+              [
+                -81.720787048,
+                30.744035721
+              ],
+              [
+                -81.712219238,
+                30.746650696
+              ],
+              [
+                -81.710464478,
+                30.741447449
+              ],
+              [
+                -81.710891724,
+                30.746765137
+              ],
+              [
+                -81.702209473,
+                30.744657516
+              ],
+              [
+                -81.694274902,
+                30.747615814
+              ],
+              [
+                -81.690643311,
+                30.741380692
+              ],
+              [
+                -81.672971,
+                30.738035
+              ],
+              [
+                -81.668592,
+                30.741977
+              ],
+              [
+                -81.669653,
+                30.747041
+              ],
+              [
+                -81.674217,
+                30.748715
+              ],
+              [
+                -81.680692,
+                30.745255
+              ],
+              [
+                -81.682682,
+                30.748165
+              ],
+              [
+                -81.6623,
+                30.752996
+              ],
+              [
+                -81.660976,
+                30.749425
+              ],
+              [
+                -81.664691,
+                30.745644
+              ],
+              [
+                -81.663925171,
+                30.742733002
+              ],
+              [
+                -81.655139478,
+                30.743194005
+              ],
+              [
+                -81.673881818,
+                30.707763636
+              ],
+              [
+                -81.677063636,
+                30.695863636
+              ],
+              [
+                -81.644981818,
+                30.6044
+              ],
+              [
+                -81.647509091,
+                30.584263636
+              ],
+              [
+                -81.638172727,
+                30.544872727
+              ],
+              [
+                -81.633818182,
+                30.507136364
+              ],
+              [
+                -81.641418182,
+                30.490236364
+              ],
+              [
+                -81.653118182,
+                30.446436364
+              ],
+              [
+                -81.658818182,
+                30.407236364
+              ],
+              [
+                -81.667518182,
+                30.398336364
+              ],
+              [
+                -81.668718182,
+                30.386336364
+              ],
+              [
+                -81.674018182,
+                30.381336364
+              ],
+              [
+                -81.668618182,
+                30.366536364
+              ],
+              [
+                -81.670018182,
+                30.336236364
+              ],
+              [
+                -81.684589757,
+                30.321521141
+              ],
+              [
+                -81.721423,
+                30.320306
+              ],
+              [
+                -81.735571,
+                30.31295
+              ],
+              [
+                -81.751898,
+                30.299328
+              ],
+              [
+                -81.75529,
+                30.291795
+              ],
+              [
+                -81.756444,
+                30.270085
+              ],
+              [
+                -81.735952,
+                30.270479
+              ],
+              [
+                -81.743035,
+                30.253444
+              ],
+              [
+                -81.736752,
+                30.219907
+              ],
+              [
+                -81.739244987,
+                30.189412382
+              ],
+              [
+                -81.733093262,
+                30.193012238
+              ],
+              [
+                -81.703598022,
+                30.189311981
+              ],
+              [
+                -81.702194214,
+                30.191513062
+              ],
+              [
+                -81.679634094,
+                30.190465927
+              ],
+              [
+                -81.681495667,
+                30.182411194
+              ],
+              [
+                -81.690513611,
+                30.17193985
+              ],
+              [
+                -81.692115784,
+                30.144739151
+              ],
+              [
+                -81.680099487,
+                30.11961174
+              ],
+              [
+                -81.68196106,
+                30.104133606
+              ],
+              [
+                -81.680198669,
+                30.085512161
+              ],
+              [
+                -81.689727783,
+                30.058654785
+              ],
+              [
+                -81.690391541,
+                30.039632797
+              ],
+              [
+                -81.687698364,
+                30.024711609
+              ],
+              [
+                -81.675796509,
+                30.010412216
+              ],
+              [
+                -81.624397278,
+                29.98141098
+              ],
+              [
+                -81.606323242,
+                29.965978622
+              ],
+              [
+                -81.600105286,
+                29.95388031
+              ],
+              [
+                -81.598709106,
+                29.940965652
+              ],
+              [
+                -81.608299255,
+                29.910013199
+              ],
+              [
+                -81.599098206,
+                29.875211716
+              ],
+              [
+                -81.580841064,
+                29.83971596
+              ],
+              [
+                -81.563903809,
+                29.798278809
+              ],
+              [
+                -81.545143127,
+                29.780729294
+              ],
+              [
+                -81.540405273,
+                29.769470215
+              ],
+              [
+                -81.525497437,
+                29.759311676
+              ],
+              [
+                -81.519897461,
+                29.494913101
+              ],
+              [
+                -81.486999512,
+                29.446512222
+              ],
+              [
+                -81.486198425,
+                29.427211761
+              ],
+              [
+                -81.48109436,
+                29.417013168
+              ],
+              [
+                -81.47819519,
+                29.398212433
+              ],
+              [
+                -81.468093872,
+                29.392313004
+              ],
+              [
+                -81.456893921,
+                29.389812469
+              ],
+              [
+                -81.434394836,
+                29.398511887
+              ],
+              [
+                -81.441596985,
+                29.385011673
+              ],
+              [
+                -81.452697754,
+                29.378011703
+              ],
+              [
+                -81.680496216,
+                29.323911667
+              ],
+              [
+                -81.67149353,
+                29.304912567
+              ],
+              [
+                -81.666694641,
+                29.300712585
+              ],
+              [
+                -81.655296326,
+                29.299612045
+              ],
+              [
+                -81.651397705,
+                29.295312881
+              ],
+              [
+                -81.64099884,
+                29.273712158
+              ],
+              [
+                -81.63899231,
+                29.055513382
+              ],
+              [
+                -81.639793396,
+                29.047712326
+              ],
+              [
+                -81.657897949,
+                29.047311783
+              ],
+              [
+                -81.658699036,
+                28.960512161
+              ],
+              [
+                -82.308296204,
+                28.960411072
+              ],
+              [
+                -82.311698914,
+                28.960910797
+              ],
+              [
+                -82.315956116,
+                28.973316193
+              ],
+              [
+                -82.341285706,
+                28.98767662
+              ],
+              [
+                -82.347610474,
+                28.987932205
+              ],
+              [
+                -82.361198425,
+                28.993812561
+              ],
+              [
+                -82.365531921,
+                29.002725601
+              ],
+              [
+                -82.377693176,
+                29.001111984
+              ],
+              [
+                -82.377952576,
+                29.004535675
+              ],
+              [
+                -82.386863708,
+                29.009056091
+              ],
+              [
+                -82.39389801,
+                29.008811951
+              ],
+              [
+                -82.394844055,
+                29.013963699
+              ],
+              [
+                -82.401885986,
+                29.019031525
+              ],
+              [
+                -82.4190979,
+                29.013879776
+              ],
+              [
+                -82.41998291,
+                29.018209457
+              ],
+              [
+                -82.429359436,
+                29.022035599
+              ],
+              [
+                -82.441848755,
+                29.035657883
+              ],
+              [
+                -82.452178955,
+                29.039806366
+              ],
+              [
+                -82.458564758,
+                29.047649384
+              ],
+              [
+                -82.471694946,
+                29.047515869
+              ],
+              [
+                -82.471916199,
+                29.052577972
+              ],
+              [
+                -82.487678528,
+                29.051933289
+              ],
+              [
+                -82.487564087,
+                29.049711227
+              ],
+              [
+                -82.498893738,
+                29.041912079
+              ],
+              [
+                -82.509025574,
+                29.039070129
+              ],
+              [
+                -82.511711121,
+                29.043437958
+              ],
+              [
+                -82.516311646,
+                29.044208527
+              ],
+              [
+                -82.523292542,
+                29.040460587
+              ],
+              [
+                -82.525390625,
+                29.043115616
+              ],
+              [
+                -82.534339905,
+                29.042110443
+              ],
+              [
+                -82.535697937,
+                29.214412689
+              ],
+              [
+                -82.403198242,
+                29.215711594
+              ],
+              [
+                -82.406700134,
+                29.484712601
+              ],
+              [
+                -82.496299744,
+                29.48551178
+              ],
+              [
+                -82.496299744,
+                29.478412628
+              ],
+              [
+                -82.556694031,
+                29.480112076
+              ],
+              [
+                -82.556495667,
+                29.537511826
+              ],
+              [
+                -82.655097961,
+                29.535713196
+              ],
+              [
+                -82.656394958,
+                29.564512253
+              ],
+              [
+                -82.749794006,
+                29.562511444
+              ]
+            ]
+          ]
+        },
+        "metadata": {
+          "kind": "land",
+          "level": {
+            "text": "warning",
+            "priority": 0
+          },
+          "priority": 52224
+        },
+        "effective": "2026-04-21T05:52:00.000Z",
+        "description": [
+          {
+            "type": "paragraph",
+            "nodes": [
+              {
+                "type": "text",
+                "content": "CRITICAL FIRE WEATHER CONDITIONS EXPECTED TODAY ACROSS INLAND NORTHEAST FL THIS MORNING THROUGH THIS LATE AFTERNOON"
+              }
+            ]
+          },
+          {
+            "text": "affected area",
+            "type": "heading"
+          },
+          {
+            "type": "paragraph",
+            "nodes": [
+              {
+                "type": "text",
+                "content": "In Florida, Baker, Inland Nassau, Union, Bradford, Gilchrist, Eastern Clay, Eastern Alachua, Eastern Putnam, Eastern Marion, Trout River, Western Clay, Western Alachua, Western Putnam, Central Marion, Northern Columbia, Western Marion, Southeastern Columbia, Western Duval and Southwestern Columbia."
+              }
+            ]
+          },
+          {
+            "text": "timing",
+            "type": "heading"
+          },
+          {
+            "type": "paragraph",
+            "nodes": [
+              {
+                "type": "text",
+                "content": "Tuesday late morning through evening."
+              }
+            ]
+          },
+          {
+            "text": "winds",
+            "type": "heading"
+          },
+          {
+            "type": "paragraph",
+            "nodes": [
+              {
+                "type": "text",
+                "content": "Northeast 12 to 18 mph with gusts to 25 mph."
+              }
+            ]
+          },
+          {
+            "text": "relative humidity",
+            "type": "heading"
+          },
+          {
+            "type": "paragraph",
+            "nodes": [
+              {
+                "type": "text",
+                "content": "As low as 21 percent."
+              }
+            ]
+          },
+          {
+            "text": "temperatures",
+            "type": "heading"
+          },
+          {
+            "type": "paragraph",
+            "nodes": [
+              {
+                "type": "text",
+                "content": "Up to 85."
+              }
+            ]
+          },
+          {
+            "text": "lightning",
+            "type": "heading"
+          },
+          {
+            "type": "paragraph",
+            "nodes": [
+              {
+                "type": "text",
+                "content": ""
+              }
+            ]
+          },
+          {
+            "text": "impacts",
+            "type": "heading"
+          },
+          {
+            "type": "paragraph",
+            "nodes": [
+              {
+                "type": "text",
+                "content": "Existing or newly ignited wildfires may exhibit erratic fire behavior, spread rapidly and become difficult to contain or suppress."
+              }
+            ]
+          }
+        ],
+        "instruction": "A Red Flag Warning means that critical fire weather conditions are either occurring now, or will shortly. A combination of strong winds, low relative humidity, and warm temperatures can contribute to extreme fire behavior.",
+        "duration": "this morning",
+        "timing": {
+          "start": "Tuesday 04/21 11:00 AM EDT",
+          "end": "Tuesday 04/21 8:00 PM EDT"
+        },
+        "alertDays": [
+          1
+        ]
+      }
+    ],
+    "highestLevel": "warning",
+    "metadata": {
+      "error": false,
+      "updated": null
+    }
+  },
+  "alertDays": [
+    {
+      "start": "2026-04-21T04:00:00.000Z",
+      "end": "2026-04-22T04:00:00.000Z",
+      "day": "Tuesday",
+      "alerts": [
+        0
+      ]
+    },
+    {
+      "start": "2026-04-22T04:00:00.000Z",
+      "end": "2026-04-23T04:00:00.000Z",
+      "day": "Wednesday",
+      "alerts": []
+    },
+    {
+      "start": "2026-04-23T04:00:00.000Z",
+      "end": "2026-04-24T04:00:00.000Z",
+      "day": "Thursday",
+      "alerts": []
+    },
+    {
+      "start": "2026-04-24T04:00:00.000Z",
+      "end": "2026-04-25T04:00:00.000Z",
+      "day": "Friday",
+      "alerts": []
+    },
+    {
+      "start": "2026-04-25T04:00:00.000Z",
+      "end": "2026-04-26T04:00:00.000Z",
+      "day": "Saturday",
+      "alerts": []
+    }
+  ],
+  "weatherstories": [],
+  "briefings": []
+}

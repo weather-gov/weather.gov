@@ -7,6 +7,16 @@ import { logger } from "./util/monitoring/index.js";
 import ConnectionTracker from "./ConnectionTracker.js";
 
 const REQUIRED_ENV_VARS = ["API_URL", "GHWO_URL"];
+const GOLANG_URL = process.env.GOLANG_URL || "http://api-interop-golang:8083";
+
+// Add prefixes of endpoints that have been converted to Golang here
+const ROUTES_IN_GO = [
+  "/test-go-proxy",
+  "/meta/alerts",
+  "/county/",
+  "/products/afd/versions",
+  "/point/"
+];
 
 const ensureEnvironmentVariables = () => {
   const missing = [];
@@ -118,6 +128,20 @@ export const main = async () => {
       schema,
       handler: async (request, response) => {
         logger.trace({ url: request.url });
+
+        if (ROUTES_IN_GO.some(prefix => request.url.startsWith(prefix))) {
+          const goUrl = `${GOLANG_URL}${request.url}`;
+          logger.trace({ goUrl }, "Proxying to Go container");
+          try {
+            const resp = await fetch(goUrl);
+            const data = await resp.json();
+            response.code(resp.status).send(data);
+          } catch (err) {
+            logger.error({ err }, "Failed proxying to Go");
+            response.code(502).send({ error: "Bad Gateway" });
+          }
+          return;
+        }
 
         /**
          * Check if we are at our max open

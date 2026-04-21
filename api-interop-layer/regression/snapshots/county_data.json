@@ -1,0 +1,935 @@
+{
+  "county": {
+    "state": "AL",
+    "county": "Autauga",
+    "primarywfo": "BMX",
+    "timezone": "America/Chicago",
+    "shape": {
+      "type": "Polygon",
+      "coordinates": [
+        [
+          [
+            -86.413093567,
+            32.70741272
+          ],
+          [
+            -86.410995483,
+            32.41021347
+          ],
+          [
+            -86.425598145,
+            32.402313232
+          ],
+          [
+            -86.439697266,
+            32.400211334
+          ],
+          [
+            -86.447898865,
+            32.400810242
+          ],
+          [
+            -86.456298828,
+            32.405910492
+          ],
+          [
+            -86.460197449,
+            32.404811859
+          ],
+          [
+            -86.459197998,
+            32.396713257
+          ],
+          [
+            -86.462997437,
+            32.37771225
+          ],
+          [
+            -86.475494385,
+            32.365413666
+          ],
+          [
+            -86.485298157,
+            32.366912842
+          ],
+          [
+            -86.491699219,
+            32.364414215
+          ],
+          [
+            -86.491195679,
+            32.346611023
+          ],
+          [
+            -86.532493591,
+            32.338813782
+          ],
+          [
+            -86.539299011,
+            32.345211029
+          ],
+          [
+            -86.542297363,
+            32.362510681
+          ],
+          [
+            -86.547897339,
+            32.369213104
+          ],
+          [
+            -86.558898926,
+            32.369010925
+          ],
+          [
+            -86.572097778,
+            32.375411987
+          ],
+          [
+            -86.579193115,
+            32.375812531
+          ],
+          [
+            -86.588294987,
+            32.367713932
+          ],
+          [
+            -86.59059906,
+            32.362110138
+          ],
+          [
+            -86.595298767,
+            32.361312866
+          ],
+          [
+            -86.614997864,
+            32.374710083
+          ],
+          [
+            -86.613594055,
+            32.399211884
+          ],
+          [
+            -86.620597839,
+            32.406612396
+          ],
+          [
+            -86.631996155,
+            32.402111053
+          ],
+          [
+            -86.642494202,
+            32.40291214
+          ],
+          [
+            -86.651496887,
+            32.399311066
+          ],
+          [
+            -86.654693604,
+            32.393814087
+          ],
+          [
+            -86.653793335,
+            32.380710602
+          ],
+          [
+            -86.656097412,
+            32.375610352
+          ],
+          [
+            -86.678794861,
+            32.355312347
+          ],
+          [
+            -86.683898926,
+            32.353412628
+          ],
+          [
+            -86.713996887,
+            32.362911224
+          ],
+          [
+            -86.719795227,
+            32.375812531
+          ],
+          [
+            -86.717193604,
+            32.400913239
+          ],
+          [
+            -86.720993042,
+            32.404811859
+          ],
+          [
+            -86.726394653,
+            32.404712677
+          ],
+          [
+            -86.736694336,
+            32.395313263
+          ],
+          [
+            -86.749198914,
+            32.389213562
+          ],
+          [
+            -86.762298584,
+            32.390312195
+          ],
+          [
+            -86.770500183,
+            32.394412994
+          ],
+          [
+            -86.779197693,
+            32.394210815
+          ],
+          [
+            -86.782196045,
+            32.389713287
+          ],
+          [
+            -86.782394409,
+            32.374610901
+          ],
+          [
+            -86.773193359,
+            32.340713501
+          ],
+          [
+            -86.791099548,
+            32.314613342
+          ],
+          [
+            -86.798294067,
+            32.308612823
+          ],
+          [
+            -86.810798645,
+            32.307613373
+          ],
+          [
+            -86.816093445,
+            32.310012817
+          ],
+          [
+            -86.820297241,
+            32.315013885
+          ],
+          [
+            -86.820899963,
+            32.333213806
+          ],
+          [
+            -86.809295654,
+            32.34551239
+          ],
+          [
+            -86.807098389,
+            32.353111267
+          ],
+          [
+            -86.81539917,
+            32.370811462
+          ],
+          [
+            -86.829093933,
+            32.380813599
+          ],
+          [
+            -86.833900452,
+            32.390010834
+          ],
+          [
+            -86.842399597,
+            32.398311615
+          ],
+          [
+            -86.846099854,
+            32.411113739
+          ],
+          [
+            -86.843696594,
+            32.417114258
+          ],
+          [
+            -86.827400208,
+            32.421012878
+          ],
+          [
+            -86.82460022,
+            32.423610687
+          ],
+          [
+            -86.828399658,
+            32.428211212
+          ],
+          [
+            -86.840698242,
+            32.431510925
+          ],
+          [
+            -86.850593567,
+            32.438510895
+          ],
+          [
+            -86.865592957,
+            32.438312531
+          ],
+          [
+            -86.865196228,
+            32.444313049
+          ],
+          [
+            -86.860794067,
+            32.450511932
+          ],
+          [
+            -86.862197876,
+            32.455810547
+          ],
+          [
+            -86.869293213,
+            32.45841217
+          ],
+          [
+            -86.869796753,
+            32.467910767
+          ],
+          [
+            -86.873199463,
+            32.468910217
+          ],
+          [
+            -86.877799988,
+            32.478710175
+          ],
+          [
+            -86.884498596,
+            32.482212067
+          ],
+          [
+            -86.879295349,
+            32.487613678
+          ],
+          [
+            -86.884994507,
+            32.499011993
+          ],
+          [
+            -86.889595032,
+            32.501811981
+          ],
+          [
+            -86.891197205,
+            32.51291275
+          ],
+          [
+            -86.902297974,
+            32.529312134
+          ],
+          [
+            -86.90259552,
+            32.536312103
+          ],
+          [
+            -86.90599823,
+            32.537212372
+          ],
+          [
+            -86.904396057,
+            32.553211212
+          ],
+          [
+            -86.900299072,
+            32.556911469
+          ],
+          [
+            -86.898399353,
+            32.567111969
+          ],
+          [
+            -86.901298523,
+            32.574512482
+          ],
+          [
+            -86.899398804,
+            32.577213287
+          ],
+          [
+            -86.905296326,
+            32.590610504
+          ],
+          [
+            -86.906997681,
+            32.608013153
+          ],
+          [
+            -86.911193848,
+            32.612411499
+          ],
+          [
+            -86.911697388,
+            32.630512238
+          ],
+          [
+            -86.918899536,
+            32.645011902
+          ],
+          [
+            -86.914100647,
+            32.648113251
+          ],
+          [
+            -86.921096802,
+            32.657112122
+          ],
+          [
+            -86.917098999,
+            32.663711548
+          ],
+          [
+            -86.816894531,
+            32.660110474
+          ],
+          [
+            -86.713897705,
+            32.662014008
+          ],
+          [
+            -86.713699341,
+            32.705612183
+          ],
+          [
+            -86.413093567,
+            32.70741272
+          ]
+        ]
+      ]
+    },
+    "statename": "Alabama",
+    "wfos": [],
+    "countyfips": "01001",
+    "statefips": "01"
+  },
+  "riskOverview": {
+    "wfo": "bmx",
+    "days": [
+      {
+        "risks": {
+          "Lightning": {
+            "color": "#ededed",
+            "category": 0,
+            "levelName": "None",
+            "definition": "No lightning risk"
+          },
+          "SevereThunderstorm": {
+            "color": "#ededed",
+            "category": 0,
+            "levelName": "None",
+            "definition": "No Severe Thunderstorm Risk"
+          }
+        },
+        "composite": {
+          "max": 0,
+          "scaled": 0
+        },
+        "dayNumber": 1,
+        "timestamp": "2026-04-21T08:00:00-05:00"
+      },
+      {
+        "risks": {
+          "Lightning": {
+            "color": "#ededed",
+            "category": 0,
+            "levelName": "None",
+            "definition": "No lightning risk"
+          },
+          "SevereThunderstorm": {
+            "color": "#ededed",
+            "category": 0,
+            "levelName": "None",
+            "definition": "No Severe Thunderstorm Risk"
+          }
+        },
+        "composite": {
+          "max": 0,
+          "scaled": 0
+        },
+        "dayNumber": 2,
+        "timestamp": "2026-04-22T07:00:00-05:00"
+      },
+      {
+        "risks": {
+          "Lightning": {
+            "color": "#ededed",
+            "category": 0,
+            "levelName": "None",
+            "definition": "No lightning risk"
+          },
+          "SevereThunderstorm": {
+            "color": "#ededed",
+            "category": 0,
+            "levelName": "None",
+            "definition": "No Severe Thunderstorm Risk"
+          }
+        },
+        "composite": {
+          "max": 0,
+          "scaled": 0
+        },
+        "dayNumber": 3,
+        "timestamp": "2026-04-23T07:00:00-05:00"
+      },
+      {
+        "risks": {
+          "Lightning": {
+            "color": "yellow",
+            "category": 1,
+            "levelName": "Limited",
+            "definition": "Isolated to scattered thunderstorms with dangerous cloud-to-ground lightning expected."
+          },
+          "SevereThunderstorm": {
+            "color": "#ededed",
+            "category": 0,
+            "levelName": "None",
+            "definition": "No Severe Thunderstorm Risk"
+          }
+        },
+        "composite": {
+          "max": 1,
+          "scaled": 0.33
+        },
+        "dayNumber": 4,
+        "timestamp": "2026-04-24T07:00:00-05:00"
+      },
+      {
+        "risks": {
+          "Lightning": {
+            "color": "yellow",
+            "category": 1,
+            "levelName": "Limited",
+            "definition": "Isolated to scattered thunderstorms with dangerous cloud-to-ground lightning expected."
+          },
+          "SevereThunderstorm": {
+            "color": "#ededed",
+            "category": 0,
+            "levelName": "None",
+            "definition": "No Severe Thunderstorm Risk"
+          }
+        },
+        "composite": {
+          "max": 1,
+          "scaled": 0.33
+        },
+        "dayNumber": 5,
+        "timestamp": "2026-04-25T07:00:00-05:00"
+      },
+      {
+        "risks": {
+          "Lightning": {
+            "color": "yellow",
+            "category": 1,
+            "levelName": "Limited",
+            "definition": "Isolated to scattered thunderstorms with dangerous cloud-to-ground lightning expected."
+          },
+          "SevereThunderstorm": {
+            "color": "#ededed",
+            "category": 0,
+            "levelName": "None",
+            "definition": "No Severe Thunderstorm Risk"
+          }
+        },
+        "composite": {
+          "max": 1,
+          "scaled": 0.33
+        },
+        "dayNumber": 6,
+        "timestamp": "2026-04-26T07:00:00-05:00"
+      },
+      {
+        "risks": {
+          "Lightning": {
+            "color": "yellow",
+            "category": 1,
+            "levelName": "Limited",
+            "definition": "Isolated to scattered thunderstorms with dangerous cloud-to-ground lightning expected."
+          },
+          "SevereThunderstorm": {
+            "color": "#ffff51",
+            "category": 2,
+            "levelName": "Slight",
+            "definition": "Scattered severe thunderstorms possible."
+          }
+        },
+        "composite": {
+          "max": 2,
+          "scaled": 0.4
+        },
+        "dayNumber": 7,
+        "timestamp": "2026-04-27T07:00:00-05:00"
+      }
+    ],
+    "fips": "01001",
+    "risks": {
+      "Lightning": {
+        "days": [
+          {
+            "color": "#ededed",
+            "image": "https://www.weather.gov/images/bmx/ghwo/LightningDay1.jpg",
+            "category": 0,
+            "levelName": "None",
+            "timestamp": "2026-04-21T08:00:00-05:00",
+            "definition": "No lightning risk"
+          },
+          {
+            "color": "#ededed",
+            "image": "https://www.weather.gov/images/bmx/ghwo/LightningDay2.jpg",
+            "category": 0,
+            "levelName": "None",
+            "timestamp": "2026-04-22T07:00:00-05:00",
+            "definition": "No lightning risk"
+          },
+          {
+            "color": "#ededed",
+            "image": "https://www.weather.gov/images/bmx/ghwo/LightningDay3.jpg",
+            "category": 0,
+            "levelName": "None",
+            "timestamp": "2026-04-23T07:00:00-05:00",
+            "definition": "No lightning risk"
+          },
+          {
+            "color": "yellow",
+            "image": "https://www.weather.gov/images/bmx/ghwo/LightningDay4.jpg",
+            "category": 1,
+            "levelName": "Limited",
+            "timestamp": "2026-04-24T07:00:00-05:00",
+            "definition": "Isolated to scattered thunderstorms with dangerous cloud-to-ground lightning expected."
+          },
+          {
+            "color": "yellow",
+            "image": "https://www.weather.gov/images/bmx/ghwo/LightningDay5.jpg",
+            "category": 1,
+            "levelName": "Limited",
+            "timestamp": "2026-04-25T07:00:00-05:00",
+            "definition": "Isolated to scattered thunderstorms with dangerous cloud-to-ground lightning expected."
+          },
+          {
+            "color": "yellow",
+            "image": "https://www.weather.gov/images/bmx/ghwo/LightningDay6.jpg",
+            "category": 1,
+            "levelName": "Limited",
+            "timestamp": "2026-04-26T07:00:00-05:00",
+            "definition": "Isolated to scattered thunderstorms with dangerous cloud-to-ground lightning expected."
+          },
+          {
+            "color": "yellow",
+            "image": "https://www.weather.gov/images/bmx/ghwo/LightningDay7.jpg",
+            "category": 1,
+            "levelName": "Limited",
+            "timestamp": "2026-04-27T07:00:00-05:00",
+            "definition": "Isolated to scattered thunderstorms with dangerous cloud-to-ground lightning expected."
+          }
+        ],
+        "name": "Lightning Risk",
+        "legend": {
+          "name": "Lightning Risk",
+          "scale": 3,
+          "category": {
+            "0": {
+              "color": "#ededed",
+              "category": 0,
+              "levelName": "None",
+              "definition": "No lightning risk"
+            },
+            "1": {
+              "color": "yellow",
+              "category": 1,
+              "levelName": "Limited",
+              "definition": "Isolated to scattered thunderstorms with dangerous cloud-to-ground lightning expected."
+            },
+            "2": {
+              "color": "orange",
+              "category": 2,
+              "levelName": "Elevated",
+              "definition": "Numerous thunderstorms with dangerous cloud-to-ground lightning expected."
+            },
+            "3": {
+              "color": "red",
+              "category": 3,
+              "levelName": "Significant",
+              "definition": "Widespread thunderstorms with dangerous cloud-to-ground lightning expected."
+            }
+          }
+        }
+      },
+      "SevereThunderstorm": {
+        "days": [
+          {
+            "color": "#ededed",
+            "image": "https://www.weather.gov/images/bmx/ghwo/SevereThunderstormsDay1.jpg",
+            "category": 0,
+            "levelName": "None",
+            "timestamp": "2026-04-21T08:00:00-05:00",
+            "definition": "No Severe Thunderstorm Risk"
+          },
+          {
+            "color": "#ededed",
+            "image": "https://www.weather.gov/images/bmx/ghwo/SevereThunderstormsDay2.jpg",
+            "category": 0,
+            "levelName": "None",
+            "timestamp": "2026-04-22T07:00:00-05:00",
+            "definition": "No Severe Thunderstorm Risk"
+          },
+          {
+            "color": "#ededed",
+            "image": "https://www.weather.gov/images/bmx/ghwo/SevereThunderstormsDay3.jpg",
+            "category": 0,
+            "levelName": "None",
+            "timestamp": "2026-04-23T07:00:00-05:00",
+            "definition": "No Severe Thunderstorm Risk"
+          },
+          {
+            "color": "#ededed",
+            "image": "https://www.weather.gov/images/bmx/ghwo/SevereThunderstormsDay4.jpg",
+            "category": 0,
+            "levelName": "None",
+            "timestamp": "2026-04-24T07:00:00-05:00",
+            "definition": "No Severe Thunderstorm Risk"
+          },
+          {
+            "color": "#ededed",
+            "image": "https://www.weather.gov/images/bmx/ghwo/SevereThunderstormsDay5.jpg",
+            "category": 0,
+            "levelName": "None",
+            "timestamp": "2026-04-25T07:00:00-05:00",
+            "definition": "No Severe Thunderstorm Risk"
+          },
+          {
+            "color": "#ededed",
+            "image": "https://www.weather.gov/images/bmx/ghwo/SevereThunderstormsDay6.jpg",
+            "category": 0,
+            "levelName": "None",
+            "timestamp": "2026-04-26T07:00:00-05:00",
+            "definition": "No Severe Thunderstorm Risk"
+          },
+          {
+            "color": "#ffff51",
+            "image": "https://www.weather.gov/images/bmx/ghwo/SevereThunderstormsDay7.jpg",
+            "category": 2,
+            "levelName": "Slight",
+            "timestamp": "2026-04-27T07:00:00-05:00",
+            "definition": "Scattered severe thunderstorms possible."
+          }
+        ],
+        "name": "Severe Thunderstorm Risk",
+        "legend": {
+          "name": "Severe Thunderstorm Risk",
+          "scale": 5,
+          "category": {
+            "0": {
+              "color": "#ededed",
+              "category": 0,
+              "levelName": "None",
+              "definition": "No Severe Thunderstorm Risk"
+            },
+            "1": {
+              "color": "#50c986",
+              "category": 1,
+              "levelName": "Marginal",
+              "definition": "Isolated severe thunderstorms possible."
+            },
+            "2": {
+              "color": "#ffff51",
+              "category": 2,
+              "levelName": "Slight",
+              "definition": "Scattered severe thunderstorms possible."
+            },
+            "3": {
+              "color": "#ffc06c",
+              "category": 3,
+              "levelName": "Enhanced",
+              "definition": "Numerous severe thunderstorms possible."
+            },
+            "4": {
+              "color": "#ff5050",
+              "category": 4,
+              "levelName": "Moderate",
+              "definition": "Widespread severe thunderstorms likely."
+            },
+            "5": {
+              "color": "#ff50ff",
+              "category": 5,
+              "levelName": "High",
+              "definition": "Widespread severe thunderstorms expected."
+            }
+          }
+        }
+      }
+    },
+    "legend": {
+      "Lightning": {
+        "name": "Lightning Risk",
+        "scale": 3,
+        "category": {
+          "0": {
+            "color": "#ededed",
+            "category": 0,
+            "levelName": "None",
+            "definition": "No lightning risk"
+          },
+          "1": {
+            "color": "yellow",
+            "category": 1,
+            "levelName": "Limited",
+            "definition": "Isolated to scattered thunderstorms with dangerous cloud-to-ground lightning expected."
+          },
+          "2": {
+            "color": "orange",
+            "category": 2,
+            "levelName": "Elevated",
+            "definition": "Numerous thunderstorms with dangerous cloud-to-ground lightning expected."
+          },
+          "3": {
+            "color": "red",
+            "category": 3,
+            "levelName": "Significant",
+            "definition": "Widespread thunderstorms with dangerous cloud-to-ground lightning expected."
+          }
+        }
+      },
+      "SevereThunderstorm": {
+        "name": "Severe Thunderstorm Risk",
+        "scale": 5,
+        "category": {
+          "0": {
+            "color": "#ededed",
+            "category": 0,
+            "levelName": "None",
+            "definition": "No Severe Thunderstorm Risk"
+          },
+          "1": {
+            "color": "#50c986",
+            "category": 1,
+            "levelName": "Marginal",
+            "definition": "Isolated severe thunderstorms possible."
+          },
+          "2": {
+            "color": "#ffff51",
+            "category": 2,
+            "levelName": "Slight",
+            "definition": "Scattered severe thunderstorms possible."
+          },
+          "3": {
+            "color": "#ffc06c",
+            "category": 3,
+            "levelName": "Enhanced",
+            "definition": "Numerous severe thunderstorms possible."
+          },
+          "4": {
+            "color": "#ff5050",
+            "category": 4,
+            "levelName": "Moderate",
+            "definition": "Widespread severe thunderstorms likely."
+          },
+          "5": {
+            "color": "#ff50ff",
+            "category": 5,
+            "levelName": "High",
+            "definition": "Widespread severe thunderstorms expected."
+          }
+        }
+      }
+    },
+    "noRisks": [
+      "Tornado Risk",
+      "Thunderstorm Wind Risk",
+      "Hail Risk",
+      "Excessive Rainfall Risk",
+      "Wind Risk",
+      "Frost/Freeze Risk",
+      "Fog Risk",
+      "Fire Weather Risk"
+    ],
+    "composite": {
+      "days": [
+        {
+          "max": 0,
+          "scaled": 0,
+          "timestamp": "2026-04-21T08:00:00-05:00"
+        },
+        {
+          "max": 0,
+          "scaled": 0,
+          "timestamp": "2026-04-22T07:00:00-05:00"
+        },
+        {
+          "max": 0,
+          "scaled": 0,
+          "timestamp": "2026-04-23T07:00:00-05:00"
+        },
+        {
+          "max": 1,
+          "scaled": 0.33,
+          "timestamp": "2026-04-24T07:00:00-05:00"
+        },
+        {
+          "max": 1,
+          "scaled": 0.33,
+          "timestamp": "2026-04-25T07:00:00-05:00"
+        },
+        {
+          "max": 1,
+          "scaled": 0.33,
+          "timestamp": "2026-04-26T07:00:00-05:00"
+        },
+        {
+          "max": 2,
+          "scaled": 0.4,
+          "timestamp": "2026-04-27T07:00:00-05:00"
+        }
+      ]
+    }
+  },
+  "alerts": {
+    "items": [],
+    "metadata": {
+      "error": false,
+      "updated": null
+    }
+  },
+  "alertDays": [
+    {
+      "start": "2026-04-21T05:00:00.000Z",
+      "end": "2026-04-22T05:00:00.000Z",
+      "day": "Tuesday",
+      "alerts": []
+    },
+    {
+      "start": "2026-04-22T05:00:00.000Z",
+      "end": "2026-04-23T05:00:00.000Z",
+      "day": "Wednesday",
+      "alerts": []
+    },
+    {
+      "start": "2026-04-23T05:00:00.000Z",
+      "end": "2026-04-24T05:00:00.000Z",
+      "day": "Thursday",
+      "alerts": []
+    },
+    {
+      "start": "2026-04-24T05:00:00.000Z",
+      "end": "2026-04-25T05:00:00.000Z",
+      "day": "Friday",
+      "alerts": []
+    },
+    {
+      "start": "2026-04-25T05:00:00.000Z",
+      "end": "2026-04-26T05:00:00.000Z",
+      "day": "Saturday",
+      "alerts": []
+    }
+  ],
+  "weatherstories": [],
+  "briefings": []
+}

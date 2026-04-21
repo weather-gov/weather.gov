@@ -1,0 +1,7 @@
+FROM golang:1.22-alpine
+
+# Install entr or CompileDaemon for hot reloading if needed, or simply run 'go run'
+WORKDIR /app
+
+# For dev we just wrap 'go run .'
+CMD ["go", "run", "."]

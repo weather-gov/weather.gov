@@ -1,0 +1,446 @@
+[
+  {
+    "name": "tsunami warning",
+    "kind": "land"
+  },
+  {
+    "name": "tornado warning",
+    "kind": "land"
+  },
+  {
+    "name": "extreme wind warning",
+    "kind": "land"
+  },
+  {
+    "name": "severe thunderstorm warning",
+    "kind": "land"
+  },
+  {
+    "name": "flash flood warning",
+    "kind": "land"
+  },
+  {
+    "name": "flash flood statement",
+    "kind": "land"
+  },
+  {
+    "name": "severe weather statement",
+    "kind": "land"
+  },
+  {
+    "name": "shelter in place warning",
+    "kind": "land"
+  },
+  {
+    "name": "evacuation immediate",
+    "kind": "land"
+  },
+  {
+    "name": "civil danger warning",
+    "kind": "land"
+  },
+  {
+    "name": "nuclear power plant warning",
+    "kind": "land"
+  },
+  {
+    "name": "radiological hazard warning",
+    "kind": "land"
+  },
+  {
+    "name": "hazardous materials warning",
+    "kind": "land"
+  },
+  {
+    "name": "fire warning",
+    "kind": "land"
+  },
+  {
+    "name": "civil emergency message",
+    "kind": "land"
+  },
+  {
+    "name": "law enforcement warning",
+    "kind": "land"
+  },
+  {
+    "name": "storm surge warning",
+    "kind": "marine"
+  },
+  {
+    "name": "hurricane force wind warning",
+    "kind": "marine"
+  },
+  {
+    "name": "hurricane warning",
+    "kind": "land"
+  },
+  {
+    "name": "typhoon warning",
+    "kind": "land"
+  },
+  {
+    "name": "special marine warning",
+    "kind": "marine"
+  },
+  {
+    "name": "blizzard warning",
+    "kind": "land"
+  },
+  {
+    "name": "snow squall warning",
+    "kind": "land"
+  },
+  {
+    "name": "ice storm warning",
+    "kind": "land"
+  },
+  {
+    "name": "heavy freezing spray warning",
+    "kind": "marine"
+  },
+  {
+    "name": "winter storm warning",
+    "kind": "land"
+  },
+  {
+    "name": "lake effect snow warning",
+    "kind": "land"
+  },
+  {
+    "name": "dust storm warning",
+    "kind": "land"
+  },
+  {
+    "name": "blowing dust warning",
+    "kind": "other"
+  },
+  {
+    "name": "high wind warning",
+    "kind": "land"
+  },
+  {
+    "name": "tropical storm warning",
+    "kind": "land"
+  },
+  {
+    "name": "storm warning",
+    "kind": "marine"
+  },
+  {
+    "name": "tsunami advisory",
+    "kind": "land"
+  },
+  {
+    "name": "tsunami watch",
+    "kind": "land"
+  },
+  {
+    "name": "avalanche warning",
+    "kind": "land"
+  },
+  {
+    "name": "earthquake warning",
+    "kind": "land"
+  },
+  {
+    "name": "volcano warning",
+    "kind": "land"
+  },
+  {
+    "name": "ashfall warning",
+    "kind": "land"
+  },
+  {
+    "name": "flood warning",
+    "kind": "land"
+  },
+  {
+    "name": "coastal flood warning",
+    "kind": "land"
+  },
+  {
+    "name": "lakeshore flood warning",
+    "kind": "land"
+  },
+  {
+    "name": "ashfall advisory",
+    "kind": "land"
+  },
+  {
+    "name": "high surf warning",
+    "kind": "land"
+  },
+  {
+    "name": "extreme heat warning",
+    "kind": "land"
+  },
+  {
+    "name": "tornado watch",
+    "kind": "land"
+  },
+  {
+    "name": "severe thunderstorm watch",
+    "kind": "land"
+  },
+  {
+    "name": "flash flood watch",
+    "kind": "land"
+  },
+  {
+    "name": "gale warning",
+    "kind": "marine"
+  },
+  {
+    "name": "flood statement",
+    "kind": "land"
+  },
+  {
+    "name": "extreme cold warning",
+    "kind": "land"
+  },
+  {
+    "name": "freeze warning",
+    "kind": "land"
+  },
+  {
+    "name": "red flag warning",
+    "kind": "land"
+  },
+  {
+    "name": "storm surge watch",
+    "kind": "marine"
+  },
+  {
+    "name": "hurricane watch",
+    "kind": "land"
+  },
+  {
+    "name": "hurricane force wind watch",
+    "kind": "marine"
+  },
+  {
+    "name": "typhoon watch",
+    "kind": "land"
+  },
+  {
+    "name": "tropical storm watch",
+    "kind": "land"
+  },
+  {
+    "name": "storm watch",
+    "kind": "marine"
+  },
+  {
+    "name": "tropical cyclone local statement",
+    "kind": "land"
+  },
+  {
+    "name": "winter weather advisory",
+    "kind": "land"
+  },
+  {
+    "name": "avalanche advisory",
+    "kind": "land"
+  },
+  {
+    "name": "cold weather advisory",
+    "kind": "land"
+  },
+  {
+    "name": "heat advisory",
+    "kind": "land"
+  },
+  {
+    "name": "flood advisory",
+    "kind": "land"
+  },
+  {
+    "name": "coastal flood advisory",
+    "kind": "land"
+  },
+  {
+    "name": "lakeshore flood advisory",
+    "kind": "land"
+  },
+  {
+    "name": "high surf advisory",
+    "kind": "land"
+  },
+  {
+    "name": "dense fog advisory",
+    "kind": "land"
+  },
+  {
+    "name": "dense smoke advisory",
+    "kind": "land"
+  },
+  {
+    "name": "small craft advisory",
+    "kind": "marine"
+  },
+  {
+    "name": "brisk wind advisory",
+    "kind": "marine"
+  },
+  {
+    "name": "hazardous seas warning",
+    "kind": "marine"
+  },
+  {
+    "name": "dust advisory",
+    "kind": "other"
+  },
+  {
+    "name": "blowing dust advisory",
+    "kind": "land"
+  },
+  {
+    "name": "lake wind advisory",
+    "kind": "land"
+  },
+  {
+    "name": "wind advisory",
+    "kind": "land"
+  },
+  {
+    "name": "frost advisory",
+    "kind": "land"
+  },
+  {
+    "name": "freezing fog advisory",
+    "kind": "land"
+  },
+  {
+    "name": "freezing spray advisory",
+    "kind": "marine"
+  },
+  {
+    "name": "low water advisory",
+    "kind": "marine"
+  },
+  {
+    "name": "local area emergency",
+    "kind": "land"
+  },
+  {
+    "name": "winter storm watch",
+    "kind": "land"
+  },
+  {
+    "name": "rip current statement",
+    "kind": "land"
+  },
+  {
+    "name": "beach hazards statement",
+    "kind": "land"
+  },
+  {
+    "name": "gale watch",
+    "kind": "marine"
+  },
+  {
+    "name": "avalanche watch",
+    "kind": "land"
+  },
+  {
+    "name": "hazardous seas watch",
+    "kind": "marine"
+  },
+  {
+    "name": "heavy freezing spray watch",
+    "kind": "marine"
+  },
+  {
+    "name": "flood watch",
+    "kind": "land"
+  },
+  {
+    "name": "coastal flood watch",
+    "kind": "land"
+  },
+  {
+    "name": "lakeshore flood watch",
+    "kind": "land"
+  },
+  {
+    "name": "high wind watch",
+    "kind": "land"
+  },
+  {
+    "name": "extreme heat watch",
+    "kind": "land"
+  },
+  {
+    "name": "extreme cold watch",
+    "kind": "land"
+  },
+  {
+    "name": "freeze watch",
+    "kind": "land"
+  },
+  {
+    "name": "fire weather watch",
+    "kind": "land"
+  },
+  {
+    "name": "extreme fire danger",
+    "kind": "land"
+  },
+  {
+    "name": "911 telephone outage",
+    "kind": "land"
+  },
+  {
+    "name": "coastal flood statement",
+    "kind": "land"
+  },
+  {
+    "name": "lakeshore flood statement",
+    "kind": "land"
+  },
+  {
+    "name": "special weather statement",
+    "kind": "land"
+  },
+  {
+    "name": "marine weather statement",
+    "kind": "marine"
+  },
+  {
+    "name": "air quality alert",
+    "kind": "land"
+  },
+  {
+    "name": "air stagnation advisory",
+    "kind": "land"
+  },
+  {
+    "name": "hazardous weather outlook",
+    "kind": "land"
+  },
+  {
+    "name": "hydrologic outlook",
+    "kind": "land"
+  },
+  {
+    "name": "short term forecast",
+    "kind": "land"
+  },
+  {
+    "name": "administrative message",
+    "kind": "land"
+  },
+  {
+    "name": "test",
+    "kind": "land"
+  },
+  {
+    "name": "child abduction emergency",
+    "kind": "land"
+  },
+  {
+    "name": "blue alert",
+    "kind": "other"
+  }
+]
