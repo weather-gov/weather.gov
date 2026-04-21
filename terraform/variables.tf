@@ -154,3 +154,9 @@ variable "web_gevent_workers" {
   default     = 8
   description = "The number of gevent workers to allocate per web instance"
 }
+
+variable "api_timings_metadata" {
+  type      = bool
+  default  = false
+  description = "Whether or not to display metadata about API request timing in interop responses"
+}

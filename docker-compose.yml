@@ -112,6 +112,9 @@ services:
       REDIS_PASSWORD: ixu3N02Xp3uRPDcuZCmKIWZyNb
       # MAX_OPEN_CONNECTIONS: 0
       DISABLE_REDIS: false
+      # Whether or not we record metadata about API
+      # request timings that is returned with the responses.
+      API_TIMINGS_METADATA: true
       # The number of Client instances to create.
       # When set to null, the Pool instance will create
       # an unlimited amount of Client instances.
