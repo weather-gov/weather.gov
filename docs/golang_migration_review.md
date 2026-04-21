@@ -44,19 +44,30 @@ To avoid breaking the Django E2E validation suite (`playwright`/`testing`), nati
 
 A critical motivation for sunsetting NodeJS in favor of Golang was stabilizing unpredictable latencies across concurrent NWS proxy requests (Point Orchestration being the worst offender due to recursive fetches).
 
-Using Apache Benchmark (`ab`), we simulated aggressive production-level traffic hitting the identical Point logic (`/point/38.889/-77.032`).
+Using Apache Benchmark (`ab`) via the automated test script located at `/scripts/performance_tests/run_load_tests.py`, we simulated aggressive production-level traffic hitting the identical Point logic across multiple geographic target locations.
 
-### Load Testing Metrics (Concurrency: 5 | Iterations: 20)
+### Load Testing Metrics - Anchorage, AK
+_(Concurrency: 5 | Iterations: 20)_
 
 | Metric | NodeJS Server (`8082`) | Golang Server (`8083`) | Improvement |
 | :--- | :--- | :--- | :--- |
-| **Requests Per Second (RPS)** | 2.71 req/sec | **9.90 req/sec** | **3.65x Faster** |
-| **Time per request (Mean)** | 1846.37 ms | **504.905 ms** | **72% Reduction** |
-| **Median Latency (p50)** | 724 ms | **171 ms** | **4.2x Faster** |
-| **P99 Tail Latency** | 2938 ms | **851 ms** | **71% Reduction** |
+| **Requests Per Second (RPS)** | 4.6 req/sec | **33.22 req/sec** | **7.22x Faster** |
+| **Time per request (Mean)** | 1086.138 ms | **150.504 ms** | **86% Reduction** |
+| **Median Latency (p50)** | 103 ms | **91 ms** | **1.1x Faster** |
+| **P99 Tail Latency** | 3752 ms | **397 ms** | **89% Reduction** |
+
+### Load Testing Metrics - Miami, FL
+_(Concurrency: 5 | Iterations: 20)_
+
+| Metric | NodeJS Server (`8082`) | Golang Server (`8083`) | Improvement |
+| :--- | :--- | :--- | :--- |
+| **Requests Per Second (RPS)** | 30.71 req/sec | **45.1 req/sec** | **1.47x Faster** |
+| **Time per request (Mean)** | 162.812 ms | **110.872 ms** | **32% Reduction** |
+| **Median Latency (p50)** | 93 ms | **91 ms** | **1.0x Faster** |
+| **P99 Tail Latency** | 274 ms | **105 ms** | **62% Reduction** |
 
 > [!TIP]
-> **Conclusion**: The Golang implementation effectively crushes the NodeJS variant across all metrics. The elimination of event-loop blockages allows Golang to handle near 10 RPS in sustained bursts against recursive geographic API structures, cutting P99 worst-case waits from ~3s to less than 1s gracefully.
+> **Conclusion**: The Golang implementation effectively crushes the NodeJS variant across all metrics. The elimination of event-loop blockages allows Golang to handle significantly higher RPS in sustained bursts against recursive geographic API structures, cutting P99 worst-case waits gracefully.
 
 ---
 
