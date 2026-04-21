@@ -90,9 +90,9 @@ To verify the stability of the Django templates when backed by the new Go routin
 ### Forecast Page
 Demonstrates current conditions, the 7-day grid, and interactive elements loading seamlessly via JSON structs marshalled directly from Go.
 
-![Forecast Page Demo](/Users/arihershowitz/Documents/AdHoc/workspace/weathergov-django-remote-clone/docs/img/forecast_demo.webp)
+![Forecast Page Demo](img/forecast_demo.webp)
 
 ### County Intersections & Risk Overviews
 Showcases a county-level hazard page loading alert geometry boundaries and GHWO aggregations synchronously.
 
-![County Page Demo](/Users/arihershowitz/Documents/AdHoc/workspace/weathergov-django-remote-clone/docs/img/county_demo.webp)
+![County Page Demo](img/county_demo.webp)
