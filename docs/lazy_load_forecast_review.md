@@ -25,16 +25,16 @@ Below is a comparison table showing the local performance benchmark results for 
 
 | Location | Main FCP (Uncached) | Main FCP (Cached) | Lazy Load FCP (Uncached) | Lazy Load FCP (Cached) |
 |---|---|---|---|---|
-| **Marquette, MI** | 5.99s | 0.80s | 2.74s | 0.12s |
-| **Denver, CO** | 1.83s | 0.34s | 2.24s | 0.17s |
-| **Honolulu, HI** | 1.16s | 0.07s | 2.92s | 0.28s |
-| **Utqiagvik, AK** | 1.89s | 0.07s | 1.66s | 0.11s |
-| **Miami, FL** | 1.66s | 0.07s | 2.28s | 0.13s |
-| **Seattle, WA** | 0.90s | 0.06s | 2.35s | 0.06s |
-| **New York, NY** | 0.84s | 0.66s | 2.23s | 0.16s |
-| **Austin, TX** | 0.73s | 0.07s | 1.66s | 0.08s |
-| **Phoenix, AZ** | 0.95s | 0.07s | 1.65s | 0.13s |
-| **Boston, MA** | 1.38s | 0.07s | 1.45s | 0.05s |
+| **Near Marquette, MI** | 2.55s | 0.12s | 4.16s | 0.26s |
+| **Near Denver, CO** | 8.82s | 0.07s | 1.36s | 0.08s |
+| **Near Honolulu, HI** | 1.32s | 0.06s | 0.90s | 0.26s |
+| **Near Utqiagvik, AK** | 2.26s | 0.30s | 1.88s | 0.12s |
+| **Near Miami, FL** | 1.21s | 0.06s | 1.26s | 0.06s |
+| **Near Seattle, WA** | 1.74s | 0.05s | 2.16s | 0.05s |
+| **Near New York, NY** | 16.78s | 0.59s | 0.64s | 0.09s |
+| **Near Austin, TX** | 8.18s | 0.06s | 0.54s | 0.07s |
+| **Near Phoenix, AZ** | 16.81s | 0.07s | 2.11s | 0.17s |
+| **Near Boston, MA** | 1.74s | 0.06s | 0.81s | 0.05s |
 
 *(Note: Load times are subject to local container speed and Redis cache states. As expected, the lazy loading architecture achieves a sub-1-second First Contentful Paint for cached requests by immediately rendering the skeleton layout while background data fetches resolve.)*
 

@@ -66,7 +66,17 @@ def point_location(request, lat, lon):  # noqa: C901
 
     # Fetch the approximate nearest place for the skeleton `<title>` and place banner
     point_geom = Point(lon, lat, srid=4326)
-    nearest_place = WeatherPlace.objects.annotate(distance=Distance("point", point_geom)).order_by("distance").first()
+    
+    # Optimize query by first searching within 0.25 degrees (~17 miles) using spatial index
+    nearest_place = WeatherPlace.objects.filter(
+        point__dwithin=(point_geom, 0.25)
+    ).annotate(distance=Distance("point", point_geom)).order_by("distance").first()
+    
+    if not nearest_place:
+        # Fallback to full table scan if no place is found within the radius
+        nearest_place = WeatherPlace.objects.annotate(
+            distance=Distance("point", point_geom)
+        ).order_by("distance").first()
     
     approximate_name = "Unknown Location"
     if nearest_place:
