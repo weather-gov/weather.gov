@@ -25,8 +25,10 @@ const DEFAULT_SETTINGS = {
   allowH2: true,
   pipelining: 10,
   connections: 500,
-  bodyTimeout: 60 * 1000,
-  headersTimeout: 60 * 1000,
+  // our timeout target is 1m but we set 20s here because (as in the case of
+  // forecast calls) we may have to make up to 3 non-parallelizable API calls.
+  bodyTimeout: 20 * 1000,
+  headersTimeout: 20 * 1000,
 };
 
 /**

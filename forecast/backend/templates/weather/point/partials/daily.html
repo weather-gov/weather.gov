@@ -1,0 +1,4 @@
+{% load weather_i18n %}
+{% load i18n %}
+<h2 class="usa-sr-only">{% trans "forecast.heading.daily-forecast.01" %}</h2>
+{% include "weather/partials/forecast.html" with forecast=point.forecast %}

@@ -185,7 +185,7 @@ describe("main bootstrapper", () => {
     });
 
     it("sets the HTTP status code if provided", async () => {
-      handler.resolves({ data: null, status: "over 9000" });
+      handler.resolves({ data: {}, status: "over 9000" });
 
       await handlerWrapper(request, response);
 

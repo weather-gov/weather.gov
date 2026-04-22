@@ -17,6 +17,8 @@
 {% endcomment %}
 {% localtime off %}
 <!DOCTYPE html>
+<!-- djlint:off H016 -->
+<!-- We ignore H016 here because djlint does not recognize the dynamically rendered Django template variable for the lang attribute -->
 <html lang="{{ request.LANGUAGE_CODE }}">
   <head>
     {% set_title_and_description %}
@@ -46,4 +48,5 @@
     {% block end_js %}{% endblock %}
   </body>
 </html>
+<!-- djlint:on H016 -->
 {% endlocaltime %}

@@ -11,7 +11,9 @@ from django.views.decorators.http import require_GET, require_POST
 from shapely import MultiPolygon, Polygon
 
 from backend import interop
+from backend.exceptions import Http429, Http504
 from backend.util import get_counties_combo_box_list, get_states_combo_box_list, process_state_alerts
+from django.utils.translation import gettext_lazy as _
 from spatial.models import WeatherAlertsCache, WeatherCounties, WeatherStates
 
 
@@ -203,4 +205,99 @@ def wx_ghwo_counties(request, county_fips):
             "ghwo": ghwo_data,
             "county": county,
         },
+    )
+
+
+@require_GET
+@never_cache
+def wx_point_header(request, lat, lon):
+    """Render the point header partial view."""
+    try:
+        point = interop.get_point_forecast(lat, lon)
+    except Http504:
+        return render(request, "weather/partials/uswds-alert.html", {"level": "error", "heading": _("error.504.interop.heading.01"), "body": _("error.504.interop.description.01")})
+    except Http429:
+        return render(request, "weather/partials/uswds-alert.html", {"level": "error", "heading": _("error.429.interop.heading.01"), "body": _("error.429.interop.description.01")})
+    except Exception:
+        return render(request, "weather/partials/uswds-alert.html", {"level": "error", "body": _("forecast.errors.loading.01")})
+
+    return render(
+        request,
+        "weather/point/partials/header.html",
+        {"point": point},
+    )
+
+
+@require_GET
+@never_cache
+def wx_point_alerts(request, lat, lon):
+    """Render the point alerts partial view."""
+    try:
+        point = interop.get_point_forecast(lat, lon)
+    except Http504:
+        return render(request, "weather/partials/uswds-alert.html", {"level": "error", "heading": _("error.504.interop.heading.01"), "body": _("error.504.interop.description.01")})
+    except Http429:
+        return render(request, "weather/partials/uswds-alert.html", {"level": "error", "heading": _("error.429.interop.heading.01"), "body": _("error.429.interop.description.01")})
+    except Exception:
+        return render(request, "weather/partials/uswds-alert.html", {"level": "error", "body": _("forecast.errors.loading.01")})
+
+    return render(
+        request,
+        "weather/point/partials/alerts.html",
+        {"point": point},
+    )
+
+
+@require_GET
+@never_cache
+def wx_point_today(request, lat, lon):
+    """Render the point today partial view."""
+    try:
+        point = interop.get_point_forecast(lat, lon)
+    except Http504:
+        return render(request, "weather/partials/uswds-alert.html", {"level": "error", "heading": _("error.504.interop.heading.01"), "body": _("error.504.interop.description.01")})
+    except Http429:
+        return render(request, "weather/partials/uswds-alert.html", {"level": "error", "heading": _("error.429.interop.heading.01"), "body": _("error.429.interop.description.01")})
+    except Exception:
+        return render(request, "weather/partials/uswds-alert.html", {"level": "error", "body": _("forecast.errors.loading.01")})
+
+    weather_story = {}
+    if "grid" in point and "wfo" in point["grid"] and "place" in point and "timezone" in point["place"]:
+        from zoneinfo import ZoneInfo  # noqa: PLC0415
+
+        from backend.models import WFO  # noqa: PLC0415
+        from backend.util import get_weather_story_from_point_data  # noqa: PLC0415
+
+        localtz = ZoneInfo(point["place"]["timezone"])
+        code = point["grid"]["wfo"]
+        wfo = WFO.objects.get(code=WFO.normalize_code(code))
+        point["wfo"] = wfo
+        weather_story = get_weather_story_from_point_data(point, wfo, localtz)
+        if "weatherstory" in point:
+            del point["weatherstory"]
+
+    return render(
+        request,
+        "weather/point/partials/today.html",
+        {"point": point, "weather_story": weather_story},
+    )
+
+
+@require_GET
+@never_cache
+def wx_point_daily(request, lat, lon):
+    """Render the point daily partial view."""
+    try:
+        point = interop.get_point_forecast(lat, lon)
+    except Http504:
+        return render(request, "weather/partials/uswds-alert.html", {"level": "error", "heading": _("error.504.interop.heading.01"), "body": _("error.504.interop.description.01")})
+    except Http429:
+        return render(request, "weather/partials/uswds-alert.html", {"level": "error", "heading": _("error.429.interop.heading.01"), "body": _("error.429.interop.description.01")})
+    except Exception:
+        return render(request, "weather/partials/uswds-alert.html", {"level": "error", "body": _("forecast.errors.loading.01")})
+
+    return render(
+        request,
+        "weather/point/partials/daily.html",
+        {"point": point},
     )

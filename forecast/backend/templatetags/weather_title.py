@@ -13,6 +13,8 @@ def set_title_and_description(context):
     title_elements = []
 
     full_name = context.get("point", {}).get("place", {}).get("fullName", None)
+    if not full_name:
+        full_name = context.get("approximate_name", None)
     page = context.get("page", {})
 
     if isinstance(page, dict):

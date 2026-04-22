@@ -1,3 +1,5 @@
+import getTimer  from "./performance.js";
+
 const STANDARD_HEADERS = {
   "User-Agent": "beta.weather.gov interop",
   Accept: "application/json",
@@ -11,6 +13,9 @@ const STANDARD_HEADERS = {
  * @returns {object} The JSON response or throws an Error object for 4xx/5xx responses
  */
 const performRequest = async (dispatcher, path, additionalHeaders = {}) => {
+  const timer = getTimer(path);
+  timer.start();
+  
   const composedHeaders = {
     ...STANDARD_HEADERS,
     ...additionalHeaders,
@@ -26,7 +31,10 @@ const performRequest = async (dispatcher, path, additionalHeaders = {}) => {
       // See https://undici.nodejs.org/#/?id=pipelining
       blocking: false,
     });
+    timer.end();
   } catch (err) {
+    timer.end();
+    timer.updateStore(response?.headers);
     // Catch undici timeout errors from the request itself
     if (
       err.code === "UND_ERR_BODY_TIMEOUT" ||
@@ -53,6 +61,7 @@ const performRequest = async (dispatcher, path, additionalHeaders = {}) => {
       const error = new Error(`Request failed: ${statusCode}`);
       error.cause = { statusText, statusCode };
       error.error = true;
+      timer.updateStore(headers);
       throw error;
     }
 
@@ -63,6 +72,7 @@ const performRequest = async (dispatcher, path, additionalHeaders = {}) => {
       await body.dump();
       const error = new Error(`Response was not JSON: ${contentType}`);
       error.error = true;
+      timer.updateStore(headers);
       throw error;
     }
 
@@ -73,6 +83,7 @@ const performRequest = async (dispatcher, path, additionalHeaders = {}) => {
       data = text && text.trim().length > 0 ? JSON.parse(text) : null;
     }
 
+    timer.updateStore(headers);
     return { data, headers };
   } catch (err) {
     // Safety cleanup for parsing errors

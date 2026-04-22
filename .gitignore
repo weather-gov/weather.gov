@@ -86,3 +86,14 @@ forecast/frontend/public/
 # Node profiling
 *.cpuprofile
 *.heapprofile
+
+# Python & Virtual Environments
+.venv/
+venv/
+env/
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/

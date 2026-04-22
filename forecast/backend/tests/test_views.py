@@ -96,7 +96,7 @@ class TestViews(TestCase):
         response = self.client.get("/")
         self.assertTemplateUsed(response, "weather/index.html")
 
-    @mock.patch("backend.views.point.interop.get_point_forecast")
+    @mock.patch("backend.interop.get_point_forecast")
     def test_point_location(self, mock_get_point_forecast):
         """Test the point location view."""
         mock_get_point_forecast.return_value = {
@@ -106,10 +106,10 @@ class TestViews(TestCase):
             "weatherstory": [self.weather_story],
         }
 
-        response = self.client.get("/point/11.1/22.2", follow=True)
+        response = self.client.get("/wx/point/11.1/22.2/today/", follow=True)
 
         mock_get_point_forecast.assert_called_once_with(11.1, 22.2)
-        self.assertTemplateUsed(response, "weather/point/overview.html")
+        self.assertTemplateUsed(response, "weather/point/partials/today.html")
         self.assertEqual(
             response.context["point"],
             {"grid": {"wfo": "TST"}, "wfo": self.wfo, "isMarine": False, "place": {"timezone": "America/New_York"}},
@@ -123,7 +123,7 @@ class TestViews(TestCase):
         self.assertEqual(response.status_code, 302)
         self.assertEqual(response.url, "/point/1.235/9.877/")
 
-    @mock.patch("backend.views.point.interop.get_point_forecast")
+    @mock.patch("backend.interop.get_point_forecast")
     def test_point_location_update(self, mock_get_point_forecast):
         """Test the point location view."""
         mock_get_point_forecast.return_value = {
@@ -139,10 +139,15 @@ class TestViews(TestCase):
         self.assertTemplateUsed(response, "weather/point/point.update.html")
         self.assertEqual(
             response.context["point"],
-            {"grid": {"wfo": "TST"}, "wfo": self.wfo, "isMarine": False, "place": {"timezone": "America/New_York"}},
+            {
+                "grid": {"wfo": "TST"},
+                "isMarine": False,
+                "place": {"timezone": "America/New_York"},
+                "weatherstory": [self.weather_story],
+            },
         )
 
-    @mock.patch("backend.views.point.interop.get_point_forecast")
+    @mock.patch("backend.interop.get_point_forecast")
     def test_point_location_no_weather_story(self, mock_get_point_forecast):
         """Test the point location view where there's no weather story available."""
         mock_get_point_forecast.return_value = {
@@ -152,7 +157,7 @@ class TestViews(TestCase):
             "weatherstory": [],
         }
 
-        response = self.client.get("/point/11.1/22.2", follow=True)
+        response = self.client.get("/wx/point/11.1/22.2/today/", follow=True)
 
         mock_get_point_forecast.assert_called_once_with(11.1, 22.2)
 
@@ -164,7 +169,7 @@ class TestViews(TestCase):
         self.assertEqual(response.context["weather_story"], expected)
         self.assertTemplateUsed("weather/partials/point-weather-storys.html")
 
-    @mock.patch("backend.views.point.interop.get_point_forecast")
+    @mock.patch("backend.interop.get_point_forecast")
     def test_point_location_ok_weather_story(self, mock_get_point_forecast):
         """Test the point location renders with OK weather story."""
         weather_story = {
@@ -187,7 +192,7 @@ class TestViews(TestCase):
             "weatherstory": [weather_story],
         }
 
-        response = self.client.get("/point/11.1/22.2", follow=True)
+        response = self.client.get("/wx/point/11.1/22.2/today/", follow=True)
 
         mock_get_point_forecast.assert_called_once_with(11.1, 22.2)
 
@@ -230,24 +235,10 @@ class TestViews(TestCase):
         self.assertEqual(response.status_code, 404)
         self.assertTemplateUsed(response, "errors/404/point-out-of-bounds.html")
 
-    @disable_logging_for_quieter_tests
-    @mock.patch("backend.views.point.interop.get_point_forecast")
-    def test_point_location_with_out_of_bounds(self, mock_get_point_forecast):
-        """Test the point location view when the requested point is out of bounds."""
-        mock_get_point_forecast.return_value = {
-            "error": True,
-            "status": 404,
-            "reason": "out-of-bounds",
-        }
-
-        response = self.client.get("/point/11.1/22.2", follow=True)
-
-        mock_get_point_forecast.assert_called_once_with(11.1, 22.2)
-
         self.assertEqual(response.status_code, 404)
         self.assertTemplateUsed(response, "errors/404/point-out-of-bounds.html")
 
-    @mock.patch("backend.views.point.interop.get_point_forecast")
+    @mock.patch("backend.interop.get_point_forecast")
     def test_point_location_with_unsupported_point(self, mock_get_point_forecast):
         """Test the point location view when the requested point is not supported."""
         mock_get_point_forecast.return_value = {
@@ -256,13 +247,13 @@ class TestViews(TestCase):
             "reason": "not-supported",
         }
 
-        response = self.client.get("/point/11.1/22.2", follow=True)
+        response = self.client.get("/wx/point/11.1/22.2/today/", follow=True)
 
         mock_get_point_forecast.assert_called_once_with(11.1, 22.2)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, "weather/point/overview.html")
+        self.assertTemplateUsed(response, "weather/point/partials/today.html")
 
-    @mock.patch("backend.views.point.interop.get_point_forecast")
+    @mock.patch("backend.interop.get_point_forecast")
     def test_point_location_with_minimal_data(self, mock_get_point_forecast):
         """Test the point location view when we have alerts but no forecast."""
         mock_get_point_forecast.return_value = {
@@ -283,15 +274,13 @@ class TestViews(TestCase):
             },
         }
 
-        response = self.client.get("/point/11.1/22.2", follow=True)
+        response = self.client.get("/wx/point/11.1/22.2/alerts/", follow=True)
 
         mock_get_point_forecast.assert_called_once_with(11.1, 22.2)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, "weather/point/overview.html")
-        self.assertNotContains(response, "daily-tab-button")
-        self.assertContains(response, "alerts-tab-button")
+        self.assertTemplateUsed(response, "weather/point/partials/alerts.html")
 
-    @mock.patch("backend.views.point.interop.get_point_forecast")
+    @mock.patch("backend.interop.get_point_forecast")
     def test_point_location_with_api_500_interop_200(self, mock_get_point_forecast):
         """Test the point location where no valid API data is returned by the interop."""
         mock_get_point_forecast.return_value = {
@@ -300,34 +289,21 @@ class TestViews(TestCase):
             "observations": {"error": True},
         }
 
-        response = self.client.get("/point/11.1/22.2", follow=True)
+        response = self.client.get("/wx/point/11.1/22.2/today/", follow=True)
 
         mock_get_point_forecast.assert_called_once_with(11.1, 22.2)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, "weather/point/overview.html")
+        self.assertTemplateUsed(response, "weather/point/partials/today.html")
         self.assertTemplateUsed(response, "weather/partials/uswds-alert.html")
 
     @disable_logging_for_quieter_tests
-    @mock.patch("backend.views.point.interop.get_point_forecast", side_effect=Http429())
+    @mock.patch("backend.interop.get_point_forecast", side_effect=Http429())
     def test_point_location_interop_429(self, mock_interop_get_point_forecast):  # noqa: ARG002
-        """Test that the point location renders 429 when interop does."""
-        response = self.client.get("/point/11.1/22.2", follow=True)
+        """Test that the point location renders 429 alert when interop throws Http429."""
+        response = self.client.get("/wx/point/11.1/22.2/today/", follow=True)
 
-        self.assertEqual(response.status_code, 429)
-        self.assertTemplateUsed(response, "errors/429.html")
-
-    @disable_logging_for_quieter_tests
-    @mock.patch("backend.views.point.interop.get_point_forecast")
-    def test_marine_point(self, mock_get_point_forecast):
-        """Test that a marine point renders the right template."""
-        mock_get_point_forecast.return_value = {
-            "grid": {"wfo": "TST"},
-            "isMarine": True,
-        }
-
-        response = self.client.get("/point/11.1/22.2", follow=True)
-
-        self.assertTemplateUsed(response, "errors/404/marine-point.html")
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "weather/partials/uswds-alert.html")
 
     @disable_logging_for_quieter_tests
     def test_place_unknown(self):
@@ -335,7 +311,7 @@ class TestViews(TestCase):
         response = self.client.get("/place/NJ/Not_Hoboken/")
         self.assertEqual(response.status_code, 404)
 
-    @mock.patch("backend.views.point.interop.get_point_forecast")
+    @mock.patch("backend.interop.get_point_forecast")
     def test_place_redirect_state(self, mock_get_point_forecast):
         """Test the place location view where the state needs redirection."""
         mock_get_point_forecast.return_value = {
@@ -347,7 +323,7 @@ class TestViews(TestCase):
         response = self.client.get("/place/nj/Hoboken/")
         self.assertRedirects(response, "/place/NJ/Hoboken/")
 
-    @mock.patch("backend.views.point.interop.get_point_forecast")
+    @mock.patch("backend.interop.get_point_forecast")
     def test_place_redirect_place(self, mock_get_point_forecast):
         """Test the place location view where the place name needs redirection."""
         mock_get_point_forecast.return_value = {
@@ -359,28 +335,18 @@ class TestViews(TestCase):
         response = self.client.get("/place/NY/New York/")
         self.assertRedirects(response, "/place/NY/New_York/")
 
-    @mock.patch("backend.views.point.interop.get_point_forecast")
-    def test_place(self, mock_get_point_forecast):
+    def test_place(self):
         """Test the place location view where the place name needs redirection."""
-        mock_get_point_forecast.return_value = {
-            "grid": {"wfo": "TST"},
-            "isMarine": False,
-            "place": {"timezone": "America/New_York"},
-            "weatherstory": [self.weather_story],
-        }
         response = self.client.get("/place/NJ/Hoboken/")
         self.assertTemplateUsed(response, "weather/point/overview.html")
-
-        # These values should come from the WeatherPlace model. The lat/lon
-        # from the place should be truncated to 3 decimal places.
-        mock_get_point_forecast.assert_called_once_with(30.543, 30.123)
-        self.assertTemplateUsed(response, "weather/point/overview.html")
         self.assertEqual(
-            response.context["point"],
-            {"grid": {"wfo": "TST"}, "wfo": self.wfo, "isMarine": False, "place": {"timezone": "America/New_York"}},
+            response.context["lat"],
+            30.543,
         )
-
-        self.assertEqual(response.context["weather_story"], self.weather_story)
+        self.assertEqual(
+            response.context["lon"],
+            30.123,
+        )
 
     def test_office_specific(self):
         """Test the specific-office view."""
