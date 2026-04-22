@@ -147,21 +147,23 @@ export const main = async () => {
           // If the variable to record API timings metadata is true,
           // we run the handler inside of the async execution context.
           // Run the handler within the async execution context
-          if(API_TIMINGS_METADATA){
-            ({ data, error, status } = await asyncStorage.run(metadata, async () => {
-              const result = await handler(request);
-              const store = asyncStorage.getStore();
-              if(result.data){
-                result.data["@metadata"] = store;
-              }
-              
-              return result;
-            }));
+          if (API_TIMINGS_METADATA) {
+            ({ data, error, status } = await asyncStorage.run(
+              metadata,
+              async () => {
+                const result = await handler(request);
+                const store = asyncStorage.getStore();
+                if (result.data) {
+                  result.data["@metadata"] = store;
+                }
+
+                return result;
+              },
+            ));
           } else {
             // Otherwise, we run the handler directly and get the result object
             ({ data, error, status } = await handler(request));
           }
-          
         }
 
         if (error) {

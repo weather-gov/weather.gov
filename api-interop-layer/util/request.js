@@ -1,4 +1,4 @@
-import getTimer  from "./performance.js";
+import getTimer from "./performance.js";
 
 const STANDARD_HEADERS = {
   "User-Agent": "beta.weather.gov interop",
@@ -15,7 +15,7 @@ const STANDARD_HEADERS = {
 const performRequest = async (dispatcher, path, additionalHeaders = {}) => {
   const timer = getTimer(path);
   timer.start();
-  
+
   const composedHeaders = {
     ...STANDARD_HEADERS,
     ...additionalHeaders,
@@ -41,7 +41,9 @@ const performRequest = async (dispatcher, path, additionalHeaders = {}) => {
       err.code === "UND_ERR_HEADERS_TIMEOUT" ||
       err.code === "UND_ERR_CONNECT_TIMEOUT"
     ) {
-      const timeoutError = new Error(`API took too long to respond: ${err.code}`);
+      const timeoutError = new Error(
+        `API took too long to respond: ${err.code}`,
+      );
       timeoutError.cause = {
         statusCode: 504,
         statusText: "Gateway Timeout",
