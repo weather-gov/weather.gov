@@ -1,5 +1,6 @@
 import { createClient } from "redis";
 import { logger } from "./util/monitoring/index.js";
+import getTimer from "./util/performance.js";
 
 // For now, let's use a single client instance
 // that we lazily assign once accessed.
@@ -150,9 +151,13 @@ export const getFromRedis = async (key) => {
   if (!USE_REDIS) {
     return null;
   }
+  const timer = getTimer(key);
+  timer.start();
   const client = await getRedisClient();
   const result = await client.json.get(key);
   if (result) {
+    timer.end();
+    timer.recordCacheHit();
     return result;
   }
   return null;
