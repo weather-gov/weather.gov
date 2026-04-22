@@ -17,7 +17,7 @@ console.log(`|---|---|---|---|---|`);
 
 for (let i = 0; i < mainResults.length; i++) {
   const m = mainResults[i];
-  const l = lazyResults.find(r => r.location === m.location);
+  const l = lazyResults[i];
   
   if (l) {
     console.log(`| **${m.location}** | ${(m.uncachedFCP/1000).toFixed(2)}s | ${(m.cachedFCP/1000).toFixed(2)}s | ${(l.uncachedFCP/1000).toFixed(2)}s | ${(l.cachedFCP/1000).toFixed(2)}s |`);

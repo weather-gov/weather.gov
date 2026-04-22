@@ -19,7 +19,27 @@ const baseLocations = [
   { name: "Near New York, NY", lat: 40.7128, lon: -74.0060 },
   { name: "Near Austin, TX", lat: 30.2672, lon: -97.7431 },
   { name: "Near Phoenix, AZ", lat: 33.4484, lon: -112.0740 },
-  { name: "Near Boston, MA", lat: 42.3601, lon: -71.0589 }
+  { name: "Near Boston, MA", lat: 42.3601, lon: -71.0589 },
+  { name: "Near Chicago, IL", lat: 41.8781, lon: -87.6298 },
+  { name: "Near Los Angeles, CA", lat: 34.0522, lon: -118.2437 },
+  { name: "Near Houston, TX", lat: 29.7604, lon: -95.3698 },
+  { name: "Near Philadelphia, PA", lat: 39.9526, lon: -75.1652 },
+  { name: "Near San Antonio, TX", lat: 29.4241, lon: -98.4936 },
+  { name: "Near San Diego, CA", lat: 32.7157, lon: -117.1611 },
+  { name: "Near Dallas, TX", lat: 32.7767, lon: -96.7970 },
+  { name: "Near San Jose, CA", lat: 37.3382, lon: -121.8863 },
+  { name: "Near Jacksonville, FL", lat: 30.3322, lon: -81.6557 },
+  { name: "Near Indianapolis, IN", lat: 39.7684, lon: -86.1581 },
+  { name: "Near San Francisco, CA", lat: 37.7749, lon: -122.4194 },
+  { name: "Near Columbus, OH", lat: 39.9612, lon: -82.9988 },
+  { name: "Near Charlotte, NC", lat: 35.2271, lon: -80.8431 },
+  { name: "Near Detroit, MI", lat: 42.3314, lon: -83.0458 },
+  { name: "Near El Paso, TX", lat: 31.7619, lon: -106.4850 },
+  { name: "Near Memphis, TN", lat: 35.1495, lon: -90.0490 },
+  { name: "Near Nashville, TN", lat: 36.1627, lon: -86.7816 },
+  { name: "Near Baltimore, MD", lat: 39.2904, lon: -76.6122 },
+  { name: "Near Milwaukee, WI", lat: 43.0389, lon: -87.9065 },
+  { name: "Near Portland, OR", lat: 45.5152, lon: -122.6784 }
 ];
 
 function getRandomizedUrl(baseLat, baseLon) {
