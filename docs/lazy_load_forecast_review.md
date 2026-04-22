@@ -42,16 +42,36 @@ Below is a comparison table showing the local performance benchmark results for 
 
 | Location | Main FCP (Uncached) | Main FCP (Cached) | Lazy Load FCP (Uncached) | Lazy Load FCP (Cached) |
 |---|---|---|---|---|
-| **Marquette, MI** | 2.55s | 0.12s | 1.00s | 0.26s |
-| **Denver, CO** | 8.82s | 0.07s | 0.66s | 0.05s |
-| **Honolulu, HI** | 1.32s | 0.06s | 1.26s | 0.06s |
-| **Utqiagvik, AK** | 2.26s | 0.30s | 2.66s | 0.04s |
-| **Miami, FL** | 1.21s | 0.06s | 0.48s | 0.05s |
-| **Seattle, WA** | 1.74s | 0.05s | 0.45s | 0.08s |
-| **New York, NY** | 16.78s | 0.59s | 0.43s | 0.05s |
-| **Austin, TX** | 8.18s | 0.06s | 0.50s | 0.06s |
-| **Phoenix, AZ** | 16.81s | 0.07s | 1.06s | 0.06s |
-| **Boston, MA** | 1.74s | 0.06s | 1.10s | 0.06s |
+| **Near Marquette, MI** | 21.85s | 0.39s | 5.04s | 0.59s |
+| **Near Denver, CO** | 11.00s | 1.42s | 1.19s | 0.24s |
+| **Near Honolulu, HI** | 2.77s | 0.04s | 1.01s | 0.10s |
+| **Near Utqiagvik, AK** | 2.73s | 0.04s | 1.56s | 0.11s |
+| **Near Miami, FL** | 24.24s | 0.06s | 0.95s | 0.07s |
+| **Near Seattle, WA** | 25.53s | 0.06s | 0.37s | 0.04s |
+| **Near New York, NY** | 10.95s | 0.07s | 0.54s | 0.08s |
+| **Near Austin, TX** | 28.31s | 0.06s | 0.92s | 0.10s |
+| **Near Phoenix, AZ** | 34.10s | 0.07s | 0.62s | 0.05s |
+| **Near Boston, MA** | 7.24s | 0.06s | 1.09s | 0.08s |
+| **Near Chicago, IL** | 5.49s | 0.03s | 1.90s | 0.04s |
+| **Near Los Angeles, CA** | 5.67s | 0.06s | 0.69s | 0.04s |
+| **Near Houston, TX** | 6.09s | 0.08s | 0.96s | 0.06s |
+| **Near Philadelphia, PA** | 18.37s | 0.06s | 0.61s | 0.04s |
+| **Near San Antonio, TX** | 16.96s | 0.06s | 0.50s | 0.04s |
+| **Near San Diego, CA** | 4.21s | 0.06s | 0.41s | 0.10s |
+| **Near Dallas, TX** | 6.26s | 0.06s | 0.48s | 0.05s |
+| **Near San Jose, CA** | 19.14s | 0.06s | 0.43s | 0.05s |
+| **Near Jacksonville, FL** | 9.38s | 0.06s | 0.39s | 0.04s |
+| **Near Indianapolis, IN** | 17.24s | 0.07s | 0.33s | 0.05s |
+| **Near San Francisco, CA** | 25.45s | 0.06s | 0.42s | 0.04s |
+| **Near Columbus, OH** | 26.95s | 0.06s | 0.44s | 0.05s |
+| **Near Charlotte, NC** | 4.07s | 0.06s | 0.66s | 0.21s |
+| **Near Detroit, MI** | 2.63s | 0.06s | 1.39s | 0.08s |
+| **Near El Paso, TX** | 3.06s | 0.06s | 0.68s | 0.07s |
+| **Near Memphis, TN** | 18.44s | 0.06s | 1.00s | 0.08s |
+| **Near Nashville, TN** | 25.56s | 0.06s | 0.92s | 0.05s |
+| **Near Baltimore, MD** | 10.04s | 0.06s | 0.61s | 0.04s |
+| **Near Milwaukee, WI** | 18.04s | 0.03s | 0.81s | 0.05s |
+| **Near Portland, OR** | 11.02s | 0.06s | 0.20s | 0.09s |
 
 ### Performance Metrics Explanation
 
