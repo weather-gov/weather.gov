@@ -21,20 +21,30 @@ By removing synchronous external API calls from the initial page load, the lazy-
 
 ![Lazy Load TTFB Comparison](lazy_load_ttfb_comparison.webp)
 
-Below is a comparison table showing the local performance benchmark results.
+Below is a comparison table showing the local performance benchmark results for the Time to First Contentful Paint (FCP), comparing the `main` branch to the new lazy-loading architecture. 
 
-| Location | TTFB / DOM | Header Load | Alerts Load | Today Load | Daily Load |
-|---|---|---|---|---|---|
-| **Marquette, MI (Cached/Fast)** | `3.79s` | `3.86s` | `3.87s` | `3.87s` | `3.87s` |
-| **Denver, CO (Cached/Baseline)** | `1.74s` | `1.76s` | `1.76s` | `1.76s` | `1.77s` |
-| **Honolulu, HI (Uncached)** | `2.67s` | `2.69s` | `2.69s` | `2.69s` | `2.70s` |
-| **Utqiagvik, AK (Uncached)** | `2.55s` | `2.57s` | `2.57s` | `2.57s` | `2.57s` |
+| Location | Main FCP (Uncached) | Main FCP (Cached) | Lazy Load FCP (Uncached) | Lazy Load FCP (Cached) |
+|---|---|---|---|---|
+| **Marquette, MI** | 5.99s | 0.80s | 2.74s | 0.12s |
+| **Denver, CO** | 1.83s | 0.34s | 2.24s | 0.17s |
+| **Honolulu, HI** | 1.16s | 0.07s | 2.92s | 0.28s |
+| **Utqiagvik, AK** | 1.89s | 0.07s | 1.66s | 0.11s |
+| **Miami, FL** | 1.66s | 0.07s | 2.28s | 0.13s |
+| **Seattle, WA** | 0.90s | 0.06s | 2.35s | 0.06s |
+| **New York, NY** | 0.84s | 0.66s | 2.23s | 0.16s |
+| **Austin, TX** | 0.73s | 0.07s | 1.66s | 0.08s |
+| **Phoenix, AZ** | 0.95s | 0.07s | 1.65s | 0.13s |
+| **Boston, MA** | 1.38s | 0.07s | 1.45s | 0.05s |
 
-*(Note: Load times are subject to local container speed and Redis cache states. The most significant gains occur when the legacy app suffers from interop timeouts. Asynchronous rendering ensures users see the skeleton layout immediately while background data fetches resolve.)*
+*(Note: Load times are subject to local container speed and Redis cache states. As expected, the lazy loading architecture achieves a sub-1-second First Contentful Paint for cached requests by immediately rendering the skeleton layout while background data fetches resolve.)*
 
 ### Running the Performance Benchmark
-A comprehensive Playwright script has been added to the repository to measure the exact loading dynamics of each component. Reviewers can run the script using:
+New Playwright scripts have been added to the repository to measure the Time to First Contentful Paint. Reviewers can run the benchmark using:
 
 ```bash
-node tests/performance/lazy_load_dynamics.js
+# Run for the current branch (e.g., lazy-load or main)
+node tests/performance/fcp_benchmark.js lazy-load
+
+# Generate the comparison table (requires both main and lazy-load results)
+node tests/performance/generate_fcp_table.js
 ```
