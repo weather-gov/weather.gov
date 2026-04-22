@@ -9,6 +9,7 @@ web_memory            = "1024M"
 web_instances         = 4
 api_interop_memory    = "1024M"
 api_interop_instances = 4
+api_timings_metadata  = false
 custom_domain_name    = "beta.weather.gov"
 redis_plan_name       = "redis-3node"
 rds_plan_name         = "medium-psql-redundant"
