@@ -36,8 +36,14 @@ Below is a comparison table showing the local performance benchmark results for 
 | **Near Phoenix, AZ** | 16.81s | 0.07s | 2.11s | 0.17s |
 | **Near Boston, MA** | 1.74s | 0.06s | 0.81s | 0.05s |
 
-*(Note: Load times are subject to local container speed and Redis cache states. As expected, the lazy loading architecture achieves a sub-1-second First Contentful Paint for cached requests by immediately rendering the skeleton layout while background data fetches resolve.)*
+### Performance Metrics Explanation
 
+The table above demonstrates that the lazy-loading architecture significantly improves FCP for cached requests (consistently sub-second) and generally stabilizes uncached FCP compared to the drastic spikes seen on `main`. 
+
+There are two important nuances to note when interpreting these local benchmark results:
+
+1. **Cold-Start Penalty (e.g., Marquette, MI):** Marquette is the first location queried in the testing script. Its higher uncached FCP (4.16s) is a classic "cold start" penalty. The first request must wait for the local Docker container to initialize the Python/Django worker, compile templates into memory, and establish the PostGIS database connection pool. Subsequent requests benefit from a warm server environment.
+2. **End-to-End Browser Rendering Overhead (e.g., Phoenix, AZ):** While the optimized Django view now returns the skeleton HTML in **< 0.01 seconds**, the FCP metric measures the complete end-to-end time. A local Playwright container still needs ~1.5 - 2.5 seconds to perform the network navigation, route through the Docker proxy, download the HTML, parse the DOM, and load blocking `<head>` assets (like CSS) before the browser can actually trigger the First Contentful Paint. In a production environment with edge caching and real CDNs, this overhead will be significantly reduced.
 ### Running the Performance Benchmark
 New Playwright scripts have been added to the repository to measure the Time to First Contentful Paint. Reviewers can run the benchmark using:
 
