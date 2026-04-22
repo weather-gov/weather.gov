@@ -156,7 +156,7 @@ variable "web_gevent_workers" {
 }
 
 variable "api_timings_metadata" {
-  type      = bool
-  default  = false
+  type        = bool
+  default     = false
   description = "Whether or not to display metadata about API request timing in interop responses"
 }

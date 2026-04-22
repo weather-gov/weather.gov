@@ -15,6 +15,7 @@ web_instances         = 1
 api_interop_memory    = "1024M"
 api_interop_instances = 1
 api_proxy_memory      = "512M"
+api_timings_metadata  = false
 api_url               = "https://api-proxy-weathergov-test.app.cloud.gov"
 ghwo_url              = "https://api-proxy-weathergov-test.app.cloud.gov"
 rds_plan_name         = "medium-psql-redundant"

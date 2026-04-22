@@ -46,11 +46,12 @@ resource "cloudfoundry_app" "interop" {
     API_NODE_APPS          = var.api_node_apps
     API_DB_MAX_CONNECTIONS = var.api_db_max_connections
     API_URL                = var.api_url
+    API_TIMINGS_METADATA   = var.api_timings_metadata
     GHWO_URL               = var.ghwo_url
     API_KEY                = var.api_key
     OPTIMIZE_MEMORY        = true
     DISABLE_GRID_ANALYSIS  = true
-    DISABLE_REDIS          = var.cf_space_name == "test" || var.cf_space_name == "loadtest"
+    DISABLE_REDIS          = var.cf_space_name == "test"
     PROXY_STANDALONE       = var.cf_space_name == "test"
   }
 
