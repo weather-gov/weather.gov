@@ -1,12 +1,4 @@
 {% load weather_i18n %}
 {% if point.alerts.items|length > 0 %}
   {% include 'weather/partials/forecast-alerts-map.html' with alerts=point.alerts.items %}
-  <script>
-    (function() {
-      const btn = document.getElementById('alerts-tab-button');
-      if (btn) {
-        btn.classList.remove('display-none');
-      }
-    })();
-  </script>
 {% endif %}

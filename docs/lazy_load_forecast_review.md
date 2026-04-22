@@ -3,6 +3,23 @@
 ## Overview
 This branch (`feature/lazy-load-forecast`) implements an asynchronous, lazy-loading architecture for the forecast page to optimize the initial page load.
 
+## Architecture
+
+The lazy-loading pattern relies on a custom vanilla JavaScript implementation (`wx-lazy-load`) combined with Django partial endpoints. The initial page request returns a skeleton layout instantly. A lightweight script on the client side (`point-lazy-load.js`) then fetches HTML snippets for each section (Header, Alerts, Today, Daily) asynchronously and injects them into the DOM.
+
+**Pros:**
+- Extremely fast initial layout render (TTFB/FCP), regardless of backend latency.
+- No new third-party dependencies were introduced, keeping the payload lean.
+- Degrades gracefully into empty sections if one specific API call fails, rather than crashing the entire page.
+- Resolves security concerns regarding XSS by ensuring no injected scripts are dynamically executed during DOM swaps.
+
+**Cons:**
+- Requires custom, manual DOM management in `point-lazy-load.js` for component-specific side effects (such as un-hiding the alerts tab).
+- We maintain our own implementation of a pattern that is solved robustly by established open-source libraries.
+
+### Future Evolution: HTMX
+While the current custom JS approach works well, a future iteration of this architecture could migrate to use [htmx](https://htmx.org/) via `django-htmx`. This would replace the `wx-lazy-load` pattern with declarative HTML attributes (`hx-get`, `hx-trigger="load"`, `hx-swap`), eliminating the need for our custom `point-lazy-load.js` script and providing a standardized, robust way to manage lazy loading and out-of-band updates across the application.
+
 ## Recent Updates for Review
 - **Reverted JS Formatting**: We reverted unintended formatting changes in the `api-interop-layer` (such as removing trailing commas and tweaking `if` statement spaces) to ensure that the merge request diff is clean. This allows the review to focus exclusively on the architectural lazy-loading changes rather than unrelated formatting noise.
 - **Linting Verification**: We verified that all newly added JS files, specifically `forecast/frontend/assets/js/components/point-lazy-load.js`, strictly follow the repository's ESLint rules and Prettier configuration. No violations or formatting issues were found.
@@ -25,16 +42,16 @@ Below is a comparison table showing the local performance benchmark results for 
 
 | Location | Main FCP (Uncached) | Main FCP (Cached) | Lazy Load FCP (Uncached) | Lazy Load FCP (Cached) |
 |---|---|---|---|---|
-| **Near Marquette, MI** | 2.55s | 0.12s | 4.16s | 0.26s |
-| **Near Denver, CO** | 8.82s | 0.07s | 1.36s | 0.08s |
-| **Near Honolulu, HI** | 1.32s | 0.06s | 0.90s | 0.26s |
-| **Near Utqiagvik, AK** | 2.26s | 0.30s | 1.88s | 0.12s |
-| **Near Miami, FL** | 1.21s | 0.06s | 1.26s | 0.06s |
-| **Near Seattle, WA** | 1.74s | 0.05s | 2.16s | 0.05s |
-| **Near New York, NY** | 16.78s | 0.59s | 0.64s | 0.09s |
-| **Near Austin, TX** | 8.18s | 0.06s | 0.54s | 0.07s |
-| **Near Phoenix, AZ** | 16.81s | 0.07s | 2.11s | 0.17s |
-| **Near Boston, MA** | 1.74s | 0.06s | 0.81s | 0.05s |
+| **Marquette, MI** | 2.55s | 0.12s | 1.00s | 0.26s |
+| **Denver, CO** | 8.82s | 0.07s | 0.66s | 0.05s |
+| **Honolulu, HI** | 1.32s | 0.06s | 1.26s | 0.06s |
+| **Utqiagvik, AK** | 2.26s | 0.30s | 2.66s | 0.04s |
+| **Miami, FL** | 1.21s | 0.06s | 0.48s | 0.05s |
+| **Seattle, WA** | 1.74s | 0.05s | 0.45s | 0.08s |
+| **New York, NY** | 16.78s | 0.59s | 0.43s | 0.05s |
+| **Austin, TX** | 8.18s | 0.06s | 0.50s | 0.06s |
+| **Phoenix, AZ** | 16.81s | 0.07s | 1.06s | 0.06s |
+| **Boston, MA** | 1.74s | 0.06s | 1.10s | 0.06s |
 
 ### Performance Metrics Explanation
 

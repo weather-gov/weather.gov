@@ -10,16 +10,13 @@ document.addEventListener("DOMContentLoaded", () => {
         const html = await response.text();
         el.innerHTML = html;
 
-        // Execute any script tags injected
-        const scripts = el.querySelectorAll("script");
-        scripts.forEach((oldScript) => {
-          const newScript = document.createElement("script");
-          Array.from(oldScript.attributes).forEach((attr) =>
-            newScript.setAttribute(attr.name, attr.value),
-          );
-          newScript.appendChild(document.createTextNode(oldScript.innerHTML));
-          oldScript.parentNode.replaceChild(newScript, oldScript);
-        });
+        // If the partial returned alerts, un-hide the alerts tab button
+        if (el.querySelector("wx-alerts")) {
+          const btn = document.getElementById("alerts-tab-button");
+          if (btn) {
+            btn.classList.remove("display-none");
+          }
+        }
 
         // Announce loaded (optional hook for screen readers)
         const text = `Loaded ${el.id || "component"}`;
