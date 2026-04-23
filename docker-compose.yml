@@ -49,6 +49,7 @@ services:
       # the default database has max_connections=100 so we divide this between
       # web and interop, keeping in mind some connections are reserved.
       WEB_DB_MAX_CONNECTIONS: 195
+      API_TIMINGS_METADATA: true
     networks:
       - weather.gov
     depends_on:
