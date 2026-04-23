@@ -44,6 +44,7 @@ resource "cloudfoundry_app" "app" {
   environment = {
     NEW_RELIC_LICENSE_KEY  = local.newrelic_license
     NEW_RELIC_APP_NAME     = "weathergov-${var.env}"
+    API_TIMINGS_METADATA   = var.api_timings_metadata
     INTEROP_URL            = "https://api-${local.app_name}-${var.env}.apps.internal:61443"
     PYTHONUNBUFFERED       = "yup"
     DJANGO_SETTINGS_MODULE = "backend.config.settings.production"

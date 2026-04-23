@@ -7,6 +7,7 @@ import requests
 from django.utils.translation import gettext_lazy as _
 from requests.adapters import HTTPAdapter
 
+from backend.context_processors import TIMING_CONTEXT
 from backend.exceptions import Http429, Http504
 from backend.util.alert import set_timing
 from spatial.models import WeatherAlertsCache
@@ -46,7 +47,13 @@ def _fetch(url):
     if response.status_code == 429:  # noqa: PLR2004
         raise Http429
 
-    return response.json()
+    json = response.json()
+
+    if "@metadata" in json:
+        timings = json["@metadata"]
+        TIMING_CONTEXT.set(timings)
+
+    return json
 
 
 def _set_high_low_pops(day, is_marine):
