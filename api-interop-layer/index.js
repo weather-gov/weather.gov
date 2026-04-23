@@ -6,7 +6,7 @@ import routes from "./routes/index.js";
 import { logger } from "./util/monitoring/index.js";
 import ConnectionTracker from "./ConnectionTracker.js";
 import asyncStorage from "./async-storage.js";
-import { API_TIMINGS_METADATA } from "./util/performance.js";
+import getTimer, { API_TIMINGS_METADATA, groupPointBatches } from "./util/performance.js";
 
 const REQUIRED_ENV_VARS = ["API_URL", "GHWO_URL"];
 
@@ -119,6 +119,10 @@ export const main = async () => {
       url,
       schema,
       handler: async (request, response) => {
+        const timer = getTimer("");
+        if(API_TIMINGS_METADATA){
+          timer.start();
+        }
         logger.trace({ url: request.url });
 
         /**
@@ -154,7 +158,15 @@ export const main = async () => {
                 const result = await handler(request);
                 const store = asyncStorage.getStore();
                 if (result.data) {
-                  result.data["@metadata"] = store;
+                  result.data["@metadata"] = {
+                    url,
+                    timings: store
+                  };
+                  if(url.startsWith("/point")){
+                    const batchData = groupPointBatches(store);
+                    result.data["@metadata"].batches = batchData.batches;
+                    result.data["@metadata"].total = batchData.total;
+                  }
                 }
 
                 return result;
@@ -175,6 +187,13 @@ export const main = async () => {
           response.code(status);
         }
 
+        if(API_TIMINGS_METADATA){
+          timer.end();
+          if(data["@metadata"]){
+            data["@metadata"].interopResponseTime = timer.timing;
+          }
+        }
+        
         response.send(data);
       },
     });

@@ -80,6 +80,37 @@ class PerformanceMeta {
   }
 }
 
+/**
+ * Given an array of timing objects, group them into the async
+ * batches reflecting how they are called in order. Then compute
+ * total batch and overall total API request timings
+ */
+export const groupPointBatches = (timings) => {
+  let batches = [
+    (timings.filter(timing => {
+      return timing.url.startsWith("/point");
+    })),
+    (timings.filter(timing => {
+      return timing.url.startsWith("/gridpoint") || timing.url.startsWith("/office");
+    })),
+    (timings.filter(timing => {
+      return timing.url.startsWith("/stations");
+    }))
+  ].map(batch => {
+    return {
+      batch,
+      max: Math.max(...batch.map(t => t.timing))
+    };
+  });
+
+  return {
+    batches,
+    total: batches.reduce((acc, batch) => {
+      return acc + batch.max;
+    }, 0)
+  };
+};
+
 export default function (url) {
   const newMeta = new PerformanceMeta(url);
   return newMeta;
