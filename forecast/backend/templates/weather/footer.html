@@ -113,9 +113,10 @@
           <h4 class="usa-summary-box__heading" id="summary-box-key-information">
             API endpoints used
           </h4>
+          <p class="usa-prose">Interop endpoint: {{timings.url}}</p>
           <div class="usa-summary-box__text">
             <ul class="usa-list">
-              {% for timing in timings %}
+              {% for timing in timings.timings %}
               <li>
                 <code>{{ timing.url }}</code> took {{ timing.timing|floatformat:2 }}ms
                 {% if timing.cached %}
@@ -128,6 +129,36 @@
               </li>
               {% endfor %}
             </ul>
+          </div>
+          <div>
+            {% if timings.batches %}
+              <p class="usa-prose">
+                Number of batches: {{timings.batches|length}}
+              </p>
+                <ol>
+                  {% for batch in timings.batches %}
+                    <li>
+                      <p>Time: {{batch.max|floatformat:2}}ms</p>
+                      <p>Endpoints in batch:</p>
+                      <ul>
+                        {% for item in batch.batch %}
+                          <li>{{item.url}}</li>
+                        {% endfor %}
+                      </ul>
+                    </li>
+                  {% endfor %}
+                </ol>
+                <p class="usa-prose">
+                  Total API request time: <span class=" text-bold">
+                  {{timings.total|floatformat:2}}ms
+                  </span>
+                </p>
+                <p class="usa-prose">
+                  Interop response time: <span class="text-bold">
+                  {{timings.interopResponseTime|floatformat:2}}ms
+                  </span>
+                </p>
+            {% endif %}
           </div>
         </div>
       </div>
