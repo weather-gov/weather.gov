@@ -1025,6 +1025,9 @@ msgstr "Filter by state name"
 msgid "state.alerts.loading-map.01"
 msgstr "Loading the map..."
 
+msgid "state.alerts.map-failure.01"
+msgstr "Map failed to load"
+
 msgid "state.alerts.none-period"
 msgstr "No active alerts for this period."
 

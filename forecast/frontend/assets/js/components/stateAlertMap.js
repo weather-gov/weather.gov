@@ -423,6 +423,7 @@ const setupStateMap = async () => {
       boundaryPromise,
       alertsPromise,
     ]);
+
     const boundaryData = decodeGeobuf(boundaryBuf);
     const alertsData = decodeGeobuf(alertsBuf);
 
@@ -591,6 +592,24 @@ const setupStateMap = async () => {
     }
   } catch (err) {
     console.error("Error loading or decoding state map data:", err);
+
+    if (loader) {
+      const loaderText = loader.querySelector(".loader-text");
+      const spinner = loader.querySelector(".loader-spinner");
+
+      if (loaderText) {
+        loaderText.textContent = meta.trans.map_failure;
+        loaderText.classList.add("text-error");
+      }
+
+      if (spinner) {
+        spinner.style.display = "none";
+      }
+
+      loader.classList.remove("hidden");
+      loader.style.display = "flex";
+      loader.style.opacity = "1";
+    }
   }
 };
 
