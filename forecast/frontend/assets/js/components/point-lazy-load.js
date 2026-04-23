@@ -1,4 +1,4 @@
-document.addEventListener("DOMContentLoaded", () => {
+const initLazyLoad = () => {
   const elements = document.querySelectorAll("[wx-lazy-load]");
   elements.forEach(async (el) => {
     const src = el.getAttribute("wx-lazy-load");
@@ -28,4 +28,10 @@ document.addEventListener("DOMContentLoaded", () => {
       console.error("Failed to load partial:", src, e);
     }
   });
-});
+};
+
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", initLazyLoad);
+} else {
+  initLazyLoad();
+}

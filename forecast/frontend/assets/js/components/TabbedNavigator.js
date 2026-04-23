@@ -16,6 +16,8 @@ class TabbedNavigator extends HTMLElement {
     );
     if (!selected.length) {
       this.switchToTab(this.querySelector("button").dataset.tabName);
+    } else {
+      this.switchToTab(selected[0].dataset.tabName);
     }
 
     // The initial page load might contain a hash fragment
