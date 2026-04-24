@@ -5,6 +5,7 @@ from django.shortcuts import get_object_or_404, render
 from django.views.decorators.cache import cache_control
 
 from backend.util import sort_alert_key
+from backend.util.state import get_wfo_data_for_state
 from spatial.models import WeatherAlertsCache, WeatherCounties, WeatherStates
 
 
@@ -118,6 +119,7 @@ def state_alerts(request, state):
             "levels": legend_levels,
             "subdivision_name": subdivision_name,
             "subdivision_name_plural": subdivision_name_plural,
+            "wfo_data": get_wfo_data_for_state(state_orm),
         },
     )
 
@@ -126,18 +128,18 @@ def state_alerts(request, state):
 def state_risks(request, state):
     """Render the risks tab for a given state."""
     state = get_object_or_404(WeatherStates, state=state.upper())
-    return render(request, "weather/state/risks.html", {"state": state})
+    return render(request, "weather/state/risks.html", {"state": state, "wfo_data": get_wfo_data_for_state(state)})
 
 
 @cache_control(max_age=120, smax_age=120, public=True)
 def state_radar(request, state):
     """Render the radar tab for a given state."""
     state = get_object_or_404(WeatherStates, state=state.upper())
-    return render(request, "weather/state/radar.html", {"state": state})
+    return render(request, "weather/state/radar.html", {"state": state, "wfo_data": get_wfo_data_for_state(state)})
 
 
 @cache_control(max_age=120, smax_age=120, public=True)
 def state_analysis(request, state):
     """Render the analysis tab for a given state."""
     state = get_object_or_404(WeatherStates, state=state.upper())
-    return render(request, "weather/state/analysis.html", {"state": state})
+    return render(request, "weather/state/analysis.html", {"state": state, "wfo_data": get_wfo_data_for_state(state)})

@@ -24,12 +24,30 @@
 
 /* Column utility
 ------------------------------------- */
+.tablet__wx-col-2,
+.tablet-lg__wx-col-3,
+.wx-col-2 {
+  li {
+    break-inside: avoid-column;
+  }
+}
+
 .wx-col-2 {
   column-count: 2;
   column-gap: units(4);
+}
 
-  li {
-    break-inside: avoid-column;
+.tablet__wx-col-2 {
+  @include at-media(tablet) {
+    column-count: 2;
+    column-gap: units(2);
+  }
+}
+
+.tablet-lg__wx-col-4 {
+  @include at-media(tablet-lg) {
+    column-count: 4;
+    column-gap: units(4);
   }
 }
 

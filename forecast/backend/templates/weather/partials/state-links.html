@@ -1,0 +1,50 @@
+{% comment %}
+-- Template purpose:
+--   Display WFO and County links at the bottom of each
+--   constituent tab/page of the state overview
+-- Used by: state overview tab templates under templates/weather/state/
+-- Expected variables:
+--   state_name: A string representing the name of the state
+--   state_abbrev: A string representing the two letter state abbreviation
+--   wfo_data: A list of dictionaries that contain metadata about WFOs that fall
+     within the state boundaries
+{% endcomment %}
+<section id="state-county-links" class="bg-primary-lightest padding-y-2 tablet-lg:padding-top-2 tablet-lg:padding-bottom-3">
+  <div class="grid-container">
+    <h2 class="font-sans-xl text-normal text-primary-darker margin-top-0 margin-bottom-1">
+      {{"state.heading.counties.01"|t}}
+    </h2>
+    <div class="display-flex flex-align-center">
+      <img src="{% static 'images/uswds/usa-icons/list__color-primary.svg' %}"
+           role="img"
+           alt="Link"
+           class="margin-right-1" />
+      <a href="{% url 'county_index' %}#{{state.state|lower}}" class="usa-link">
+        {% trans_with_args "state.links.county-links.01" state_name=state_name %}
+      </a>
+    </div>
+  </div>
+</section>
+<section id="state-wfo-links" class="border-top-2px border-primary bg-base-lightest padding-bottom-8">
+  <div class="grid-container">
+    <h2 class="line-height-heading-3 font-sans-xl text-normal text-primary-darker margin-top-2 margin-bottom-2">
+      {{"state.heading.offices.01"|t}}
+    </h2>
+      <ul class="usa-list usa-list--unstyled tablet__wx-col-2 tablet-lg__wx-col-4">
+      {% for wfo in wfo_data %}
+        <li >
+        <div class="margin-bottom-2"> 
+          <a class="usa-link display-block" href="{{wfo.url}}">NWS {{wfo.name}}</a>
+        {% if wfo.phone %}
+          <div class="margin-top-05">
+            <span class="text-bold text-base-dark font-mono-sm">{{"county.wfo-promo.labels.phone.01"|t|upper}}: </span>
+            <span>{{wfo.phone}}</span>
+          </div>
+        {% endif %}
+        </div>
+        </li>
+      {% endfor %}
+      </ul>
+      
+  </div>
+</section>
