@@ -91,9 +91,10 @@ export const updateStoreUrl = function(url, cb) {
   if(API_TIMINGS_METADATA){
     const store = asyncStorage.getStore();
     if(store){
-      return cb(
-        store.find(entry => entry.url === url)
-      );
+      const item = store.find(entry => entry.url === url);
+      if(item){
+        return cb(item);
+      }
     }
   }
   return null;

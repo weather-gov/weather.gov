@@ -142,9 +142,11 @@ export default async (
       updateStoreUrl(
         urlFromStation(station),
         (entry) => {
-          entry.awaited = true;
-          entry.obsIndex = 0;
-          entry.validObs = false;
+          if(entry){
+            entry.awaited = true;
+            entry.obsIndex = 0;
+            entry.validObs = false;
+          }
         }
       );
     }
@@ -179,9 +181,11 @@ export default async (
             updateStoreUrl(
               url,
               (entry) => {
-                entry.awaited = true;
-                entry.obsIndex = idx + 1;
-                entry.validObs = ((idx + 1) === validIndex);
+                if(entry){
+                  entry.awaited = true;
+                  entry.obsIndex = idx + 1;
+                  entry.validObs = ((idx + 1) === validIndex);
+                }
               }
             );
           });
@@ -195,9 +199,11 @@ export default async (
       updateStoreUrl(
         urlFromStation(station),
         (timingData) => {
-          timingData.awaited = true;
-          timingData.obsIndex = 0,
-          timingData.validObs = true;
+          if(timingData){
+            timingData.awaited = true;
+            timingData.obsIndex = 0,
+            timingData.validObs = true;
+          }
         }
       );
 
@@ -207,9 +213,11 @@ export default async (
           updateStoreUrl(
             url,
             (entry) => {
-              entry.awaited = false;
-              entry.obsIndex = idx + 1;
-              entry.validObs = false;
+              if(entry){
+                entry.awaited = false;
+                entry.obsIndex = idx + 1;
+                entry.validObs = false;
+              }
             }
           );
         });
