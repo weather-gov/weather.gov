@@ -339,7 +339,7 @@ def get_briefing(wfo):
     url = f"/offices/{wfo.upper()}/briefing"
     try:
         briefing = _fetch(url)
-        if "briefing" in briefing:
+        if "briefing" in briefing and briefing["briefing"]:
             return briefing["briefing"]
         if "error" in briefing:
             return {"error": briefing["error"], "officeId": wfo.upper()}
