@@ -1010,11 +1010,20 @@ msgstr "Radar"
 msgid "state.heading.analysis.01"
 msgstr "Analysis"
 
+msgid "state.heading.offices.01"
+msgstr "Weather forecasting offices"
+
 msgid "state.heading.alerts-type.01"
 msgstr "Alerts By Type"
 
 msgid "state.heading.index.01"
 msgstr "State and Territory Views"
+
+msgid "state.heading.counties.01"
+msgstr "Counties"
+
+msgid "state.links.county-links.01"
+msgstr "View counties in {state_name}"
 
 msgid "state.description.index.01"
 msgstr "Select your state or territory from the list below to see alerts, risk levels, and more for the state."

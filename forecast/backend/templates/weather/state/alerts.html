@@ -43,11 +43,11 @@
   {% include "weather/scripts/leaflet.html" %}
 {% endblock %}
 {% block page_content %}
-  <div class="layout-container grid-row height-full flex-column flex-no-wrap">
+  <div class="height-full display-flex flex-column">
     {% include "weather/state/name.html" with state_name=state.name %}
-    <wx-tabbed-nav class="display-block position-relative" id="state-page-tabbed-nav">
+    <wx-tabbed-nav class="display-block position-relative flex-1" id="state-page-tabbed-nav">
     {% include "weather/state/tabs.html" with url_name=request.resolver_match.url_name %}
-    <div class="bg-white padding-bottom-8">
+    <div class="bg-white padding-bottom-4">
       <div class="wx-focus-offset-205" id="alerts" tabindex="0">
         <div class="grid-container">
           <h2 class="text-normal text-primary-dark margin-top-3 font-sans-xl">{{ "county.heading.alerts.01" | t }}</h2>
@@ -116,5 +116,6 @@
       </div>
     </div>
     </wx-tabbed-nav>
+    {% include 'weather/partials/state-links.html' with state_name=state.name %}
   </div>
 {% endblock %}

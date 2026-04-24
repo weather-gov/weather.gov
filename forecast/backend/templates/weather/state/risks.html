@@ -11,11 +11,11 @@
           type="module"></script>
 {% endblock %}
 {% block page_content %}
-  <div class="layout-container grid-row height-full flex-column flex-no-wrap">
+    <div class="height-full display-flex flex-column">
     {% include "weather/state/name.html" with state_name=state.name %}
-    <wx-tabbed-nav class="display-block position-relative" id="state-page-tabbed-nav">
+    <wx-tabbed-nav class="display-block position-relative flex-1" id="state-page-tabbed-nav">
     {% include "weather/state/tabs.html" with url_name=request.resolver_match.url_name %}
-    <div class="bg-base-lightest padding-top-3 padding-bottom-8">
+    <div class="bg-base-lightest padding-top-3 padding-bottom-4">
       <div class="wx-focus-offset-205"
            id="risks"
            aria-labelledby="risks-tab-button"
@@ -23,11 +23,12 @@
         <div class="grid-container margin-top-2 margin-bottom-8 desktop:margin-bottom-10">
           <h2 class="text-normal text-primary-darker">{{ "state.heading.risks.01" | t }}</h2>
           <div class="grid-col-12 desktop:grid-col-12">
-            <p>Risks</p>
+              <p>Risks</p>
           </div>
         </div>
       </div>
     </div>
     </wx-tabbed-nav>
-  </div>
-{% endblock %}
+    {% include 'weather/partials/state-links.html' with state_name=state.name %}
+    </div>
+  {% endblock %}
