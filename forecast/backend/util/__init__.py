@@ -532,10 +532,12 @@ def format_briefing_timestamps(briefing, wfo_instance, time_zone_info):
 def get_briefings_from_county_data(county_data, wfo_instances, time_zone_info):
     """Pull out and format briefings from county data as returned from the interop."""
     # First, make a lookup dictionary of WFOs to briefing information.
-    # Each briefing should have an officeId key.
+    # Each briefing (that is actually present) should have an officeId key.
     lookup = {}
     for item in county_data["briefings"]:
         if "officeId" in item:
+            if "briefing" in item and not item["briefing"]:
+                continue
             lookup[item["officeId"]] = item
 
     # Now using the passed-in WFO instances, perform briefing lookups

@@ -71,34 +71,3 @@ class TestNWSConnectUtil(TestCase):
         actual = nwsconnect.get_office_briefing(self.wfo1, tz)
 
         self.assertEqual(actual, expected)
-
-    @mock.patch("backend.util.nwsconnect.get_briefing")
-    def test_get_county_briefings_success(self, mock_get_briefing):
-        """Tests the happy path for multiple offices briefings."""
-        mock_get_briefing.side_effect = [
-            {
-                "title": "Test briefing",
-                "startTime": "1990-01-01T00:00:00Z",
-                "endTime": "1991-01-01T00:00:00Z",
-                "updateTime": "1990-01-01T00:00:00Z",
-            },
-            None,
-        ]
-
-        tz = ZoneInfo("UTC")
-
-        expected = [
-            {
-                "title": "Test briefing",
-                "startTime": datetime.fromisoformat("1990-01-01T00:00:00Z").astimezone(tz=tz),
-                "endTime": datetime.fromisoformat("1991-01-01T00:00:00Z").astimezone(tz=tz),
-                "updateTime": datetime.fromisoformat("1990-01-01T00:00:00Z").astimezone(tz=tz),
-                "wfo_name": "Test WFO",
-                "wfo_url": "/offices/NWC/",
-            },
-            {"is_empty": True, "officeId": "NWX", "wfo_name": "Test WFO", "wfo_url": "/offices/NWX/"},
-        ]
-
-        actual = nwsconnect.get_county_briefings([self.wfo1, self.wfo2], tz)
-
-        self.assertEqual(actual, expected)

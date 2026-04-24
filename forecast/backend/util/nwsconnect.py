@@ -19,21 +19,3 @@ def get_office_briefing(wfo, time_zone_info):
             # briefing went live, then we absolutely do care.
             briefing["updateTime"] = max(briefing["updateTime"], briefing["startTime"])
     return briefing
-
-
-def get_county_briefings(wfos, time_zone_info):
-    """Fetch briefings for a set of WFOs."""
-    valid = []
-    errors = []
-    empties = []
-    for wfo in wfos:
-        briefing = get_office_briefing(wfo, time_zone_info)
-        if briefing:
-            if "error" in briefing:
-                errors.append(briefing)
-            else:
-                valid.append(briefing)
-        else:
-            empties.append({"officeId": wfo.code.upper(), "wfo_url": wfo.url, "wfo_name": wfo.name, "is_empty": True})
-
-    return valid + empties + errors
