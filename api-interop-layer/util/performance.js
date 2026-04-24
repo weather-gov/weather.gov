@@ -81,6 +81,29 @@ class PerformanceMeta {
 }
 
 /**
+ * Update an existing timing in the store
+ * (if present).
+ * We look for the matching url in the store
+ * and, if not null, we return the execution of
+ * the passed in callback on the item.
+ */
+export const updateStoreUrl = function(url, cb) {
+  if(API_TIMINGS_METADATA){
+    const store = asyncStorage.getStore();
+    if(store){
+      return cb(
+        store.find(entry => entry.url === url)
+      );
+    }
+  }
+  return null;
+};
+
+const isObservationUrl = (url) => {
+  return url.startsWith("/station") || url.endsWith("limit=3");
+};
+
+/**
  * Given an array of timing objects, group them into the async
  * batches reflecting how they are called in order. Then compute
  * total batch and overall total API request timings
@@ -91,16 +114,43 @@ export const groupPointBatches = (timings) => {
       return timing.url.startsWith("/point");
     })),
     (timings.filter(timing => {
-      return timing.url.startsWith("/gridpoint") || timing.url.startsWith("/office");
+      return !timing.url.startsWith("/point");
     })),
-    (timings.filter(timing => {
-      return timing.url.startsWith("/stations");
-    }))
-  ].map(batch => {
-    return {
-      batch,
-      max: Math.max(...batch.map(t => t.timing))
+  ].map((batch, idx) => {
+    const result = { batch };
+    if(idx === 1){
+      // We are dealing with the big second batch for the
+      // point endpoint. We need to do extra calculation when
+      // it comes to the observation station calls
+
+      // Observation timings are now determined based on annotations
+      // made to the corresponding timing objects in /obs/index.js
+      // Since we request all observations, but only conditionally
+      // await/care about some of them, we have annotated the timings
+      // with a boolean `awaited` property that tells us if they are relevant
+      // to the overall timing considerations.
+      const observationTimings = batch.filter(item => {
+        return item.url.startsWith("/station") && item.awaited === true;
+      });
+      const maxObservation = Math.max(
+        ...observationTimings.map(timingData => timingData.timing)
+      ) ;
+      const stationsListTiming = batch.find(item => {
+        return item.url.endsWith("limit=3");
+      });
+      const totalObservationTiming = stationsListTiming.timing + maxObservation;
+      let timings = batch.filter(batchItem => {
+        return !isObservationUrl(batchItem.url);
+      }).map(batchItem => {
+        return batchItem.timing;
+      });
+      timings = [...timings, totalObservationTiming];
+      result.max = Math.max(...timings);
+    } else {
+      result.max = Math.max(...batch.map(t => t.timing));
     };
+
+    return result;
   });
 
   return {

@@ -115,15 +115,24 @@
           </h4>
           <p class="usa-prose">Interop endpoint: {{timings.url}}</p>
           <div class="usa-summary-box__text">
-            <ul class="usa-list">
+            <ul>
               {% for timing in timings.timings %}
-              <li>
+              <li class="maxw-none margin-top-1 margin-bottom-1">
                 <code>{{ timing.url }}</code> took {{ timing.timing|floatformat:2 }}ms
+                {% if timing.obsIndex > -1 %}
+                  <span class="usa-tag">Observation {{timing.obsIndex}}</span>
+                {% endif %}
+                {% if timing.awaited %}
+                  <span class="usa-tag">awaited</span>
+                {% endif %}
+                {% if timing.validObs %}
+                  <span class="usa-tag">selected obs</span>
+                {% endif %}
                 {% if timing.cached %}
                   <span class="usa-tag">cached</span>
                 {% elif timing.correlationId %}
                   <ul>
-                    <li>API Correlation ID: <span>{{ timing.correlationId }}</span></li>
+                    <li class="margin-top-1 margin-bottom-1">API Correlation ID: <span>{{ timing.correlationId }}</span></li>
                   </ul>
                 {% endif %}
               </li>
