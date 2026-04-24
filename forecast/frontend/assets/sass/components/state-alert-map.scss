@@ -5,14 +5,14 @@
 
 .wx-state-alert-map-container {
   display: block;
-  width: 100% !important;
-  height: auto !important;
-  background-color: color("white") !important;
+  width: 100%;
+  height: auto;
+  background-color: color("white");
   position: relative;
   padding-bottom: 1px;
 
   // Default Mobile ratio
-  aspect-ratio: 1 / 1 !important;
+  aspect-ratio: 1 / 1;
 
   #wx-state-alert-map {
     height: 100%;
@@ -21,7 +21,7 @@
 
   .wx_alert_map_legend {
     span {
-      font-size: size("sans", "xs") !important;
+      font-size: size("sans", "xs");
     }
   }
 
@@ -62,16 +62,70 @@
     }
   }
 
+  button.wx-radar-expand svg {
+    margin-left: calc(calc(units(4) - units(2.5)) / 2);
+  }
+
+  &.wx-state-alert-map-container__expanded {
+    aspect-ratio: 3 / 5;
+  }
+
+  button.wx-radar-expand,
+  button.wx-map-control__expanded {
+    border: 0;
+    border-radius: radius("md");
+    height: units(4);
+    width: units(4);
+    text-align: center;
+    background: color("white");
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;             
+    overflow: hidden;
+
+    @include u-shadow(1);
+
+    svg {
+      fill: color("base");
+      stroke: none;
+      height: units(2.5);
+      width: units(2.5);
+      margin: 0; 
+      pointer-events: none;
+    }
+
+    &:hover,
+    &:focus {
+      @include u-shadow(2);
+
+      background: color("base-lighter");
+
+      svg {
+        stroke: color("base-dark");
+        fill: color("base-dark");
+      }
+    }
+
+    &:active {
+      background: color("base-light");
+    }
+  }
+
   @include at-media("tablet") {
-    aspect-ratio: 3 / 2 !important;
+    aspect-ratio: 3 / 2;
 
     &.wx-state-alert-map-container__expanded {
-      aspect-ratio: 5 / 6 !important;
+      aspect-ratio: 5 / 6;
     }
   }
 
   @include at-media("desktop") {
-    aspect-ratio: 16 / 9 !important;
+    aspect-ratio: 16 / 9;
+
+    &.wx-state-alert-map-container__expanded {
+      aspect-ratio: 5 / 4;
+    }
   }
 }
 
