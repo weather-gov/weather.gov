@@ -57,6 +57,53 @@ const setupStateMap = async () => {
     worldCopyJump: false,
   }).setView([0, 0], 0);
 
+  L.Control.Expand = L.Control.extend({
+    options: {
+      position: "topright",
+    },
+
+    onAdd: function (map) {
+      this.map = map;
+      this.container = map.getContainer().parentElement;
+      this.button = document.createElement("button");
+      this.button.classList.add("wx-radar-expand", "padding-0", "margin-1");
+      this.buttonSetToExpand();
+      this.button.addEventListener("click", this._resize.bind(this));
+      return this.button;
+    },
+
+    buttonSetToExpand: function () {
+      this.button.innerHTML = `<svg role="img" class="width-full height-full" aria-hidden="true"><use xlink:href="/public/images/uswds/sprite.svg#zoom_out_map"></use></svg>`;
+      this.button.setAttribute("aria-label", "Expand the state alert map");
+    },
+
+    buttonSetToCollapse: function () {
+      this.button.innerHTML = `<svg role="img" class="width-full height-full" aria-hidden="true"><use xlink:href="/public/images/spritesheet.svg#wx_zoom-in-map"></use></svg>`;
+      this.button.setAttribute("aria-label", "Collapse the state alert map");
+    },
+
+    _resize: function (event) {
+      this.container.classList.toggle("wx-state-alert-map-container__expanded");
+      this.button.classList.toggle("wx-map-control__expanded");
+
+      if (this.button.classList.contains("wx-map-control__expanded")) {
+        this.buttonSetToCollapse();
+      } else {
+        this.buttonSetToExpand();
+      }
+
+      // Critical for Leaflet to recalculate the canvas size
+      this.map.invalidateSize();
+    },
+
+    onRemove: function (map) {
+      /* noop */
+    },
+  });
+
+  const expandButton = new L.Control.Expand();
+  expandButton.addTo(map);
+
   /** Show alerts for the selected day or for "all". */
   const filterMap = () => {
     if (!markers) return;
