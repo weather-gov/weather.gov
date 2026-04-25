@@ -200,6 +200,7 @@ export const main = async () => {
             // Otherwise, we run the handler directly and get the result object
             ({ data, error, status } = await handler(request));
           }
+
         }
 
         if (error) {

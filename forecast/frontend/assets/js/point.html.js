@@ -24,5 +24,6 @@ import "./components/DailyForecast.js";
 
 // For refreshing the radar
 import "./components/update-page.js";
+import "./components/point-lazy-load.js";
 
 import "./components/expander.js";

@@ -1,6 +1,3 @@
-from http import HTTPStatus
-from zoneinfo import ZoneInfo
-
 from django.http import Http404
 from django.shortcuts import redirect, render
 from django.urls import reverse
@@ -8,8 +5,10 @@ from django.views.decorators.cache import cache_control
 
 from backend import interop
 from backend.models import WFO
-from backend.util import get_weather_story_from_point_data, get_wfo_from_afd
+from backend.util import get_wfo_from_afd
 from spatial.models import WeatherPlace
+from django.contrib.gis.geos import Point
+from django.contrib.gis.db.models.functions import Distance
 
 from ._helpers import get_redirect_for_afd_queries
 
@@ -52,42 +51,11 @@ def point_location(request, lat, lon):  # noqa: C901
             },
         )
 
-    point = interop.get_point_forecast(lat, lon)
-
-    if "status" in point and point["status"] == HTTPStatus.NOT_FOUND:
-        raise Http404(point)
-
-    # we do not currently support marine.
-    if "isMarine" in point and point["isMarine"]:
-        return render(request, "errors/404/marine-point.html", {"point": point}, status=404)
-
-    # Get the local timezone for the current point place
-    # If there was an error retrieving the place API endpoint,
-    # we set to None
-    # NOTE: If we permanently remove generated timestamps
-    # from the weather stories, we can safely remove this timezone
-    # code, which is only used for that purpose currently
-    if "place" in point and "timezone" in point["place"]:
-        localtz = ZoneInfo(point["place"]["timezone"])
-    else:
-        localtz = None
-
-    weather_story = {}
-    if "grid" in point and "wfo" in point["grid"] and localtz:
-        code = point["grid"]["wfo"]
-        wfo = WFO.objects.get(code=WFO.normalize_code(code))
-        point["wfo"] = wfo
-
-        # Pull the weather story data out of the point interop response
-        # and format the timestamps / handle errors as needed.
-        weather_story = get_weather_story_from_point_data(point, wfo, localtz)
-
-        # Remove the reference to the raw weatherstory data from
-        # the point dictionary. We will pull this out a level in the render
-        # call below, into its own top level key/variable
-        del point["weatherstory"]
-
     if "update" in request.GET:
+        # For radar updates, we only need radar metadata, but currently point updates
+        # fetch everything. We leave this as is since radar update may be refactored later,
+        # or we just fetch the interop point here.
+        point = interop.get_point_forecast(lat, lon)
         return render(
             request,
             "weather/point/point.update.html",
@@ -96,12 +64,32 @@ def point_location(request, lat, lon):  # noqa: C901
             },
         )
 
+    # Fetch the approximate nearest place for the skeleton `<title>` and place banner
+    point_geom = Point(lon, lat, srid=4326)
+    
+    # Optimize query by first searching within 0.25 degrees (~17 miles) using spatial index
+    nearest_place = WeatherPlace.objects.filter(
+        point__dwithin=(point_geom, 0.25)
+    ).annotate(distance=Distance("point", point_geom)).order_by("distance").first()
+    
+    if not nearest_place:
+        # Fallback to full table scan if no place is found within the radius
+        nearest_place = WeatherPlace.objects.annotate(
+            distance=Distance("point", point_geom)
+        ).order_by("distance").first()
+    
+    approximate_name = "Unknown Location"
+    if nearest_place:
+        approximate_name = f"{nearest_place.name}, {nearest_place.state}"
+
+    # Instead of fetching interop synchronously, return the wrapper for lazy loading.
     return render(
         request,
         "weather/point/overview.html",
         {
-            "point": point,
-            "weather_story": weather_story,
+            "lat": lat,
+            "lon": lon,
+            "approximate_name": approximate_name,
         },
     )
 

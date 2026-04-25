@@ -1,0 +1,9 @@
+{% load weather_i18n %}
+{% include 'weather/partials/place-banner.html' with place=point.place %}
+{% if point.alerts.items|length > 0 %}
+  <div class="bg-primary-darker padding-bottom-105">
+    <div class="grid-container margin-top-0">
+      {% include "weather/partials/alert-summary.html" with alerts=point.alerts.items %}
+    </div>
+  </div>
+{% endif %}
