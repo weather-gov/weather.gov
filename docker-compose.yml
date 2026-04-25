@@ -161,6 +161,28 @@ services:
         soft: 65536
         hard: 65536
 
+  api-interop-golang:
+    build:
+      context: ./api-interop-golang
+      dockerfile: Dockerfile.dev
+    environment:
+      PORT: 8083
+      API_URL: ${API_URL:-http://api-proxy:8081}
+      GHWO_URL: ${GHWO_URL:-http://api-proxy:8081}
+      DB_USER: drupal
+      DB_PASS: drupal
+      DB_HOST: database
+      DB_NAME: weathergov
+      DB_PORT: 5432
+    networks:
+      - weather.gov
+    links:
+      - api-proxy
+    ports:
+      - 8083:8083
+    volumes:
+      - ./api-interop-golang:/app
+
   uswds:
     build:
       context: ./

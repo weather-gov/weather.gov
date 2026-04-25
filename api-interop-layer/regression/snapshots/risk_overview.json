@@ -1,0 +1,479 @@
+{
+  "wfo": "bmx",
+  "days": [
+    {
+      "risks": {
+        "Lightning": {
+          "color": "#ededed",
+          "category": 0,
+          "levelName": "None",
+          "definition": "No lightning risk"
+        },
+        "SevereThunderstorm": {
+          "color": "#ededed",
+          "category": 0,
+          "levelName": "None",
+          "definition": "No Severe Thunderstorm Risk"
+        }
+      },
+      "composite": {
+        "max": 0,
+        "scaled": 0
+      },
+      "dayNumber": 1,
+      "timestamp": "2026-04-21T08:00:00-05:00"
+    },
+    {
+      "risks": {
+        "Lightning": {
+          "color": "#ededed",
+          "category": 0,
+          "levelName": "None",
+          "definition": "No lightning risk"
+        },
+        "SevereThunderstorm": {
+          "color": "#ededed",
+          "category": 0,
+          "levelName": "None",
+          "definition": "No Severe Thunderstorm Risk"
+        }
+      },
+      "composite": {
+        "max": 0,
+        "scaled": 0
+      },
+      "dayNumber": 2,
+      "timestamp": "2026-04-22T07:00:00-05:00"
+    },
+    {
+      "risks": {
+        "Lightning": {
+          "color": "#ededed",
+          "category": 0,
+          "levelName": "None",
+          "definition": "No lightning risk"
+        },
+        "SevereThunderstorm": {
+          "color": "#ededed",
+          "category": 0,
+          "levelName": "None",
+          "definition": "No Severe Thunderstorm Risk"
+        }
+      },
+      "composite": {
+        "max": 0,
+        "scaled": 0
+      },
+      "dayNumber": 3,
+      "timestamp": "2026-04-23T07:00:00-05:00"
+    },
+    {
+      "risks": {
+        "Lightning": {
+          "color": "yellow",
+          "category": 1,
+          "levelName": "Limited",
+          "definition": "Isolated to scattered thunderstorms with dangerous cloud-to-ground lightning expected."
+        },
+        "SevereThunderstorm": {
+          "color": "#ededed",
+          "category": 0,
+          "levelName": "None",
+          "definition": "No Severe Thunderstorm Risk"
+        }
+      },
+      "composite": {
+        "max": 1,
+        "scaled": 0.33
+      },
+      "dayNumber": 4,
+      "timestamp": "2026-04-24T07:00:00-05:00"
+    },
+    {
+      "risks": {
+        "Lightning": {
+          "color": "yellow",
+          "category": 1,
+          "levelName": "Limited",
+          "definition": "Isolated to scattered thunderstorms with dangerous cloud-to-ground lightning expected."
+        },
+        "SevereThunderstorm": {
+          "color": "#ededed",
+          "category": 0,
+          "levelName": "None",
+          "definition": "No Severe Thunderstorm Risk"
+        }
+      },
+      "composite": {
+        "max": 1,
+        "scaled": 0.33
+      },
+      "dayNumber": 5,
+      "timestamp": "2026-04-25T07:00:00-05:00"
+    },
+    {
+      "risks": {
+        "Lightning": {
+          "color": "yellow",
+          "category": 1,
+          "levelName": "Limited",
+          "definition": "Isolated to scattered thunderstorms with dangerous cloud-to-ground lightning expected."
+        },
+        "SevereThunderstorm": {
+          "color": "#ededed",
+          "category": 0,
+          "levelName": "None",
+          "definition": "No Severe Thunderstorm Risk"
+        }
+      },
+      "composite": {
+        "max": 1,
+        "scaled": 0.33
+      },
+      "dayNumber": 6,
+      "timestamp": "2026-04-26T07:00:00-05:00"
+    },
+    {
+      "risks": {
+        "Lightning": {
+          "color": "yellow",
+          "category": 1,
+          "levelName": "Limited",
+          "definition": "Isolated to scattered thunderstorms with dangerous cloud-to-ground lightning expected."
+        },
+        "SevereThunderstorm": {
+          "color": "#ffff51",
+          "category": 2,
+          "levelName": "Slight",
+          "definition": "Scattered severe thunderstorms possible."
+        }
+      },
+      "composite": {
+        "max": 2,
+        "scaled": 0.4
+      },
+      "dayNumber": 7,
+      "timestamp": "2026-04-27T07:00:00-05:00"
+    }
+  ],
+  "fips": "01001",
+  "risks": {
+    "Lightning": {
+      "days": [
+        {
+          "color": "#ededed",
+          "image": "https://www.weather.gov/images/bmx/ghwo/LightningDay1.jpg",
+          "category": 0,
+          "levelName": "None",
+          "timestamp": "2026-04-21T08:00:00-05:00",
+          "definition": "No lightning risk"
+        },
+        {
+          "color": "#ededed",
+          "image": "https://www.weather.gov/images/bmx/ghwo/LightningDay2.jpg",
+          "category": 0,
+          "levelName": "None",
+          "timestamp": "2026-04-22T07:00:00-05:00",
+          "definition": "No lightning risk"
+        },
+        {
+          "color": "#ededed",
+          "image": "https://www.weather.gov/images/bmx/ghwo/LightningDay3.jpg",
+          "category": 0,
+          "levelName": "None",
+          "timestamp": "2026-04-23T07:00:00-05:00",
+          "definition": "No lightning risk"
+        },
+        {
+          "color": "yellow",
+          "image": "https://www.weather.gov/images/bmx/ghwo/LightningDay4.jpg",
+          "category": 1,
+          "levelName": "Limited",
+          "timestamp": "2026-04-24T07:00:00-05:00",
+          "definition": "Isolated to scattered thunderstorms with dangerous cloud-to-ground lightning expected."
+        },
+        {
+          "color": "yellow",
+          "image": "https://www.weather.gov/images/bmx/ghwo/LightningDay5.jpg",
+          "category": 1,
+          "levelName": "Limited",
+          "timestamp": "2026-04-25T07:00:00-05:00",
+          "definition": "Isolated to scattered thunderstorms with dangerous cloud-to-ground lightning expected."
+        },
+        {
+          "color": "yellow",
+          "image": "https://www.weather.gov/images/bmx/ghwo/LightningDay6.jpg",
+          "category": 1,
+          "levelName": "Limited",
+          "timestamp": "2026-04-26T07:00:00-05:00",
+          "definition": "Isolated to scattered thunderstorms with dangerous cloud-to-ground lightning expected."
+        },
+        {
+          "color": "yellow",
+          "image": "https://www.weather.gov/images/bmx/ghwo/LightningDay7.jpg",
+          "category": 1,
+          "levelName": "Limited",
+          "timestamp": "2026-04-27T07:00:00-05:00",
+          "definition": "Isolated to scattered thunderstorms with dangerous cloud-to-ground lightning expected."
+        }
+      ],
+      "name": "Lightning Risk",
+      "legend": {
+        "name": "Lightning Risk",
+        "scale": 3,
+        "category": {
+          "0": {
+            "color": "#ededed",
+            "category": 0,
+            "levelName": "None",
+            "definition": "No lightning risk"
+          },
+          "1": {
+            "color": "yellow",
+            "category": 1,
+            "levelName": "Limited",
+            "definition": "Isolated to scattered thunderstorms with dangerous cloud-to-ground lightning expected."
+          },
+          "2": {
+            "color": "orange",
+            "category": 2,
+            "levelName": "Elevated",
+            "definition": "Numerous thunderstorms with dangerous cloud-to-ground lightning expected."
+          },
+          "3": {
+            "color": "red",
+            "category": 3,
+            "levelName": "Significant",
+            "definition": "Widespread thunderstorms with dangerous cloud-to-ground lightning expected."
+          }
+        }
+      }
+    },
+    "SevereThunderstorm": {
+      "days": [
+        {
+          "color": "#ededed",
+          "image": "https://www.weather.gov/images/bmx/ghwo/SevereThunderstormsDay1.jpg",
+          "category": 0,
+          "levelName": "None",
+          "timestamp": "2026-04-21T08:00:00-05:00",
+          "definition": "No Severe Thunderstorm Risk"
+        },
+        {
+          "color": "#ededed",
+          "image": "https://www.weather.gov/images/bmx/ghwo/SevereThunderstormsDay2.jpg",
+          "category": 0,
+          "levelName": "None",
+          "timestamp": "2026-04-22T07:00:00-05:00",
+          "definition": "No Severe Thunderstorm Risk"
+        },
+        {
+          "color": "#ededed",
+          "image": "https://www.weather.gov/images/bmx/ghwo/SevereThunderstormsDay3.jpg",
+          "category": 0,
+          "levelName": "None",
+          "timestamp": "2026-04-23T07:00:00-05:00",
+          "definition": "No Severe Thunderstorm Risk"
+        },
+        {
+          "color": "#ededed",
+          "image": "https://www.weather.gov/images/bmx/ghwo/SevereThunderstormsDay4.jpg",
+          "category": 0,
+          "levelName": "None",
+          "timestamp": "2026-04-24T07:00:00-05:00",
+          "definition": "No Severe Thunderstorm Risk"
+        },
+        {
+          "color": "#ededed",
+          "image": "https://www.weather.gov/images/bmx/ghwo/SevereThunderstormsDay5.jpg",
+          "category": 0,
+          "levelName": "None",
+          "timestamp": "2026-04-25T07:00:00-05:00",
+          "definition": "No Severe Thunderstorm Risk"
+        },
+        {
+          "color": "#ededed",
+          "image": "https://www.weather.gov/images/bmx/ghwo/SevereThunderstormsDay6.jpg",
+          "category": 0,
+          "levelName": "None",
+          "timestamp": "2026-04-26T07:00:00-05:00",
+          "definition": "No Severe Thunderstorm Risk"
+        },
+        {
+          "color": "#ffff51",
+          "image": "https://www.weather.gov/images/bmx/ghwo/SevereThunderstormsDay7.jpg",
+          "category": 2,
+          "levelName": "Slight",
+          "timestamp": "2026-04-27T07:00:00-05:00",
+          "definition": "Scattered severe thunderstorms possible."
+        }
+      ],
+      "name": "Severe Thunderstorm Risk",
+      "legend": {
+        "name": "Severe Thunderstorm Risk",
+        "scale": 5,
+        "category": {
+          "0": {
+            "color": "#ededed",
+            "category": 0,
+            "levelName": "None",
+            "definition": "No Severe Thunderstorm Risk"
+          },
+          "1": {
+            "color": "#50c986",
+            "category": 1,
+            "levelName": "Marginal",
+            "definition": "Isolated severe thunderstorms possible."
+          },
+          "2": {
+            "color": "#ffff51",
+            "category": 2,
+            "levelName": "Slight",
+            "definition": "Scattered severe thunderstorms possible."
+          },
+          "3": {
+            "color": "#ffc06c",
+            "category": 3,
+            "levelName": "Enhanced",
+            "definition": "Numerous severe thunderstorms possible."
+          },
+          "4": {
+            "color": "#ff5050",
+            "category": 4,
+            "levelName": "Moderate",
+            "definition": "Widespread severe thunderstorms likely."
+          },
+          "5": {
+            "color": "#ff50ff",
+            "category": 5,
+            "levelName": "High",
+            "definition": "Widespread severe thunderstorms expected."
+          }
+        }
+      }
+    }
+  },
+  "legend": {
+    "Lightning": {
+      "name": "Lightning Risk",
+      "scale": 3,
+      "category": {
+        "0": {
+          "color": "#ededed",
+          "category": 0,
+          "levelName": "None",
+          "definition": "No lightning risk"
+        },
+        "1": {
+          "color": "yellow",
+          "category": 1,
+          "levelName": "Limited",
+          "definition": "Isolated to scattered thunderstorms with dangerous cloud-to-ground lightning expected."
+        },
+        "2": {
+          "color": "orange",
+          "category": 2,
+          "levelName": "Elevated",
+          "definition": "Numerous thunderstorms with dangerous cloud-to-ground lightning expected."
+        },
+        "3": {
+          "color": "red",
+          "category": 3,
+          "levelName": "Significant",
+          "definition": "Widespread thunderstorms with dangerous cloud-to-ground lightning expected."
+        }
+      }
+    },
+    "SevereThunderstorm": {
+      "name": "Severe Thunderstorm Risk",
+      "scale": 5,
+      "category": {
+        "0": {
+          "color": "#ededed",
+          "category": 0,
+          "levelName": "None",
+          "definition": "No Severe Thunderstorm Risk"
+        },
+        "1": {
+          "color": "#50c986",
+          "category": 1,
+          "levelName": "Marginal",
+          "definition": "Isolated severe thunderstorms possible."
+        },
+        "2": {
+          "color": "#ffff51",
+          "category": 2,
+          "levelName": "Slight",
+          "definition": "Scattered severe thunderstorms possible."
+        },
+        "3": {
+          "color": "#ffc06c",
+          "category": 3,
+          "levelName": "Enhanced",
+          "definition": "Numerous severe thunderstorms possible."
+        },
+        "4": {
+          "color": "#ff5050",
+          "category": 4,
+          "levelName": "Moderate",
+          "definition": "Widespread severe thunderstorms likely."
+        },
+        "5": {
+          "color": "#ff50ff",
+          "category": 5,
+          "levelName": "High",
+          "definition": "Widespread severe thunderstorms expected."
+        }
+      }
+    }
+  },
+  "noRisks": [
+    "Tornado Risk",
+    "Thunderstorm Wind Risk",
+    "Hail Risk",
+    "Excessive Rainfall Risk",
+    "Wind Risk",
+    "Frost/Freeze Risk",
+    "Fog Risk",
+    "Fire Weather Risk"
+  ],
+  "composite": {
+    "days": [
+      {
+        "max": 0,
+        "scaled": 0,
+        "timestamp": "2026-04-21T08:00:00-05:00"
+      },
+      {
+        "max": 0,
+        "scaled": 0,
+        "timestamp": "2026-04-22T07:00:00-05:00"
+      },
+      {
+        "max": 0,
+        "scaled": 0,
+        "timestamp": "2026-04-23T07:00:00-05:00"
+      },
+      {
+        "max": 1,
+        "scaled": 0.33,
+        "timestamp": "2026-04-24T07:00:00-05:00"
+      },
+      {
+        "max": 1,
+        "scaled": 0.33,
+        "timestamp": "2026-04-25T07:00:00-05:00"
+      },
+      {
+        "max": 1,
+        "scaled": 0.33,
+        "timestamp": "2026-04-26T07:00:00-05:00"
+      },
+      {
+        "max": 2,
+        "scaled": 0.4,
+        "timestamp": "2026-04-27T07:00:00-05:00"
+      }
+    ]
+  }
+}

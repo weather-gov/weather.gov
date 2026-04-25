@@ -79,6 +79,8 @@ terraform/dist
 *.mo
 *.pyc
 **/.venv/
+.venv/
+**/__pycache__/
 
 # Uploaded media (weather stories, briefings, etc.)
 forecast/media/*.*
