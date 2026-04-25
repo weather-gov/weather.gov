@@ -13,6 +13,7 @@ import (
 
 func main() {
 	SetupDatabase()
+	data.InitRedis()
 
 	port := os.Getenv("PORT")
 	if port == "" {

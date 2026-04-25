@@ -74,7 +74,7 @@ func GetPointData(ctx context.Context, pool *pgxpool.Pool, lat, lon float64) (*P
 	go func() {
 		defer wg.Done()
 		apiPath := fmt.Sprintf("/points/%f,%f", lat, lon)
-		body, _, err := FetchAPI(apiPath)
+		body, _, err := FetchAPICached(ctx, apiPath)
 		if err == nil {
 			var raw map[string]interface{}
 			if json.Unmarshal(body, &raw) == nil {
