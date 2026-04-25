@@ -6,6 +6,7 @@ import (
 	"io"
 	"net/http"
 	"os"
+	"time"
 )
 
 func getAPIURL() string {
@@ -44,14 +45,22 @@ func FetchAPICached(ctx context.Context, apiPath string) ([]byte, int, error) {
 
 	cacheKey := "interop:api:" + apiPath
 	cached, err := RedisClient.Get(ctx, cacheKey).Bytes()
+	
 	if err == nil && len(cached) > 0 {
+		// Stale-While-Revalidate: Fetch fresh data in the background
+		go func() {
+			bgCtx := context.Background()
+			body, status, fetchErr := FetchAPI(apiPath)
+			if fetchErr == nil && status == http.StatusOK {
+				RedisClient.Set(bgCtx, cacheKey, body, 2*time.Hour)
+			}
+		}()
 		return cached, http.StatusOK, nil
 	}
 
 	body, status, err := FetchAPI(apiPath)
 	if err == nil && status == http.StatusOK {
-		// Cache for 30 days
-		RedisClient.Set(ctx, cacheKey, body, 30*24*60*60*1000*1000*1000)
+		RedisClient.Set(ctx, cacheKey, body, 2*time.Hour)
 	}
 
 	return body, status, err
