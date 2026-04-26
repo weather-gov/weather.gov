@@ -36,42 +36,32 @@ While the current custom JS approach works well, a future iteration of this arch
 ## Performance Improvements
 By removing synchronous external API calls from the initial page load, the lazy-loading architecture significantly improves the Time To First Byte (TTFB). The following screencast demonstrates the immediate layout rendering (fast TTFB) for both a cached point and an uncached point, with the weather data loading smoothly in the background.
 
-![Lazy Load TTFB Comparison](lazy_load_ttfb_comparison.webp)
+**Honolulu, HI (Uncached) - Main Branch**
+![Honolulu Main](videos/Honolulu_HI_main.webm)
+
+**Honolulu, HI (Uncached) - Lazy Load Branch**
+![Honolulu Lazy](videos/Honolulu_HI_experimental-perf.webm)
+
+**Utqiagvik, AK (Uncached) - Main Branch**
+![Utqiagvik Main](videos/Utqiagvik_AK_main.webm)
+
+**Utqiagvik, AK (Uncached) - Lazy Load Branch**
+![Utqiagvik Lazy](videos/Utqiagvik_AK_experimental-perf.webm)
 
 Below is a comparison table showing the local performance benchmark results for the Time to First Contentful Paint (FCP), comparing the `main` branch to the new lazy-loading architecture. 
 
 | Location | Main FCP (Uncached) | Main FCP (Cached) | Lazy Load FCP (Uncached) | Lazy Load FCP (Cached) |
 |---|---|---|---|---|
-| **Near Marquette, MI** | 21.85s | 0.39s | 5.04s | 0.59s |
-| **Near Denver, CO** | 11.00s | 1.42s | 1.19s | 0.24s |
-| **Near Honolulu, HI** | 2.77s | 0.04s | 1.01s | 0.10s |
-| **Near Utqiagvik, AK** | 2.73s | 0.04s | 1.56s | 0.11s |
-| **Near Miami, FL** | 24.24s | 0.06s | 0.95s | 0.07s |
-| **Near Seattle, WA** | 25.53s | 0.06s | 0.37s | 0.04s |
-| **Near New York, NY** | 10.95s | 0.07s | 0.54s | 0.08s |
-| **Near Austin, TX** | 28.31s | 0.06s | 0.92s | 0.10s |
-| **Near Phoenix, AZ** | 34.10s | 0.07s | 0.62s | 0.05s |
-| **Near Boston, MA** | 7.24s | 0.06s | 1.09s | 0.08s |
-| **Near Chicago, IL** | 5.49s | 0.03s | 1.90s | 0.04s |
-| **Near Los Angeles, CA** | 5.67s | 0.06s | 0.69s | 0.04s |
-| **Near Houston, TX** | 6.09s | 0.08s | 0.96s | 0.06s |
-| **Near Philadelphia, PA** | 18.37s | 0.06s | 0.61s | 0.04s |
-| **Near San Antonio, TX** | 16.96s | 0.06s | 0.50s | 0.04s |
-| **Near San Diego, CA** | 4.21s | 0.06s | 0.41s | 0.10s |
-| **Near Dallas, TX** | 6.26s | 0.06s | 0.48s | 0.05s |
-| **Near San Jose, CA** | 19.14s | 0.06s | 0.43s | 0.05s |
-| **Near Jacksonville, FL** | 9.38s | 0.06s | 0.39s | 0.04s |
-| **Near Indianapolis, IN** | 17.24s | 0.07s | 0.33s | 0.05s |
-| **Near San Francisco, CA** | 25.45s | 0.06s | 0.42s | 0.04s |
-| **Near Columbus, OH** | 26.95s | 0.06s | 0.44s | 0.05s |
-| **Near Charlotte, NC** | 4.07s | 0.06s | 0.66s | 0.21s |
-| **Near Detroit, MI** | 2.63s | 0.06s | 1.39s | 0.08s |
-| **Near El Paso, TX** | 3.06s | 0.06s | 0.68s | 0.07s |
-| **Near Memphis, TN** | 18.44s | 0.06s | 1.00s | 0.08s |
-| **Near Nashville, TN** | 25.56s | 0.06s | 0.92s | 0.05s |
-| **Near Baltimore, MD** | 10.04s | 0.06s | 0.61s | 0.04s |
-| **Near Milwaukee, WI** | 18.04s | 0.03s | 0.81s | 0.05s |
-| **Near Portland, OR** | 11.02s | 0.06s | 0.20s | 0.09s |
+| **Near Marquette, MI** | 4.86s | 0.20s | 1.66s | 0.09s |
+| **Near Denver, CO** | 6.53s | 0.06s | 1.91s | 0.26s |
+| **Near Honolulu, HI** | 5.61s | 0.45s | 1.24s | 0.06s |
+| **Near Utqiagvik, AK** | 4.00s | 1.09s | 4.29s | 0.07s |
+| **Near Miami, FL** | 5.97s | 0.06s | 0.76s | 0.06s |
+| **Near Seattle, WA** | 2.55s | 0.10s | 0.82s | 0.05s |
+| **Near New York, NY** | 6.75s | 0.06s | 0.70s | 0.05s |
+| **Near Austin, TX** | 8.35s | 0.06s | 0.82s | 0.04s |
+| **Near Phoenix, AZ** | 4.12s | 0.06s | 0.82s | 0.05s |
+| **Near Boston, MA** | 6.73s | 0.06s | 1.02s | 0.05s |
 
 ### Performance Metrics Explanation
 

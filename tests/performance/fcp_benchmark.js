@@ -88,7 +88,7 @@ async function getFCP(page, url) {
 
   console.log(`Starting FCP Benchmark for branch: ${branchName}...\n`);
 
-  for (const loc of baseLocations) {
+  for (const loc of baseLocations.slice(0, 10)) {
     const randomizedUrl = getRandomizedUrl(loc.lat, loc.lon);
     console.log(`Processing ${loc.name} at ${randomizedUrl}...`);
     

@@ -1,0 +1,52 @@
+[
+  {
+    "location": "Near Marquette, MI",
+    "uncachedFCP": 1656,
+    "cachedFCP": 92
+  },
+  {
+    "location": "Near Denver, CO",
+    "uncachedFCP": 1908,
+    "cachedFCP": 260
+  },
+  {
+    "location": "Near Honolulu, HI",
+    "uncachedFCP": 1236,
+    "cachedFCP": 56
+  },
+  {
+    "location": "Near Utqiagvik, AK",
+    "uncachedFCP": 4292,
+    "cachedFCP": 68
+  },
+  {
+    "location": "Near Miami, FL",
+    "uncachedFCP": 756,
+    "cachedFCP": 60
+  },
+  {
+    "location": "Near Seattle, WA",
+    "uncachedFCP": 820,
+    "cachedFCP": 48
+  },
+  {
+    "location": "Near New York, NY",
+    "uncachedFCP": 704,
+    "cachedFCP": 48
+  },
+  {
+    "location": "Near Austin, TX",
+    "uncachedFCP": 824,
+    "cachedFCP": 44
+  },
+  {
+    "location": "Near Phoenix, AZ",
+    "uncachedFCP": 820,
+    "cachedFCP": 48
+  },
+  {
+    "location": "Near Boston, MA",
+    "uncachedFCP": 1016,
+    "cachedFCP": 48
+  }
+]

@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 
 const mainPath = path.join(__dirname, 'fcp_results_main.json');
-const lazyPath = path.join(__dirname, 'fcp_results_lazy-load.json');
+const lazyPath = path.join(__dirname, 'fcp_results_experimental-perf.json');
 
 if (!fs.existsSync(mainPath) || !fs.existsSync(lazyPath)) {
   console.error("Missing result files. Please run the benchmark for both 'main' and 'lazy-load' first.");
