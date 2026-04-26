@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"math"
 	"sync"
+	"time"
 
 	"github.com/jackc/pgx/v5/pgxpool"
 	"golang.org/x/sync/singleflight"
@@ -136,15 +137,33 @@ func fetchPointDataInternal(ctx context.Context, pool *pgxpool.Pool, lat, lon fl
 	xStr := fmt.Sprintf("%v", grid["x"])
 	yStr := fmt.Sprintf("%v", grid["y"])
 
-	// 1. Forecast
+	// 1. Forecast (Daily & Hourly)
 	go func() {
 		defer orchWg.Done()
 		forecast = map[string]interface{}{"error": true, "message": "Could not fetch"}
 		dailyPath := fmt.Sprintf("/gridpoints/%s/%s,%s/forecast", wfo, xStr, yStr)
-		body, _, err := FetchAPI(dailyPath)
-		if err == nil {
+		hourlyPath := fmt.Sprintf("/gridpoints/%s/%s,%s/forecast/hourly", wfo, xStr, yStr)
+
+		var fetchWg sync.WaitGroup
+		fetchWg.Add(2)
+
+		var dailyBody, hourlyBody []byte
+		var dailyErr, hourlyErr error
+
+		go func() {
+			defer fetchWg.Done()
+			dailyBody, _, dailyErr = FetchAPI(dailyPath)
+		}()
+		go func() {
+			defer fetchWg.Done()
+			hourlyBody, _, hourlyErr = FetchAPI(hourlyPath)
+		}()
+
+		fetchWg.Wait()
+
+		if dailyErr == nil {
 			var raw map[string]interface{}
-			if json.Unmarshal(body, &raw) == nil {
+			if json.Unmarshal(dailyBody, &raw) == nil {
 				if props, ok := raw["properties"].(map[string]interface{}); ok {
 					// Mocking UI parity format structure for daily
 					forecast = map[string]interface{}{
@@ -170,7 +189,7 @@ func fetchPointDataInternal(ctx context.Context, pool *pgxpool.Pool, lat, lon fl
 										"description": pMap["shortForecast"],
 										"temperature": map[string]interface{}{"value": pMap["temperature"], "degF": pMap["temperature"]},
 										"probabilityOfPrecipitation": pMap["probabilityOfPrecipitation"],
-										"windSpeed": map[string]interface{}{"value": 5, "mph": 5}, // Basic mock
+										"windSpeed": map[string]interface{}{"value": pMap["windSpeed"], "mph": pMap["windSpeed"]},
 										"windDirection": map[string]interface{}{"cardinalLong": pMap["windDirection"]},
 									},
 								}
@@ -201,6 +220,47 @@ func fetchPointDataInternal(ctx context.Context, pool *pgxpool.Pool, lat, lon fl
 								}
 							}
 						}
+
+						// Parse Hourly if available
+						if hourlyErr == nil {
+							var hourlyRaw map[string]interface{}
+							if json.Unmarshal(hourlyBody, &hourlyRaw) == nil {
+								if hProps, ok := hourlyRaw["properties"].(map[string]interface{}); ok {
+									if hPeriods, ok := hProps["periods"].([]interface{}); ok {
+										for i, d := range days {
+											dMap := d.(map[string]interface{})
+											dStart, _ := time.Parse(time.RFC3339, dMap["start"].(string))
+											dEnd, _ := time.Parse(time.RFC3339, dMap["end"].(string))
+											var hours []interface{}
+
+											for _, hp := range hPeriods {
+												hpMap := hp.(map[string]interface{})
+												hpStart, _ := time.Parse(time.RFC3339, hpMap["startTime"].(string))
+												if (hpStart.Equal(dStart) || hpStart.After(dStart)) && hpStart.Before(dEnd) {
+													hourData := map[string]interface{}{
+														"time": hpMap["startTime"],
+														"temperature": map[string]interface{}{"degF": hpMap["temperature"]},
+														"windSpeed": map[string]interface{}{"mph": hpMap["windSpeed"]},
+														"windDirection": hpMap["windDirection"],
+														"probabilityOfPrecipitation": map[string]interface{}{"percent": 0},
+													}
+													if pop, ok := hpMap["probabilityOfPrecipitation"].(map[string]interface{}); ok {
+														hourData["probabilityOfPrecipitation"] = map[string]interface{}{"percent": pop["value"]}
+													}
+													if rh, ok := hpMap["relativeHumidity"].(map[string]interface{}); ok {
+														hourData["relativeHumidity"] = map[string]interface{}{"percent": rh["value"]}
+													}
+													hours = append(hours, hourData)
+												}
+											}
+											dMap["hours"] = hours
+											days[i] = dMap
+										}
+									}
+								}
+							}
+						}
+
 						forecast["days"] = days
 					}
 				}
