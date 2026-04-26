@@ -153,17 +153,19 @@ def _process_interop_point_forecast(data):
 
     tz = ZoneInfo(data["place"]["timezone"])
 
-    # Pull full alert data from the database. The interop only returns alert
-    # hashes, in order to save on bandwidth.
+    # Pull full alert data from the database. The TS interop returns alert
+    # hashes; the Go interop returns full alert objects. Handle both cases.
     if "alerts" in data and "items" in data["alerts"] and len(data["alerts"]["items"]):
-        alerts = WeatherAlertsCache.objects.only("hash", "alertjson").filter(hash__in=data["alerts"]["items"])
-        # Map the hash to the alert object, with timings applied
-        alerts = {alert.hash: set_timing(alert.alertjson, tz) for alert in alerts}
-        # Now replace the alert hashes with actual alerts. If there's no
-        # alert corresponding to a hash, just drop it. There's a small but
-        # non-zero chance that the alert was removed from the cache in the
-        # time between when the interop sent us this and when we queried.
-        data["alerts"]["items"] = [alerts[hash] for hash in data["alerts"]["items"] if hash in alerts]
+        first_item = data["alerts"]["items"][0]
+        if isinstance(first_item, str):
+            # TS interop: items are hashes, look up full data from DB cache
+            alerts = WeatherAlertsCache.objects.only("hash", "alertjson").filter(hash__in=data["alerts"]["items"])
+            alerts = {alert.hash: set_timing(alert.alertjson, tz) for alert in alerts}
+            data["alerts"]["items"] = [alerts[hash] for hash in data["alerts"]["items"] if hash in alerts]
+        elif isinstance(first_item, dict):
+            # Go interop: items are already full alert objects, apply timing
+            for alert in data["alerts"]["items"]:
+                set_timing(alert, tz)
 
     if "days" in data["forecast"]:
         for day in data["forecast"]["days"]:

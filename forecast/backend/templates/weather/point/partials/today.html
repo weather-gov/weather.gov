@@ -12,7 +12,7 @@
         {% if point.forecast.days|length == 0 %}
           {% include 'weather/partials/uswds-alert.html' with level="error" body="forecast.errors.loading.01"|t %}
         {% else %}
-          {% include 'weather/partials/today-summary-forecast.html' with forecast=point.forecast astronomical_data=point.point.astronomicalData %}
+          {% include 'weather/partials/today-summary-forecast.html' with forecast=point.forecast astronomical_data=point.point.astronomicalData timezone=point.place.timezone %}
         {% endif %}
       </div>
     {% else %}

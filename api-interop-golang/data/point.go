@@ -225,12 +225,13 @@ func fetchPointDataInternal(ctx context.Context, pool *pgxpool.Pool, lat, lon fl
 			if json.Unmarshal(body, &raw) == nil {
 				if props, ok := raw["properties"].(map[string]interface{}); ok {
 					grid = map[string]interface{}{
-						"wfo":              props["gridId"],
-						"x":                props["gridX"],
-						"y":                props["gridY"],
-						"geometry":         raw["geometry"],
-						"astronomicalData": props["astronomicalData"],
+						"wfo":      props["gridId"],
+						"x":        props["gridX"],
+						"y":        props["gridY"],
+						"geometry": raw["geometry"],
 					}
+					// Store astronomical data on the point object (matching TS interop parity)
+					point["astronomicalData"] = props["astronomicalData"]
 				}
 			}
 		} else {
@@ -568,8 +569,49 @@ func fetchPointDataInternal(ctx context.Context, pool *pgxpool.Pool, lat, lon fl
 	go func() {
 		defer orchWg.Done()
 		alerts = map[string]interface{}{"items": []interface{}{}}
-		// Placeholder for alerts parity logic
-		// We'd ideally intersect DB shape with geo bounds. We'll leave the array empty for parity fallback.
+		alertsPath := fmt.Sprintf("/alerts/active?status=actual&message_type=alert&point=%f,%f", lat, lon)
+		body, _, err := FetchAPI(alertsPath)
+		if err == nil {
+			var raw map[string]interface{}
+			if json.Unmarshal(body, &raw) == nil {
+				if features, ok := raw["features"].([]interface{}); ok {
+					items := make([]interface{}, 0, len(features))
+					for _, f := range features {
+						feature, ok := f.(map[string]interface{})
+						if !ok {
+							continue
+						}
+						props, ok := feature["properties"].(map[string]interface{})
+						if !ok {
+							continue
+						}
+						finish := props["ends"]
+						if finish == nil || finish == "" {
+							finish = props["expires"]
+						}
+
+						items = append(items, map[string]interface{}{
+							"event":       props["event"],
+							"onset":       props["onset"],
+							"ends":        props["ends"],
+							"expires":     props["expires"],
+							"finish":      finish,
+							"severity":    props["severity"],
+							"certainty":   props["certainty"],
+							"urgency":     props["urgency"],
+							"senderName":  props["senderName"],
+							"headline":    props["headline"],
+							"description": props["description"],
+							"instruction": props["instruction"],
+							"areaDesc":    props["areaDesc"],
+							"id":          props["id"],
+							"geometry":    feature["geometry"],
+						})
+					}
+					alerts = map[string]interface{}{"items": items}
+				}
+			}
+		}
 	}()
 
 	orchWg.Wait()

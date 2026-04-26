@@ -70,6 +70,25 @@ describe("Point forecast › Today tab", () => {
       await expect(container).toBeVisible();
     });
 
+    test("I expect to see astronomical data", async ({ page }) => {
+      const sunrise = page.getByText(/Sunrise/i);
+      const sunset = page.getByText(/Sunset/i);
+      
+      await expect(sunrise).toBeVisible();
+      await expect(sunset).toBeVisible();
+      
+      const expandBtn = page.getByRole("button", { name: "show more" });
+      await expandBtn.click();
+      
+      const firstLight = page.getByRole("rowheader", { name: /first light/i });
+      const lastLight = page.getByRole("rowheader", { name: /last light/i });
+      const lengthOfDay = page.getByRole("rowheader", { name: /length of day/i });
+      
+      await expect(firstLight).toBeVisible();
+      await expect(lastLight).toBeVisible();
+      await expect(lengthOfDay).toBeVisible();
+    });
+
     describe("When I toggle the radar legend", () => {
       test("I expect to see the intensity key", async ({ page }) => {
         const button = page.getByRole("button", {

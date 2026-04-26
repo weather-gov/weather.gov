@@ -284,6 +284,9 @@ msgstr "This area doesn't have forecast data. Please try searching for a differe
 msgid "forecast.errors.point.01"
 msgstr "Something went wrong loading this page. Please try again in a few minutes."
 
+msgid "forecast.alerts.empty.01"
+msgstr "There are currently no active alerts for this location."
+
 msgid "forecast.labels.alerts.01"
 msgstr "Alerts"
 

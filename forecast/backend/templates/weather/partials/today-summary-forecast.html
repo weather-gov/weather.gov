@@ -1,5 +1,6 @@
+{% load weather_i18n %}
+{% load tz %}
 {% comment %}
--- Template purpose:
 --   Display "Today's forecast" information on the point forecast page.
 -- Used by: point/overview.html
 {% endcomment %}
@@ -16,6 +17,7 @@
         {% daily_summary_list_item day=forecast.days.0 %}
       </ol>
       <div class="wx-sunrise-sunset-container padding-top-3 desktop:padding-top-4 padding-x-2">
+        {% timezone timezone %}
         <div class="padding-bottom-1 display-flex flex-align-center">
           <div class="padding-right-1">
             <img alt="" src="{% static 'images/weather/wx_sunrise_sm.svg' %}">
@@ -85,6 +87,7 @@
             </tr>
           </tbody>
         </table>
+        {% endtimezone %}
       </div>
     </div>
   {% endwith %}
