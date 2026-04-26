@@ -1,52 +1,52 @@
 [
   {
     "location": "Near Marquette, MI",
-    "uncachedFCP": 4860,
-    "cachedFCP": 200
+    "uncachedFCP": 6204,
+    "cachedFCP": 68
   },
   {
     "location": "Near Denver, CO",
     "uncachedFCP": 6528,
+    "cachedFCP": 64
+  },
+  {
+    "location": "Near Chicago, IL",
+    "uncachedFCP": 4032,
+    "cachedFCP": 48
+  },
+  {
+    "location": "Near Los Angeles, CA",
+    "uncachedFCP": 5980,
     "cachedFCP": 60
-  },
-  {
-    "location": "Near Honolulu, HI",
-    "uncachedFCP": 5612,
-    "cachedFCP": 452
-  },
-  {
-    "location": "Near Utqiagvik, AK",
-    "uncachedFCP": 4000,
-    "cachedFCP": 1092
   },
   {
     "location": "Near Miami, FL",
-    "uncachedFCP": 5968,
-    "cachedFCP": 60
+    "uncachedFCP": 8104,
+    "cachedFCP": 64
   },
   {
     "location": "Near Seattle, WA",
-    "uncachedFCP": 2548,
-    "cachedFCP": 104
+    "uncachedFCP": 6508,
+    "cachedFCP": 64
   },
   {
     "location": "Near New York, NY",
-    "uncachedFCP": 6748,
-    "cachedFCP": 60
+    "uncachedFCP": 7180,
+    "cachedFCP": 64
   },
   {
     "location": "Near Austin, TX",
-    "uncachedFCP": 8352,
+    "uncachedFCP": 4924,
     "cachedFCP": 60
   },
   {
     "location": "Near Phoenix, AZ",
-    "uncachedFCP": 4120,
+    "uncachedFCP": 5764,
     "cachedFCP": 60
   },
   {
     "location": "Near Boston, MA",
-    "uncachedFCP": 6728,
-    "cachedFCP": 64
+    "uncachedFCP": 8672,
+    "cachedFCP": 84
   }
 ]

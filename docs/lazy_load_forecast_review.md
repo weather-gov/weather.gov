@@ -1,4 +1,4 @@
-# Lazy Load Forecast Review Walkthrough
+# Performance Branch Review and Demos
 
 ## Overview
 This branch (`feature/lazy-load-forecast`) implements an asynchronous, lazy-loading architecture for the forecast page to optimize the initial page load.
@@ -36,32 +36,68 @@ While the current custom JS approach works well, a future iteration of this arch
 ## Performance Improvements
 By removing synchronous external API calls from the initial page load, the lazy-loading architecture significantly improves the Time To First Byte (TTFB). The following screencast demonstrates the immediate layout rendering (fast TTFB) for both a cached point and an uncached point, with the weather data loading smoothly in the background.
 
-**Honolulu, HI (Uncached) - Main Branch**
-![Honolulu Main](videos/Honolulu_HI_main.webm)
+**Denver, CO (Uncached) - Main Branch**
+![Denver Uncached Main](videos/Denver_CO_uncached_main.webm)
 
-**Honolulu, HI (Uncached) - Lazy Load Branch**
-![Honolulu Lazy](videos/Honolulu_HI_experimental-perf.webm)
+**Denver, CO (Uncached) - Lazy Load Branch**
+![Denver Uncached Lazy](videos/Denver_CO_uncached_experimental-perf.webm)
 
-**Utqiagvik, AK (Uncached) - Main Branch**
-![Utqiagvik Main](videos/Utqiagvik_AK_main.webm)
+**Denver, CO (Cached) - Main Branch**
+![Denver Cached Main](videos/Denver_CO_cached_main.webm)
 
-**Utqiagvik, AK (Uncached) - Lazy Load Branch**
-![Utqiagvik Lazy](videos/Utqiagvik_AK_experimental-perf.webm)
+**Denver, CO (Cached) - Lazy Load Branch**
+![Denver Cached Lazy](videos/Denver_CO_cached_experimental-perf.webm)
+
+**Seattle, WA (Uncached) - Main Branch**
+![Seattle Uncached Main](videos/Seattle_WA_uncached_main.webm)
+
+**Seattle, WA (Uncached) - Lazy Load Branch**
+![Seattle Uncached Lazy](videos/Seattle_WA_uncached_experimental-perf.webm)
+
+**Seattle, WA (Cached) - Main Branch**
+![Seattle Cached Main](videos/Seattle_WA_cached_main.webm)
+
+**Seattle, WA (Cached) - Lazy Load Branch**
+![Seattle Cached Lazy](videos/Seattle_WA_cached_experimental-perf.webm)
+
+**Austin, TX (Uncached) - Main Branch**
+![Austin Uncached Main](videos/Austin_TX_uncached_main.webm)
+
+**Austin, TX (Uncached) - Lazy Load Branch**
+![Austin Uncached Lazy](videos/Austin_TX_uncached_experimental-perf.webm)
+
+**Austin, TX (Cached) - Main Branch**
+![Austin Cached Main](videos/Austin_TX_cached_main.webm)
+
+**Austin, TX (Cached) - Lazy Load Branch**
+![Austin Cached Lazy](videos/Austin_TX_cached_experimental-perf.webm)
+
+**Boston, MA (Uncached) - Main Branch**
+![Boston Uncached Main](videos/Boston_MA_uncached_main.webm)
+
+**Boston, MA (Uncached) - Lazy Load Branch**
+![Boston Uncached Lazy](videos/Boston_MA_uncached_experimental-perf.webm)
+
+**Boston, MA (Cached) - Main Branch**
+![Boston Cached Main](videos/Boston_MA_cached_main.webm)
+
+**Boston, MA (Cached) - Lazy Load Branch**
+![Boston Cached Lazy](videos/Boston_MA_cached_experimental-perf.webm)
 
 Below is a comparison table showing the local performance benchmark results for the Time to First Contentful Paint (FCP), comparing the `main` branch to the new lazy-loading architecture. 
 
 | Location | Main FCP (Uncached) | Main FCP (Cached) | Lazy Load FCP (Uncached) | Lazy Load FCP (Cached) |
 |---|---|---|---|---|
-| **Near Marquette, MI** | 4.86s | 0.20s | 1.66s | 0.09s |
-| **Near Denver, CO** | 6.53s | 0.06s | 1.91s | 0.26s |
-| **Near Honolulu, HI** | 5.61s | 0.45s | 1.24s | 0.06s |
-| **Near Utqiagvik, AK** | 4.00s | 1.09s | 4.29s | 0.07s |
-| **Near Miami, FL** | 5.97s | 0.06s | 0.76s | 0.06s |
-| **Near Seattle, WA** | 2.55s | 0.10s | 0.82s | 0.05s |
-| **Near New York, NY** | 6.75s | 0.06s | 0.70s | 0.05s |
-| **Near Austin, TX** | 8.35s | 0.06s | 0.82s | 0.04s |
-| **Near Phoenix, AZ** | 4.12s | 0.06s | 0.82s | 0.05s |
-| **Near Boston, MA** | 6.73s | 0.06s | 1.02s | 0.05s |
+| **Near Marquette, MI** | 6.20s | 0.07s | 3.08s | 0.08s |
+| **Near Denver, CO** | 6.53s | 0.06s | 0.74s | 0.28s |
+| **Near Chicago, IL** | 4.03s | 0.05s | 0.87s | 0.08s |
+| **Near Los Angeles, CA** | 5.98s | 0.06s | 0.77s | 0.06s |
+| **Near Miami, FL** | 8.10s | 0.06s | 1.33s | 0.04s |
+| **Near Seattle, WA** | 6.51s | 0.06s | 0.69s | 0.15s |
+| **Near New York, NY** | 7.18s | 0.06s | 0.75s | 0.06s |
+| **Near Austin, TX** | 4.92s | 0.06s | 0.31s | 0.31s |
+| **Near Phoenix, AZ** | 5.76s | 0.06s | 0.76s | 0.09s |
+| **Near Boston, MA** | 8.67s | 0.08s | 0.55s | 0.05s |
 
 ### Performance Metrics Explanation
 
