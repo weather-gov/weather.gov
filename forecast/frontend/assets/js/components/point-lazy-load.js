@@ -10,12 +10,22 @@ const initLazyLoad = () => {
         const html = await response.text();
         el.innerHTML = html;
 
-        // If the partial returned alerts, un-hide the alerts tab button
-        if (el.querySelector("wx-alerts")) {
-          const btn = document.getElementById("alerts-tab-button");
-          if (btn) {
-            btn.classList.remove("display-none");
+        const tabContainer = el.closest(".wx-tab-container");
+        if (tabContainer && tabContainer.id) {
+          if (tabContainer.id === "alerts") {
+            const badge = document.querySelector("#alerts-tab-button .alerts-badge");
+            if (badge) {
+              const count = el.querySelectorAll(".usa-accordion").length;
+              if (count > 0) {
+                badge.textContent = count;
+                badge.classList.remove("display-none");
+              }
+            }
           }
+
+          document.dispatchEvent(
+            new CustomEvent("wx:partial-loaded", { detail: { tabId: tabContainer.id } }),
+          );
         }
 
         // Announce loaded (optional hook for screen readers)

@@ -1,4 +1,36 @@
 {% load weather_i18n %}
 {% if point.alerts.items|length > 0 %}
+  <div class="grid-container padding-top-2 padding-bottom-0">
+    <div class="usa-alert usa-alert--warning usa-alert--slim wx-alert margin-bottom-2">
+      <div class="usa-alert__body">
+        <h4 class="usa-alert__heading">{{ point.alerts.items|length }} Active Alert{{ point.alerts.items|length|pluralize }}</h4>
+        <p class="usa-alert__text">Most Severe: <strong>{{ point.alerts.items.0.event | t }}</strong></p>
+      </div>
+    </div>
+  </div>
   {% include 'weather/partials/forecast-alerts-map.html' with alerts=point.alerts.items %}
+  <script>
+    (function() {
+      const btn = document.getElementById('alerts-tab-button');
+      if (btn) {
+        btn.innerHTML = '{{ "forecast.labels.alerts.01" | t }} <span class="usa-badge usa-badge--warning margin-left-05">{{ point.alerts.items|length }}</span>';
+      }
+    })();
+  </script>
+{% else %}
+  <div class="grid-container padding-y-4">
+    <div class="usa-alert usa-alert--info">
+      <div class="usa-alert__body">
+        <p class="usa-alert__text">{{ "forecast.alerts.empty.01" | t|default:"There are currently no active alerts for this location." }}</p>
+      </div>
+    </div>
+  </div>
+  <script>
+    (function() {
+      const btn = document.getElementById('alerts-tab-button');
+      if (btn) {
+        btn.innerHTML = '{{ "forecast.labels.alerts.01" | t }}';
+      }
+    })();
+  </script>
 {% endif %}

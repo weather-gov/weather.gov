@@ -270,15 +270,56 @@ def wx_point_today(request, lat, lon):
 
         localtz = ZoneInfo(point["place"]["timezone"])
         code = point["grid"]["wfo"]
-        wfo = WFO.objects.get(code=WFO.normalize_code(code))
-        point["wfo"] = wfo
-        weather_story = get_weather_story_from_point_data(point, wfo, localtz)
-        if "weatherstory" in point:
-            del point["weatherstory"]
+        try:
+            wfo = WFO.objects.get(code=WFO.normalize_code(code))
+            point["wfo"] = wfo
+            weather_story = get_weather_story_from_point_data(point, wfo, localtz)
+            if "weatherstory" in point:
+                del point["weatherstory"]
+        except WFO.DoesNotExist:
+            pass
 
     return render(
         request,
         "weather/point/partials/today.html",
+        {"point": point, "weather_story": weather_story},
+    )
+
+
+@require_GET
+@never_cache
+def wx_point_footer(request, lat, lon):
+    """Render the point footer partial view."""
+    try:
+        point = interop.get_point_forecast(lat, lon)
+    except Http504:
+        return render(request, "weather/partials/uswds-alert.html", {"level": "error", "heading": _("error.504.interop.heading.01"), "body": _("error.504.interop.description.01")})
+    except Http429:
+        return render(request, "weather/partials/uswds-alert.html", {"level": "error", "heading": _("error.429.interop.heading.01"), "body": _("error.429.interop.description.01")})
+    except Exception:
+        return render(request, "weather/partials/uswds-alert.html", {"level": "error", "body": _("forecast.errors.loading.01")})
+
+    weather_story = {}
+    if "grid" in point and "wfo" in point["grid"] and "place" in point and "timezone" in point["place"]:
+        from zoneinfo import ZoneInfo  # noqa: PLC0415
+
+        from backend.models import WFO  # noqa: PLC0415
+        from backend.util import get_weather_story_from_point_data  # noqa: PLC0415
+
+        localtz = ZoneInfo(point["place"]["timezone"])
+        code = point["grid"]["wfo"]
+        try:
+            wfo = WFO.objects.get(code=WFO.normalize_code(code))
+            point["wfo"] = wfo
+            weather_story = get_weather_story_from_point_data(point, wfo, localtz)
+            if "weatherstory" in point:
+                del point["weatherstory"]
+        except WFO.DoesNotExist:
+            pass
+
+    return render(
+        request,
+        "weather/point/partials/point-footer.html",
         {"point": point, "weather_story": weather_story},
     )
 
@@ -295,6 +336,15 @@ def wx_point_daily(request, lat, lon):
         return render(request, "weather/partials/uswds-alert.html", {"level": "error", "heading": _("error.429.interop.heading.01"), "body": _("error.429.interop.description.01")})
     except Exception:
         return render(request, "weather/partials/uswds-alert.html", {"level": "error", "body": _("forecast.errors.loading.01")})
+
+    if "grid" in point and "wfo" in point["grid"]:
+        from backend.models import WFO  # noqa: PLC0415
+        try:
+            code = point["grid"]["wfo"]
+            wfo = WFO.objects.get(code=WFO.normalize_code(code))
+            point["wfo"] = wfo
+        except Exception:
+            pass
 
     return render(
         request,

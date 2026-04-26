@@ -1,8 +1,9 @@
 import { drawChart, setupScrollButtons } from "./WeatherChart.js";
 import styles from "../styles.js";
 
+const initCharts = () => {
 const chartContainers = Array.from(
-  document.querySelectorAll(".wx-hourly-wind-chart-container"),
+  document.querySelectorAll(".wx-hourly-wind-chart-container:not([data-chart-initialized])"),
 );
 
 /**
@@ -95,6 +96,7 @@ const drawWindInfoLabels = (chart) => {
 };
 
 for (const container of chartContainers) {
+  container.setAttribute("data-chart-initialized", "true");
   const times = JSON.parse(container.dataset.times);
   const speeds = JSON.parse(container.dataset.windSpeeds);
   const gusts = JSON.parse(container.dataset.windGusts);
@@ -202,3 +204,11 @@ for (const container of chartContainers) {
   drawChart(container, config);
   setupScrollButtons(container);
 }
+};
+
+document.addEventListener('wx:partial-loaded', (event) => {
+  if (event.detail.tabId === 'daily') {
+    initCharts();
+  }
+});
+initCharts();

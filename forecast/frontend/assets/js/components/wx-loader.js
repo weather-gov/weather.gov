@@ -1,7 +1,7 @@
 /** @file this is for the events to show and hide the wx-loader */
 
 const hideNavigationLoader = () => {
-  document.querySelectorAll("wx-loader").forEach((loader) => {
+  document.querySelectorAll("wx-loader:not([data-keep-visible='true'])").forEach((loader) => {
     loader.setAttribute("aria-hidden", true);
   });
 };

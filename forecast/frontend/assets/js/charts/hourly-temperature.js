@@ -1,11 +1,13 @@
 import { drawChart, setupScrollButtons } from "./WeatherChart.js";
 import styles from "../styles.js";
 
+const initCharts = () => {
 const chartContainers = Array.from(
-  document.querySelectorAll(".wx-hourly-temp-chart-container"),
+  document.querySelectorAll(".wx-hourly-temp-chart-container:not([data-chart-initialized])"),
 );
 
 for (const container of chartContainers) {
+  container.setAttribute("data-chart-initialized", "true");
   const times = JSON.parse(container.dataset.times);
   const temps = JSON.parse(container.dataset.temps).map((v) =>
     Number.parseInt(v, 10),
@@ -130,3 +132,11 @@ for (const container of chartContainers) {
   drawChart(container, config);
   setupScrollButtons(container);
 }
+};
+
+document.addEventListener('wx:partial-loaded', (event) => {
+  if (event.detail.tabId === 'daily') {
+    initCharts();
+  }
+});
+initCharts();

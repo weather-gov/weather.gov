@@ -5,6 +5,8 @@
 --   for_these: space-separated list of IDs which will trigger this loader
 --              as described in wx-loader.js
 --   pop_in(boolean): whether the loader should take up space while hidden
+--   visible(boolean): whether the loader should be visible by default
+--   loading_text(string): text to display next to the loader
 -- Used by: index.html, partials/location-search.html
 {% endcomment %}
 {% load i18n %}
@@ -13,7 +15,7 @@
 {% if pop_in %}wx-loader-pop-in{% endif %}
 "
 {% if for_these %}loader-for="{{ for_these }}"{% endif %}
-aria-hidden="true">
+{% if not visible %}aria-hidden="true"{% else %}aria-hidden="false" data-keep-visible="true"{% endif %}>
 <div class="wx-loader-icon display-block height-4 width-4 margin-right-05"></div>
-<span class="wx-loader-text">{{ "loader.loading-text.01" | t }}...</span>
+<span class="wx-loader-text">{% if loading_text %}{{ loading_text }}{% else %}{{ "loader.loading-text.01" | t }}...{% endif %}</span>
 </wx-loader>

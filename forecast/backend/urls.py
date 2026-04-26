@@ -51,6 +51,7 @@ urlpatterns = [
     path("wx/state/<state>/alerts", partials.wx_state_alerts_pbf, name="wx_state_boundary"),
     path("wx/point/<float:lat>/<float:lon>/header/", partials.wx_point_header, name="wx_point_header"),
     path("wx/point/<float:lat>/<float:lon>/today/", partials.wx_point_today, name="wx_point_today"),
+    path("wx/point/<float:lat>/<float:lon>/footer/", partials.wx_point_footer, name="wx_point_footer"),
     path("wx/point/<float:lat>/<float:lon>/daily/", partials.wx_point_daily, name="wx_point_daily"),
     path("wx/point/<float:lat>/<float:lon>/alerts/", partials.wx_point_alerts, name="wx_point_alerts"),
     # Wagtail

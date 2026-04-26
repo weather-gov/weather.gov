@@ -182,3 +182,15 @@ if (currentTabSelected && window.cmiRadar) {
     }
   });
 }
+
+document.addEventListener("wx:partial-loaded", (event) => {
+  if (event.detail.tabId === "today") {
+    if (window.cmiRadar) {
+      setupRadar();
+    } else if (scriptEl) {
+      scriptEl.addEventListener("load", () => {
+        setupRadar();
+      });
+    }
+  }
+});

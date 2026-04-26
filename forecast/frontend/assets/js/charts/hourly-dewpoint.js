@@ -1,11 +1,13 @@
 import { drawChart, setupScrollButtons } from "./WeatherChart.js";
 import styles from "../styles.js";
 
+const initCharts = () => {
 const chartContainers = Array.from(
-  document.querySelectorAll(".wx-hourly-dewpoint-chart-container"),
+  document.querySelectorAll(".wx-hourly-dewpoint-chart-container:not([data-chart-initialized])"),
 );
 
 for (const container of chartContainers) {
+  container.setAttribute("data-chart-initialized", "true");
   const times = JSON.parse(container.dataset.times);
   const dewpoints = JSON.parse(container.dataset.dewpoints).map((v) =>
     Number.parseInt(v, 10),
@@ -91,3 +93,11 @@ for (const container of chartContainers) {
   drawChart(container, config);
   setupScrollButtons(container);
 }
+};
+
+document.addEventListener('wx:partial-loaded', (event) => {
+  if (event.detail.tabId === 'daily') {
+    initCharts();
+  }
+});
+initCharts();

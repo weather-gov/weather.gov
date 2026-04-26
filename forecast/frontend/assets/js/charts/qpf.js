@@ -1,11 +1,12 @@
 import { drawChart } from "./WeatherChart.js";
 import styles from "../styles.js";
 
+const initCharts = () => {
 const round = (number, decimals) =>
   Math.round(number * 100 ** decimals) / 100 ** decimals;
 
 const chartContainers = Array.from(
-  document.querySelectorAll(".wx-qpf-chart-container"),
+  document.querySelectorAll(".wx-qpf-chart-container:not([data-chart-initialized])"),
 );
 
 const makePattern = async (imageUrl, size = 60) =>
@@ -38,6 +39,7 @@ const createCharts = async () => {
   );
 
   for (const container of chartContainers) {
+  container.setAttribute("data-chart-initialized", "true");
     const times = JSON.parse(container.dataset.times);
 
     const liquid = JSON.parse(container.dataset.liquid).map((v) =>
@@ -154,3 +156,11 @@ const createCharts = async () => {
 };
 
 createCharts();
+};
+
+document.addEventListener('wx:partial-loaded', (event) => {
+  if (event.detail.tabId === 'daily') {
+    initCharts();
+  }
+});
+initCharts();

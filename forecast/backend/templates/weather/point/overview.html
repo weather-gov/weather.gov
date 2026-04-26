@@ -42,9 +42,6 @@
           <h1 class="text-white margin-y-0 font-sans-xl">{% if approximate_name %}{{ approximate_name }}{% else %}{{ "forecast.labels.weather-info.01" | t }}{% endif %}</h1>
         </div>
       </div>
-      <div class="grid-container padding-x-0 padding-y-10 grid-col-12 display-flex flex-justify-center">
-        {% include 'weather/partials/wx-loader.html' %}
-      </div>
     </div>
     <wx-tabbed-nav class="display-block position-relative" id="point-page-tabbed-nav">
     <div id="tablist-label" class="usa-sr-only">{{ "forecast.labels.weather-info.01" | t }}</div>
@@ -55,13 +52,12 @@
              class="tab-buttons display-flex flex-row top-4 grid-col-12"
              aria-labelledby="tablist-label">
           <div id="alerts-tab-button-parent"
-               class="display-none"
                style="display:contents">
             <button role="tab"
                     id="alerts-tab-button"
-                    class="tab-button display-none"
+                    class="tab-button"
                     data-tab-name="alerts"
-                    aria-controls="alerts">{{ "forecast.labels.alerts.01" | t }}</button>
+                    aria-controls="alerts"><span class="alerts-tab-text">{{ "forecast.labels.alerts.01" | t }}</span><span class="alerts-badge display-none usa-badge usa-badge--warning margin-left-05"></span></button>
           </div>
           <button role="tab"
                   id="current-conditions-tab-button"
@@ -85,7 +81,7 @@
            tabindex="0">
         <div wx-lazy-load="{% url 'wx_point_alerts' lat=lat lon=lon %}">
           <div class="grid-container padding-x-0 padding-y-10 grid-col-12 display-flex flex-justify-center">
-            {% include 'weather/partials/wx-loader.html' %}
+            {% include 'weather/partials/wx-loader.html' with visible=True loading_text="Gathering alert information..." %}
           </div>
         </div>
       </div>
@@ -96,18 +92,23 @@
            tabindex="0">
         <div wx-lazy-load="{% url 'wx_point_today' lat=lat lon=lon %}">
           <div class="grid-container padding-x-0 padding-y-10 grid-col-12 display-flex flex-justify-center" style="min-height: 400px;">
-            {% include 'weather/partials/wx-loader.html' %}
+            {% include 'weather/partials/wx-loader.html' with visible=True loading_text="Gathering forecast information..." %}
           </div>
         </div>
       </div>
       <wx-daily-forecast class="wx-tab-container wx-focus-offset-205" id="daily" role="tabpanel" aria-labelledby="daily-tab-button" tabindex="0">
       <div wx-lazy-load="{% url 'wx_point_daily' lat=lat lon=lon %}">
         <div class="grid-container padding-x-0 padding-y-10 grid-col-12 display-flex flex-justify-center" style="min-height: 600px;">
-          {% include 'weather/partials/wx-loader.html' %}
+          {% include 'weather/partials/wx-loader.html' with visible=True loading_text="Gathering forecast information..." %}
         </div>
       </div>
       </wx-daily-forecast>
     </div>
     </wx-tabbed-nav>
+    <div wx-lazy-load="{% url 'wx_point_footer' lat=lat lon=lon %}">
+      <div class="grid-container padding-x-0 padding-y-10 grid-col-12 display-flex flex-justify-center">
+        {% include 'weather/partials/wx-loader.html' with visible=True loading_text="Gathering forecast information..." %}
+      </div>
+    </div>
   </div>
 {% endblock %}
