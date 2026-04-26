@@ -1,11 +1,11 @@
 module github.com/weathergov/api-interop-golang
 
-go 1.25.0
+go 1.22.0
 
 require (
 	github.com/jackc/pgx/v5 v5.7.1
 	github.com/redis/go-redis/v9 v9.18.0
-	golang.org/x/sync v0.20.0
+	golang.org/x/sync v0.8.0
 )
 
 require (
