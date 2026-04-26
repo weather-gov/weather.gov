@@ -5,6 +5,9 @@ import (
 	"encoding/json"
 	"fmt"
 	"math"
+	"regexp"
+	"strconv"
+	"strings"
 	"sync"
 	"time"
 
@@ -30,6 +33,121 @@ func min(a, b int) int {
 		return a
 	}
 	return b
+}
+
+var windSpeedRegex = regexp.MustCompile(`(\d+)`)
+
+// parseWindSpeedMPH extracts the numeric mph value from a string like "13 mph"
+func parseWindSpeedMPH(raw interface{}) interface{} {
+	if raw == nil {
+		return nil
+	}
+	switch v := raw.(type) {
+	case float64:
+		return int(v)
+	case string:
+		matches := windSpeedRegex.FindStringSubmatch(v)
+		if len(matches) > 1 {
+			val, _ := strconv.Atoi(matches[1])
+			return val
+		}
+		return nil
+	}
+	return nil
+}
+
+// celsiusToFahrenheit converts a Celsius value to Fahrenheit
+func celsiusToFahrenheit(c float64) int {
+	return int(math.Round(c*9.0/5.0 + 32.0))
+}
+
+// expandCardinalDirection converts abbreviation like "NE" to full name like "northeast"
+func expandCardinalDirection(abbr string) string {
+	directions := map[string]string{
+		"N":   "north",
+		"NNE": "north-northeast",
+		"NE":  "northeast",
+		"ENE": "east-northeast",
+		"E":   "east",
+		"ESE": "east-southeast",
+		"SE":  "southeast",
+		"SSE": "south-southeast",
+		"S":   "south",
+		"SSW": "south-southwest",
+		"SW":  "southwest",
+		"WSW": "west-southwest",
+		"W":   "west",
+		"WNW": "west-northwest",
+		"NW":  "northwest",
+		"NNW": "north-northwest",
+	}
+	if full, ok := directions[strings.ToUpper(abbr)]; ok {
+		return full
+	}
+	return strings.ToLower(abbr)
+}
+
+// buildWindDirectionDict builds a proper windDirection dict from a cardinal abbreviation
+func buildWindDirectionDict(raw interface{}) map[string]interface{} {
+	if raw == nil {
+		return nil
+	}
+	abbr, ok := raw.(string)
+	if !ok {
+		return nil
+	}
+	return map[string]interface{}{
+		"cardinalShort": strings.ToUpper(abbr),
+		"cardinalLong":  expandCardinalDirection(abbr),
+	}
+}
+
+// parseIconURL parses a weather.gov icon URL into a dict with icon and base fields.
+// Example: "https://api.weather.gov/icons/land/night/rain_showers,20?size=medium"
+// becomes: {"icon": "rain_showers-night.svg", "base": "rain_showers-night"}
+func parseIconURL(raw interface{}) map[string]interface{} {
+	if raw == nil {
+		return map[string]interface{}{"icon": nil, "base": nil}
+	}
+	urlStr, ok := raw.(string)
+	if !ok {
+		return map[string]interface{}{"icon": nil, "base": nil}
+	}
+
+	// Extract the path after /icons/land/ or /icons/
+	// URL format: https://api.weather.gov/icons/land/{timeOfDay}/{condition},{coverage}?size=medium
+	parts := strings.Split(urlStr, "/icons/")
+	if len(parts) < 2 {
+		return map[string]interface{}{"icon": nil, "base": nil}
+	}
+
+	pathPart := parts[1]
+	// Remove query string
+	if idx := strings.Index(pathPart, "?"); idx >= 0 {
+		pathPart = pathPart[:idx]
+	}
+
+	// Split path segments: "land/night/rain_showers,20" -> ["land", "night", "rain_showers,20"]
+	segs := strings.Split(pathPart, "/")
+	if len(segs) < 3 {
+		return map[string]interface{}{"icon": nil, "base": nil}
+	}
+
+	timeOfDay := segs[1] // "day" or "night"
+	condition := segs[2]
+
+	// Remove coverage percentage: "rain_showers,20" -> "rain_showers"
+	if idx := strings.Index(condition, ","); idx >= 0 {
+		condition = condition[:idx]
+	}
+
+	base := condition + "-" + timeOfDay
+	icon := base + ".svg"
+
+	return map[string]interface{}{
+		"icon": icon,
+		"base": base,
+	}
 }
 
 func GetPointData(ctx context.Context, pool *pgxpool.Pool, lat, lon float64) (*PointResponse, error) {
@@ -179,18 +297,19 @@ func fetchPointDataInternal(ctx context.Context, pool *pgxpool.Pool, lat, lon fl
 								en, _ := pMap["endTime"].(string)
 								isDaytime, _ := pMap["isDaytime"].(bool)
 
+								windMph := parseWindSpeedMPH(pMap["windSpeed"])
 								periodData := map[string]interface{}{
 									"start":       st,
 									"end":         en,
 									"isDaytime":   isDaytime,
 									"isOvernight": false,
 									"data": map[string]interface{}{
-										"icon":        pMap["icon"],
+										"icon":        parseIconURL(pMap["icon"]),
 										"description": pMap["shortForecast"],
 										"temperature": map[string]interface{}{"value": pMap["temperature"], "degF": pMap["temperature"]},
 										"probabilityOfPrecipitation": pMap["probabilityOfPrecipitation"],
-										"windSpeed": map[string]interface{}{"value": pMap["windSpeed"], "mph": pMap["windSpeed"]},
-										"windDirection": map[string]interface{}{"cardinalLong": pMap["windDirection"]},
+										"windSpeed": map[string]interface{}{"value": windMph, "mph": windMph},
+										"windDirection": buildWindDirectionDict(pMap["windDirection"]),
 									},
 								}
 
@@ -203,7 +322,8 @@ func fetchPointDataInternal(ctx context.Context, pool *pgxpool.Pool, lat, lon fl
 										"qpf": map[string]interface{}{
 											"periods": []interface{}{},
 											"hasSnow": false,
-											"hasIce": false,
+											"hasIce":  false,
+											"hasQPF":  false,
 										},
 										"alerts": map[string]interface{}{
 											"metadata": map[string]interface{}{
@@ -223,7 +343,8 @@ func fetchPointDataInternal(ctx context.Context, pool *pgxpool.Pool, lat, lon fl
 											"qpf": map[string]interface{}{
 												"periods": []interface{}{},
 												"hasSnow": false,
-												"hasIce": false,
+												"hasIce":  false,
+												"hasQPF":  false,
 											},
 											"alerts": map[string]interface{}{
 												"metadata": map[string]interface{}{
@@ -245,7 +366,8 @@ func fetchPointDataInternal(ctx context.Context, pool *pgxpool.Pool, lat, lon fl
 												"qpf": map[string]interface{}{
 													"periods": []interface{}{},
 													"hasSnow": false,
-													"hasIce": false,
+													"hasIce":  false,
+													"hasQPF":  false,
 												},
 												"alerts": map[string]interface{}{
 													"metadata": map[string]interface{}{
@@ -292,14 +414,17 @@ func fetchPointDataInternal(ctx context.Context, pool *pgxpool.Pool, lat, lon fl
 												hpMap := hp.(map[string]interface{})
 												hpStart, _ := time.Parse(time.RFC3339, hpMap["startTime"].(string))
 												if (hpStart.Equal(dStart) || hpStart.After(dStart)) && hpStart.Before(dEnd) {
+													hourWindSpeed := parseWindSpeedMPH(hpMap["windSpeed"])
+													hourWindGust := parseWindSpeedMPH(hpMap["windSpeed"]) // default to windSpeed
+													hourTemp := hpMap["temperature"]
 													hourData := map[string]interface{}{
-														"time": hpMap["startTime"],
-														"temperature": map[string]interface{}{"degF": hpMap["temperature"]},
-														"apparentTemperature": map[string]interface{}{"degF": hpMap["temperature"]},
-														"dewpoint": map[string]interface{}{"degF": hpMap["temperature"]},
-														"windSpeed": map[string]interface{}{"mph": hpMap["windSpeed"]},
-														"windGust": map[string]interface{}{"mph": hpMap["windSpeed"]},
-														"windDirection": hpMap["windDirection"],
+														"time":                       hpMap["startTime"],
+														"temperature":                map[string]interface{}{"degF": hourTemp},
+														"apparentTemperature":        map[string]interface{}{"degF": hourTemp},
+														"dewpoint":                   map[string]interface{}{"degF": hourTemp},
+														"windSpeed":                  map[string]interface{}{"mph": hourWindSpeed},
+														"windGust":                   map[string]interface{}{"mph": hourWindGust},
+														"windDirection":              buildWindDirectionDict(hpMap["windDirection"]),
 														"probabilityOfPrecipitation": map[string]interface{}{"percent": 0},
 													}
 													if pop, ok := hpMap["probabilityOfPrecipitation"].(map[string]interface{}); ok && pop["value"] != nil {
@@ -309,12 +434,18 @@ func fetchPointDataInternal(ctx context.Context, pool *pgxpool.Pool, lat, lon fl
 														hourData["relativeHumidity"] = map[string]interface{}{"percent": rh["value"]}
 													}
 													if appTemp, ok := hpMap["apparentTemperature"].(map[string]interface{}); ok && appTemp["value"] != nil {
-														hourData["apparentTemperature"] = map[string]interface{}{"degF": appTemp["value"]}
+														if v, ok := appTemp["value"].(float64); ok {
+															hourData["apparentTemperature"] = map[string]interface{}{"degF": celsiusToFahrenheit(v)}
+														}
 													}
 													if dew, ok := hpMap["dewpoint"].(map[string]interface{}); ok && dew["value"] != nil {
-														hourData["dewpoint"] = map[string]interface{}{"degF": dew["value"]}
+														if v, ok := dew["value"].(float64); ok {
+															hourData["dewpoint"] = map[string]interface{}{"degF": celsiusToFahrenheit(v)}
+														}
 													}
-													if wg, ok := hpMap["windGust"].(map[string]interface{}); ok && wg["value"] != nil {
+													if wgStr, ok := hpMap["windGust"].(string); ok {
+														hourData["windGust"] = map[string]interface{}{"mph": parseWindSpeedMPH(wgStr)}
+													} else if wg, ok := hpMap["windGust"].(map[string]interface{}); ok && wg["value"] != nil {
 														hourData["windGust"] = map[string]interface{}{"mph": wg["value"]}
 													}
 													hours = append(hours, hourData)
