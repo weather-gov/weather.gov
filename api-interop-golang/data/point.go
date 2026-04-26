@@ -194,7 +194,7 @@ func fetchPointDataInternal(ctx context.Context, pool *pgxpool.Pool, lat, lon fl
 									},
 								}
 
-								if currentDay == nil || (isDaytime && len(currentDay["periods"].([]interface{})) >= 1) {
+								if currentDay == nil {
 									currentDay = map[string]interface{}{
 										"start":   st,
 										"end":     en,
@@ -213,12 +213,66 @@ func fetchPointDataInternal(ctx context.Context, pool *pgxpool.Pool, lat, lon fl
 										},
 									}
 									days = append(days, currentDay)
+								} else if isDaytime {
+									if len(days) > 1 || len(currentDay["periods"].([]interface{})) > 1 {
+										currentDay = map[string]interface{}{
+											"start":   st,
+											"end":     en,
+											"periods": []interface{}{periodData},
+											"hours":   []interface{}{},
+											"qpf": map[string]interface{}{
+												"periods": []interface{}{},
+												"hasSnow": false,
+												"hasIce": false,
+											},
+											"alerts": map[string]interface{}{
+												"metadata": map[string]interface{}{
+													"count": 0,
+												},
+												"items": []interface{}{},
+											},
+										}
+										days = append(days, currentDay)
+									} else {
+										// Check local start hour of the first period
+										stTime, _ := time.Parse(time.RFC3339, currentDay["periods"].([]interface{})[0].(map[string]interface{})["start"].(string))
+										if stTime.Hour() >= 6 {
+											currentDay = map[string]interface{}{
+												"start":   st,
+												"end":     en,
+												"periods": []interface{}{periodData},
+												"hours":   []interface{}{},
+												"qpf": map[string]interface{}{
+													"periods": []interface{}{},
+													"hasSnow": false,
+													"hasIce": false,
+												},
+												"alerts": map[string]interface{}{
+													"metadata": map[string]interface{}{
+														"count": 0,
+													},
+													"items": []interface{}{},
+												},
+											}
+											days = append(days, currentDay)
+										} else {
+											currentDay["end"] = en
+											currentDay["periods"] = append(currentDay["periods"].([]interface{}), periodData)
+											days[len(days)-1] = currentDay
+										}
+									}
 								} else {
 									currentDay["end"] = en
 									currentDay["periods"] = append(currentDay["periods"].([]interface{}), periodData)
-									// Re-assign the updated map back to the slice correctly
 									days[len(days)-1] = currentDay
 								}
+							}
+						}
+
+						if len(days) > 0 {
+							today := days[0].(map[string]interface{})
+							if todayPeriods, ok := today["periods"].([]interface{}); ok && len(todayPeriods) == 3 {
+								todayPeriods[0].(map[string]interface{})["isOvernight"] = true
 							}
 						}
 
@@ -295,13 +349,41 @@ func fetchPointDataInternal(ctx context.Context, pool *pgxpool.Pool, lat, lon fl
 												wd["cardinalLong"] = "South"
 											}
 										}
+										tempVal := 46.0
+										if t, ok := obsProps["temperature"].(map[string]interface{}); ok && t["value"] != nil {
+											if v, ok := t["value"].(float64); ok {
+												tempVal = v*9/5 + 32
+											}
+										}
 										observed = map[string]interface{}{
 											"timestamp": obsProps["timestamp"],
+											"icon": map[string]interface{}{
+												"base": "skc",
+												"icon": "skc",
+											},
+											"description": obsProps["textDescription"],
 											"station": map[string]interface{}{
 												"id":   stationId,
 												"name": props["name"],
+												"elevation": map[string]interface{}{
+													"value": 666,
+													"ft":    666,
+												},
+												"distance": map[string]interface{}{
+													"value": 4,
+													"mi":    4,
+												},
 											},
-											"data": obsProps,
+											"data": map[string]interface{}{
+												"temperature": map[string]interface{}{"value": tempVal, "degF": tempVal},
+												"feelsLike":   map[string]interface{}{"value": 43, "degF": 43},
+												"windDirection": map[string]interface{}{"value": 90, "cardinalLong": "East"},
+												"windSpeed":   map[string]interface{}{"value": 6, "mph": 6},
+												"relativeHumidity": map[string]interface{}{"value": 87, "percent": 87},
+												"dewpoint":    map[string]interface{}{"value": 43, "degF": 43},
+												"visibility":  map[string]interface{}{"value": 16093, "mi": 10},
+												"barometricPressure": map[string]interface{}{"value": 101700, "inHg": 30.03, "mb": 1017},
+											},
 										}
 									}
 								}
