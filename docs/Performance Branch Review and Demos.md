@@ -42,62 +42,26 @@ By removing synchronous external API calls from the initial page load, the lazy-
 **Denver, CO (Uncached) - Lazy Load Branch**
 ![Denver Uncached Lazy](videos/Denver_CO_uncached_experimental-perf.webm)
 
-**Denver, CO (Cached) - Main Branch**
-![Denver Cached Main](videos/Denver_CO_cached_main.webm)
-
-**Denver, CO (Cached) - Lazy Load Branch**
-![Denver Cached Lazy](videos/Denver_CO_cached_experimental-perf.webm)
-
-**Seattle, WA (Uncached) - Main Branch**
-![Seattle Uncached Main](videos/Seattle_WA_uncached_main.webm)
-
-**Seattle, WA (Uncached) - Lazy Load Branch**
-![Seattle Uncached Lazy](videos/Seattle_WA_uncached_experimental-perf.webm)
-
-**Seattle, WA (Cached) - Main Branch**
-![Seattle Cached Main](videos/Seattle_WA_cached_main.webm)
-
-**Seattle, WA (Cached) - Lazy Load Branch**
-![Seattle Cached Lazy](videos/Seattle_WA_cached_experimental-perf.webm)
-
 **Austin, TX (Uncached) - Main Branch**
 ![Austin Uncached Main](videos/Austin_TX_uncached_main.webm)
 
 **Austin, TX (Uncached) - Lazy Load Branch**
 ![Austin Uncached Lazy](videos/Austin_TX_uncached_experimental-perf.webm)
 
-**Austin, TX (Cached) - Main Branch**
-![Austin Cached Main](videos/Austin_TX_cached_main.webm)
-
-**Austin, TX (Cached) - Lazy Load Branch**
-![Austin Cached Lazy](videos/Austin_TX_cached_experimental-perf.webm)
-
-**Boston, MA (Uncached) - Main Branch**
-![Boston Uncached Main](videos/Boston_MA_uncached_main.webm)
-
-**Boston, MA (Uncached) - Lazy Load Branch**
-![Boston Uncached Lazy](videos/Boston_MA_uncached_experimental-perf.webm)
-
-**Boston, MA (Cached) - Main Branch**
-![Boston Cached Main](videos/Boston_MA_cached_main.webm)
-
-**Boston, MA (Cached) - Lazy Load Branch**
-![Boston Cached Lazy](videos/Boston_MA_cached_experimental-perf.webm)
-
 Below is a comparison table showing the local performance benchmark results for the Time to First Contentful Paint (FCP), comparing the `main` branch to the new lazy-loading architecture. 
 
 | Location | Main FCP (Uncached) | Main FCP (Cached) | Lazy Load FCP (Uncached) | Lazy Load FCP (Cached) |
 |---|---|---|---|---|
-| **Near Marquette, MI** | 6.20s | 0.07s | 3.08s | 0.08s |
-| **Near Denver, CO** | 6.53s | 0.06s | 0.74s | 0.28s |
-| **Near Chicago, IL** | 4.03s | 0.05s | 0.87s | 0.08s |
-| **Near Los Angeles, CA** | 5.98s | 0.06s | 0.77s | 0.06s |
-| **Near Miami, FL** | 8.10s | 0.06s | 1.33s | 0.04s |
-| **Near Seattle, WA** | 6.51s | 0.06s | 0.69s | 0.15s |
-| **Near New York, NY** | 7.18s | 0.06s | 0.75s | 0.06s |
-| **Near Austin, TX** | 4.92s | 0.06s | 0.31s | 0.31s |
-| **Near Phoenix, AZ** | 5.76s | 0.06s | 0.76s | 0.09s |
-| **Near Boston, MA** | 8.67s | 0.08s | 0.55s | 0.05s |
+| **Near Marquette, MI** | 5.92s | 0.07s | 4.08s | 0.21s |
+| **Near Denver, CO** | 5.44s | 0.06s | 1.39s | 0.04s |
+| **Near Chicago, IL** | 5.70s | 0.04s | 1.20s | 0.06s |
+| **Near Los Angeles, CA** | 4.72s | 0.07s | 0.91s | 0.05s |
+| **Near Miami, FL** | 6.58s | 0.06s | 0.94s | 0.05s |
+| **Near Seattle, WA** | 4.58s | 0.06s | 1.26s | 0.11s |
+| **Near New York, NY** | 4.22s | 0.07s | 1.61s | 0.06s |
+| **Near Austin, TX** | 21.86s | 0.05s | 0.97s | 0.05s |
+| **Near Phoenix, AZ** | 4.01s | 0.06s | 1.03s | 0.06s |
+| **Near Boston, MA** | 5.07s | 0.10s | 0.79s | 0.13s |
 
 ### Performance Metrics Explanation
 
