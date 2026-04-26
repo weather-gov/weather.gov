@@ -295,15 +295,27 @@ func fetchPointDataInternal(ctx context.Context, pool *pgxpool.Pool, lat, lon fl
 													hourData := map[string]interface{}{
 														"time": hpMap["startTime"],
 														"temperature": map[string]interface{}{"degF": hpMap["temperature"]},
+														"apparentTemperature": map[string]interface{}{"degF": hpMap["temperature"]},
+														"dewpoint": map[string]interface{}{"degF": hpMap["temperature"]},
 														"windSpeed": map[string]interface{}{"mph": hpMap["windSpeed"]},
+														"windGust": map[string]interface{}{"mph": hpMap["windSpeed"]},
 														"windDirection": hpMap["windDirection"],
 														"probabilityOfPrecipitation": map[string]interface{}{"percent": 0},
 													}
-													if pop, ok := hpMap["probabilityOfPrecipitation"].(map[string]interface{}); ok {
+													if pop, ok := hpMap["probabilityOfPrecipitation"].(map[string]interface{}); ok && pop["value"] != nil {
 														hourData["probabilityOfPrecipitation"] = map[string]interface{}{"percent": pop["value"]}
 													}
-													if rh, ok := hpMap["relativeHumidity"].(map[string]interface{}); ok {
+													if rh, ok := hpMap["relativeHumidity"].(map[string]interface{}); ok && rh["value"] != nil {
 														hourData["relativeHumidity"] = map[string]interface{}{"percent": rh["value"]}
+													}
+													if appTemp, ok := hpMap["apparentTemperature"].(map[string]interface{}); ok && appTemp["value"] != nil {
+														hourData["apparentTemperature"] = map[string]interface{}{"degF": appTemp["value"]}
+													}
+													if dew, ok := hpMap["dewpoint"].(map[string]interface{}); ok && dew["value"] != nil {
+														hourData["dewpoint"] = map[string]interface{}{"degF": dew["value"]}
+													}
+													if wg, ok := hpMap["windGust"].(map[string]interface{}); ok && wg["value"] != nil {
+														hourData["windGust"] = map[string]interface{}{"mph": wg["value"]}
 													}
 													hours = append(hours, hourData)
 												}
