@@ -399,8 +399,8 @@ def wx_point_footer(request, lat, lon):
 
     return render(
         request,
-        "weather/point/partials/point-footer.html",
-        {"point": point, "weather_story": weather_story},
+        "weather/partials/wfo-promo.html",
+        {"point": point, "weather_story": weather_story, "wfo": point.get("wfo")},
     )
 
 

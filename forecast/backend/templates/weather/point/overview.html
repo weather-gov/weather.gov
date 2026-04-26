@@ -96,13 +96,13 @@
           </div>
         </div>
       </div>
-      <wx-daily-forecast class="wx-tab-container wx-focus-offset-205" id="daily" role="tabpanel" aria-labelledby="daily-tab-button" tabindex="0">
-      <div wx-lazy-load="{% url 'wx_point_daily' lat=lat lon=lon %}">
-        <div class="grid-container padding-x-0 padding-y-10 grid-col-12 display-flex flex-justify-center" style="min-height: 600px;">
-          {% include 'weather/partials/wx-loader.html' with visible=True loading_text="Gathering forecast information..." %}
+      <div class="wx-tab-container wx-focus-offset-205" id="daily" role="tabpanel" aria-labelledby="daily-tab-button" tabindex="0">
+        <div wx-lazy-load="{% url 'wx_point_daily' lat=lat lon=lon %}">
+          <div class="grid-container padding-x-0 padding-y-10 grid-col-12 display-flex flex-justify-center" style="min-height: 600px;">
+            {% include 'weather/partials/wx-loader.html' with visible=True loading_text="Gathering forecast information..." %}
+          </div>
         </div>
       </div>
-      </wx-daily-forecast>
     </div>
     </wx-tabbed-nav>
     <div wx-lazy-load="{% url 'wx_point_footer' lat=lat lon=lon %}">

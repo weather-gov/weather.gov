@@ -8,7 +8,10 @@ import (
 	"sync"
 
 	"github.com/jackc/pgx/v5/pgxpool"
+	"golang.org/x/sync/singleflight"
 )
+
+var pointGroup singleflight.Group
 
 type PointResponse struct {
 	Alerts       map[string]interface{} `json:"alerts"`
@@ -29,6 +32,21 @@ func min(a, b int) int {
 }
 
 func GetPointData(ctx context.Context, pool *pgxpool.Pool, lat, lon float64) (*PointResponse, error) {
+	// Round to 3 decimal places
+	lat = math.Round(lat*1000) / 1000
+	lon = math.Round(lon*1000) / 1000
+
+	key := fmt.Sprintf("%.3f,%.3f", lat, lon)
+	val, err, _ := pointGroup.Do(key, func() (interface{}, error) {
+		return fetchPointDataInternal(ctx, pool, lat, lon)
+	})
+	if err != nil {
+		return nil, err
+	}
+	return val.(*PointResponse), nil
+}
+
+func fetchPointDataInternal(ctx context.Context, pool *pgxpool.Pool, lat, lon float64) (*PointResponse, error) {
 	// Round to 3 decimal places
 	lat = math.Round(lat*1000) / 1000
 	lon = math.Round(lon*1000) / 1000
