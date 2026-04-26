@@ -109,6 +109,7 @@ module.exports = defineConfig([
       "web/**/tests/**/*.js",
       "**/playwright.config.js",
       "forecast/frontend/**/*.js",
+      "*.js",
     ],
 
     languageOptions: {

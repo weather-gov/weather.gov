@@ -1,3 +1,5 @@
+from django.contrib.gis.db.models.functions import Distance
+from django.contrib.gis.geos import Point
 from django.http import Http404
 from django.shortcuts import redirect, render
 from django.urls import reverse
@@ -7,8 +9,6 @@ from backend import interop
 from backend.models import WFO
 from backend.util import get_wfo_from_afd
 from spatial.models import WeatherPlace
-from django.contrib.gis.geos import Point
-from django.contrib.gis.db.models.functions import Distance
 
 from ._helpers import get_redirect_for_afd_queries
 
@@ -66,18 +66,18 @@ def point_location(request, lat, lon):  # noqa: C901
 
     # Fetch the approximate nearest place for the skeleton `<title>` and place banner
     point_geom = Point(lon, lat, srid=4326)
-    
+
     # Optimize query by first searching within 0.25 degrees (~17 miles) using spatial index
     nearest_place = WeatherPlace.objects.filter(
         point__dwithin=(point_geom, 0.25)
     ).annotate(distance=Distance("point", point_geom)).order_by("distance").first()
-    
+
     if not nearest_place:
         # Fallback to full table scan if no place is found within the radius
         nearest_place = WeatherPlace.objects.annotate(
             distance=Distance("point", point_geom)
         ).order_by("distance").first()
-    
+
     approximate_name = "Unknown Location"
     if nearest_place:
         approximate_name = f"{nearest_place.name}, {nearest_place.state}"
