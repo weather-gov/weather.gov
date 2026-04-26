@@ -2,6 +2,7 @@
  * WCAG compliant Combobox component
  */
 const comboTemplate = `
+<div style="position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;" aria-live="polite" id="sr-announcer"></div>
 <div>
   <slot name="input"></slot>
   <div>
@@ -54,10 +55,25 @@ export default class Combobox extends HTMLElement {
     // the input element specifically, and handled on this component.
     this.input = this.querySelector(`input[slot="input"]`);
     if (this.input) {
+      if (!this.input.hasAttribute("role")) {
+        this.input.setAttribute("role", "combobox");
+      }
+      this.input.setAttribute("aria-autocomplete", "list");
       this.input.addEventListener("input", this.handleInput);
       this.input.addEventListener("keydown", this.handleKeyDown);
       this.input.addEventListener("focus", this.handleFocus);
       this.input.addEventListener("blur", this.handleBlur);
+      
+      // If the input has an id, ensure the label points to it and we can associate it
+      if (this.input.id) {
+        const label = document.querySelector(`label[for="${this.input.id}"]`);
+        if (label && !label.id) {
+          label.id = `${this.input.id}-label`;
+        }
+        if (label && !this.input.hasAttribute("aria-labelledby")) {
+          this.input.setAttribute("aria-labelledby", label.id);
+        }
+      }
     }
 
     this.addEventListener("focus", this.handleFocus);
@@ -256,6 +272,12 @@ export default class Combobox extends HTMLElement {
       }
 
       this.input.value = event.target.selection.textContent || null;
+      
+      // Announce the selection to screen readers
+      const announcer = this.shadowRoot.getElementById("sr-announcer");
+      if (announcer && this.input.value) {
+        announcer.textContent = `Selected: ${this.input.value}`;
+      }
     } else {
       this.input.value = null;
     }
