@@ -209,6 +209,7 @@ func fetchPointDataInternal(ctx context.Context, pool *pgxpool.Pool, lat, lon fl
 											"metadata": map[string]interface{}{
 												"count": 0,
 											},
+											"items": []interface{}{},
 										},
 									}
 									days = append(days, currentDay)
