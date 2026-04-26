@@ -11,9 +11,7 @@ if (!branchName) {
 
 const locations = [
   { name: "Denver_CO", lat: 39.739, lon: -104.984 },
-  { name: "Seattle_WA", lat: 47.6062, lon: -122.3321 },
-  { name: "Austin_TX", lat: 30.2672, lon: -97.7431 },
-  { name: "Boston_MA", lat: 42.3601, lon: -71.0589 }
+  { name: "Austin_TX", lat: 30.2672, lon: -97.7431 }
 ];
 
 function getRandomizedUrl(baseLat, baseLon) {
@@ -48,10 +46,6 @@ function getRandomizedUrl(baseLat, baseLon) {
     }
 
     await runRecording(browser, videoDir, randomizedUrl, branchName, `${loc.name}_uncached_${branchName}.webm`);
-
-    // 2. CACHED RUN
-    console.log(`Processing ${loc.name} (Cached) at ${randomizedUrl} for branch ${branchName}...`);
-    await runRecording(browser, videoDir, randomizedUrl, branchName, `${loc.name}_cached_${branchName}.webm`);
   }
 
   await browser.close();
