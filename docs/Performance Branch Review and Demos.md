@@ -2,9 +2,14 @@
 
 ## Overview
 
-This branch (`experimental-perf`) implements an asynchronous, lazy-loading architecture for the forecast page to optimize the initial page load. It also includes a Golang interop layer that implements a single-flight pattern for fetching data from the API for a given point.
+This branch (`experimental-perf`) implements two key performance optimizations for the forecast page:
+
+1. **Lazy-Loading Architecture**: An asynchronous, partial-based loading pattern that delivers the initial page skeleton instantly while weather data loads in the background.
+2. **Golang API Interop Layer**: A complete rewrite of the NodeJS API interop service in Go, implementing single-flight request coalescing, bounded goroutine orchestration, and native PostGIS spatial queries to eliminate the event-loop bottleneck.
 
 ## Architecture
+
+### Lazy-Loading Pattern
 
 The lazy-loading pattern relies on a custom vanilla JavaScript implementation (`wx-lazy-load`) combined with Django partial endpoints. The initial page request returns a skeleton layout instantly. A lightweight script on the client side (`point-lazy-load.js`) then fetches HTML snippets for each section (Header, Alerts, Today, Daily) asynchronously and injects them into the DOM.
 
@@ -20,74 +25,93 @@ The lazy-loading pattern relies on a custom vanilla JavaScript implementation (`
 - Requires custom, manual DOM management in `point-lazy-load.js` for component-specific side effects (such as un-hiding the alerts tab).
 - We maintain our own implementation of a pattern that is solved robustly by established open-source libraries.
 
+### Golang API Interop Layer
+
+The Go interop (`api-interop-golang/`) replaces the NodeJS `api-interop-layer/` as the backend data aggregation service for point forecasts. Key design decisions:
+
+- **Single-Flight Pattern** (`golang.org/x/sync/singleflight`): Concurrent requests for the same lat/lon are coalesced into a single upstream API call. This eliminates duplicate fetch storms under concurrent load.
+- **Goroutine Orchestration**: Each point request fans out up to 6 parallel goroutines (place lookup, marine check, observations, forecast+hourly, alerts, weather story) and joins them via `sync.WaitGroup`, replacing Node's recursive `Promise.all` nesting.
+- **Data Format Normalization**: The Go layer normalizes raw NWS API responses into the exact structure expected by Django templates. This includes:
+  - Parsing wind speed strings (`"13 mph"` → integer `13`)
+  - Converting temperatures from Celsius to Fahrenheit (for dewpoint, apparent temperature)
+  - Expanding cardinal direction abbreviations (`"NE"` → `{"cardinalLong": "northeast", "cardinalShort": "NE"}`)
+  - Parsing icon URLs into structured dicts (`{"icon": "rain_showers-night.svg", "base": "rain_showers-night"}`)
+  - Querying full place metadata (name, state, countyfips) for proper display (e.g., "Vinings, GA")
+
 ### Future Evolution: HTMX
 
-While the current custom JS approach works well, a future iteration of this architecture could migrate to use [htmx](https://htmx.org/) via `django-htmx`. This would replace the `wx-lazy-load` pattern with declarative HTML attributes (`hx-get`, `hx-trigger="load"`, `hx-swap`), eliminating the need for our custom `point-lazy-load.js` script and providing a standardized, robust way to manage lazy loading and out-of-band updates across the application.
+While the current custom JS approach works well, a future iteration of this architecture could migrate to use [htmx](https://htmx.org/) via `django-htmx`. This would replace the `wx-lazy-load` pattern with declarative HTML attributes (`hx-get`, `hx-trigger="load"`, `hx-swap`), eliminating the need for our custom `point-lazy-load.js` script.
 
-## Recent Updates for Review
+## Recent Bug Fixes
 
-- **Reverted JS Formatting**: We reverted unintended formatting changes in the `api-interop-layer` (such as removing trailing commas and tweaking `if` statement spaces) to ensure that the merge request diff is clean. This allows the review to focus exclusively on the architectural lazy-loading changes rather than unrelated formatting noise.
-- **Linting Verification**: We verified that all newly added JS files, specifically `forecast/frontend/assets/js/components/point-lazy-load.js`, strictly follow the repository's ESLint rules and Prettier configuration. No violations or formatting issues were found.
+### Go Interop Data Format Parity (April 2026)
 
-## What Was Tested
+The initial Go port returned raw NWS API data formats that did not match the normalized structure expected by Django template tags. This caused:
 
-- Confirmed via `git diff` against `main` that only the formatting changes were reverted and no functional logic was altered in the `api-interop-layer`.
-- Ran `eslint` and `prettier` locally on `point-lazy-load.js` to ensure full compliance with the repository's code quality standards.
+- **7-Day forecast crash (HTTP 500)**: The `wind_speed_direction` template tag tried to access `direction["cardinalLong"]` on a plain string, causing a `TypeError`.
+- **Missing location state**: The place query only selected `name` and `timezone`, so location headers showed "Vinings" instead of "Vinings, GA".
 
-## Validation Results
+These were fixed by adding five helper functions to `api-interop-golang/data/point.go`:
 
-- The branch history is now cleaner and easier to review.
-- The remote repository has been updated with these focused changes.
-- The lazy-loading implementation is ready for a focused code review.
+| Function | Purpose |
+|----------|---------|
+| `parseWindSpeedMPH()` | Extract numeric mph from strings like `"13 mph"` |
+| `celsiusToFahrenheit()` | Convert Celsius to Fahrenheit with rounding |
+| `expandCardinalDirection()` | Map abbreviations to full names (`"NE"` → `"northeast"`) |
+| `buildWindDirectionDict()` | Build proper wind direction dict from abbreviation |
+| `parseIconURL()` | Parse NWS API icon URLs into `{icon, base}` format |
 
-## Performance Improvements
+## Performance Benchmarks
 
-By removing synchronous external API calls from the initial page load, the lazy-loading architecture significantly improves the Time To First Byte (TTFB). The following screencast demonstrates the immediate layout rendering (fast TTFB) for both a cached point and an uncached point, with the weather data loading smoothly in the background.
+### FCP Comparison: `main` vs `experimental-perf`
 
-**Denver, CO (Uncached) - Main Branch**
-![Denver Uncached Main](videos/Denver_CO_uncached_main.webm)
+All measurements are **uncached** (Redis flushed before each request) to represent cold-start, worst-case real-world performance. Cached FCP is consistently sub-100ms on both branches.
 
-**Denver, CO (Uncached) - Lazy Load Branch**
-![Denver Uncached Lazy](videos/Denver_CO_uncached_experimental-perf.webm)
+| Location | Main FCP (Uncached) | Perf Branch FCP (Uncached) | Improvement |
+|---|---|---|---|
+| **Near Marquette, MI** | 6.20s | 4.18s | 1.5x faster |
+| **Near Denver, CO** | 6.53s | 1.89s | 3.5x faster |
+| **Near Chicago, IL** | 4.03s | 1.50s | 2.7x faster |
+| **Near Los Angeles, CA** | 5.98s | 0.62s | 9.6x faster |
+| **Near Miami, FL** | 8.10s | 0.71s | 11.4x faster |
+| **Near Seattle, WA** | 6.51s | 0.94s | 6.9x faster |
+| **Near New York, NY** | 7.18s | 0.89s | 8.1x faster |
+| **Near Austin, TX** | 4.92s | 0.92s | 5.3x faster |
+| **Near Phoenix, AZ** | 5.76s | 0.49s | 11.8x faster |
+| **Near Boston, MA** | 8.67s | 0.77s | 11.3x faster |
 
-**Austin, TX (Uncached) - Main Branch**
-![Austin Uncached Main](videos/Austin_TX_uncached_main.webm)
+**Average improvement: ~7.2x faster uncached FCP.**
 
-**Austin, TX (Uncached) - Lazy Load Branch**
-![Austin Uncached Lazy](videos/Austin_TX_uncached_experimental-perf.webm)
+### Interpretation Notes
 
-Below is a comparison table showing the local performance benchmark results for the Time to First Contentful Paint (FCP), comparing the `main` branch to the new lazy-loading architecture.
+1. **Cold-Start Penalty (Marquette, MI):** Marquette is the first location queried in the testing script. Its higher uncached FCP (4.18s) is a classic "cold start" penalty—the first request must wait for the Docker container to initialize the worker, compile templates, and establish the database connection pool. Subsequent requests benefit from a warm environment.
 
-| Location | Main FCP (Uncached) | Main FCP (Cached) | Lazy Load FCP (Uncached) | Lazy Load FCP (Cached) |
-|---|---|---|---|---|
-| **Near Marquette, MI** | 5.92s | 0.07s | 4.08s | 0.21s |
-| **Near Denver, CO** | 5.44s | 0.06s | 1.39s | 0.04s |
-| **Near Chicago, IL** | 5.70s | 0.04s | 1.20s | 0.06s |
-| **Near Los Angeles, CA** | 4.72s | 0.07s | 0.91s | 0.05s |
-| **Near Miami, FL** | 6.58s | 0.06s | 0.94s | 0.05s |
-| **Near Seattle, WA** | 4.58s | 0.06s | 1.26s | 0.11s |
-| **Near New York, NY** | 4.22s | 0.07s | 1.61s | 0.06s |
-| **Near Austin, TX** | 21.86s | 0.05s | 0.97s | 0.05s |
-| **Near Phoenix, AZ** | 4.01s | 0.06s | 1.03s | 0.06s |
-| **Near Boston, MA** | 5.07s | 0.10s | 0.79s | 0.13s |
+2. **End-to-End Overhead:** While the optimized Django view returns the skeleton HTML in **< 10ms**, the FCP metric measures the complete end-to-end time including Playwright browser startup, network navigation through Docker proxy, HTML parsing, and blocking CSS loading. In production with CDN caching, these numbers will be significantly lower.
 
-### Performance Metrics Explanation
-
-The table above demonstrates that the lazy-loading architecture significantly improves FCP for cached requests (consistently sub-second) and generally stabilizes uncached FCP compared to the drastic spikes seen on `main`.
-
-There are two important nuances to note when interpreting these local benchmark results:
-
-1. **Cold-Start Penalty (e.g., Marquette, MI):** Marquette is the first location queried in the testing script. Its higher uncached FCP (4.16s) is a classic "cold start" penalty. The first request must wait for the local Docker container to initialize the Python/Django worker, compile templates into memory, and establish the PostGIS database connection pool. Subsequent requests benefit from a warm server environment.
-2. **End-to-End Browser Rendering Overhead (e.g., Phoenix, AZ):** While the optimized Django view now returns the skeleton HTML in **< 0.01 seconds**, the FCP metric measures the complete end-to-end time. A local Playwright container still needs ~1.5 - 2.5 seconds to perform the network navigation, route through the Docker proxy, download the HTML, parse the DOM, and load blocking `<head>` assets (like CSS) before the browser can actually trigger the First Contentful Paint. In a production environment with edge caching and real CDNs, this overhead will be significantly reduced.
-
-### Running the Performance Benchmark
-
-New Playwright scripts have been added to the repository to measure the Time to First Contentful Paint. Reviewers can run the benchmark using:
+### Running the Benchmark
 
 ```bash
-# Run for the current branch (e.g., lazy-load or main)
-node tests/performance/fcp_benchmark.js lazy-load
+# Run FCP benchmark for the current branch
+node tests/performance/fcp_benchmark.js experimental-perf
 
-# Generate the comparison table (requires both main and lazy-load results)
+# Compare results (requires both main and experimental-perf JSON files)
 node tests/performance/generate_fcp_table.js
 ```
+
+## Visual Demonstrations
+
+The following screencasts demonstrate the lazy-loading architecture with the Go interop backend for uncached locations. Note the instant skeleton render followed by progressive content loading.
+
+**Denver, CO (Uncached) - Performance Branch**
+![Denver Uncached Perf](videos/Denver_CO_uncached_experimental-perf.webm)
+
+**Austin, TX (Uncached) - Performance Branch**
+![Austin Uncached Perf](videos/Austin_TX_uncached_experimental-perf.webm)
+
+**New York, NY (Uncached) - Performance Branch**
+![New York Uncached Perf](videos/New_York_NY_uncached_experimental-perf.webm)
+
+## Reverted Changes
+
+- **Reverted JS Formatting**: Unintended formatting changes in the `api-interop-layer` (trailing commas, `if` statement spacing) were reverted so the merge request diff focuses exclusively on the architectural changes.
+- **Linting Verification**: All newly added JS files strictly follow the repository's ESLint rules and Prettier configuration.

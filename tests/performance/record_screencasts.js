@@ -5,13 +5,14 @@ const { execSync } = require('child_process');
 
 const branchName = process.argv[2];
 if (!branchName) {
-  console.error("Please provide a branch name argument (e.g., node record_screencasts.js main)");
+  console.error("Please provide a branch name argument (e.g., node record_screencasts.js experimental-perf)");
   process.exit(1);
 }
 
 const locations = [
   { name: "Denver_CO", lat: 39.739, lon: -104.984 },
-  { name: "Austin_TX", lat: 30.2672, lon: -97.7431 }
+  { name: "Austin_TX", lat: 30.2672, lon: -97.7431 },
+  { name: "New_York_NY", lat: 40.7128, lon: -74.0060 }
 ];
 
 function getRandomizedUrl(baseLat, baseLon) {
@@ -36,7 +37,7 @@ function getRandomizedUrl(baseLat, baseLon) {
   for (const loc of locations) {
     const randomizedUrl = getRandomizedUrl(loc.lat, loc.lon);
     
-    // 1. UNCACHED RUN
+    // UNCACHED RUN
     console.log(`Processing ${loc.name} (Uncached) at ${randomizedUrl} for branch ${branchName}...`);
     try {
       execSync('docker compose exec -T redis redis-cli -a ixu3N02Xp3uRPDcuZCmKIWZyNb FLUSHALL', { stdio: 'ignore' });
@@ -61,18 +62,20 @@ async function runRecording(browser, videoDir, url, branch, outputFilename) {
 
   const page = await context.newPage();
   
-  // Wait 1 second before navigation to ensure browser window initializes fully and avoids blank start
+  // Wait 1 second before navigation to ensure browser window initializes fully
   await page.waitForTimeout(1000);
   
   if (branch === 'experimental-perf') {
       await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 60000 });
       
+      // Wait for "Today" tab to finish loading
       try {
           await page.waitForSelector('#today wx-loader', { state: 'hidden', timeout: 30000 });
       } catch(e) {}
       
       await page.waitForTimeout(2000);
       
+      // Click through tabs to demonstrate all content
       const alertsBtn = await page.$('#alerts-tab-button');
       if (alertsBtn) {
           await alertsBtn.click();

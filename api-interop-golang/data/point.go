@@ -185,14 +185,22 @@ func fetchPointDataInternal(ctx context.Context, pool *pgxpool.Pool, lat, lon fl
 
 	go func() {
 		defer wg.Done()
-		query := `SELECT name, timezone FROM weathergov_geo_places ORDER BY point <-> ST_GEOMFROMTEXT($1, 4326) LIMIT 1`
+		query := `SELECT name, state, statename, countyfips, timezone FROM weathergov_geo_places ORDER BY point <-> ST_GEOMFROMTEXT($1, 4326) LIMIT 1`
 		geom := fmt.Sprintf("POINT(%f %f)", lon, lat)
-		var name, tz string
-		err := pool.QueryRow(ctx, query, geom).Scan(&name, &tz)
+		var name, state, statename, countyfips, tz string
+		err := pool.QueryRow(ctx, query, geom).Scan(&name, &state, &statename, &countyfips, &tz)
 		if err == nil {
+			fullName := name
+			if state != "" {
+				fullName = name + ", " + state
+			}
 			place = map[string]interface{}{
-				"name":     name,
-				"timezone": tz,
+				"name":       name,
+				"state":      state,
+				"stateName":  statename,
+				"countyfips": countyfips,
+				"fullName":   fullName,
+				"timezone":   tz,
 			}
 		}
 	}()
