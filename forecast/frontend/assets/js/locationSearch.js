@@ -10,6 +10,21 @@
     form.submit();
   };
 
+  const removeBrowserLocationButtons = (buttons) => {
+    // make a copy and reverse so we don't accidentally clobber ourselves.
+    Array.from(buttons)
+      .reverse()
+      .forEach((button) => {
+        if (button) {
+          const sibling = button.previousElementSibling;
+          if (sibling) {
+            sibling.remove();
+          }
+          button.remove();
+        }
+      });
+  };
+
   const setupBrowserGeolocation = async () => {
     // There can be multiple buttons used for selecting the browser location.
     // For example, one can be hidden away in the nav bar while another is
@@ -22,12 +37,8 @@
     // If the browser does not support the geolocation API, just bail out. Take
     // the "use my location" button away too. Also bop out if we don't have a
     // button for some reason. Just being safe.
-    if (!buttons.length || !navigator.geolocation) {
-      Array.from(buttons).forEach((button) => {
-        button?.parentElement?.previousElementSibling.remove();
-        button?.parentElement?.remove();
-      });
-
+    if (!navigator.geolocation) {
+      removeBrowserLocationButtons(buttons);
       return;
     }
 
@@ -71,11 +82,7 @@
         // Key important takeaway, though, is that "denied" means all of those
         // things and it is impossible for us to know which.
         if (status.state === "denied") {
-          Array.from(buttons).forEach((button) => {
-            button.parentElement.previousElementSibling.remove();
-            button.parentElement.remove();
-          });
-
+          removeBrowserLocationButtons(buttons);
           return;
         }
 
