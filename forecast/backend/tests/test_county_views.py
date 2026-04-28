@@ -147,7 +147,7 @@ class TestCountyViews(TestCase):
         # and ensure that its constituent counties are in
         # alphabetical order. It's the 3rd state.
         # Then get the list of its related counties
-        counties = list(mock_call[0][2]["states"][2].counties.all())
+        counties = list(mock_call[0][2]["states"][2].counties_list)
 
         # Assert that the order is alphabetical
         self.assertEqual(counties[0], self.county2)

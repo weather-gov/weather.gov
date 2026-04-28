@@ -30,10 +30,10 @@ logger = logging.getLogger(__name__)
 @cache_control(public=True, max_age=3600)
 def index(request):
     """Render the county index page."""
+    counties_qs = WeatherCounties.objects.defer("shape").order_by("countyname")
     states = (
         WeatherStates.objects.defer("shape")
-        .prefetch_related(Prefetch("counties", queryset=WeatherCounties.objects.order_by("countyname")))
-        .defer("counties__shape")
+        .prefetch_related(Prefetch("counties", queryset=counties_qs, to_attr="counties_list"))
         .all()
         .order_by("name")
     )
