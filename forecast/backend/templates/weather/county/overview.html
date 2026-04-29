@@ -37,8 +37,8 @@
       </div>
     </div>
   </div>
-  <div class="grid-container margin-top-2 margin-bottom-8 desktop:margin-bottom-10">
-    <h2 class="text-normal text-primary-darker">{{ "county.heading.alerts.01" | t }}</h2>
+  <div class="grid-container margin-top-2 margin-bottom-4">
+    <h2 class="text-normal text-primary-darker margin-bottom-2">{{ "county.heading.alerts.01" | t }}</h2>
     <div class="grid-col-12 desktop:grid-col-12">
       <wx-tabs id="county-alerts">
       <div class="usa-button-group usa-button-group--segmented overflow-x-auto"
@@ -93,7 +93,7 @@
     </div>
   </div>
   <div {% if data.radar and not data.radar.error %}id="radar-enable"{% endif %}
-       class="grid-container margin-top-2 margin-bottom-8 desktop:margin-bottom-10">
+       class="grid-container margin-bottom-4">
     <div class="grid-row">
       {% if data.radar and not data.radar.error %}
         <div class="desktop:grid-col-6 wx-radar-wrapper">
@@ -103,7 +103,7 @@
       {% include 'weather/county/wfo-promo.html' %}
     </div>
   </div>
-  <div class="bg-primary-lightest padding-bottom-4">
+  <div class="bg-primary-lightest padding-bottom-8 desktop:padding-bottom-10">
     <div class="grid-container padding-top-2 desktop:padding-top-4">
       <h2 id="cps__header" class="text-normal text-primary-darker margin-top-0">
         {{ "county.forecast-link.heading.01" | t }}

@@ -1,0 +1,51 @@
+@use "uswds-core" as *;
+
+h1 {
+  @include u-font("heading", "2xl");
+}
+
+h2 {
+  @include u-font("heading", "xl");
+}
+
+h3 {
+  @include u-font("heading", "lg");
+}
+
+h4 {
+  @include u-font("heading", "md");
+}
+
+h5 {
+  @include u-font("heading", "sm");
+  @include u-text("bold");
+}
+
+h6 {
+  @include u-font("heading", "xs");
+
+  text-transform: uppercase;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  line-height: 1.27;
+}
+
+h3.wx-visual-h2,
+.usa-prose h3.wx-visual-h2 {
+  @include h2;
+
+  &.text-normal {
+    font-weight: 400;
+  }
+}
+
+h4.wx-visual-h3,
+.usa-prose h4.wx-visual-h3 {
+  @include h3;
+}
+
+h5.wx-visual-h4,
+.usa-prose h5.wx-visual-h4 {
+  @include h4;
+}
