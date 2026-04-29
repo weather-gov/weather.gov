@@ -10,11 +10,11 @@
 @use "components/location-search";
 @use "components/listbox";
 @use "components/combobox";
-@use "components/mono-typography";
+@use "components/typography-mono";
+@use "components/typography-heading";
 @use "components/usa-identifier";
 @use "components/utilities";
 @use "components/variables";
-@use "components/visual-page-headings";
 @use "components/usa-prose-overrides";
 @use "components/site-navigation";
 @use "components/wx-loader";
@@ -88,6 +88,7 @@ $trapezoid-wrapper-height: 420px;
       @include u-text("light");
 
       font-size: 42px;
+      line-height: 1.15;
       text-align: center;
       margin: 0;
       margin-bottom: units("105");
@@ -177,6 +178,7 @@ $trapezoid-wrapper-height: 420px;
   display: flex;
   position: relative;
   flex: 1;
+  line-height: 1.15;
   width: 100%;
   max-height: var(--trapezoid-height-mobile);
   background-color: color("primary-darkest");
@@ -476,6 +478,7 @@ $trapezoid-wrapper-height: 420px;
       h3 {
         margin-top: 0;
         position: relative;
+        line-height: 1.15;
 
         @include u-font("sans", "lg");
         @include u-text("normal");

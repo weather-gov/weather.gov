@@ -16,7 +16,8 @@
 @use "components/hourly-table";
 @use "components/icons";
 @use "components/location-search";
-@use "components/mono-typography";
+@use "components/typography-heading";
+@use "components/typography-mono";
 @use "components/obs-table";
 @use "components/precip-table";
 @use "components/preview";
@@ -28,7 +29,6 @@
 @use "components/usa-identifier";
 @use "components/utilities";
 @use "components/variables";
-@use "components/visual-page-headings";
 @use "components/weather-story";
 @use "components/wfo-page";
 @use "components/wx-charts";
