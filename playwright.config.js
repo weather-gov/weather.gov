@@ -51,7 +51,7 @@ const config = {
     baseURL: services.webURL,
 
     /* Take screenshot when a test fails. */
-    screenshot: 'only-on-failure',
+    screenshot: "only-on-failure",
 
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: "on-first-retry",

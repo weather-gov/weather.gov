@@ -362,7 +362,7 @@ js-lint:
     - npx --no-install eslint
     - npx --no-install stylelint 'forecast/frontend/**/assets/**/*.scss'
     - |
-      npx --no-install prettier \
+      npx --no-install prettier --check \
       'forecast/frontend/**/assets/**/*.js' \
       'forecast/frontend/**/assets/**/*.scss' \
       'tests/**/*.js' \
