@@ -3,9 +3,7 @@ import { expect } from "chai";
 import quibble from "quibble";
 
 describe("route: afd versions", () => {
-  let getAFDVersions,
-      versions,
-      sandbox;
+  let getAFDVersions, versions, sandbox;
 
   before(async () => {
     sandbox = sinon.createSandbox();
@@ -13,7 +11,7 @@ describe("route: afd versions", () => {
 
     await quibble.esm("../data/products/afd/versions.js", {}, getAFDVersions);
 
-    versions = await import ("./afd-versions.js");
+    versions = await import("./afd-versions.js");
   });
 
   beforeEach(() => {
@@ -21,7 +19,7 @@ describe("route: afd versions", () => {
     sandbox.resetHistory();
   });
 
-  after(async() => {
+  after(async () => {
     sandbox.restore();
     await quibble.reset();
   });
@@ -49,7 +47,7 @@ describe("route: afd versions", () => {
       getAFDVersions.resolves({
         error: "Error?",
         detail: "Not sure, maybe there was an error?",
-        status: 432
+        status: 432,
       });
 
       const actual = await versions.handler();
@@ -60,9 +58,9 @@ describe("route: afd versions", () => {
         data: {
           error: "Error?",
           detail: "Not sure, maybe there was an error?",
-          status: 432
+          status: 432,
         },
-        status: 432
+        status: 432,
       });
     });
   });

@@ -6,7 +6,10 @@ import connectionPool from "../connectionPool.js";
 import { parseAPIIcon } from "../../util/icon.js";
 import { logger } from "../../util/monitoring/index.js";
 import isObservationValid from "./valid.js";
-import { updateStoreUrl, API_TIMINGS_METADATA } from "../../util/performance.js";
+import {
+  updateStoreUrl,
+  API_TIMINGS_METADATA,
+} from "../../util/performance.js";
 
 const observationsLogger = logger.child({ subsystem: "observations" });
 
@@ -138,17 +141,14 @@ export default async (
       "station observations are invalid",
     );
 
-    if(API_TIMINGS_METADATA){
-      updateStoreUrl(
-        urlFromStation(station),
-        (entry) => {
-          if(entry){
-            entry.awaited = true;
-            entry.obsIndex = 0;
-            entry.validObs = false;
-          }
+    if (API_TIMINGS_METADATA) {
+      updateStoreUrl(urlFromStation(station), (entry) => {
+        if (entry) {
+          entry.awaited = true;
+          entry.obsIndex = 0;
+          entry.validObs = false;
         }
-      );
+      });
     }
 
     const fallbackObs = await Promise.all(others);
@@ -175,52 +175,40 @@ export default async (
         "station observations are invalid",
       );
 
-      if(API_TIMINGS_METADATA){
-        stations.map(urlFromStation)
-          .forEach((url, idx) => {
-            updateStoreUrl(
-              url,
-              (entry) => {
-                if(entry){
-                  entry.awaited = true;
-                  entry.obsIndex = idx + 1;
-                  entry.validObs = ((idx + 1) === validIndex);
-                }
-              }
-            );
+      if (API_TIMINGS_METADATA) {
+        stations.map(urlFromStation).forEach((url, idx) => {
+          updateStoreUrl(url, (entry) => {
+            if (entry) {
+              entry.awaited = true;
+              entry.obsIndex = idx + 1;
+              entry.validObs = idx + 1 === validIndex;
+            }
           });
+        });
       }
-      
+
       station = null;
       observation = null;
     }
   } else {
-    if(API_TIMINGS_METADATA){
-      updateStoreUrl(
-        urlFromStation(station),
-        (timingData) => {
-          if(timingData){
-            timingData.awaited = true;
-            timingData.obsIndex = 0,
-            timingData.validObs = true;
-          }
+    if (API_TIMINGS_METADATA) {
+      updateStoreUrl(urlFromStation(station), (timingData) => {
+        if (timingData) {
+          timingData.awaited = true;
+          ((timingData.obsIndex = 0), (timingData.validObs = true));
         }
-      );
+      });
 
       // Add falsy data for the rest of the stations
-      stations.map(urlFromStation)
-        .forEach((url, idx) => {
-          updateStoreUrl(
-            url,
-            (entry) => {
-              if(entry){
-                entry.awaited = false;
-                entry.obsIndex = idx + 1;
-                entry.validObs = false;
-              }
-            }
-          );
+      stations.map(urlFromStation).forEach((url, idx) => {
+        updateStoreUrl(url, (entry) => {
+          if (entry) {
+            entry.awaited = false;
+            entry.obsIndex = idx + 1;
+            entry.validObs = false;
+          }
         });
+      });
     }
   }
 

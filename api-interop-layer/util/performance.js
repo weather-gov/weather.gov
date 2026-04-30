@@ -87,12 +87,12 @@ class PerformanceMeta {
  * and, if not null, we return the execution of
  * the passed in callback on the item.
  */
-export const updateStoreUrl = function(url, cb) {
-  if(API_TIMINGS_METADATA){
+export const updateStoreUrl = function (url, cb) {
+  if (API_TIMINGS_METADATA) {
     const store = asyncStorage.getStore();
-    if(store){
-      const item = store.find(entry => entry.url === url);
-      if(item){
+    if (store) {
+      const item = store.find((entry) => entry.url === url);
+      if (item) {
         return cb(item);
       }
     }
@@ -111,15 +111,15 @@ const isObservationUrl = (url) => {
  */
 export const groupPointBatches = (timings) => {
   let batches = [
-    (timings.filter(timing => {
+    timings.filter((timing) => {
       return timing.url.startsWith("/point");
-    })),
-    (timings.filter(timing => {
+    }),
+    timings.filter((timing) => {
       return !timing.url.startsWith("/point");
-    })),
+    }),
   ].map((batch, idx) => {
     const result = { batch };
-    if(idx === 1){
+    if (idx === 1) {
       // We are dealing with the big second batch for the
       // point endpoint. We need to do extra calculation when
       // it comes to the observation station calls
@@ -130,26 +130,28 @@ export const groupPointBatches = (timings) => {
       // await/care about some of them, we have annotated the timings
       // with a boolean `awaited` property that tells us if they are relevant
       // to the overall timing considerations.
-      const observationTimings = batch.filter(item => {
+      const observationTimings = batch.filter((item) => {
         return item.url.startsWith("/station") && item.awaited === true;
       });
       const maxObservation = Math.max(
-        ...observationTimings.map(timingData => timingData.timing)
-      ) ;
-      const stationsListTiming = batch.find(item => {
+        ...observationTimings.map((timingData) => timingData.timing),
+      );
+      const stationsListTiming = batch.find((item) => {
         return item.url.endsWith("limit=3");
       });
       const totalObservationTiming = stationsListTiming.timing + maxObservation;
-      let timings = batch.filter(batchItem => {
-        return !isObservationUrl(batchItem.url);
-      }).map(batchItem => {
-        return batchItem.timing;
-      });
+      let timings = batch
+        .filter((batchItem) => {
+          return !isObservationUrl(batchItem.url);
+        })
+        .map((batchItem) => {
+          return batchItem.timing;
+        });
       timings = [...timings, totalObservationTiming];
       result.max = Math.max(...timings);
     } else {
-      result.max = Math.max(...batch.map(t => t.timing));
-    };
+      result.max = Math.max(...batch.map((t) => t.timing));
+    }
 
     return result;
   });
@@ -158,7 +160,7 @@ export const groupPointBatches = (timings) => {
     batches,
     total: batches.reduce((acc, batch) => {
       return acc + batch.max;
-    }, 0)
+    }, 0),
   };
 };
 

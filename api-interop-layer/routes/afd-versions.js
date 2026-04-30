@@ -7,7 +7,7 @@ export const schema = {};
 export const handler = async (request) => {
   const data = await getAFDVersions();
 
-  if(data.error){
+  if (data.error) {
     return { data, error: data.detail, status: data.status };
   }
 

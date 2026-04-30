@@ -8,7 +8,7 @@ import { logger } from "../../../util/monitoring/index.js";
 import connectionPool from "../../connectionPool.js";
 import { getFromRedis, saveToRedis } from "../../../redis.js";
 
-const productLogger = logger.child({subsystem: "product:afd"});
+const productLogger = logger.child({ subsystem: "product:afd" });
 
 /**
  * Fetches all AFD versions that are currently available
@@ -21,30 +21,27 @@ export default async () => {
     // Check the redis cache for any stored value.
     // Return that if we find one.
     const foundInCache = await getFromRedis(url);
-    if(foundInCache){
+    if (foundInCache) {
       return foundInCache;
     }
 
     // Fetch from the API
-    const [ data, headers ] = await requestJSONWithHeaders(
-      connectionPool,
-      url
-    );
+    const [data, headers] = await requestJSONWithHeaders(connectionPool, url);
 
     // Cache and return the result
     let ttl = parseTTLFromHeaders(headers);
-    if(!ttl){
+    if (!ttl) {
       // API headers seem to indicate 120 as the ttl
       ttl = 120;
     }
     await saveToRedis(url, data, ttl);
     return data;
-  } catch(e) {
-    productLogger.error({e});
+  } catch (e) {
+    productLogger.error({ e });
 
     return {
       error: true,
-      status: e.cause?.statusCode || e.statusCode || 500
+      status: e.cause?.statusCode || e.statusCode || 500,
     };
   }
 };
@@ -60,29 +57,26 @@ export const byWFO = async (wfo) => {
     // Check the redis cache for any stored value.
     // Return that if we find one
     const foundInCache = await getFromRedis(url);
-    if(foundInCache){
+    if (foundInCache) {
       return foundInCache;
     }
 
     // Fetch from the API
-    const [ data, headers ] = await requestJSONWithHeaders(
-      connectionPool,
-      url
-    );
+    const [data, headers] = await requestJSONWithHeaders(connectionPool, url);
 
     // Cache and return the result
     let ttl = parseTTLFromHeaders(headers);
-    if(!ttl){
+    if (!ttl) {
       ttl = 120;
     }
     await saveToRedis(url, data, ttl);
     return data;
   } catch (e) {
-    productLogger.error({ e , url });
+    productLogger.error({ e, url });
 
     return {
       error: true,
-      status: e.cause?.statusCode || e.statusCode || 500
+      status: e.cause?.statusCode || e.statusCode || 500,
     };
   }
 };

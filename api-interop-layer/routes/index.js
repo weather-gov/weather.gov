@@ -17,5 +17,5 @@ export default [
   riskOverview,
   weatherstories,
   afdVersions,
-  afdVersionsByWFO
+  afdVersionsByWFO,
 ];

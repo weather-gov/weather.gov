@@ -7,10 +7,10 @@ export const schema = {
     type: "object",
     properties: {
       wfo: {
-        type: "string"
-      }
-    }
-  }
+        type: "string",
+      },
+    },
+  },
 };
 
 export const handler = async (request) => {
@@ -18,7 +18,7 @@ export const handler = async (request) => {
 
   const data = await byWFO(wfo);
 
-  if(data.error){
+  if (data.error) {
     return { data, error: data.detail, status: data.status };
   }
 

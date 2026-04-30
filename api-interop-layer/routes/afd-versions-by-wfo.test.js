@@ -3,17 +3,19 @@ import { expect } from "chai";
 import quibble from "quibble";
 
 describe("route: afd versions by wfo", () => {
-  let getAFDVersionsByWFO,
-      versions,
-      sandbox;
+  let getAFDVersionsByWFO, versions, sandbox;
 
   before(async () => {
     sandbox = sinon.createSandbox();
     getAFDVersionsByWFO = sandbox.stub();
 
-    await quibble.esm("../data/products/afd/versions.js", { byWFO: getAFDVersionsByWFO}, {});
+    await quibble.esm(
+      "../data/products/afd/versions.js",
+      { byWFO: getAFDVersionsByWFO },
+      {},
+    );
 
-    versions = await import ("./afd-versions-by-wfo.js");
+    versions = await import("./afd-versions-by-wfo.js");
   });
 
   beforeEach(() => {
@@ -21,7 +23,7 @@ describe("route: afd versions by wfo", () => {
     sandbox.resetHistory();
   });
 
-  after(async() => {
+  after(async () => {
     sandbox.restore();
     await quibble.reset();
   });
@@ -41,10 +43,10 @@ describe("route: afd versions by wfo", () => {
           type: "object",
           properties: {
             wfo: {
-              type: "string"
-            }
-          }
-        }
+              type: "string",
+            },
+          },
+        },
       });
     });
 
@@ -58,9 +60,9 @@ describe("route: afd versions by wfo", () => {
       getAFDVersionsByWFO.withArgs("TST").resolves({
         error: "Error?",
         detail: "Not sure, maybe there was an error?",
-        status: 432
+        status: 432,
       });
-      
+
       const request = { params: { wfo: "TST" } };
 
       const actual = await versions.handler(request);
@@ -71,9 +73,9 @@ describe("route: afd versions by wfo", () => {
         data: {
           error: "Error?",
           detail: "Not sure, maybe there was an error?",
-          status: 432
+          status: 432,
         },
-        status: 432
+        status: 432,
       });
     });
   });
