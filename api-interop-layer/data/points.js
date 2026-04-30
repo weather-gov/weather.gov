@@ -1,10 +1,14 @@
 import { SPATIAL_PROJECTION } from "../util/constants.js";
 import { logger } from "../util/monitoring/index.js";
 import { requestJSONWithHeaders } from "../util/request.js";
+import { parseTTLFromHeaders } from "../util/caching.js";
 import connectionPool from "./connectionPool.js";
 import openDatabase from "./db.js";
+import { saveToRedis, getFromRedis } from "../redis.js";
 
 const pointLogger = logger.child({ subsystem: "point" });
+
+export const DEFAULT_POINTS_CACHE_TTL = 120;
 
 export const getClosestPlace = async (latitude, longitude) => {
   const pointGeom = `ST_GEOMFROMTEXT('POINT(${longitude} ${latitude})',${SPATIAL_PROJECTION.WGS84})`;
@@ -71,6 +75,41 @@ export const getClosestPlace = async (latitude, longitude) => {
   return place;
 };
 
+const createPointsPromise = async (pointsUrl) => {
+  try {
+    const [gridData, gridHeaders] = await requestJSONWithHeaders(
+      connectionPool,
+      pointsUrl,
+    );
+
+    let ttl = parseTTLFromHeaders(gridHeaders);
+    if (!ttl) {
+      ttl = DEFAULT_POINTS_CACHE_TTL;
+    }
+    await saveToRedis(pointsUrl, gridData, ttl);
+
+    return gridData;
+  } catch (err) {
+    // Handle the 404 "Out of Bounds" case specifically
+    if (err.cause?.statusCode === 404 || err.statusCode === 404) {
+      return {
+        error: true,
+        outOfBounds: true,
+        status: 404,
+      };
+    }
+
+    // Throw errors with statusCode 403 or 504, so they can be handled
+    // immediately in route handlers
+    if (err.cause?.statusCode === 403 || err.cause?.statusCode === 504) {
+      throw err;
+    }
+
+    // General error fallback
+    return { error: true };
+  }
+};
+
 export const getPointData = async (lat, lon) => {
   // Truncate to 3 decimal places
   const [latitude, longitude] = [
@@ -78,42 +117,30 @@ export const getPointData = async (lat, lon) => {
     Number.parseFloat(lon.toFixed(3)),
   ];
 
-  pointLogger.trace({ latitude, longitude }, "place");
   const point = { latitude, longitude };
+  pointLogger.trace(point, "place");
 
-  const pointsPromise = requestJSONWithHeaders(
-    connectionPool,
-    `/points/${latitude},${longitude}`,
-  )
-    .then(([gridData]) => {
-      point.astronomicalData = gridData.properties?.astronomicalData;
+  const pointsUrl = `/points/${latitude},${longitude}`;
+  const foundInCache = await getFromRedis(pointsUrl);
 
-      return {
-        wfo: gridData.properties?.gridId,
-        x: gridData.properties?.gridX,
-        y: gridData.properties?.gridY,
-        geometry: gridData.geometry,
-      };
-    })
-    .catch((err) => {
-      // Handle the 404 "Out of Bounds" case specifically
-      if (err.cause?.statusCode === 404 || err.statusCode === 404) {
-        return {
-          error: true,
-          outOfBounds: true,
-          status: 404,
-        };
-      }
-
-      // Throw errors with statusCode 403 or 504, so they can be handled
-      // immediately in route handlers
-      if (err.cause?.statusCode === 403 || err.cause?.statusCode === 504) {
-        throw err;
-      }
-
-      // General error fallback
-      return { error: true };
-    });
+  // if we have a cache hit then wrap the hit into a promise, otherwise create a
+  // promise to call the actual endpoint. in either case we extract the data
+  // (taking special care to separate out the astronomical data)
+  const initialPointsPromise = foundInCache
+    ? new Promise((resolve) => resolve(foundInCache))
+    : createPointsPromise(pointsUrl);
+  const pointsPromise = initialPointsPromise.then((gridData) => {
+    if (gridData.error) {
+      return gridData;
+    }
+    point.astronomicalData = gridData.properties?.astronomicalData;
+    return {
+      wfo: gridData.properties?.gridId,
+      x: gridData.properties?.gridX,
+      y: gridData.properties?.gridY,
+      geometry: gridData.geometry,
+    };
+  });
 
   const placePromise = getClosestPlace(latitude, longitude);
 
