@@ -192,7 +192,7 @@ export const main = async () => {
 
         if (API_TIMINGS_METADATA) {
           timer.end();
-          if (data["@metadata"]) {
+          if (data && data["@metadata"]) {
             data["@metadata"].interopResponseTime = timer.timing;
           }
         }
