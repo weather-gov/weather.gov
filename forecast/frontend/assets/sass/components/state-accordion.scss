@@ -8,7 +8,6 @@
   flex-direction: column;
   width: 100%;
   padding: units(1.5) units(2);
-  gap: units(1.5);
 
   .alert-icon-box {
     display: inline-block;
@@ -33,19 +32,44 @@
       width: units(3);
       height: units(3);
       flex-shrink: 0;
-
-      use {
-        fill: currentcolor;
-      }
     }
   }
 
   .alert-count-subtext {
     color: color("base-dark");
     font-size: size("sans", "xs");
-    font-weight: font-weight("normal");
-    display: block;
-    width: fit-content;
+  }
+
+  .js-list-toggle {
+    text-decoration: none;
+    color: color("primary");
+    outline: none;
+    box-shadow: none;
+
+    &:focus,
+    &:active {
+      outline: none;
+      box-shadow: none;
+      background-color: transparent;
+    }
+
+    &:hover {
+      background-color: transparent;
+      text-decoration: none;
+    }
+  }
+
+  &.is-expanded {
+    .js-list-toggle {
+      margin-bottom: units(2);
+    }
+  }
+
+  .js-collapsible-container {
+    &:not(.display-none) {
+      display: block;
+      width: 100%;
+    }
   }
 
   &[data-alert-level="warning"] {
