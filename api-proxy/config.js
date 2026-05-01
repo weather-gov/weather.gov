@@ -6,6 +6,7 @@ dayjs.extend(utc);
 dayjs.extend(timezone);
 
 let play = null;
+let playError = null;
 let now = null;
 let delay = 0;
 let nowMethod = null;
@@ -49,6 +50,12 @@ export default {
   },
   set play(v) {
     play = v;
+  },
+  get playError() {
+    return playError;
+  },
+  set playError(v) {
+    playError = v;
   },
 
   get delay() {

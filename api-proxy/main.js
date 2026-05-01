@@ -10,6 +10,7 @@ import getProductInfo from "./products.js";
 import proxyToApi from "./proxy.js";
 import save from "./save.js";
 import serveBundle from "./serve.js";
+import serveError from "./error.js";
 
 const mainLogger = logger.child({ subsystem: "main" });
 
@@ -83,9 +84,6 @@ const getPointFileInfo = async () => {
         };
 
         let hostName = "http://localhost:8080";
-        if (process.env.CLOUDGOV_PROXY) {
-          hostName = "https://weathergov-test.app.cloud.gov";
-        }
         const link = `${hostName}/point/${path.basename(pointFile, ".json").split(",").join("/")}`;
         const interop = `http://localhost:8082/point/${path.basename(pointFile, ".json").split(",").join("/")}`;
 
@@ -120,7 +118,7 @@ const ui = async ({ error = false } = {}) => {
 
   const bundles = contents.filter((_, i) => dirs[i]);
 
-  const isLocal = !process.env.CLOUDGOV_PROXY;
+  const isLocal = !process.env.API_PROXY_PRODUCTION;
 
   const points = config.play ? await getPointFileInfo() : [];
   const bundleProducts = config.play
@@ -153,6 +151,7 @@ app.get("/set-delay", async (req, res) => {
 
 app.get(/\/proxy\/stop\/?/, async (_, res) => {
   config.play = false;
+  config.playError = false;
   res.redirect("/");
   res.end();
 });
@@ -165,6 +164,7 @@ app.get("/proxy/play/:bundle", async (req, res) => {
   if (exists) {
     await loadBundle(bundle);
     config.play = bundle;
+    config.playError = false;
     res.redirect("/");
     res.end();
     return;
@@ -172,6 +172,13 @@ app.get("/proxy/play/:bundle", async (req, res) => {
 
   res.setHeader("Content-Type", "text/html");
   res.write(await ui({ error: `I don't have a bundle ${bundle}` }));
+  res.end();
+});
+
+app.get("/proxy/error/403/", async (req, res) => {
+  config.play = false;
+  config.playError = 403;
+  res.redirect("/");
   res.end();
 });
 
@@ -207,6 +214,8 @@ app.get("*any", async (req, res) => {
 
   if (config.play) {
     serveBundle(req, res);
+  } else if (config.playError) {
+    serveError(req, res);
   } else {
     proxyToApi(req, res);
   }
