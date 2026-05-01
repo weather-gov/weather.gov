@@ -160,6 +160,54 @@ export default class StateAlertsHandler {
       else if (entries.length > 8)
         list.classList.add("tablet__county-column-2");
 
+      const toggleBtn = alertBox.querySelector(".js-list-toggle");
+      const collapsibleContainer = alertBox.querySelector(
+        ".js-collapsible-container",
+      );
+      const toggleText = alertBox.querySelector(".js-toggle-text");
+      const toggleIcon = alertBox.querySelector(".js-toggle-icon");
+
+      const collapseCountyLimit = 32;
+
+      if (entries.length > collapseCountyLimit) {
+        toggleBtn.classList.remove("display-none");
+        collapsibleContainer.classList.add("display-none");
+
+        // Translations `Expand {pluralSubdivision}`
+        const pluralSubdivision = this.meta.trans.subdivision_name_plural;
+        const expandLabel = this.meta.trans.see_list_pattern.replace(
+          "{subdivision}",
+          pluralSubdivision,
+        );
+        const collapseLabel = this.meta.trans.collapse_pattern.replace(
+          "{subdivision}",
+          pluralSubdivision,
+        );
+        toggleText.textContent = expandLabel;
+
+        // Collapse/Expand Event logic
+        toggleBtn.addEventListener("click", () => {
+          const isExpanded = toggleBtn.getAttribute("aria-expanded") === "true";
+          const newState = !isExpanded;
+
+          toggleBtn.setAttribute("aria-expanded", newState);
+          collapsibleContainer.classList.toggle("display-none", isExpanded);
+
+          alertBox.classList.toggle("is-expanded", newState);
+
+          toggleText.textContent = newState ? collapseLabel : expandLabel;
+
+          const iconName = newState ? "remove_circle" : "add_circle";
+          const currentHref =
+            toggleIcon.getAttribute("href") ||
+            toggleIcon.getAttribute("xlink:href");
+          const basePath = currentHref.split("#")[0];
+
+          toggleIcon.setAttribute("href", `${basePath}#${iconName}`);
+          toggleIcon.setAttribute("xlink:href", `${basePath}#${iconName}`);
+        });
+      }
+
       /**
        * Populate County Links
        * For every county in the group, we clone the sub-template and fill it.

@@ -1034,17 +1034,20 @@ msgstr "Filter by state name"
 msgid "state.alerts.loading-map.01"
 msgstr "Loading the map..."
 
+msgid "state.alerts.collapse-subdivision.01"
+msgstr "Collapse {subdivision}"
+
 msgid "state.alerts.map-failure.01"
 msgstr "Map failed to load"
 
-msgid "state.alerts.none-period"
+msgid "state.alerts.none-period.01"
 msgstr "No active alerts for this period."
 
 msgid "spatial.status.count-of-total.01"
 msgstr "{count} of {total} {subdivision}"
 
 msgid "spatial.status.see-list.01"
-msgstr "See List of {subdivision}"
+msgstr "Expand {subdivision}"
 
 msgid "error.500.generic.message.01"
 msgstr "Something went wrong on our end. Please wait a few moments and reload the page or visit <a href='https://www.weather.gov' class='usa-link'>weather.gov</a> for current forecast information."
