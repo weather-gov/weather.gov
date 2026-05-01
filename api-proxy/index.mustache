@@ -32,6 +32,11 @@
         border: 1px solid black;
         background-color: yellow;
       }
+
+      &.orange {
+        border: 1px solid black;
+        background-color: orange;
+      }
     }
     </style>
   </head>
@@ -45,6 +50,12 @@
             Stop playing <span class="font-family-mono">{{ config.play }}</span>
           </a>
         {{/config.play}}
+        {{#config.playError}}
+          <a href="/proxy/stop" class="usa-button usa-button--outline">
+            <div class="red dot"></div>
+            Stop sending <span class="font-family-mono">{{ config.playError }}</span>
+          </a>
+        {{/config.playError}}
         {{#bundles}}
           <a href="/proxy/play/{{ . }}" class="usa-button usa-button--outline">
             <div class="green dot"></div>
@@ -73,6 +84,10 @@
           </div>
         </div>
       {{/error}}
+
+      {{#config.playError}}
+        <h2>Currently sending error <span class="font-family-mono">{{config.playError}}</span></h2>
+      {{/config.playError}}
 
       {{#config.play}}
         <h2>Currently playing bundle <span class="font-family-mono">{{config.play}}</span></h2>
@@ -152,7 +167,6 @@
                 </div>
               </div>
 
-
           </div>
           <div class="grid-col-6">
             <h3>Products in this bundle:</h3>
@@ -174,7 +188,9 @@
 
       <hr>
       {{^config.play}}
-        <h3>Not playing a bundle. Sending requests through</h3>
+        {{^config.playError}}
+          <h3>Not playing a bundle. Sending requests through</h3>
+        {{/config.playError}}
       {{/config.play}}
 
       {{#isLocal}}
@@ -216,6 +232,12 @@
             </a>
           </li>
         {{/bundles}}
+        <li>
+          <a href="/proxy/error/403/" class="usa-button usa-button--outline">
+            <div class="orange dot"></div>
+            return 403 errors
+          </a>
+        </li>
       </ul>
 
     </div>
