@@ -5,9 +5,9 @@
 -- Url: https://beta.weather.gov/forecast/state/VA/
 {% endcomment %}
 {% block head_link %}
-  <link rel="prefetch" href="{% url 'state_risks' state.state %}" />
-  <link rel="prefetch" href="{% url 'state_radar' state.state %}" />
-  <link rel="prefetch" href="{% url 'state_analysis' state.state %}" />
+  <link rel="prefetch" href="{% url 'state_risks' state_abbrev %}" />
+  <link rel="prefetch" href="{% url 'state_radar' state_abbrev %}" />
+  <link rel="prefetch" href="{% url 'state_analysis' state_abbrev %}" />
 {% endblock %}
 {% block page_head_css %}
   <link rel="stylesheet"
@@ -25,7 +25,7 @@
   {{ alerts|json_script:"alerts-data" }}
   <script id="state-metadata" type="application/json">
     {
-      "stateCode": "{{ state.state|upper }}",
+      "stateCode": "{{ state_abbrev|upper }}",
       "totalCounties": "{{ state.county_count }}",
       "trans": {
         "count_pattern": "{{ 'spatial.status.count-of-total.01' | t }}",
@@ -45,7 +45,7 @@
 {% endblock %}
 {% block page_content %}
   <div class="height-full display-flex flex-column">
-    {% include "weather/state/name.html" with state_name=state.name %}
+    {% include "weather/state/name.html" with state_name=state_name %}
     <wx-tabbed-nav class="display-block position-relative flex-1" id="state-page-tabbed-nav">
     {% include "weather/state/tabs.html" with url_name=request.resolver_match.url_name %}
     <div class="bg-white padding-bottom-4">
@@ -117,6 +117,6 @@
       </div>
     </div>
     </wx-tabbed-nav>
-    {% include 'weather/partials/state-links.html' with state_name=state.name %}
+    {% include 'weather/partials/state-links.html' with state_name=state_name %}
   </div>
 {% endblock %}

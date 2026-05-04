@@ -5,11 +5,11 @@
 -- Url: https://beta.weather.gov/county/MN/analysis/
 {% endcomment %}
 {% block head_link %}
-  <link rel="prefetch" href="{% url 'state_alerts' state.state %}" />
-  <link rel="prefetch" href="{% url 'state_risks' state.state %}" />
-  <link rel="prefetch" href="{% url 'state_radar' state.state %}" />
+  <link rel="prefetch" href="{% url 'state_alerts' state_abbrev %}" />
+  <link rel="prefetch" href="{% url 'state_risks' state_abbrev %}" />
+  <link rel="prefetch" href="{% url 'state_radar' state_abbrev %}" />
 {% endblock %}
-{% block head_js %}{{ state.public|json_script:"state-data" }}{% endblock %}
+{% block head_js %}{{ state_public|json_script:"state-data" }}{% endblock %}
 {% block page_end_js %}
   <script type="module"
           src="{% static 'js/state/analysis.html.js' %}"
@@ -17,23 +17,37 @@
 {% endblock %}
 {% block page_content %}
   <div class="height-full display-flex flex-column">
-    {% include "weather/state/name.html" with state_name=state.name %}
+    {% include "weather/state/name.html" with state_name=state_name %}
     <wx-tabbed-nav class="display-block position-relative flex-1" id="state-page-tabbed-nav">
-    {% include "weather/state/tabs.html" with url_name=request.resolver_match.url_name %}
-    <div class="display-flex flex-column flex-no-wrap bg-base-lightest padding-top-3 padding-bottom-4">
-      <div class="flex-1 wx-focus-offset-205"
-           id="analysis"
-           aria-labelledby="analysis-tab-button"
-           tabindex="0">
-        <div class="grid-container margin-top-2 margin-bottom-8 desktop:margin-bottom-10">
-          <h2 class="text-normal text-primary-darker">{{ "state.heading.analysis.01" | t }}</h2>
-          <div class="grid-col-12 desktop:grid-col-12">
-            <p>Analysis</p>
+      {% include "weather/state/tabs.html" with url_name=request.resolver_match.url_name %}
+      <div class="display-flex flex-column flex-no-wrap bg-base-white padding-top-3 padding-bottom-4">
+        <div class="flex-1 wx-focus-offset-205"
+             id="analysis"
+             aria-labelledby="analysis-tab-button"
+             tabindex="0">
+          <div class="grid-container">
+            <h2 class="font-sans-xl text-primary-darker margin-top-0 text-normal">
+              {% translate_plural_with_args "county.briefing.header.01" 2 %}
+            </h2>
+            <div class="grid-col-12 desktop:grid-col-12">
+              {% include "weather/state/briefings.html" %}
+            </div>
+            <h2 class="font-sans-xl text-primary-darker text-normal margin-top-4">
+              {{"wfo-info.heading.forecast-discussion.01"|t}}
+            </h2>
+            <ul id="state-afds" class="add-list-reset tablet-lg__wx-col-2">
+              {% for wfo in wfo_data %}
+                <li class="afd-link-item display-flex flex-align-start padding-bottom-2">
+                  <img src="{% static 'images/weather/wx_document_afd.svg' %}" />
+                  <a class="usa-link margin-left-1"
+                     href="{% url 'afd_by_office' wfo=wfo.code %}">{% trans_with_args "weather-story.link.area-forecast-discussion.02" office_name=wfo.name %}</a>
+                </li>
+              {% endfor %}
+            </ul>
           </div>
         </div>
       </div>
-    </div>
     </wx-tabbed-nav>
-    {% include 'weather/partials/state-links.html' with state_name=state.name %}
+    {% include 'weather/partials/state-links.html' with state_name=state_name %}
   </div>
-  {% endblock %}
+{% endblock %}

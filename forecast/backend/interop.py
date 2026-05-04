@@ -35,12 +35,12 @@ def _get_hour(dt):
     return dt.strftime("%-I%p").lower()
 
 
-def _fetch(url):
+def _fetch(url, query_params=None):
     """Fetch a dictionary from the interop layer."""
     base_url = getenv("INTEROP_URL")
     full_url = f"{base_url}{url}"
     # note that interop has a 60s body timeout and gunicorn has a 60s worker timeout
-    response = _get_requests_session().get(full_url, timeout=65)
+    response = _get_requests_session().get(full_url, timeout=65, params=query_params)
 
     if response.status_code == 504:  # noqa: PLR2004
         raise Http504

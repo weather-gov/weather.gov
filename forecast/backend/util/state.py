@@ -1,3 +1,4 @@
+from backend import interop
 from backend.models.org_structure import WFO
 from spatial.models import WeatherCounties
 
@@ -21,3 +22,12 @@ def get_wfo_data_for_state(state_instance):
         }
         for wfo in wfo_instances
     ]
+
+
+def get_analysis_data_for_state(wfos):
+    """Get the analysis tab data for the state by its abbreviation."""
+    url = "/state/analysis"
+    return interop._fetch(
+        url,
+        query_params=wfos
+    )

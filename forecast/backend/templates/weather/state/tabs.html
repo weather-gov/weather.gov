@@ -14,23 +14,23 @@
          class="tab-buttons display-flex flex-row top-4 grid-col-12"
          aria-labelledby="tablist-label">
       <a id="alerts-tab-button"
-         href="{% url 'state_alerts' state.state %}"
+         href="{% url 'state_alerts' state_abbrev %}"
          class="tab-button"
          {% if url_name == "state_overview" %}data-selected{% endif %}
          {% if url_name == "state_alerts" %}data-selected{% endif %}
          data-tab-name="alerts">{{ "state.label.alerts.01" | t }}</a>
       <a id="risks-tab-button"
-         href="{% url 'state_risks' state.state %}"
+         href="{% url 'state_risks' state_abbrev %}"
          class="tab-button"
          {% if url_name == "state_risks" %}data-selected{% endif %}
          data-tab-name="risks">{{ "state.label.risks.01" | t }}</a>
       <a id="radar-tab-button"
-         href="{% url 'state_radar' state.state %}"
+         href="{% url 'state_radar' state_abbrev %}"
          class="tab-button"
          {% if url_name == "state_radar" %}data-selected{% endif %}
          data-tab-name="radar">{{ "state.label.radar.01" | t }}</a>
       <a id="analysis-tab-button"
-         href="{% url 'state_analysis' state.state %}"
+         href="{% url 'state_analysis' state_abbrev %}"
          class="tab-button"
          {% if url_name == "state_analysis" %}data-selected{% endif %}
          data-tab-name="analysis">{{ "state.label.analysis.01" | t }}</a>
