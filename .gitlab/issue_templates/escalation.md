@@ -18,4 +18,16 @@
 
 <!-- Include log messages, screenshots, or anything else which may help to debug. Feel free to attach files. -->
 
-/label ~escalation
+
+
+### Additional data points if applicable:
+- Time of Incident:
+- URL where issue was encountered: (EG:beta.weather.gov/point/45.458/-122.846/)
+- Device(Laptop/PC/Phone type):
+- Browser:
+- Internet connection (Hardwired/Wifi/Cell data):
+- Does issue occur on legacy site?: 
+- Agent contact if more information is needed
+
+
+/label ~bug ~backlog ~IOC ~Need refinement
