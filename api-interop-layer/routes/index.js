@@ -7,6 +7,7 @@ import * as riskOverview from "./risk-overview.js";
 import * as weatherstories from "./weatherstories.js";
 import * as afdVersions from "./afd-versions.js";
 import * as afdVersionsByWFO from "./afd-versions-by-wfo.js";
+import * as stateAnalysis from "./state-analysis.js";
 
 export default [
   alertMeta,
@@ -18,4 +19,5 @@ export default [
   weatherstories,
   afdVersions,
   afdVersionsByWFO,
+  stateAnalysis,
 ];

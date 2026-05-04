@@ -873,6 +873,9 @@ msgstr[1] "Briefings"
 msgid "county.briefing.created.01"
 msgstr "Published"
 
+msgid "state.briefing.created.01"
+msgstr "PUBLISHED"
+
 msgid "county.briefing.updated.01"
 msgstr "Last updated"
 
@@ -998,6 +1001,9 @@ msgstr "Radar"
 msgid "state.label.analysis.01"
 msgstr "Analysis"
 
+msgid "state.briefings-missing.analysis.01"
+msgstr "No briefings available for the following offices:"
+
 msgid "state.heading.alerts.01"
 msgstr "Alerts"
 
@@ -1042,6 +1048,9 @@ msgstr "Map failed to load"
 
 msgid "state.alerts.none-period.01"
 msgstr "No active alerts for this period."
+
+msgid "state.briefing.link-label.01"
+msgstr "{wfoName} weather office briefing"
 
 msgid "spatial.status.count-of-total.01"
 msgstr "{count} of {total} {subdivision}"

@@ -8,7 +8,7 @@ const briefingsLogger = logger.child({ subsystem: "briefings" });
 // 1 hr
 const DEFAULT_BRIEFING_CACHE_TTL = 3600;
 
-export default async (wfo) => {
+export const getBriefing = async (wfo) => {
   const url = `/offices/${wfo}/briefing`;
 
   try {
@@ -60,3 +60,25 @@ export default async (wfo) => {
     return { error: true };
   }
 };
+
+/**
+ * Given a list of WFO codes, asynchronously fetch
+ * the briefing for each WFO.
+ * For briefings with a null briefing value or
+ * that have an error property, add the officeId
+ * property and return.
+ * @param {string[]} wfos - An array of WFO codes
+ * @returns {object} briefing data
+ */
+export const getBriefingsForWFOs = async (wfos) => {
+  return Promise.all(
+    wfos.map((wfo) => {
+      return getBriefing(wfo).then((briefing) => {
+        briefing.officeId = wfo.toUpperCase();
+        return briefing;
+      });
+    }),
+  );
+};
+
+export default getBriefing;

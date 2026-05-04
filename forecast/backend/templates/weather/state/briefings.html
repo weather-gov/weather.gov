@@ -1,0 +1,56 @@
+<div class="grid-col-12 tablet-lg__wx-col-2" id="briefing-container">
+  {% if active_briefings|length %}
+    <ul class="state-active-briefings add-list-reset grid-container padding-x-0 margin-bottom-205">
+    {% for briefing_data in active_briefings %}
+      <li class="state-active-briefing margin-bottom-2">
+        {% if briefing_data.error %}
+          <div class="usa-alert usa-alert--error margin-bottom-2">
+            <div class=" usa-alert__body">
+              <div class="usa-alert__text">
+                {% trans_with_args "There was an error loading briefings for the {wfo} WFO" wfo=briefing_data.wfo_name %}
+              </div>
+            </div>
+          </div>
+        {% elif briefing_data.briefing %}
+          <div class="grid-row font-family-mono font-mono-xs text-base-dark">
+            <div class="grid-col-12 display-block tablet:grid-col-auto text-uppercase margin-right-1 margin-bottom-05">
+              {# djlint:off #}
+              {% if briefing_data.briefing.updateTime %}
+                <span>{{ "state.briefing.created.01" | t }}</span>
+              {% endif %}
+              {# djlint:on #}
+            </div>
+            <div class="grid-col-12 display-block">
+              {% if briefing_data.briefing.updateTime %}
+                <time datetime="{{ briefing_data.briefing.updateTime }}">
+                  {{ briefing_data.briefing.updateTime|date:"l, M j, Y, g:i A e" }}
+                </time>
+              {% endif %}
+            </div>
+          </div>
+          <div class="grid-col-12 margin-top-1">
+            <svg role="img"
+                 class="usa-icon width-3 height-3 text-primary"
+                 aria-hidden="true">
+              <use xlink:href="{% static 'images/uswds/sprite.svg' %}#file_download"></use>
+            </svg>
+            <a href="{{ briefing_data.briefing.download }}" class="usa-link line-height-body-4">{% trans_with_args "state.briefing.link-label.01" wfoName=briefing_data.wfo_name %} [PDF]</a>
+          </div>
+        {% else %}
+          {% trans_with_args "No active briefing for {wfo} WFO" wfo=briefing_data.wfo_name %}
+        {% endif %}
+      </li>
+    {% endfor %}
+    </ul>
+  {% else %}
+    No recent briefing available
+  {% endif %}
+</div>
+{% if active_briefings and empty_briefings %}
+  <p class="margin-bottom-4">
+    <span>{{"state.briefings-missing.analysis.01"|t}} </span>
+    {% for briefing in empty_briefings %}
+      <span>{{briefing.wfo_name}}{% if not forloop.last %}, {% endif %}</span>
+    {% endfor %}
+  </p>
+{% endif %}

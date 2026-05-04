@@ -5,7 +5,7 @@ from django.shortcuts import get_object_or_404, render
 from django.views.decorators.cache import cache_control
 
 from backend.util import sort_alert_key
-from backend.util.state import get_wfo_data_for_state
+from backend.util.state import get_analysis_data_for_state, get_wfo_data_for_state
 from spatial.models import WeatherAlertsCache, WeatherCounties, WeatherStates
 
 
@@ -113,7 +113,9 @@ def state_alerts(request, state):
         request,
         "weather/state/alerts.html",
         {
-            "state": state_orm,
+            "state_abbrev": state_orm.state,
+            "state_name": state_orm.name,
+            "county_count": state_orm.county_count,
             "alerts": alerts_list,
             "alert_days_timeline": alert_days_timeline,
             "levels": legend_levels,
@@ -128,18 +130,93 @@ def state_alerts(request, state):
 def state_risks(request, state):
     """Render the risks tab for a given state."""
     state = get_object_or_404(WeatherStates, state=state.upper())
-    return render(request, "weather/state/risks.html", {"state": state, "wfo_data": get_wfo_data_for_state(state)})
+    return render(
+        request,
+        "weather/state/risks.html",
+        {
+            "state": state,
+            "state_abbrev": state.state,
+            "wfo_data": get_wfo_data_for_state(state)
+        }
+    )
 
 
 @cache_control(max_age=120, smax_age=120, public=True)
 def state_radar(request, state):
     """Render the radar tab for a given state."""
     state = get_object_or_404(WeatherStates, state=state.upper())
-    return render(request, "weather/state/radar.html", {"state": state, "wfo_data": get_wfo_data_for_state(state)})
+    return render(
+        request,
+        "weather/state/radar.html",
+        {
+            "state": state,
+            "state_abbrev": state.state,
+            "wfo_data": get_wfo_data_for_state(state)
+        }
+    )
 
 
 @cache_control(max_age=120, smax_age=120, public=True)
 def state_analysis(request, state):
     """Render the analysis tab for a given state."""
-    state = get_object_or_404(WeatherStates, state=state.upper())
-    return render(request, "weather/state/analysis.html", {"state": state, "wfo_data": get_wfo_data_for_state(state)})
+    state_instance = get_object_or_404(WeatherStates, state=state.upper())
+    tz = ZoneInfo(state_instance.timezone or "UTC")
+
+    # Get all the WFOs that are relevant for the state
+    # and also a list of their corresponding codes.
+    # We use the list of codes to bulk request briefings
+    # from the interop layer
+    wfo_data = get_wfo_data_for_state(state_instance)
+    wfo_codes = [wfo["code"] for wfo in wfo_data]
+    state_data = get_analysis_data_for_state({"wfos": wfo_codes})
+
+    wfo_instance_lookup  = {
+        wfo["code"]: {
+            "name": wfo["name"],
+            "code": wfo["code"],
+        } for wfo in wfo_data
+    }
+
+    # Modify the briefings with the extra WFO information.
+    # For now, this information needs to be added from the
+    # Django side, since it is managed in our CMS and is not
+    # a part of our interop-available geospatial data
+    for briefing_data in state_data["briefings"]:
+        wfo_instance = wfo_instance_lookup[briefing_data["officeId"]]
+        briefing_data["wfo_name"] = wfo_instance["name"]
+
+        # Set the actual updateTime in the briefing object to be a datetime
+        # with the correct timezone
+        if briefing_data["briefing"] and "updateTime" in briefing_data["briefing"]:
+            briefing_data["briefing"]["updateTime"] = datetime.fromisoformat(
+                briefing_data["briefing"]["updateTime"]
+            ).astimezone(tz)
+
+    # Now sort the list of briefings by WFO name
+    state_data["briefings"].sort(key=lambda x: x["wfo_name"])
+
+    # Now get a list of active vs inactive briefings.
+    # The active briefings will be fully displayed with timestamps
+    # and links.
+    # The inactive (null/None) briefings will be added to a list with
+    # a text description at the bottom of the section
+    active_briefings = []
+    empty_briefings = []
+    for briefing in state_data["briefings"]:
+        if briefing["briefing"] is None:
+            empty_briefings.append(briefing)
+        else:
+            active_briefings.append(briefing)
+
+    return render(
+        request,
+        "weather/state/analysis.html",
+        {
+            "state_name": state_instance.name,
+            "state_abbrev": state_instance.state,
+            "wfo_data": wfo_data,
+            "active_briefings": active_briefings,
+            "empty_briefings": empty_briefings,
+            **state_data,
+        }
+    )
