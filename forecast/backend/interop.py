@@ -332,6 +332,12 @@ def get_ghwo_data_for_county(county_fips):
     return _fetch(url)
 
 
+def get_ghwo_data_for_state(state_code):
+    """Fetch GHWO data for the given state from the interop."""
+    url = f"/risk-overview/{state_code}"
+    return _fetch(url)
+
+
 def get_briefing(wfo):
     """
     Fetch the current briefing for the given WFO, if any.

@@ -1,10 +1,10 @@
 {% comment %}
 -- Template purpose:
 --   Display a form to select a county/state combo.
--- Used by: county/ghwo.html
+-- Used by: county/ghwo.html, state/ghwo.html
 --          backend.views.partials.wx_select_ghwo_counties
 {% endcomment %}
-<form method="post" action="/counties/ghwo/" class="grid-row padding-y-2">
+<form method="post" action="{% url 'risk_index' %}" class="grid-row padding-y-2">
   {% csrf_token %}
   <div class="grid-col-12 tablet-lg:grid-col-4 line-height-sans-5 tablet-lg:margin-right-4">
     <label for="state-select" class="text-base-darker">{{ "ghwo.selector.label.state.01" | t }}</label>
@@ -14,7 +14,7 @@
            data-value-for="state"
            type="text"
            slot="input" />
-    <input type="hidden" name="state" value="{{ county.state.fips }}" />
+    <input type="hidden" name="state" value="{{ state.state }}" />
     <button type="button"
             class="empty"
             aria-label="{{ "afd.aria.clear-input-box.01" | t }}"
@@ -42,7 +42,11 @@
            data-value-for="county"
            type="text"
            slot="input" />
-    <input type="hidden" name="county" value="{{ county.countyfips }}" />
+    {% if county %}
+      <input type="hidden" name="county" value="{{ county.countyfips }}" />
+    {% else %}
+      <input type="hidden" name="county" value="all" />
+    {% endif %}
     <button type="button"
             class="empty"
             aria-label="{{ "afd.aria.clear-input-box.01" | t }}"
@@ -51,6 +55,10 @@
             aria-label="{{ "afd.aria.toggle-dropdown.01" | t }}"
             slot="toggle-button">&nbsp;</button>
     <wx-filterable-listbox slot="popup" id="county-select--list" role="listbox">
+      <div role="option"
+           id="county-selector--all-counties"
+           data-value="all"
+           aria-selected="{% if not county %}true{% else %}false{% endif %}">{{"ghwo.selector.label.all-counties.01"|t}}</div>
     {% for county in counties %}
       <div role="option"
            id="county-selector--{{ county.value }}-{{ forloop.counter0 }}"
@@ -62,16 +70,21 @@
     <input type="hidden"
            id="current-county"
            name="current-county"
-           value="{{ county.countyfips }}" />
+           value="{% if county %}{{ county.countyfips }}{% else %}all{% endif %}" />
     <input type="hidden"
            id="current-state"
            name="current-state"
-           value="{{ county.state.fips }}" />
+           value="{{ state.state }}" />
   </div>
   <div class="grid-col-12 tablet-lg:grid-col-3 line-height-sans-5 display-flex flex-column flex-justify-center tablet-lg:border-left-1px border-base-light margin-top-3 tablet-lg:margin-top-0">
     <div class="tablet-lg:margin-top-1 tablet-lg:padding-left-4 desktop:padding-left-5">
-      <a href="{% url 'county_overview' countyfips=county.countyfips %}"
-         class="usa-link">{{ "ghwo.selector.label.county-link.01" | t }}</a>
+      {% if county %}
+        <a href="{% url 'county_overview' countyfips=county.countyfips %}"
+           class="usa-link" id="view-county-details-link">{{ "ghwo.selector.label.county-link.01" | t }}</a>
+      {% else %}
+        <a href="{% url 'county_overview' countyfips='all' %}"
+           class="usa-link display-none" id="view-county-details-link" aria-hidden="true">{{ "ghwo.selector.label.county-link.01" | t }}</a>
+      {% endif %}
     </div>
   </div>
 </form>

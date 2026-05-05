@@ -26,6 +26,9 @@
 
 const WX_COUNTY_GHWO_SELECTOR_URL = `/wx/select/ghwo/counties/`;
 const WX_COUNTY_GHWO_DETAILS_URL = `/wx/ghwo/counties/`;
+const WX_STATE_GHWO_DETAILS_URL = `/wx/ghwo/state/`;
+const STATE_GHWO_URL = `/forecast/state/<stateCode>/risk-overview/`;
+const COUNTY_GHWO_URL = `/forecast/county/<countyFips>/risk-overview/`;
 
 // Specifies a timeout/delay in milliseconds before the loader
 // image should show during asynchronous requests for
@@ -50,6 +53,8 @@ class GHWOCountySelector extends HTMLElement {
     this.handleBackButton = this.handleBackButton.bind(this);
     this.showLoader = this.showLoader.bind(this);
     this.hideLoader = this.hideLoader.bind(this);
+    this.updateViewCountyDetailsLink =
+      this.updateViewCountyDetailsLink.bind(this);
   }
 
   connectedCallback() {
@@ -129,11 +134,22 @@ class GHWOCountySelector extends HTMLElement {
       this.innerHTML = html;
 
       // Update the browser history and url
-      window.history.pushState(
-        {},
-        formData.get("county"),
-        `/counties/ghwo/${formData.get("county")}/`,
-      );
+      const countyFips = formData.get("county");
+      const stateCode = formData.get("state");
+      const showAllCountiesForState = countyFips === "all";
+      if (showAllCountiesForState) {
+        window.history.pushState(
+          {},
+          stateCode,
+          STATE_GHWO_URL.replace("<stateCode>", stateCode),
+        );
+      } else {
+        window.history.pushState(
+          {},
+          countyFips,
+          COUNTY_GHWO_URL.replace("<countyFips>", countyFips),
+        );
+      }
       window.addEventListener("popstate", this.handleBackButton);
     } else {
       // For now simply log the error
@@ -164,11 +180,14 @@ class GHWOCountySelector extends HTMLElement {
 
     // Fetch the GHWO details partial for the currently selected county fips
     const selectedCountyFips = this.querySelector(`[name="county"]`).value;
+    const selectedStateCode = this.querySelector(`[name="state"]`).value;
+    const showAllCountiesForState = selectedCountyFips === "all";
 
     this.showLoader(elements);
-    const response = await fetch(
-      `${WX_COUNTY_GHWO_DETAILS_URL}${selectedCountyFips}/`,
-    );
+    const url = showAllCountiesForState
+      ? `${WX_STATE_GHWO_DETAILS_URL}${selectedStateCode}`
+      : `${WX_COUNTY_GHWO_DETAILS_URL}${selectedCountyFips}`;
+    const response = await fetch(url);
     this.hideLoader();
 
     if (response.ok) {
@@ -178,11 +197,21 @@ class GHWOCountySelector extends HTMLElement {
       });
 
       // Update the browser history and url
-      window.history.pushState(
-        {},
-        selectedCountyFips,
-        `/counties/ghwo/${selectedCountyFips}/`,
-      );
+      if (showAllCountiesForState) {
+        this.updateViewCountyDetailsLink();
+        window.history.pushState(
+          {},
+          selectedStateCode,
+          STATE_GHWO_URL.replace("<stateCode>", selectedStateCode),
+        );
+      } else {
+        this.updateViewCountyDetailsLink(selectedCountyFips);
+        window.history.pushState(
+          {},
+          selectedCountyFips,
+          COUNTY_GHWO_URL.replace("<countyFips>", selectedCountyFips),
+        );
+      }
       window.addEventListener("popstate", this.handleBackButton);
     } else {
       const errorEl = document.createElement("pre");
@@ -193,6 +222,33 @@ class GHWOCountySelector extends HTMLElement {
       console.error(
         `Could not retrieve GHWO details for county ${selectedCountyFips}`,
       );
+    }
+  }
+
+  /**
+   * In some cases, we want to hide/show the selector
+   * form's link to county details.
+   * In cases where we are showing information for all counties
+   * for a given state, we want to hide the link. In cases where
+   * we are showing a specific county, we want to show the link
+   */
+  updateViewCountyDetailsLink(countyfips = false) {
+    const countyDetailsAnchor = document.getElementById(
+      "view-county-details-link",
+    );
+    if (!countyDetailsAnchor) {
+      return;
+    }
+    let href = countyDetailsAnchor.href;
+    if (countyfips) {
+      href = countyDetailsAnchor.href.replace("/all", `/${countyfips}`);
+      countyDetailsAnchor.setAttribute("href", href);
+      countyDetailsAnchor.removeAttribute("aria-hidden");
+      countyDetailsAnchor.classList.remove("display-none");
+    } else {
+      countyDetailsAnchor.setAttribute("href", href.replace(/[0-9]{5}/, "all"));
+      countyDetailsAnchor.setAttribute("aria-hidden", true);
+      countyDetailsAnchor.classList.add("display-none");
     }
   }
 

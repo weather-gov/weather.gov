@@ -4,14 +4,7 @@ from django.views.generic.base import RedirectView, TemplateView
 from wagtail.admin import urls as wagtailadmin_urls
 from wagtail.documents import urls as wagtaildocs_urls
 
-from backend.views import (
-    county,
-    index,
-    offices,
-    partials,
-    point,
-    state,
-)
+from backend.views import county, index, offices, partials, point, risk, state
 
 from .url_converters import FloatConverter
 
@@ -32,21 +25,23 @@ urlpatterns = [
     # County pages
     path("county/", county.index, name="county_index"),
     path("county/<countyfips>/", county.county_overview, name="county_overview"),
-    path("counties/ghwo/", county.county_ghwo_index, name="county_ghwo_index"),
-    path("counties/ghwo/<str:county_fips>/", county.county_ghwo, name="county_ghwo"),
+    path("forecast/county/<str:county_fips>/risk-overview/", risk.risk_details_by_county, name="county_risk_overview"),
     # State pages
     path("forecast/state/", state.index, name="state_index"),
     path("forecast/state/<state>/", state.state_alerts, name="state_overview"),
     path("forecast/state/<state>/alerts/", state.state_alerts, name="state_alerts"),
     path("forecast/state/<state>/risks/", state.state_risks, name="state_risks"),
+    path("forecast/state/<state_code>/risk-overview/", risk.risk_details_by_state, name="state_risk_overview"),
     path("forecast/state/<state>/radar/", state.state_radar, name="state_radar"),
     path("forecast/state/<state>/analysis/", state.state_analysis, name="state_analysis"),
+    path("forecast/risk-overview/", risk.ghwo_index, name="risk_index"),
     # WX routes are those that return partial HTML markup
     # that will be requested from the frontend (htmx style)
     path("wx/afd/<afd_id>/", partials.wx_afd_id, name="wx_afd_id"),
     path("wx/afd/locations/<wfo>/", partials.wx_afd_versions, name="wx_afd_versions"),
     path("wx/select/ghwo/counties/", partials.wx_select_ghwo_counties, name="wx_select_ghwo_counties"),
     path("wx/ghwo/counties/<str:county_fips>/", partials.wx_ghwo_counties, name="wx_ghwo_counties"),
+    path("wx/ghwo/state/<str:state_code>/", partials.wx_ghwo_all_counties_for_state, name="wx_ghwo_state_all"),
     path("wx/state/<state>/", partials.wx_state_boundaries_pbf, name="wx_state_boundary"),
     path("wx/state/<state>/alerts", partials.wx_state_alerts_pbf, name="wx_state_boundary"),
     # Wagtail

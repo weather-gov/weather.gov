@@ -156,7 +156,7 @@ class TestCountyViews(TestCase):
 
     @mock.patch("backend.interop.get_county_data")
     @mock.patch("backend.interop.get_radar")
-    def test_overview_link_to_county_ghwo(self, mock_get_radar, mock_get_county_data):
+    def test_overview_link_to_county_risk_overview(self, mock_get_radar, mock_get_county_data):
         """Test that county overview links to detailed risk analysis."""
         mock_get_county_data.return_value = {
             "riskOverview": self.ghwo,
@@ -170,7 +170,7 @@ class TestCountyViews(TestCase):
 
         response = self.client.get(reverse("county_overview", kwargs={"countyfips": "44444"}))
         self.assertTemplateUsed(response, "weather/county/overview.html")
-        link = reverse("county_ghwo", kwargs={"county_fips": "44444"})
+        link = reverse("county_risk_overview", kwargs={"county_fips": "44444"})
         self.assertContains(response, link)
 
     @mock.patch("backend.interop.get_county_data")
@@ -423,79 +423,4 @@ class TestCountyViews(TestCase):
             response = self.client.get(reverse("county_overview", kwargs={"countyfips": "44444"}))
             self.assertEqual(response.status_code, 500)
 
-    @mock.patch("backend.interop.get_ghwo_data_for_county")
-    @mock.patch("backend.util.get_ghwo_daily_images")
-    def test_county_ghwo_severity_sorting(self, mock_get_images, mock_get_ghwo_data):
-        """Test that risks are sorted descending by their total severity across days."""
-        mock_get_ghwo_data.return_value = {
-            "wfo": "YND",
-            "legend": {},
-            "composite": {
-                "days": [
-                    {"timestamp": "2026-03-30T12:00:00Z", "scaled": 0},
-                    {"timestamp": "2026-03-31T12:00:00Z", "scaled": 5},
-                ]
-            },
-            "days": [
-                {"timestamp": "2026-03-30T12:00:00Z"},
-                {"timestamp": "2026-03-31T12:00:00Z"},
-            ],
-            "risks": {
-                "low_risk": {
-                    "days": [
-                        {
-                            "category": 0,
-                            "timestamp": "2026-03-30T12:00:00Z",
-                            "start": "2026-03-30T12:00:00Z",
-                            "end": "2026-03-31T12:00:00Z",
-                        },
-                        {
-                            "category": 1,
-                            "timestamp": "2026-03-31T12:00:00Z",
-                            "start": "2026-03-31T12:00:00Z",
-                            "end": "2026-04-01T12:00:00Z",
-                        },
-                    ]
-                },
-                "high_risk": {
-                    "days": [
-                        {
-                            "category": 4,
-                            "timestamp": "2026-03-30T12:00:00Z",
-                            "start": "2026-03-30T12:00:00Z",
-                            "end": "2026-03-31T12:00:00Z",
-                        },
-                        {
-                            "category": 5,
-                            "timestamp": "2026-03-31T12:00:00Z",
-                            "start": "2026-03-31T12:00:00Z",
-                            "end": "2026-04-01T12:00:00Z",
-                        },
-                    ]
-                },
-                "med_risk": {
-                    "days": [
-                        {
-                            "category": 2,
-                            "timestamp": "2026-03-30T12:00:00Z",
-                            "start": "2026-03-30T12:00:00Z",
-                            "end": "2026-03-31T12:00:00Z",
-                        },
-                        {
-                            "category": 1,
-                            "timestamp": "2026-03-31T12:00:00Z",
-                            "start": "2026-03-31T12:00:00Z",
-                            "end": "2026-04-01T12:00:00Z",
-                        },
-                    ]
-                },
-            },
-        }
-        mock_get_images.return_value = []
 
-        response = self.client.get(reverse("county_ghwo", kwargs={"county_fips": "44444"}))
-        self.assertEqual(response.status_code, 200)
-
-        # The risks should be sorted high -> med -> low based on sum of categories
-        sorted_risks = list(response.context["ghwo"]["risks"].keys())
-        self.assertEqual(sorted_risks, ["high_risk", "med_risk", "low_risk"])
