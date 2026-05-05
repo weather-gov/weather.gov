@@ -571,7 +571,7 @@ const setupStateMap = async () => {
     if (alertsData && alertsData.features) {
       for (let i = alertsData.features.length - 1; i >= 0; i--) {
         const feature = alertsData.features[i];
-        const alertJSON = feature.properties.alertjson;
+        const alertJSON = feature.properties;
 
         // Extract metadata
         const alertType = alertJSON.metadata.level.text || "other";
