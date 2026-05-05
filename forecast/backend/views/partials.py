@@ -1,7 +1,6 @@
 import json
 
 import geobuf
-from django.contrib.gis.serializers.geojson import Serializer
 from django.http import Http404, HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, render
 from django.template.loader import render_to_string
@@ -47,63 +46,47 @@ def wx_state_alerts_pbf(_, state):
     state_fips = state_obj.fips
 
     # Get all alerts for the state
-    alerts = WeatherAlertsCache.objects.filter(states__contains=[state_fips]).only(
+    alerts = WeatherAlertsCache.objects.filter(states__contains=[state_fips]).values(
         "id", "alertjson", "alertkind", "counties", "states", "shape"
-    )
-
-    state_fips = state_obj.fips
-
-    # Get Weather alerts for state
-    alerts_queryset = WeatherAlertsCache.objects.filter(states__contains=[state_fips]).only(
-        "id", "alertjson", "alertkind", "counties", "states"
     )
 
     # Loop through all alerts and create set of counties
     all_fips = set()
-    for alert in alerts_queryset:
-        if alert.counties:
-            all_fips.update(alert.counties)
-
-    # Query all FIPS and names for each alert county
-    county_map = dict(WeatherCounties.objects.filter(countyfips__in=all_fips).values_list("countyfips", "countyname"))
-
-    # Serialize and load the data for encoding
-    serializer = Serializer()
-    geojson_data = serializer.serialize(
-        alerts, geometry_field="shape", fields=("alertjson", "alertkind", "counties", "states")
-    )
-    geojson_dict = json.loads(geojson_data)
+    for a in alerts:
+        if a["counties"]:
+            all_fips.update(a["counties"])
 
     #  Internal Sorting Logic (Ticket #207)
-    for feature in geojson_dict.get("features", []):
-        # Remove the nested geometry field
-        feature["properties"]["alertjson"].pop("geometry", None)
+    features = []
+    for alert in alerts:
+        # Convert directly to a dict without huge string intermediates
+        geom_dict = json.loads(alert["shape"].geojson)
 
-        geom = feature.get("geometry")
+        # Internal Sorting Logic
+        if geom_dict.get("type") == "MultiPolygon":
+            polys = [Polygon(shell=p[0], holes=p[1:]) for p in geom_dict["coordinates"]]
+            # Sort by area
+            polys.sort(key=lambda a: a.area, reverse=True)
+            geom_dict = MultiPolygon(polys).__geo_interface__
 
-        counties_mapping = {
-            fips: county_map.get(fips, fips)
-            for fips in feature["properties"]["counties"]
-            if str(fips).startswith(str(state_fips))
-        }
-        feature["properties"]["alertjson"]["total_counties_display"] = len(counties_mapping)
+        # Build feature manually
+        properties = alert["alertjson"]
+        properties.pop("geometry", None)
 
-        # We only care about MultiPolygons
-        if not geom or geom.get("type") != "MultiPolygon":
-            continue
+        counties_mapping_count = sum(1 for f in alert["counties"] if str(f).startswith(str(state_fips)))
+        properties["total_counties_display"] = counties_mapping_count
+        properties["alertkind"] = alert["alertkind"]
+        properties["counties"] = alert["counties"]
 
-        # Loop through nested polygons and format for shapely
-        polygons = [Polygon(shell=poly_coords[0], holes=poly_coords[1:]) for poly_coords in geom["coordinates"]]
-
-        # Sort and output
-        sorted_polygons = sorted(polygons, key=lambda a: a.area, reverse=True)
-        feature["geometry"] = MultiPolygon(polygons=sorted_polygons).__geo_interface__
+        features.append({"type": "Feature", "geometry": geom_dict, "properties": properties})
 
     # Process alerts by sorting by timestamp and severity
-    geojson_dict["features"] = process_state_alerts(geojson_dict["features"])
+    sorted_features = process_state_alerts(features)
 
     # Encode and return
-    pbf_data = geobuf.encode(geojson_dict)
+    pbf_data = geobuf.encode({"type": "FeatureCollection", "features": sorted_features})
+    del features
+
     return HttpResponse(pbf_data, content_type="application/x-protobuf")
 
 

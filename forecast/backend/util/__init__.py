@@ -435,7 +435,7 @@ def process_state_alerts(alert_geojsons: list, state_timezone: str = "UTC") -> l
 
     unique_map = {}
     for feature in alert_geojsons:
-        aj = feature["properties"]["alertjson"]
+        aj = feature["properties"]
         h = aj.get("hash")
         if h not in unique_map:
             onset_dt = datetime.fromisoformat(aj["onset"].replace("Z", "+00:00")).astimezone(tz)
@@ -455,25 +455,25 @@ def process_state_alerts(alert_geojsons: list, state_timezone: str = "UTC") -> l
             aj["alertDays"] = []
             unique_map[h] = feature
 
-    sorted_features = sorted(unique_map.values(), key=lambda x: sort_alert_key(x["properties"]["alertjson"]))
+    sorted_features = sorted(unique_map.values(), key=lambda x: sort_alert_key(x["properties"]))
 
     # Timeline Logic (Using pre-parsed dates)
     for i, (d_start, d_end) in enumerate(days):
         for feature in sorted_features:
-            aj = feature["properties"]["alertjson"]
+            aj = feature["properties"]
             if aj["_onset_dt"] < d_end and (aj["_finish_dt"] is None or aj["_finish_dt"] >= d_start):
                 aj["alertDays"].append(i + 1)
 
     # Count totals for indexing (Using pre-determined _day_raw)
     totals = defaultdict(int)
     for feature in sorted_features:
-        aj = feature["properties"]["alertjson"]
+        aj = feature["properties"]
         totals[f"{aj.get('event', 'Alert')}-{aj['_day_raw']}"] += 1
 
     # Final Loop: Unique ID and Display Title
     occurrences = defaultdict(int)
     for feature in sorted_features:
-        aj = feature["properties"]["alertjson"]
+        aj = feature["properties"]
         event_type = aj.get("event", "Alert")
         day_raw = aj["_day_raw"]
 
