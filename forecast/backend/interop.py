@@ -6,6 +6,7 @@ from zoneinfo import ZoneInfo
 import requests
 from django.utils.translation import gettext_lazy as _
 from requests.adapters import HTTPAdapter
+from requests.exceptions import HTTPError, Timeout
 
 from backend.context_processors import TIMING_CONTEXT
 from backend.exceptions import Http429, Http504
@@ -40,7 +41,12 @@ def _fetch(url, query_params=None):
     base_url = getenv("INTEROP_URL")
     full_url = f"{base_url}{url}"
     # note that interop has a 60s body timeout and gunicorn has a 60s worker timeout
-    response = _get_requests_session().get(full_url, timeout=65, params=query_params)
+    try:
+        response = _get_requests_session().get(full_url, timeout=65, params=query_params)
+    except Timeout:
+        raise Http504 from None
+    except HTTPError:
+        raise Http504 from None
 
     if response.status_code == 504:  # noqa: PLR2004
         raise Http504
