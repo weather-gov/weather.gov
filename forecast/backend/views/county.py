@@ -3,21 +3,14 @@ from datetime import datetime
 from zoneinfo import ZoneInfo
 
 from django.db.models import Prefetch
-from django.http import Http404
-from django.shortcuts import get_object_or_404, redirect, render
-from django.urls import reverse
+from django.shortcuts import get_object_or_404, render
 from django.views.decorators.cache import cache_control, never_cache
-from django.views.decorators.http import require_POST
 from shapely import MultiPolygon, Polygon
 
 from backend import interop
 from backend.models import WFO
 from backend.util import (
-    get_basis_for_ghwo_risk,
     get_briefings_from_county_data,
-    get_counties_combo_box_list,
-    get_ghwo_daily_images,
-    get_states_combo_box_list,
     get_weather_stories_from_county_data,
     process_county_alerts,
 )
@@ -151,119 +144,4 @@ def county_overview(request, countyfips):  # noqa: C901
                 "wfo_codes": wfo_codes,
             },
         },
-    )
-
-
-def compute_severity(risk_entry):
-    """Compute severity for a GHWO risk entry."""
-    return sum(day["category"] for day in risk_entry["days"])
-
-
-@never_cache
-def county_ghwo(request, county_fips):  # noqa: C901
-    """Load a county GHWO details page by FIPS."""
-    county = get_object_or_404(
-        WeatherCounties.objects.select_related("state").only("countyname", "st", "countyfips", "state__fips"),
-        countyfips=county_fips,
-    )
-
-    localtz = ZoneInfo("UTC")
-    if county.timezone:
-        localtz = ZoneInfo(county.timezone)
-
-    # Get all of the states, for use in the combobox dropdown.
-    states = get_states_combo_box_list(county.state.fips)
-
-    # Now get a list of all counties in the same state as the found county.
-    counties = get_counties_combo_box_list(county.state.fips, county_fips)
-
-    # Fetch the GHWO data for the county from the interop layer
-    ghwo_data = interop.get_ghwo_data_for_county(county.countyfips)
-
-    if "error" not in ghwo_data:
-        risk_overview_timestamps_to_dates(ghwo_data, localtz)
-
-        # Get basis description for each risk, if we have it.
-        for risk_id, risk in ghwo_data["legend"].items():
-            risk["basis"] = get_basis_for_ghwo_risk(ghwo_data["wfo"], risk_id)
-        # Now map those from the global legend into the risk-specific legends
-        for risk_id, risk in ghwo_data["risks"].items():
-            # GHWO legends don't always contain entries for every risk type.
-            # Guard against that.
-            if risk_id in ghwo_data["legend"]:
-                if "basis" in ghwo_data["legend"][risk_id]:
-                    risk["legend"]["basis"] = ghwo_data["legend"][risk_id]["basis"]
-
-        ghwo_data["risks"] = dict(
-            sorted(ghwo_data["risks"].items(), key=lambda i: compute_severity(i[1]), reverse=True)
-        )
-
-        # Pick the first non-zero value and mark it as first. This one
-        # will be highlighted on page load.
-        for risk in ghwo_data["risks"].values():
-            for day in risk["days"]:
-                if day["category"] > 0:
-                    day["is_first"] = True
-                    break
-            else:
-                continue
-            break
-
-        # Update the scaled value for screenreader text
-        for day in ghwo_data["composite"]["days"]:
-            if day["scaled"] is not None:
-                day["scaled_10"] = day["scaled"] * 10
-
-        # Add any image urls to the list of images to prefetch
-        ghwo_data["prefetch_images"] = get_ghwo_daily_images(ghwo_data)
-
-    return render(
-        request,
-        "weather/county/ghwo.html",
-        {
-            "counties": counties,
-            "states": states,
-            "county": county,
-            "ghwo": ghwo_data,
-        },
-    )
-
-
-@require_POST
-@never_cache
-def county_ghwo_index(request):
-    """Redirects to the correct County GHWO page given the post data.
-
-    Intended to be used by the <form> element in
-    <wx-county-ghwo-selector>
-    """
-    current_state = request.POST.get("current-state")
-    selected_state = request.POST.get("state")
-    selected_county = request.POST.get("county")
-
-    try:
-        # If the current state does not match the selected
-        # state, then we assume the state has changed
-        # and that we should render the form with data for
-        # the new state
-        if current_state != selected_state:
-            state = WeatherStates.objects.get(fips=selected_state)
-            county = (
-                WeatherCounties.objects.filter(
-                    state__id=state.id,
-                )
-                .order_by("countyname")
-                .first()
-            )
-            # Otherwise, we render as if the selected county
-            # is the one we wish to render the form/page for
-        else:
-            county = WeatherCounties.objects.get(countyfips=selected_county)
-    except Exception as e:
-        raise Http404() from e
-
-    # Redirect to the main county ghwo page for the
-    # resolved county
-    return redirect(
-        reverse("county_ghwo", kwargs={"county_fips": county.countyfips}),
     )

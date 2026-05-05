@@ -1,4 +1,5 @@
 import json
+from zoneinfo import ZoneInfo
 
 import geobuf
 from django.http import Http404, HttpResponse, JsonResponse
@@ -11,6 +12,7 @@ from shapely import MultiPolygon, Polygon
 
 from backend import interop
 from backend.util import get_counties_combo_box_list, get_states_combo_box_list, process_state_alerts
+from backend.views.risk import process_ghwo_data
 from spatial.models import WeatherAlertsCache, WeatherCounties, WeatherStates
 
 
@@ -125,31 +127,34 @@ def wx_select_ghwo_counties(request):
     selected_state = request.POST.get("state", current_state)
     selected_county = request.POST.get("county", current_county)
 
+    # By default, we assume there is no incoming county
+    # (which results in listing all counties)
+    county = None
+
     try:
         # If the current state does not match the selected
         # state, then we assume the state has changed
         # and that we should render the form with data for
         # the new state
         if current_state != selected_state:
-            state = WeatherStates.objects.defer("shape").get(fips=selected_state)
-            county = (
-                WeatherCounties.objects.filter(
-                    state__id=state.id,
-                )
-                .order_by("countyname")
-                .first()
-            )
+            state = WeatherStates.objects.defer("shape").get(state=selected_state)
+
             # Otherwise, we render as if the selected county
             # is the one we wish to render the form/page for
-        else:
+        elif selected_county != "all":
             county = WeatherCounties.objects.defer("shape").get(countyfips=selected_county)
             state = county.state
+        else:
+            state = WeatherStates.objects.defer("shape").get(state=current_state)
 
         # Get the needed state dropdown data
-        states = get_states_combo_box_list(state.fips)
+        states = get_states_combo_box_list(selected_state)
 
         # Get the needed county dropdown data
-        counties = get_counties_combo_box_list(state.fips, county.countyfips)
+        if county:
+            counties = get_counties_combo_box_list(state.state, county.countyfips)
+        else:
+            counties = get_counties_combo_box_list(state.state, "")
     except Exception as e:
         raise Http404() from e
 
@@ -175,8 +180,17 @@ def wx_ghwo_counties(request, county_fips):
     """
     county = get_object_or_404(WeatherCounties.objects.defer("shape"), countyfips=county_fips)
 
+    # Get timezone information
+    localtz = ZoneInfo("UTC")
+    if county.timezone:
+        localtz = ZoneInfo(county.timezone)
+
     # Fetch the GHWO data for the county
     ghwo_data = interop.get_ghwo_data_for_county(county_fips)
+
+    # Process ghwo data, adding timezone info
+    # as needed
+    process_ghwo_data(ghwo_data, localtz)
 
     # Render the partial
     return render(
@@ -185,5 +199,43 @@ def wx_ghwo_counties(request, county_fips):
         {
             "ghwo": ghwo_data,
             "county": county,
+            "state": county.state
         },
+    )
+
+@require_GET
+@never_cache
+def wx_ghwo_all_counties_for_state(request, state_code):
+    """Respond with the markup for the GHWO details for the whole state.
+
+    Wil respond with the HTML for a partial only,
+    using the state abbrev code provided in the URL
+    param.
+    """
+    state = get_object_or_404(
+        WeatherStates.objects.defer("shape"),
+        state=state_code
+    )
+
+    # Get timezone information
+    localtz = ZoneInfo("UTC")
+    if state.timezone:
+        localtz = ZoneInfo(state.timezone)
+
+    # Fetch GHWO data for the state
+    ghwo_data = interop.get_ghwo_data_for_state(state.state)
+
+    # Process ghwo data, adding timezone information
+    # as needed
+    process_ghwo_data(ghwo_data, localtz)
+
+    # Render the partial
+    return render(
+        request,
+        "weather/partials/ghwo-details.html",
+        {
+            "ghwo": ghwo_data,
+            "county": None,
+            "state": state,
+        }
     )

@@ -85,7 +85,7 @@
         {% include "weather/partials/risk-overview-summary.html" with ghwo=data.public.riskOverview %}
         {% if not data.public.riskOverview.error %}
           <div class="margin-top-2">
-            <a href="{% url 'county_ghwo' county_fips=countyfips %}"
+            <a href="{% url 'county_risk_overview' county_fips=countyfips %}"
                class="usa-link">{{ "county.overview.link-to-ghwo-analysis.01" | t }}</a>
           </div>
         {% endif %}

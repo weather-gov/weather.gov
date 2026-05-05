@@ -755,6 +755,9 @@ msgstr "Select a state"
 msgid "ghwo.selector.label.county.01"
 msgstr "Select a county"
 
+msgid "ghwo.selector.label.all-counties.01"
+msgstr "All counties"
+
 msgid "ghwo.selector.label.county-link.01"
 msgstr "View county page"
 
@@ -771,7 +774,7 @@ msgid "ghwo.heading.no-data-description.01"
 msgstr "Please use the forecast search to see data for a specific point near this location."
 
 msgid "ghwo.loader.loading-text.01"
-msgstr "Loading the risk data"
+msgstr "Loading the risk data..."
 
 msgid "ghwo.details.table.risk-level.lower.01"
 msgstr "risk level"
