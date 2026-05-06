@@ -1,3 +1,5 @@
+import { checkForLeaflet } from "./util.js";
+
 /**
  * stateAlertMap.js
  * Logic for fetching state boundaries and alerts via Geobuf endpoints.
@@ -660,24 +662,4 @@ const setupStateMap = async () => {
   }
 };
 
-const checkForLeaflet = () => {
-  if (window.L && window.L.esri && window.L.esri.Vector) {
-    setupStateMap();
-  } else {
-    // Poll for the scripts loaded via alerts.html
-    document.addEventListener("DOMContentLoaded", checkForLeaflet);
-
-    // Check for the data attributes usually found in weather/scripts/leaflet.html
-    document
-      .querySelector("[data-wx-leaflet]")
-      ?.addEventListener("load", checkForLeaflet);
-    document
-      .querySelector("[data-wx-leaflet-esri]")
-      ?.addEventListener("load", checkForLeaflet);
-    document
-      .querySelector("[data-wx-leaflet-esri-vector]")
-      ?.addEventListener("load", checkForLeaflet);
-  }
-};
-
-checkForLeaflet();
+checkForLeaflet(setupStateMap);
