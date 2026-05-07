@@ -297,3 +297,18 @@ class ForecastGridHeatIndex(models.Model):
         db_table = "weathergov_ndfd_grid_index"
         unique_together = ("interval_start", "wfo", "x", "y")
         ordering = ["-interval_start"]
+
+
+class WeatherGridPoints(models.Model):
+    """Individual NDFD Forecast Grid Points."""
+
+    cwa = models.CharField(max_length=3)
+    x = models.IntegerField()
+    y = models.IntegerField()
+    point = models.PointField(srid=4326, spatial_index=True)
+
+    class Meta:  # noqa: D106
+        db_table = "weathergov_geo_gridpoints"
+        indexes = [
+            models.Index(fields=["x", "y"]),
+        ]
