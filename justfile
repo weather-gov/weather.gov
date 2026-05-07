@@ -323,3 +323,7 @@ load-zones: && clear-alert-cache
 [group("spatial data loading")]
 load-places:
   docker compose exec web python manage.py loadspatial --places
+# Load grid points
+[group("spatial data loading")]
+load-gridpoints path:
+    docker compose exec web python manage.py loadspatial --gridpoints /code/{{path}}

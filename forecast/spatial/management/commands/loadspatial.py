@@ -6,6 +6,7 @@ from spatial.management.commands._spatial_util import cache_path, clean_cache
 from spatial.management.commands.v1.data import (
     load_counties,
     load_cwas,
+    load_grid_points,
     load_places,
     load_states,
     load_zones,
@@ -30,6 +31,8 @@ class Command(BaseCommand):
             load_zones(force=force)
         if load_options["places"] or load_options["all"]:
             load_places(force=force)
+        if load_options["gridpoints"]:
+            load_grid_points(load_options["gridpoints"], force=force)
 
         # Cleanup the cache, if requested.
         if load_options["cleanup"]:
@@ -86,6 +89,11 @@ class Command(BaseCommand):
             default=False,
             help="Cleanup caches after loading data",
         )
+        parser.add_argument(
+            "--gridpoints",
+            type=str,
+            help="Path to the .gpkg file",
+        )
 
     def handle(self, *args, **options):
         """Handle the loadspatial management command."""
@@ -95,11 +103,13 @@ class Command(BaseCommand):
             "zones": options["zones"],
             "counties": options["counties"],
             "places": options["places"],
+            "gridpoints": options["gridpoints"],
             "all": not options["states"]
             and not options["cwas"]
             and not options["zones"]
             and not options["counties"]
-            and not options["places"],
+            and not options["places"]
+            and not options["gridpoints"],
             "force": options["force"],
             "cleanup": options["cleanup"],
         }
