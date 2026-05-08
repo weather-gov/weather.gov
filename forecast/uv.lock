@@ -1,5 +1,5 @@
 version = 1
-revision = 2
+revision = 3
 requires-python = "==3.12.*"
 
 [[package]]
@@ -1496,7 +1496,7 @@ requires-dist = [
     { name = "boto3", specifier = "==1.42.59" },
     { name = "cfenv", specifier = "==0.5.3" },
     { name = "deepmerge", specifier = "==2.0" },
-    { name = "django", specifier = ">=6.0.3" },
+    { name = "django", specifier = ">=6.0.5" },
     { name = "django-allow-cidr", specifier = "==0.8.0" },
     { name = "django-csp", specifier = "==4.0" },
     { name = "django-debug-toolbar", specifier = ">=6.2.0" },

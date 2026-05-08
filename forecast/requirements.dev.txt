@@ -118,9 +118,9 @@ dj-email-url==1.0.6 \
     --hash=sha256:55ffe3329e48f54f8a75aa36ece08f365e09d61f8a209773ef09a1d4760e699a \
     --hash=sha256:cbd08327fbb08b104eac160fb4703f375532e4c0243eb230f5b960daee7a96db
     # via environs
-django==6.0.3 \
-    --hash=sha256:2e5974441491ddb34c3f13d5e7a9f97b07ba03bf70234c0a9c68b79bbb235bc3 \
-    --hash=sha256:90be765ee756af8a6cbd6693e56452404b5ad15294f4d5e40c0a55a0f4870fe1
+django==6.0.5 \
+    --hash=sha256:9d58a7cb49244e74c8e161d5e403a46d6209f1009ba40f5a66d6aa0d0786a8f0 \
+    --hash=sha256:bc6d6872e98a2864c836e42edd644b362db311147dd5aa8d5b82ba7a032f5269
     # via
     #   dj-database-url
     #   django-allow-cidr
