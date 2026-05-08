@@ -301,12 +301,6 @@ def get_point_forecast(lat, lon):
     return _process_interop_point_forecast(data)
 
 
-def get_radar(lat, lon):
-    """Fetch the radar metadata for a given lat/lon."""
-    url = f"/radar/{lat}/{lon}"
-    return _fetch(url)
-
-
 def get_county_data(countyfips):
     """Get county data. Consolidated risk overview and alerts per county.
 

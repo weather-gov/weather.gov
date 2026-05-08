@@ -125,7 +125,6 @@ def county_overview(request, countyfips):  # noqa: C901
     wfo = relevant_wfos[0] if relevant_wfos else None
 
     (lon, lat) = county.shape.centroid.coords
-    radar = interop.get_radar(lat, lon)
 
     return render(
         request,
@@ -139,9 +138,10 @@ def county_overview(request, countyfips):  # noqa: C901
                 "briefings": briefings,
                 "weather_stories": weather_stories,
                 "county_label": county.label,
-                "radar": radar,
                 "primary_wfo": wfo or None,
                 "wfo_codes": wfo_codes,
+                "bounds": county_data["county"].get("bounds", None),
+                "radar": { "radarMetadata": {} },
             },
         },
     )

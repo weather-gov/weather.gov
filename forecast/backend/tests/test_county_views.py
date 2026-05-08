@@ -155,8 +155,7 @@ class TestCountyViews(TestCase):
         self.assertEqual(counties[2], self.county3)
 
     @mock.patch("backend.interop.get_county_data")
-    @mock.patch("backend.interop.get_radar")
-    def test_overview_link_to_county_risk_overview(self, mock_get_radar, mock_get_county_data):
+    def test_overview_link_to_county_risk_overview(self, mock_get_county_data):
         """Test that county overview links to detailed risk analysis."""
         mock_get_county_data.return_value = {
             "riskOverview": self.ghwo,
@@ -166,7 +165,6 @@ class TestCountyViews(TestCase):
             "weatherstories": [],
             "briefings": [],
         }
-        mock_get_radar.return_value = {"radarMetadata": {}}
 
         response = self.client.get(reverse("county_overview", kwargs={"countyfips": "44444"}))
         self.assertTemplateUsed(response, "weather/county/overview.html")
@@ -174,8 +172,7 @@ class TestCountyViews(TestCase):
         self.assertContains(response, link)
 
     @mock.patch("backend.interop.get_county_data")
-    @mock.patch("backend.interop.get_radar")
-    def test_overview_without_timezone(self, mock_get_radar, mock_get_county_data):
+    def test_overview_without_timezone(self, mock_get_county_data):
         """Test the overview view without timezone."""
         mock_get_county_data.return_value = {
             "riskOverview": self.ghwo,
@@ -185,7 +182,6 @@ class TestCountyViews(TestCase):
             "weatherstories": [],
             "briefings": [],
         }
-        mock_get_radar.return_value = {"radarMetadata": {}}
 
         response = self.client.get(reverse("county_overview", kwargs={"countyfips": "44444"}))
         self.assertTemplateUsed(response, "weather/county/overview.html")
@@ -194,6 +190,7 @@ class TestCountyViews(TestCase):
             {
                 "alert_levels": [],
                 "alert_level_days": [],
+                "bounds": None,
                 "county_label": "Anansi County, GH",
                 "primary_wfo": self.wfo,
                 "public": {
@@ -214,8 +211,7 @@ class TestCountyViews(TestCase):
         )
 
     @mock.patch("backend.interop.get_county_data")
-    @mock.patch("backend.interop.get_radar")
-    def test_overview_with_timezone(self, mock_get_radar, mock_get_county_data):
+    def test_overview_with_timezone(self, mock_get_county_data):
         """Test the overview view with timezone."""
         mock_get_county_data.return_value = {
             "riskOverview": self.ghwo,
@@ -225,7 +221,6 @@ class TestCountyViews(TestCase):
             "weatherstories": [],
             "briefings": [],
         }
-        mock_get_radar.return_value = {"radarMetadata": {}}
 
         response = self.client.get(reverse("county_overview", kwargs={"countyfips": "55555"}))
         self.assertTemplateUsed(response, "weather/county/overview.html")
@@ -234,6 +229,7 @@ class TestCountyViews(TestCase):
             {
                 "alert_levels": [],
                 "alert_level_days": [],
+                "bounds": None,
                 "county_label": "Keelut Census Area, AK",
                 "primary_wfo": self.wfo,
                 "public": {
@@ -255,8 +251,7 @@ class TestCountyViews(TestCase):
 
     @disable_logging_for_quieter_tests
     @mock.patch("backend.interop.get_county_data")
-    @mock.patch("backend.interop.get_radar")
-    def test_overview_with_no_wfo(self, mock_get_radar, mock_get_county_data):
+    def test_overview_with_no_wfo(self, mock_get_county_data):
         """Test the overview view where the county doesn't map to a WFO.
 
         This is an error condition, but we don't want it to crash the UX.
@@ -269,7 +264,6 @@ class TestCountyViews(TestCase):
             "weatherstories": [],
             "briefings": [],
         }
-        mock_get_radar.return_value = {"radarMetadata": {}}
 
         response = self.client.get(reverse("county_overview", kwargs={"countyfips": "33333"}))
         self.assertTemplateUsed(response, "weather/county/overview.html")
@@ -278,6 +272,7 @@ class TestCountyViews(TestCase):
             {
                 "alert_level_days": [],
                 "alert_levels": [],
+                "bounds": None,
                 "county_label": "Sanderson Sisters County, MA",
                 "public": {
                     "alerts": {"items": []},
@@ -297,8 +292,7 @@ class TestCountyViews(TestCase):
 
     @disable_logging_for_quieter_tests
     @mock.patch("backend.interop.get_county_data")
-    @mock.patch("backend.interop.get_radar")
-    def test_alert_level_to_day_mapping(self, mock_get_radar, mock_get_county_data):
+    def test_alert_level_to_day_mapping(self, mock_get_county_data):
         """Tests that the levels for alerts on given days are mapped correctly."""
         mock_get_county_data.return_value = {
             "county": {"wfos": ["YND"]},
@@ -334,7 +328,6 @@ class TestCountyViews(TestCase):
                 },  # warning, watch
             ],
         }
-        mock_get_radar.return_value = {"radarMetadata": {}}
 
         response = self.client.get(reverse("county_overview", kwargs={"countyfips": "33333"}))
 
@@ -368,8 +361,7 @@ class TestCountyViews(TestCase):
 
     @disable_logging_for_quieter_tests
     @mock.patch("backend.interop.get_county_data")
-    @mock.patch("backend.interop.get_radar")
-    def test_alert_levels_only_present(self, mock_get_radar, mock_get_county_data):
+    def test_alert_levels_only_present(self, mock_get_county_data):
         """Tests that only present alert levels are returned."""
         mock_get_county_data.return_value = {
             "county": {"wfos": ["YND"]},
@@ -384,7 +376,6 @@ class TestCountyViews(TestCase):
             },
             "alertDays": [],
         }
-        mock_get_radar.return_value = {"radarMetadata": {}}
 
         response = self.client.get(reverse("county_overview", kwargs={"countyfips": "33333"}))
 

@@ -98,17 +98,50 @@ const setupRadar = () => {
 
   updateRadarTimestamps(container);
 
-  const lat = Number.parseFloat(container.getAttribute("lat"));
-  const lon = Number.parseFloat(container.getAttribute("lon"));
-
-  const point = [lon, lat];
-
   const bookmark = {
-    agenda: { id: "weather", zoom: 7, center: point, location: point },
+    agenda: {
+      id: "weather",
+    },
     opacity: {
       alerts: 0,
     },
   };
+
+  const bounds = container.getAttribute("bounds");
+  if (bounds) {
+    try {
+      const boundingCoordinates = JSON.parse(bounds);
+      bookmark.agenda = {
+        custom: {
+          id: "radar",
+          layers: ["activearea", "national"],
+          area: {
+            fitMaxZoom: 20,
+            fitPadding: [160, 160, 160, 160],
+            polygon: boundingCoordinates,
+            style: {
+              stroke: { color: "transparent" },
+              fill: { color: "transparent" },
+            },
+          },
+        },
+      };
+    } catch (e) {
+      console.error(`Could not parse bounds for radar geometry`);
+      return;
+    }
+  } else {
+    const lat = Number.parseFloat(container.getAttribute("lat"));
+    const lon = Number.parseFloat(container.getAttribute("lon"));
+
+    const point = [lon, lat];
+    bookmark.agenda = {
+      id: "weather",
+      zoom: 7,
+      center: point,
+      location: point,
+    };
+  }
 
   const options = {
     settings: {

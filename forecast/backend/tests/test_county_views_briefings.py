@@ -106,8 +106,7 @@ class TestCountyViewBriefings(TestCase):
         self.ghwo = {"days": [], "fips": "12345"}
 
     @mock.patch("backend.interop.get_county_data")
-    @mock.patch("backend.interop.get_radar")
-    def test_overview_with_one_briefing(self, mock_get_radar, mock_get_county_data):
+    def test_overview_with_one_briefing(self, mock_get_county_data):
         """Test the overview view with just one briefing."""
         mock_get_county_data.return_value = {
             "riskOverview": self.ghwo,
@@ -117,7 +116,6 @@ class TestCountyViewBriefings(TestCase):
             "weatherstories": [],
             "briefings": self.basic_briefing,
         }
-        mock_get_radar.return_value = {"radarMetadata": {}}
 
         expected = [briefing["briefing"] for briefing in self.basic_briefing]
 
@@ -127,8 +125,7 @@ class TestCountyViewBriefings(TestCase):
         self.assertEqual(response.context["data"]["briefings"], expected)
 
     @mock.patch("backend.interop.get_county_data")
-    @mock.patch("backend.interop.get_radar")
-    def test_overview_with_multiple_briefings(self, mock_get_radar, mock_get_county_data):
+    def test_overview_with_multiple_briefings(self, mock_get_county_data):
         """Test the overview with multiple briefings."""
         mock_get_county_data.return_value = {
             "riskOverview": self.ghwo,
@@ -138,7 +135,6 @@ class TestCountyViewBriefings(TestCase):
             "weatherstories": [],
             "briefings": [briefing["briefing"] for briefing in self.multiple_briefings],
         }
-        mock_get_radar.return_value = {"radarMetadata": {}}
 
         expected = [briefing["briefing"] for briefing in self.multiple_briefings]
 
@@ -148,8 +144,7 @@ class TestCountyViewBriefings(TestCase):
         self.assertEqual(response.context["data"]["briefings"], expected)
 
     @mock.patch("backend.interop.get_county_data")
-    @mock.patch("backend.interop.get_radar")
-    def test_overview_with_empty_briefings_list(self, mock_get_radar, mock_get_county_data):
+    def test_overview_with_empty_briefings_list(self, mock_get_county_data):
         """Test the overview with empty briefings."""
         mock_get_county_data.return_value = {
             "riskOverview": self.ghwo,
@@ -159,7 +154,6 @@ class TestCountyViewBriefings(TestCase):
             "weatherstories": [],
             "briefings": [],
         }
-        mock_get_radar.return_value = {"radarMetadata": {}}
 
         response = self.client.get(reverse("county_overview", kwargs={"countyfips": "11111"}))
         self.assertTemplateUsed(response, "weather/county/overview.html")
@@ -170,8 +164,7 @@ class TestCountyViewBriefings(TestCase):
         )
 
     @mock.patch("backend.interop.get_county_data")
-    @mock.patch("backend.interop.get_radar")
-    def test_overview_with_null_briefing(self, mock_get_radar, mock_get_county_data):
+    def test_overview_with_null_briefing(self, mock_get_county_data):
         """
         Test the overview with briefing data that has a null response.
 
@@ -186,7 +179,6 @@ class TestCountyViewBriefings(TestCase):
             "weatherstories": [],
             "briefings": [{"briefing": None}],
         }
-        mock_get_radar.return_value = {"radarMetadata": {}}
 
         response = self.client.get(reverse("county_overview", kwargs={"countyfips": "11111"}))
         self.assertTemplateUsed(response, "weather/county/overview.html")
@@ -197,8 +189,7 @@ class TestCountyViewBriefings(TestCase):
         )
 
     @mock.patch("backend.interop.get_county_data")
-    @mock.patch("backend.interop.get_radar")
-    def test_overview_with_error_in_briefings(self, mock_get_radar, mock_get_county_data):
+    def test_overview_with_error_in_briefings(self, mock_get_county_data):
         """Test the overview with an error in the briefings."""
         mock_get_county_data.return_value = {
             "riskOverview": self.ghwo,
@@ -208,7 +199,6 @@ class TestCountyViewBriefings(TestCase):
             "weatherstories": [],
             "briefings": self.errored_briefing,
         }
-        mock_get_radar.return_value = {"radarMetadata": {}}
 
         response = self.client.get(reverse("county_overview", kwargs={"countyfips": "11111"}))
         self.assertTemplateUsed(response, "weather/county/overview.html")
