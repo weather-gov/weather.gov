@@ -10,7 +10,11 @@
   {% include "weather/partials/radar-timestamp.html" with radar_metadata=radar_metadata %}
   <div class="grid-container padding-0 bg-white shadow-1">
     <div class="grid-row wx-radar-container position-relative">
-      <wx-radar class="grid-col-12" lat="{{ point.latitude }}" lon="{{ point.longitude }}" data-timezone="{{ place.timezone }}">
+      {% if bounds %}
+        <wx-radar class="grid-col-12" bounds="{{bounds}}" data-timezone="{{ place.timezone }}">
+      {% else %}
+          <wx-radar class="grid-col-12" lat="{{ point.latitude }}" lon="{{ point.longitude }}" data-timezone="{{ place.timezone }}">
+      {% endif %}
       <div id="wx-radar-container"></div>
       </wx-radar>
       <div class="position-absolute top-0 right-0 height-full">

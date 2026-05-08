@@ -41,26 +41,26 @@
     <h2 class="text-normal text-primary-darker margin-bottom-2">{{ "county.heading.alerts.01" | t }}</h2>
     <div class="grid-col-12 desktop:grid-col-12">
       <wx-tabs id="county-alerts">
-      <div class="usa-button-group usa-button-group--segmented overflow-x-auto"
-           role="tablist">
-        <button id="alert-day-all-button"
-                type="button"
-                class="usa-button padding-x-105"
-                role="tab"
-                data-alert-day="all"
-                aria-controls="alert-day"
-                aria-selected="true">{{ "county.alert-tabs.day.all.01" | t }}</button>
-        {% for day in data.public.alertDays %}
-          <button id="alert-day-{{ forloop.counter }}-button"
+        <div class="usa-button-group usa-button-group--segmented overflow-x-auto"
+             role="tablist">
+          <button id="alert-day-all-button"
                   type="button"
                   class="usa-button padding-x-105"
                   role="tab"
-                  data-alert-day="{{ forloop.counter }}"
-                  data-alert-levels="{{ data.alert_level_days | item_at_index:forloop.counter0 }}"
+                  data-alert-day="all"
                   aria-controls="alert-day"
-                  aria-selected="false">{{ "county.alert-tabs.day." | add:day.day | add:".01" | t }}</button>
-        {% endfor %}
-      </div>
+                  aria-selected="true">{{ "county.alert-tabs.day.all.01" | t }}</button>
+          {% for day in data.public.alertDays %}
+            <button id="alert-day-{{ forloop.counter }}-button"
+                    type="button"
+                    class="usa-button padding-x-105"
+                    role="tab"
+                    data-alert-day="{{ forloop.counter }}"
+                    data-alert-levels="{{ data.alert_level_days | item_at_index:forloop.counter0 }}"
+                    aria-controls="alert-day"
+                    aria-selected="false">{{ "county.alert-tabs.day." | add:day.day | add:".01" | t }}</button>
+          {% endfor %}
+        </div>
       </wx-tabs>
       <div id="alert-day"
            role="tabpanel"
@@ -92,14 +92,11 @@
       </div>
     </div>
   </div>
-  <div {% if data.radar and not data.radar.error %}id="radar-enable"{% endif %}
-       class="grid-container margin-bottom-4">
-    <div class="grid-row">
-      {% if data.radar and not data.radar.error %}
-        <div class="desktop:grid-col-6 wx-radar-wrapper">
-          {% radar place=data.radar.place.fullName point=data.radar.point radar_metadata=data.radar.radarMetadata heading_level="h2" heading_class="text-normal text-primary-darker padding-x-2 tablet:padding-x-0 margin-top-3 margin-bottom-2" %}
-        </div>
-      {% endif %}
+  <div id="radar-enable" class="grid-container margin-bottom-4">
+    <div class="grid-row grid-gap">
+      <div class="desktop:grid-col-6 wx-radar-wrapper margin-bottom-1 desktop:margin-bottom-0">
+        {% radar bounds=data.bounds|json_encode heading_level="h2" heading_class="text-normal text-primary-darker padding-x-2 tablet:padding-x-0 margin-top-3 margin-bottom-2" %}
+      </div>
       {% include 'weather/county/wfo-promo.html' %}
     </div>
   </div>

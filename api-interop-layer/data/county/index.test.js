@@ -37,6 +37,8 @@ describe("county data index", () => {
 
   beforeEach(() => {
     sandbox.resetHistory();
+    sandbox.resetBehavior();
+    openDatabase.resolves(db);
   });
 
   after(async () => {
@@ -45,7 +47,7 @@ describe("county data index", () => {
   });
 
   it("handles an unexpected error", async () => {
-    db.query.rejects(new Error("Oh noes"));
+    db.query.rejects(new Error("Oh noessss"));
 
     const actual = await getCountyData("yonder");
 
@@ -84,6 +86,18 @@ describe("county data index", () => {
             shape: `{ "type": "oblong" }`,
             primarywfo: 37,
             wfos: ["FRA"],
+            bounds: JSON.stringify({
+              type: "Polygon",
+              coordinates: [
+                [
+                  [0, 0],
+                  [0, 1],
+                  [1, 1],
+                  [1, 0],
+                  [0, 0],
+                ],
+              ],
+            }),
           },
         ],
       });
@@ -116,6 +130,13 @@ describe("county data index", () => {
           shape: { type: "oblong" },
           primarywfo: "FRA",
           wfos: ["FRA"],
+          bounds: [
+            [0, 0],
+            [1, 0],
+            [1, 1],
+            [0, 1],
+            [0, 0],
+          ],
         },
         riskOverview: "mercy sakes",
         alerts: { items: [] },
@@ -231,6 +252,18 @@ describe("county data index", () => {
             shape: `{ "type": "oblong" }`,
             primarywfo: 37,
             wfos: ["FRA"],
+            bounds: JSON.stringify({
+              type: "Polygon",
+              coordinates: [
+                [
+                  [0, 0],
+                  [0, 1],
+                  [1, 1],
+                  [1, 0],
+                  [0, 0],
+                ],
+              ],
+            }),
           },
         ],
       });
@@ -262,6 +295,18 @@ describe("county data index", () => {
             shape: `{ "type": "oblong" }`,
             primarywfo: 37,
             wfos: wfos,
+            bounds: JSON.stringify({
+              type: "Polygon",
+              coordinates: [
+                [
+                  [0, 0],
+                  [0, 1],
+                  [1, 1],
+                  [1, 0],
+                  [0, 0],
+                ],
+              ],
+            }),
           },
         ],
       });
@@ -296,6 +341,18 @@ describe("county data index", () => {
             shape: `{ "type": "oblong" }`,
             primarywfo: 37,
             wfos: ["FRA"],
+            bounds: JSON.stringify({
+              type: "Polygon",
+              coordinates: [
+                [
+                  [0, 0],
+                  [0, 1],
+                  [1, 1],
+                  [1, 0],
+                  [0, 0],
+                ],
+              ],
+            }),
           },
         ],
       });
@@ -352,6 +409,18 @@ describe("county data index", () => {
             shape: `{ "type": "oblong" }`,
             primarywfo: 37,
             wfos: wfos,
+            bounds: JSON.stringify({
+              type: "Polygon",
+              coordinates: [
+                [
+                  [0, 0],
+                  [0, 1],
+                  [1, 1],
+                  [1, 0],
+                  [0, 0],
+                ],
+              ],
+            }),
           },
         ],
       });

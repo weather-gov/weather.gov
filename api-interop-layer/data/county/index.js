@@ -89,6 +89,9 @@ export const getCountyData = async (fips) => {
               ${SPATIAL_PROJECTION.WGS84}
             )
           ) AS shape,
+          ST_AsGeoJSON(
+            ST_Envelope(shape)
+          ) as bounds,
           (SELECT name FROM weathergov_geo_states a WHERE a.state=b.st) as statename,
           ARRAY(SELECT cwas.wfo as wfo  FROM weathergov_geo_cwas cwas
                        JOIN weathergov_geo_counties_cwas jt ON cwas.id=jt.weathercountywarningareas_id
@@ -105,6 +108,9 @@ export const getCountyData = async (fips) => {
             countyfips: fips,
             statefips: fips.slice(0, 2),
             shape: JSON.parse(rows[0].shape),
+            bounds: JSON.parse(rows[0].bounds).coordinates[0].map(
+              ([lon, lat]) => [lat, lon],
+            ),
           };
         }
       });

@@ -439,6 +439,7 @@ class TestWeatherPartials(TestCase):
             {
                 "place": "Bob's",
                 "point": "Burgers",
+                "bounds": None,
                 "radar_metadata": "ping? PONG!",
                 "intensities": weather_partials.RADAR_INTENSITIES,
                 "heading_level": "h2",

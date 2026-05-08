@@ -156,9 +156,10 @@ def wind_speed_direction(**kwargs):
 @register.inclusion_tag("weather/partials/radar.html")
 def radar(**kwargs):
     """Render the radar."""
-    place = kwargs["place"]
-    point = kwargs["point"]
-    radar_metadata = kwargs["radar_metadata"]
+    place = kwargs.get("place", None)
+    point = kwargs.get("point", None)
+    bounds = kwargs.get("bounds", None)
+    radar_metadata = kwargs.get("radar_metadata")
     radar_heading_level = "h2"  # default value
     if "heading_level" in kwargs:
         radar_heading_level = kwargs["heading_level"]
@@ -167,6 +168,7 @@ def radar(**kwargs):
     return {
         "place": place,
         "point": point,
+        "bounds": bounds,
         "radar_metadata": radar_metadata,
         "intensities": RADAR_INTENSITIES,
         "heading_level": radar_heading_level,
