@@ -68,6 +68,7 @@ class SatelliteVideo extends HTMLElement {
         hour: "numeric",
         minute: "2-digit",
         timeZone: timezone,
+        timeZoneName: "short",
       };
 
       const dayOptions = {
