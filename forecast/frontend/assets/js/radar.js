@@ -10,17 +10,26 @@ const toggleMapExpand = (() => {
     const container = event.target.closest(".wx-radar-container");
     const wrapper = event.target.closest(".wx-radar-wrapper");
     const svgUse = document.querySelector("button.wx-radar-expand svg use");
+    const isLargeMap = container.classList.contains("wx-large-map");
 
     expanded = !expanded;
 
     if (expanded) {
       container.classList.add("wx-radar-container__expanded");
-      wrapper.classList.remove("desktop:grid-col-6");
-      wrapper.classList.add("desktop:grid-col-12");
     } else {
       container.classList.remove("wx-radar-container__expanded");
-      wrapper.classList.add("desktop:grid-col-6");
-      wrapper.classList.remove("desktop:grid-col-12");
+    }
+
+    // on small maps, the expand button widens the map; on large maps,
+    // (like state) the expand button changes the aspect ratio (via CSS)
+    if (!isLargeMap) {
+      if (expanded) {
+        wrapper.classList.remove("desktop:grid-col-6");
+        wrapper.classList.add("desktop:grid-col-12");
+      } else {
+        wrapper.classList.add("desktop:grid-col-6");
+        wrapper.classList.remove("desktop:grid-col-12");
+      }
     }
 
     const descriptors = Array.from(

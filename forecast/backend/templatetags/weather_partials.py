@@ -164,6 +164,7 @@ def radar(**kwargs):
     if "heading_level" in kwargs:
         radar_heading_level = kwargs["heading_level"]
     radar_heading_class = kwargs.get("heading_class", None)
+    large_map = "large_map" in kwargs
 
     return {
         "place": place,
@@ -173,6 +174,7 @@ def radar(**kwargs):
         "intensities": RADAR_INTENSITIES,
         "heading_level": radar_heading_level,
         "heading_class": radar_heading_class,
+        "large_map": large_map,
     }
 
 
