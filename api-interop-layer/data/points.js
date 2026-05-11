@@ -9,6 +9,13 @@ import { saveToRedis, getFromRedis } from "../redis.js";
 const pointLogger = logger.child({ subsystem: "point" });
 
 export const DEFAULT_POINTS_CACHE_TTL = 120;
+const POSTGRES_UNDEFINED_TABLE = "42P01";
+
+/**
+ * Determine whether or not to use internal wfo gridpoint
+ * lookups based on the presence of an environment variable.
+ */
+const USE_INTERNAL_LOOKUP = process.env.INTERNAL_GRIDPOINT_LOOKUP === "true";
 
 export const getClosestPlace = async (latitude, longitude) => {
   const pointGeom = `ST_GEOMFROMTEXT('POINT(${longitude} ${latitude})',${SPATIAL_PROJECTION.WGS84})`;
@@ -120,27 +127,38 @@ export const getPointData = async (lat, lon) => {
   const point = { latitude, longitude };
   pointLogger.trace(point, "place");
 
-  const pointsUrl = `/points/${latitude},${longitude}`;
-  const foundInCache = await getFromRedis(pointsUrl);
+  let grid = false;
+  if (USE_INTERNAL_LOOKUP) {
+    grid = await getInternalGridData(latitude, longitude);
+  }
 
-  // if we have a cache hit then wrap the hit into a promise, otherwise create a
-  // promise to call the actual endpoint. in either case we extract the data
-  // (taking special care to separate out the astronomical data)
-  const initialPointsPromise = foundInCache
-    ? new Promise((resolve) => resolve(foundInCache))
-    : createPointsPromise(pointsUrl);
-  const pointsPromise = initialPointsPromise.then((gridData) => {
+  // If 'grid.outOfBounds' is true, our internal DB confirmed the point is
+  // more than 3.5km from any grid center. We stop here and return a 404 without hitting the NWS API
+  // We only fall back to the NWS API if the internal check failed due to code errors
+  if (!grid || (grid.error && !grid.outOfBounds)) {
+    const pointsUrl = `/points/${latitude},${longitude}`;
+    const gridData =
+      (await getFromRedis(pointsUrl)) || (await createPointsPromise(pointsUrl));
+
     if (gridData.error) {
-      return gridData;
+      grid = gridData;
+    } else {
+      point.astronomicalData = gridData.properties?.astronomicalData;
+      grid = {
+        wfo: gridData.properties?.gridId,
+        x: gridData.properties?.gridX,
+        y: gridData.properties?.gridY,
+        geometry: gridData.geometry,
+        source: "nws-api",
+      };
     }
-    point.astronomicalData = gridData.properties?.astronomicalData;
-    return {
-      wfo: gridData.properties?.gridId,
-      x: gridData.properties?.gridX,
-      y: gridData.properties?.gridY,
-      geometry: gridData.geometry,
+  } else if (grid?.outOfBounds) {
+    grid = {
+      error: true,
+      outOfBounds: true,
+      status: 404,
     };
-  });
+  }
 
   const placePromise = getClosestPlace(latitude, longitude);
 
@@ -158,11 +176,7 @@ export const getPointData = async (lat, lon) => {
     ),
   );
 
-  const [grid, place, isMarine] = await Promise.all([
-    pointsPromise,
-    placePromise,
-    isMarinePromise,
-  ]);
+  const [place, isMarine] = await Promise.all([placePromise, isMarinePromise]);
 
   if (grid.wfo === null) {
     // If we did not get an error but the WFO is empty, then it's within our
@@ -172,4 +186,51 @@ export const getPointData = async (lat, lon) => {
   }
 
   return { point, place, grid, isMarine: isMarine.rows.length > 0 };
+};
+
+const getInternalGridData = async (latitude, longitude) => {
+  try {
+    const db = await openDatabase();
+    const pointGeom = `ST_SetSRID(ST_Point(${longitude}, ${latitude}), 4326)`;
+
+    // THRESHOLD: 3500 meters. This covers the ~2 mile max distance in Alaska + truncation error.
+    const MAX_DISTANCE_METERS = 3500;
+
+    const query = `
+      SELECT UPPER(cwa) as wfo, x, y, ST_AsGeoJSON(point) as geometry
+      FROM weathergov_geo_gridpoints
+      WHERE ST_DWithin(point::geography, ${pointGeom}::geography, ${MAX_DISTANCE_METERS})
+      ORDER BY point <-> ${pointGeom}
+      LIMIT 1
+    `;
+
+    const result = await db.query(query);
+
+    if (result.rows?.length > 0) {
+      const row = result.rows[0];
+      return {
+        wfo: row.wfo,
+        x: row.x,
+        y: row.y,
+        // We parse here because PostGIS returns a string; NWS API returns an object.
+        geometry: JSON.parse(row.geometry),
+        source: "internal",
+      };
+    }
+
+    // Explicitly out of bounds for the internal dataset
+    return { error: true, outOfBounds: true };
+  } catch (err) {
+    if (err.code === POSTGRES_UNDEFINED_TABLE) {
+      pointLogger.warn(
+        "WeatherGridPoints table not found, falling back to NWS API",
+      );
+    } else {
+      pointLogger.error(
+        { err },
+        "Unexpected error querying internal grid points",
+      );
+    }
+    return { error: true }; // Fall back to /points on any DB error
+  }
 };
