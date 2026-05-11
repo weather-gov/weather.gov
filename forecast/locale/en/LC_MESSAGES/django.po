@@ -865,9 +865,6 @@ msgstr "%(event)s %(day)s (#%(index)s)"
 msgid "alerts.titles.without-index.01"
 msgstr "%(event)s %(day)s"
 
-msgid "county.overview.link-to-ghwo-analysis.01"
-msgstr "See the detailed risk analysis"
-
 msgid "county.briefing.header.01"
 msgid_plural "county.briefing.header.01-plural"
 msgstr[0] "Briefing"
@@ -900,6 +897,9 @@ msgstr "{wfo_name} Forecast Office"
 msgid "county.wfo-promo.labels.phone.01"
 msgstr "Phone"
 
+msgid "ghwo.overview.link-to-ghwo-analysis.01"
+msgstr "See the detailed risk analysis"
+
 msgid "ghwo.summary.error.not-found.01"
 msgstr "This area doesn't have daily risk summary data. Please try searching for a different location."
 
@@ -922,6 +922,9 @@ msgstr "Seven-day weather risk overview"
 
 msgid "ghwo.table.caption.description.01"
 msgstr "Daily weather risk summary"
+
+msgid "ghwo.table.caption.detailed-description.01"
+msgstr "The graphic shows the daily risk summary for 7 days. Daily risk is based on highest risk factor for that day."
 
 msgid "ghwo.table.details.header.01"
 msgstr "What factors are driving the risk?"

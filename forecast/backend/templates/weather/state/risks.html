@@ -2,33 +2,37 @@
 {% comment %}
 -- Template purpose:
 --   Display the 7-day weather risk overview (GHWO) for a state.
--- Url: https://beta.weather.gov/county/MN/risks/
+-- Url: https://beta.weather.gov/state/MN/risks/
 {% endcomment %}
-{% block head_js %}{{ state.public|json_script:"state-data" }}{% endblock %}
+{% block head_link %}
+  <link rel="prefetch" href="{% url 'state_alerts' state_abbrev %}" />
+  <link rel="prefetch" href="{% url 'state_radar' state_abbrev %}" />
+  <link rel="prefetch" href="{% url 'state_analysis' state_abbrev %}" />
+{% endblock %}
 {% block page_end_js %}
   <script type="module"
           src="{% static 'js/state/risks.html.js' %}"
           type="module"></script>
 {% endblock %}
 {% block page_content %}
-    <div class="height-full display-flex flex-column">
+  <div class="height-full display-flex flex-column">
     {% include "weather/state/name.html" with state_name=state.name %}
     <wx-tabbed-nav class="display-block position-relative flex-1" id="state-page-tabbed-nav">
     {% include "weather/state/tabs.html" with url_name=request.resolver_match.url_name %}
-    <div class="bg-base-lightest padding-top-3 padding-bottom-4">
-      <div class="wx-focus-offset-205"
-           id="risks"
-           aria-labelledby="risks-tab-button"
-           tabindex="0">
-        <div class="grid-container margin-top-2 margin-bottom-8 desktop:margin-bottom-10">
-          <h2 class="text-normal text-primary-darker">{{ "state.heading.risks.01" | t }}</h2>
-          <div class="grid-col-12 desktop:grid-col-12">
-              <p>Risks</p>
-          </div>
+    <div class="bg-white padding-bottom-4">
+      <div class="wx-focus-offset-205" id="risks" aria-labelledby="risks-tab-button" tabindex="0">
+        <div class="grid-container">
+          {% include "weather/partials/risk-overview-summary.html" with ghwo=data.public.riskOverview for_state=True %}
+          {% if not data.public.riskOverview.error %}
+            <div class="margin-top-2">
+              <a href="{% url 'state_risk_overview' state_code=state.state %}"
+                  class="usa-link">{{ "ghwo.overview.link-to-ghwo-analysis.01" | t }}</a>
+            </div>
+          {% endif %}
         </div>
       </div>
     </div>
     </wx-tabbed-nav>
     {% include 'weather/partials/state-links.html' with state_name=state.name %}
-    </div>
-  {% endblock %}
+  </div>
+{% endblock %}
