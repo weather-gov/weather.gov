@@ -63,8 +63,22 @@ class TestStateViews(TestCase):
         self.assertEqual(response.context["state_name"], self.state_fr.name)
         self.assertEqual(response.status_code, 200)
 
-    def test_risks(self):
+    @mock.patch("backend.interop.get_ghwo_data_for_state")
+    def test_risks(self, mock_get_ghwo_data_for_state):
         """Test the risks page."""
+        mock_get_ghwo_data_for_state.return_value = {
+            "composite": {
+                "days": [
+                    {"max": 4, "scaled": 1, "timestamp": "2026-05-06T15:00:00-05:00"},
+                    {"max": 4, "scaled": 1, "timestamp": "2026-05-07T07:00:00-05:00"},
+                    {"max": 1, "scaled": 0.25, "timestamp": "2026-05-08T07:00:00-05:00"},
+                    {"max": 3, "scaled": 0.75, "timestamp": "2026-05-09T07:00:00-05:00"},
+                    {"max": 3, "scaled": 0.75, "timestamp": "2026-05-10T07:00:00-05:00"},
+                    {"max": 1, "scaled": 0.33, "timestamp": "2026-05-11T07:00:00-05:00"},
+                    {"max": 1, "scaled": 0.33, "timestamp": "2026-05-12T07:00:00-05:00"},
+                ],
+            },
+        }
         response = self.client.get(reverse("state_risks", kwargs={"state": "FR"}))
         self.assertTemplateUsed(response, "weather/state/risks.html")
         self.assertEqual(response.context["state_abbrev"], self.state_fr.state)
