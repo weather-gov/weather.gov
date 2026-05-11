@@ -105,68 +105,77 @@ const isObservationUrl = (url) => {
 };
 
 /**
+ * Calculate the big second batch for the forecast endpoint. We need to do extra
+ * calculation when it comes to the observation station calls.
+ */
+const calculateObservationTimings = (batch) => {
+  const result = { batch };
+  // Observation timings are now determined based on annotations
+  // made to the corresponding timing objects in /obs/index.js
+  // Since we request all observations, but only conditionally
+  // await/care about some of them, we have annotated the timings
+  // with a boolean `awaited` property that tells us if they are relevant
+  // to the overall timing considerations.
+  const observationTimings = batch.filter((item) => {
+    return item.url.startsWith("/station") && item.awaited === true;
+  });
+  const maxObservation =
+    observationTimings.length > 0
+      ? Math.max(...observationTimings.map((timingData) => timingData.timing))
+      : 0;
+  const stationsListTiming = batch.find((item) => {
+    return item.url.endsWith("limit=3");
+  });
+  const stationsListVal = stationsListTiming ? stationsListTiming.timing : 0;
+  const totalObservationTiming = stationsListVal + maxObservation;
+  let timings = batch
+    .filter((batchItem) => {
+      return !isObservationUrl(batchItem.url);
+    })
+    .map((batchItem) => {
+      return batchItem.timing;
+    });
+  timings = [...timings, totalObservationTiming];
+  result.max = Math.max(...timings);
+  return result;
+};
+
+/**
+ * Calculate the point timings. We intentionally return an empty array if the
+ * points endpoint is not used so we can collapse the final result.
+ */
+const calculatePointTimings = (batch) => {
+  if (batch.length == 0) {
+    return [];
+  }
+  let timings = batch.map((batchItem) => batchItem.timing);
+  return [
+    {
+      batch,
+      max: Math.max(...timings),
+    },
+  ];
+};
+
+/**
  * Given an array of timing objects, group them into the async
  * batches reflecting how they are called in order. Then compute
  * total batch and overall total API request timings
  */
 export const groupPointBatches = (timings) => {
+  const pointBatch = timings.filter((timing) =>
+    timing.url.startsWith("/point"),
+  );
+  const nonPointBatch = timings.filter(
+    (timing) => !timing.url.startsWith("/point"),
+  );
   let batches = [
-    timings.filter((timing) => {
-      return timing.url.startsWith("/point");
-    }),
-    timings.filter((timing) => {
-      return !timing.url.startsWith("/point");
-    }),
-  ].map((batch, idx) => {
-    const result = { batch };
-    if (idx === 1) {
-      // We are dealing with the big second batch for the
-      // point endpoint. We need to do extra calculation when
-      // it comes to the observation station calls
-
-      // Observation timings are now determined based on annotations
-      // made to the corresponding timing objects in /obs/index.js
-      // Since we request all observations, but only conditionally
-      // await/care about some of them, we have annotated the timings
-      // with a boolean `awaited` property that tells us if they are relevant
-      // to the overall timing considerations.
-      const observationTimings = batch.filter((item) => {
-        return item.url.startsWith("/station") && item.awaited === true;
-      });
-      const maxObservation =
-        observationTimings.length > 0
-          ? Math.max(
-              ...observationTimings.map((timingData) => timingData.timing),
-            )
-          : 0;
-      const stationsListTiming = batch.find((item) => {
-        return item.url.endsWith("limit=3");
-      });
-      const stationsListVal = stationsListTiming
-        ? stationsListTiming.timing
-        : 0;
-      const totalObservationTiming = stationsListVal + maxObservation;
-      let timings = batch
-        .filter((batchItem) => {
-          return !isObservationUrl(batchItem.url);
-        })
-        .map((batchItem) => {
-          return batchItem.timing;
-        });
-      timings = [...timings, totalObservationTiming];
-      result.max = Math.max(...timings);
-    } else {
-      result.max = timings.length > 0 ? Math.max(...timings) : 0;
-    }
-
-    return result;
-  });
-
+    ...calculatePointTimings(pointBatch),
+    calculateObservationTimings(nonPointBatch),
+  ];
   return {
     batches,
-    total: batches.reduce((acc, batch) => {
-      return acc + batch.max;
-    }, 0),
+    total: batches.reduce((acc, batch) => acc + batch.max, 0),
   };
 };
 
