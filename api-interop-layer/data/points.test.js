@@ -12,6 +12,7 @@ describe("point method", () => {
     sandbox;
 
   before(async () => {
+    process.env.INTERNAL_GRIDPOINT_LOOKUP = "true";
     sandbox = sinon.createSandbox();
 
     openDatabase = sandbox.stub();
@@ -53,6 +54,15 @@ describe("point method", () => {
     connectionPool.request.resolves(response);
     response.body.dump.resolves();
     response.headers = { "content-type": "application/json" };
+
+    db.query.callsFake(async (sql) => {
+      if (sql.includes("weathergov_geo_gridpoints")) {
+        const err = new Error("Table not found");
+        err.code = "42P01";
+        throw err;
+      }
+      return { rows: [] };
+    });
   });
 
   after(async () => {
@@ -62,11 +72,12 @@ describe("point method", () => {
 
   it("truncates lat/lon to 3 decimal places", async () => {
     connectionPool.request.resolves(errorResponse);
-    db.query.resolves({ rows: [] });
 
     await points(1.1234567, 9.876543);
 
     const call = connectionPool.request.getCall(0);
+    // If this is null, the code didn't reach the API.
+    expect(call).to.not.be.null;
     const requestPath = call.args[0].path;
 
     expect(requestPath).to.equal(`/points/1.123,9.877`);
@@ -74,7 +85,6 @@ describe("point method", () => {
 
   it("passes along errors from the API, no location", async () => {
     connectionPool.request.resolves(errorResponse);
-    db.query.resolves({ rows: [] });
 
     const actual = await points(1, 2);
 
@@ -87,14 +97,6 @@ describe("point method", () => {
   });
 
   it("returns an out-of-bounds grid for points not covered by the API", async () => {
-    connectionPool.request.resolves({
-      statusCode: 404,
-      headers: { "content-type": "application/json" },
-      body: {
-        dump: sandbox.stub().resolves(),
-        text: sandbox.stub().resolves(""),
-      },
-    });
     db.query.resolves({ rows: [] });
 
     const actual = await points(1, 2);
@@ -116,7 +118,10 @@ describe("point method", () => {
         text: sandbox.stub().resolves(""),
       },
     });
-    db.query.resolves({ rows: [] });
+
+    const dbError = new Error("Table not found");
+    dbError.code = "42P01";
+    db.query.rejects(dbError);
 
     let threwError = false;
     try {
@@ -137,8 +142,6 @@ describe("point method", () => {
       }),
     );
 
-    db.query.resolves({ rows: [] });
-
     const actual = await points(1, 2);
 
     expect(actual).to.eql({
@@ -150,6 +153,7 @@ describe("point method", () => {
         x: null,
         y: null,
         geometry: undefined,
+        source: "nws-api",
       },
       isMarine: false,
       place: null,
@@ -163,17 +167,23 @@ describe("point method", () => {
           gridId: "PPU",
           gridX: 30,
           gridY: 40,
-          geometry: undefined,
         },
       }),
     );
-    db.query.resolves({ rows: [] });
+
+    connectionPool.request.resolves(response);
 
     const actual = await points(4, 5);
 
     expect(actual).to.eql({
       point: { latitude: 4, longitude: 5, astronomicalData: undefined },
-      grid: { wfo: "PPU", x: 30, y: 40, geometry: undefined },
+      grid: {
+        wfo: "PPU",
+        x: 30,
+        y: 40,
+        geometry: undefined,
+        source: "nws-api",
+      },
       isMarine: false,
       place: null,
     });
@@ -187,17 +197,23 @@ describe("point method", () => {
           gridX: 30,
           gridY: 40,
           geometry: undefined,
+          source: "nws-api",
           astronomicalData: "stars and stuff",
         },
       }),
     );
-    db.query.resolves({ rows: [] });
 
     const actual = await points(4, 5);
 
     expect(actual).to.eql({
       point: { latitude: 4, longitude: 5, astronomicalData: "stars and stuff" },
-      grid: { wfo: "PPU", x: 30, y: 40, geometry: undefined },
+      grid: {
+        wfo: "PPU",
+        x: 30,
+        y: 40,
+        geometry: undefined,
+        source: "nws-api",
+      },
       isMarine: false,
       place: null,
     });
@@ -299,5 +315,37 @@ describe("point method", () => {
         fullName: "Townsville, OT",
       },
     });
+  });
+
+  it("returns internal grid data when a close match is found in DB", async () => {
+    // Mock the database to return a valid point
+    db.query.resolves({
+      rows: [
+        {
+          wfo: "ABR",
+          x: 1,
+          y: 102,
+          geometry: '{"type":"Point","coordinates":[-102,45]}',
+        },
+      ],
+    });
+
+    const actual = await points(45.5, -102.0);
+
+    expect(actual.grid.wfo).to.equal("ABR");
+    expect(actual.grid.source).to.equal("internal");
+    // Verify we DID NOT call the NWS API
+    expect(connectionPool.request.called).to.be.false;
+  });
+
+  it("returns 404 out-of-bounds when internal DB confirms point is too far", async () => {
+    db.query.resolves({ rows: [] });
+
+    const actual = await points(1, 2);
+
+    expect(actual.grid.outOfBounds).to.be.true;
+    expect(actual.grid.status).to.equal(404);
+    // Verify we DID NOT call the NWS API
+    expect(connectionPool.request.called).to.be.false;
   });
 });

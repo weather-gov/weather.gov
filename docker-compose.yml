@@ -145,6 +145,9 @@ services:
       # interop and web, keeping in mind some connections are reserved.
       API_DB_MAX_CONNECTIONS: 195
       API_INTEROP_INSTANCES: 1
+      # Whether or not to use internal geodata
+      # queries to resolve lat/lon -> grid lookups
+      INTERNAL_GRIDPOINT_LOOKUP: true
     networks:
       - weather.gov
     links:

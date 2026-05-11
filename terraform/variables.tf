@@ -160,3 +160,9 @@ variable "api_timings_metadata" {
   default     = false
   description = "Whether or not to display metadata about API request timing in interop responses"
 }
+
+variable "internal_gridpoint_lookup" {
+  type       = bool
+  default    = false
+  description = "Whether or not to attempt internal geodata lookup for resolving lat/lon into grid cells"
+}

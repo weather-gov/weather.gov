@@ -133,13 +133,19 @@ export const groupPointBatches = (timings) => {
       const observationTimings = batch.filter((item) => {
         return item.url.startsWith("/station") && item.awaited === true;
       });
-      const maxObservation = Math.max(
-        ...observationTimings.map((timingData) => timingData.timing),
-      );
+      const maxObservation =
+        observationTimings.length > 0
+          ? Math.max(
+              ...observationTimings.map((timingData) => timingData.timing),
+            )
+          : 0;
       const stationsListTiming = batch.find((item) => {
         return item.url.endsWith("limit=3");
       });
-      const totalObservationTiming = stationsListTiming.timing + maxObservation;
+      const stationsListVal = stationsListTiming
+        ? stationsListTiming.timing
+        : 0;
+      const totalObservationTiming = stationsListVal + maxObservation;
       let timings = batch
         .filter((batchItem) => {
           return !isObservationUrl(batchItem.url);
@@ -150,7 +156,7 @@ export const groupPointBatches = (timings) => {
       timings = [...timings, totalObservationTiming];
       result.max = Math.max(...timings);
     } else {
-      result.max = Math.max(...batch.map((t) => t.timing));
+      result.max = timings.length > 0 ? Math.max(...timings) : 0;
     }
 
     return result;
