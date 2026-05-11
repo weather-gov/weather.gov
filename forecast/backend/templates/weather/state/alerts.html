@@ -49,7 +49,7 @@
     <wx-tabbed-nav class="display-block position-relative flex-1" id="state-page-tabbed-nav">
     {% include "weather/state/tabs.html" with url_name=request.resolver_match.url_name %}
     <div class="bg-white padding-bottom-4">
-      <div class="wx-focus-offset-205" id="alerts" tabindex="0">
+      <div class="wx-focus-offset-205" aria-labelledby="alerts-tab-button" id="alerts" tabindex="0">
         <div class="grid-container">
           <h2 class="text-normal text-primary-dark margin-top-3 font-sans-xl">{{ "county.heading.alerts.01" | t }}</h2>
           <wx-tabs id="state-alerts">

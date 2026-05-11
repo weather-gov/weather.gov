@@ -159,14 +159,30 @@ def state_risks(request, state):
 def state_radar(request, state):
     """Render the radar tab for a given state."""
     state = get_object_or_404(WeatherStates, state=state.upper())
+
+    lon_min, lat_min, lon_max, lat_max = state.shape.extent
+    bounds = [
+        (lat_min, lon_min),
+        (lat_min, lon_max),
+        (lat_max, lon_max),
+        (lat_max, lon_min),
+    ]
+    # Alaska crosses the antemeridian: this frames the state, albeit imperfectly
+    if state.state == "AK":
+        bounds[1] = (lat_min, 0)
+        bounds[2] = (lat_max, 0)
+
     return render(
         request,
         "weather/state/radar.html",
         {
             "state": state,
             "state_abbrev": state.state,
-            "wfo_data": get_wfo_data_for_state(state)
-        }
+            "wfo_data": get_wfo_data_for_state(state),
+            "data": {
+                "bounds": bounds
+            }
+        },
     )
 
 

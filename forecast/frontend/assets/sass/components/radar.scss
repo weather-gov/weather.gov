@@ -73,8 +73,16 @@
 }
 
 @include at-media("tablet") {
-  .wx-radar-container {
+  .wx-radar-container.wx-small-map {
     aspect-ratio: 4/3 !important;
+
+    &.wx-radar-container__expanded {
+      aspect-ratio: 5/6 !important;
+    }
+  }
+
+  .wx-radar-container.wx-large-map {
+    aspect-ratio: 3/2 !important;
 
     &.wx-radar-container__expanded {
       aspect-ratio: 5/6 !important;
@@ -83,11 +91,19 @@
 }
 
 @include at-media("desktop") {
-  .wx-radar-container {
+  .wx-radar-container.wx-small-map {
     aspect-ratio: 1/1 !important;
 
     &.wx-radar-container__expanded {
       aspect-ratio: 3/2 !important;
+    }
+  }
+
+  .wx-radar-container.wx-large-map {
+    aspect-ratio: 16/9 !important;
+
+    &.wx-radar-container__expanded {
+      aspect-ratio: 5/4 !important;
     }
   }
 }
