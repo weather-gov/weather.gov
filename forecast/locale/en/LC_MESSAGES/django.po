@@ -48,13 +48,13 @@ msgid "afd.heading.forecast-discussion.01"
 msgstr "Forecast Discussion"
 
 msgid "afd.label.forecast-office.01"
-msgstr "Forecast office:"
+msgstr "Forecast Office:"
 
 msgid "afd.label.versions.01"
 msgstr "Versions for {wfo_name}:"
 
 msgid "afd.table-header.chance-precip.01"
-msgstr "Chance of precipitation"
+msgstr "Chance of Precipitation"
 
 msgid "afd.table-header.location.01"
 msgstr "Location"
@@ -87,10 +87,10 @@ msgid "alerts.heading+aria.alerts.01"
 msgstr "Alerts"
 
 msgid "alerts.labels.areas-impacted.01"
-msgstr "Areas impacted"
+msgstr "Areas Impacted"
 
 msgid "alerts.labels.what-to-do.01"
-msgstr "What to do"
+msgstr "What to Do"
 
 msgid "alerts.legend.impacted-area.01"
 msgstr "Impacted Area"
@@ -159,7 +159,7 @@ msgid "daily-forecast.aria.low-of.01"
 msgstr "Low of {degrees}℉"
 
 msgid "daily-forecast.heading.hourly-forecast.01"
-msgstr "Hourly forecast"
+msgstr "Hourly Forecast"
 
 msgid "daily-forecast.labels.alert.01"
 msgstr "Alert"
@@ -261,13 +261,13 @@ msgid "forecast.current.obs-station-elevation.01"
 msgstr "Elevation"
 
 msgid "forecast.heading.current-conditions.01"
-msgstr "Current conditions"
+msgstr "Current Conditions"
 
 msgid "forecast.heading.daily-forecast.01"
-msgstr "Daily forecast"
+msgstr "Daily Forecast"
 
 msgid "forecast.heading.today-forecast.01"
-msgstr "Today's forecast"
+msgstr "Today's Forecast"
 
 msgid "forecast.errors.current-conditions.01"
 msgstr "There was an error loading the current conditions."
@@ -414,7 +414,7 @@ msgid "frontpage.rebuilding.list-items-03.01"
 msgstr "<li>Did you find the information you were looking for?</li><li>Did you have any challenges in understanding it?</li><li>In what ways have you been using this website?</li><li>What can we do to serve you better?</li>"
 
 msgid "hourly-charts.heading.chance-precip.01"
-msgstr "Chance of precipitation"
+msgstr "Chance of Precipitation"
 
 msgid "hourly-charts.heading.dewpoint.01"
 msgstr "Dewpoint"
@@ -423,7 +423,7 @@ msgid "hourly-charts.heading.humidity.01"
 msgstr "Humidity"
 
 msgid "hourly-charts.heading.precip-amounts.01"
-msgstr "Precipitation amounts"
+msgstr "Precipitation Amounts"
 
 msgid "hourly-charts.heading.temperature.01"
 msgstr "Temperature"
@@ -471,7 +471,7 @@ msgid "hourly-table.labels.wind-speed.01"
 msgstr "Wind speed"
 
 msgid "hourly-table.table-header.chance-precip.01"
-msgstr "Chance of precipitation"
+msgstr "Chance of Precipitation"
 
 msgid "hourly-table.text.gusting.01"
 msgstr "with gusts up to {gustSpeed} mph"
@@ -519,7 +519,7 @@ msgid "precip-table.aria.amounts.01"
 msgstr "precipitation amounts for the coming hours"
 
 msgid "precip-table.heading.amounts.01"
-msgstr "Precipitation amounts"
+msgstr "Precipitation Amounts"
 
 msgid "precip-table.table-header.time-period.01"
 msgstr "Time Period"
@@ -555,7 +555,7 @@ msgid "radar.link.explore-other.01"
 msgstr "Explore other radar views"
 
 msgid "safety.labels.tips.01"
-msgstr "Tips to stay safe"
+msgstr "Tips to Stay Safe"
 
 msgid "satellite.heading.satellite.01"
 msgstr "Satellite"
@@ -681,13 +681,13 @@ msgid "wfo.labels.youtube.01"
 msgstr "YouTube"
 
 msgid "weather-story.heading.from-forecaster.01"
-msgstr "From the forecaster"
+msgstr "From the Forecaster"
 
 msgid "weather-story.link.area-forecast-discussion.02"
 msgstr "{office_name} Area Forecast Discussion"
 
 msgid "weather-story.link.county-overview.01"
-msgstr "County overview"
+msgstr "County Overview"
 
 msgid "weather-story.link.zone-forecast.01"
 msgstr "Zone forecast product"
@@ -747,13 +747,13 @@ msgid "site.meta.titles.privacy.01"
 msgstr "Privacy policy"
 
 msgid "site.meta.titles.ghwo.risk.01"
-msgstr "Risk overview"
+msgstr "Risk Overview"
 
 msgid "ghwo.selector.label.state.01"
-msgstr "Select a state"
+msgstr "Select state"
 
 msgid "ghwo.selector.label.county.01"
-msgstr "Select a county"
+msgstr "Select county"
 
 msgid "ghwo.selector.label.all-counties.01"
 msgstr "All counties"
@@ -786,13 +786,13 @@ msgid "ghwo.details.pane.legend.sr.risk-level-description.01"
 msgstr "risk level description"
 
 msgid "ghwo.details.pane.header.risk-map.01"
-msgstr "Risk map"
+msgstr "Risk Map"
 
 msgid "ghwo.details.pane.header.based-on.01"
-msgstr "What is this based on?"
+msgstr "Determining Risk"
 
 msgid "ghwo.details.pane.header.risk-levels.01"
-msgstr "Risk levels"
+msgstr "Risk Levels"
 
 msgid "ghwo.summary.scale.label.01"
 msgstr "{scaled} out of 10"
@@ -824,7 +824,7 @@ msgid "county.heading.alerts.01"
 msgstr "Alerts"
 
 msgid "county.heading.wfo-promo.01"
-msgstr "Weather forecasting office"
+msgstr "Weather Forecasting Office"
 
 msgid "county.alert-tabs.day.all.01"
 msgstr "All days"
@@ -889,7 +889,7 @@ msgid "county.briefing.no-briefing.01"
 msgstr "No recent briefing available"
 
 msgid "county.forecast-link.heading.01"
-msgstr "Find a forecast"
+msgstr "Find a Forecast"
 
 msgid "county.wfo-promo.wfo-label.01"
 msgstr "{wfo_name} Forecast Office"
@@ -918,16 +918,16 @@ msgid "county-index.headers.description.01"
 msgstr "Select your state and county below to see alerts, risk levels, and more for your area"
 
 msgid "ghwo.table.caption.header.01"
-msgstr "Seven-day weather risk overview"
+msgstr "Seven-day Weather Risk Overview"
 
 msgid "ghwo.table.caption.description.01"
-msgstr "Daily weather risk summary"
+msgstr "The graphic shows the daily risk summary for 7 days. Daily risk is based on highest risk factor for that day."
 
 msgid "ghwo.table.caption.detailed-description.01"
 msgstr "The graphic shows the daily risk summary for 7 days. Daily risk is based on highest risk factor for that day."
 
 msgid "ghwo.table.details.header.01"
-msgstr "What factors are driving the risk?"
+msgstr "Risk Factors"
 
 msgid "ghwo.table.details.header.no-risk.01"
 msgstr "No expected risks for the next 7 days"
@@ -1023,10 +1023,10 @@ msgid "state.heading.analysis.01"
 msgstr "Analysis"
 
 msgid "state.heading.offices.01"
-msgstr "Weather forecasting offices"
+msgstr "Weather Forecasting Offices"
 
 msgid "state.heading.alerts-type.01"
-msgstr "Alerts By Type"
+msgstr "Alerts by Type"
 
 msgid "state.heading.index.01"
 msgstr "State and Territory Views"
@@ -1143,7 +1143,7 @@ msgid "menu.navigation.resources.01"
 msgstr "Resources"
 
 msgid "menu.navigation.resources.state-weather-overview.01"
-msgstr "State weather overview"
+msgstr "State Weather Overview"
 
 msgid "menu.navigation.resources.storm-recaps.01"
 msgstr "Storm Recaps"
