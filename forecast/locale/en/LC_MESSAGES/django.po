@@ -1049,6 +1049,9 @@ msgstr "Loading the map..."
 msgid "state.alerts.collapse-subdivision.01"
 msgstr "Collapse {subdivision}"
 
+msgid "state.alerts.expand-subdivision.01"
+msgstr "Expand {subdivision}"
+
 msgid "state.alerts.map-failure.01"
 msgstr "Map failed to load"
 
@@ -1062,7 +1065,7 @@ msgid "spatial.status.count-of-total.01"
 msgstr "{count} of {total} {subdivision}"
 
 msgid "spatial.status.see-list.01"
-msgstr "Expand {subdivision}"
+msgstr "See List of {subdivision}"
 
 msgid "error.500.generic.message.01"
 msgstr "Something went wrong on our end. Please wait a few moments and reload the page or visit <a href='https://www.weather.gov' class='usa-link'>weather.gov</a> for current forecast information."

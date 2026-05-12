@@ -175,7 +175,7 @@ export default class StateAlertsHandler {
 
         // Translations `Expand {pluralSubdivision}`
         const pluralSubdivision = this.meta.trans.subdivision_name_plural;
-        const expandLabel = this.meta.trans.see_list_pattern.replace(
+        const expandLabel = this.meta.trans.expand_pattern.replace(
           "{subdivision}",
           pluralSubdivision,
         );
