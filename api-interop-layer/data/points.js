@@ -132,10 +132,14 @@ export const getPointData = async (lat, lon) => {
     grid = await getInternalGridData(latitude, longitude);
   }
 
-  // If 'grid.outOfBounds' is true, our internal DB confirmed the point is
-  // more than 3.5km from any grid center. We stop here and return a 404 without hitting the NWS API
   // We only fall back to the NWS API if the internal check failed due to code errors
-  if (!grid || (grid.error && !grid.outOfBounds)) {
+  if (!grid || grid.error) {
+    if (USE_INTERNAL_LOOKUP) {
+      pointLogger.warn(
+        { grid, lat, lon },
+        `Internal gridpoints lookup failed. Querying API`,
+      );
+    }
     const pointsUrl = `/points/${latitude},${longitude}`;
     const gridData =
       (await getFromRedis(pointsUrl)) || (await createPointsPromise(pointsUrl));

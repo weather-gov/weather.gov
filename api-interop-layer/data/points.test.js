@@ -96,7 +96,12 @@ describe("point method", () => {
     });
   });
 
-  it("returns an out-of-bounds grid for points not covered by the API", async () => {
+  it.skip("returns an out-of-bounds grid for points not covered by the API", async () => {
+    /**
+     * Note:
+     * It will be safe to re-enable this test once all environments automatically
+     * and regularly have populated internal wfo grid data ingested
+     */
     db.query.resolves({ rows: [] });
 
     const actual = await points(1, 2);
@@ -338,14 +343,11 @@ describe("point method", () => {
     expect(connectionPool.request.called).to.be.false;
   });
 
-  it("returns 404 out-of-bounds when internal DB confirms point is too far", async () => {
+  it("calls the API if the internal gridpoint lookup is empty", async () => {
     db.query.resolves({ rows: [] });
 
-    const actual = await points(1, 2);
+    await points(1, 2);
 
-    expect(actual.grid.outOfBounds).to.be.true;
-    expect(actual.grid.status).to.equal(404);
-    // Verify we DID NOT call the NWS API
-    expect(connectionPool.request.called).to.be.false;
+    expect(connectionPool.request.called).to.be.true;
   });
 });

@@ -1,14 +1,21 @@
+# Loading WFO Grid Data
+
 This guide outlines the process for converting NWS Grid Points from GeoJSON to CSV and importing them into the `weathergov_geo_gridpoints` table. This method leverages the `psql` client-side streaming capability, avoiding the need for FTP or direct file pushes to Cloud Foundry instances.
+
+This guide outlines the two-stage process for converting NWS Gridpoints from GeoJSON to CSV, and to inserting this information into the `weathergov_geo_gridpoints` table.
+  
+It makes use of both a local and manual conversion step (Stage 1) and an automated command that can be run locally or in higher environments (Stage 2)
+
+For the moment, the overall process of converting and uploading gridpoints data to any given environment database (ie, running stages 1 and 2 together) is still a manual process and not handled by CI or postdeploy scripts.
 
 ## Prerequisites
 
 - **Docker**: Required for the GDAL/OGR conversion tool.
-- **CF CLI**: With the `connect-to-service` plugin installed.
 - **gridpoints.json**: The source GeoJSON file.
 
 ---
 
-## 1. Convert GeoJSON to CSV
+## Stage 1: Manual, one-time conversion of GeoJSON data into CSV
 We use Docker to run `ogr2ogr`. This transforms the nested GeoJSON properties into a flat CSV and extracts the geometry into explicit `X` (Longitude) and `Y` (Latitude) columns.
 
 ```bash
@@ -18,65 +25,24 @@ docker run --rm -v "$(pwd):/data" osgeo/gdal:alpine-small-3.6.3 \
   -sql "SELECT cwa, gridX AS x, gridY AS y FROM \"gridpoints\""
 ```
 
-## 2. Connect to the Database
-Authenticate with Cloud Foundry and open a secure tunnel to a selected environmental RDS instance.
+**Note** that this conversion only needs to be done _once_ per source gridpoints GeoJSON file data, and that the resulting CSV can be stored locally and/or remotely and reused by Stage 2 until the source data needs updating. This means that in we can use the same CSV source file, once generated, to run Stage 2 multiple times in each of the environments we need to populate gridpoints data for.
 
-```bash
-cf login --sso
-cf connect-to-service weathergov-<environment> weathergov-rds-<environment>
+## Stage 2: Automatic ingestion of csv data into the `weathergov_geo_gridpoints` table, followed by additional processing.
+For this stage, we make use of a Django management command:
+```python manage.py loadgridpoints <path-to-csv-file>```
+
+**The path to this file assumes the /forecast prefix.** So if you have placed your CSV file in `/forecast/spatial/management/commands/file.csv`, for example, you would run `python manage.py loadgridpoints spatial/management/commands/file.csv`
+  
+If you are running this in a local dev environment, you can simply:
 ```
-
-## 3. The Import Process
-
-Once connected to the psql prompt, execute the following steps in order.
-
-> Note: Do not close your session until Step 3.3 is complete. Temporary tables (TEMP) are automatically dropped when you disconnect.
-
-### 3.1 Create Temporary Staging Table
-This creates an in-memory "workbench" to hold the raw CSV data.
-
-```sql
-CREATE TEMP TABLE temp_grid (
-    raw_lon TEXT,
-    raw_lat TEXT,
-    raw_cwa TEXT,
-    raw_x TEXT,
-    raw_y TEXT
-);
+docker compose exec web python manage.py loadgridpoints <path-to-csv-file>
 ```
+where the path represents the container's notion of the path to the csv file.
+  
+This command will perform the following steps automatically, assuming it can find a valid CSV data file at the given path:
+1. Create a temporary staging table
+2. Load CSV data into the staging table
+3. Reformat columns and insert temp values unto the real gridpoints table
+4. Optimize indexing on the table
+5. Cross-reference marine zone tables and update `is_marine` and `type` columns to have correct marine values for each gridpoints
 
-### 3.2 Stream Local CSV to Remote Server
-The `\copy` command is a meta-command that tells your local client to read the file and stream it into the database.
-
-```sql
-\copy temp_grid FROM 'gridpoints.csv' WITH CSV HEADER
-```
-
-### 3.3 Transform and Move to Production
-This is the final step. It converts the raw text into the proper database types, capitalizes the CWA (WFO), and generates the PostGIS binary geometry.
-
-```sql
-INSERT INTO weathergov_geo_gridpoints (cwa, x, y, point)
-SELECT
-    UPPER(raw_cwa),
-    raw_x::integer,
-    raw_y::integer,
-    ST_SetSRID(ST_Point(raw_lon::float, raw_lat::float), 4326)
-FROM temp_grid;
-```
-
-### 3.4 Optimization
-Update the database statistics to ensure spatial index performance.
-```sql
-VACUUM ANALYZE weathergov_geo_gridpoints;
-```
-
-### 4. Verification
-Run a test query to ensure coordinates and WFOs are correctly formatted.
-
-```sql
-SELECT cwa, x, y, ST_AsText(point)
-FROM weathergov_geo_gridpoints
-WHERE cwa = 'ABR'
-LIMIT 5;
-```
