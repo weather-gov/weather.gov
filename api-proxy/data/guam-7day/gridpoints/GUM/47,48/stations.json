@@ -1,0 +1,138 @@
+{
+  "@context": [
+    "https://geojson.org/geojson-ld/geojson-context.jsonld",
+    {
+      "@version": "1.1",
+      "wx": "https://api.weather.gov/ontology#",
+      "s": "https://schema.org/",
+      "geo": "http://www.opengis.net/ont/geosparql#",
+      "unit": "http://codes.wmo.int/common/unit/",
+      "@vocab": "https://api.weather.gov/ontology#",
+      "geometry": { "@id": "s:GeoCoordinates", "@type": "geo:wktLiteral" },
+      "city": "s:addressLocality",
+      "state": "s:addressRegion",
+      "distance": { "@id": "s:Distance", "@type": "s:QuantitativeValue" },
+      "bearing": { "@type": "s:QuantitativeValue" },
+      "value": { "@id": "s:value" },
+      "unitCode": { "@id": "s:unitCode", "@type": "@id" },
+      "forecastOffice": { "@type": "@id" },
+      "forecastGridData": { "@type": "@id" },
+      "publicZone": { "@type": "@id" },
+      "county": { "@type": "@id" },
+      "observationStations": { "@container": "@list", "@type": "@id" }
+    }
+  ],
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "id": "https://api.weather.gov/stations/PGUM",
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [144.79712, 13.48395] },
+      "properties": {
+        "@id": "https://api.weather.gov/stations/PGUM",
+        "@type": "wx:ObservationStation",
+        "elevation": { "unitCode": "wmoUnit:m", "value": 92.6592 },
+        "stationIdentifier": "PGUM",
+        "name": "Guam International Airport",
+        "timeZone": "Pacific/Guam",
+        "provider": "ASOS",
+        "subProvider": "",
+        "distance": { "unitCode": "wmoUnit:m", "value": 4360.1794143408 },
+        "bearing": { "unitCode": "wmoUnit:degree_(angle)", "value": 14 },
+        "forecast": "https://api.weather.gov/zones/forecast/GUZ001",
+        "county": "https://api.weather.gov/zones/county/GUC010",
+        "fireWeatherZone": "https://api.weather.gov/zones/fire/GUZ001"
+      }
+    },
+    {
+      "id": "https://api.weather.gov/stations/PGUA",
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [144.93333, 13.58333] },
+      "properties": {
+        "@id": "https://api.weather.gov/stations/PGUA",
+        "@type": "wx:ObservationStation",
+        "elevation": { "unitCode": "wmoUnit:m", "value": 187.1472 },
+        "stationIdentifier": "PGUA",
+        "name": "Andersen, Mariana Is, Andersen Air Force Base",
+        "timeZone": "Pacific/Guam",
+        "provider": "OTHER-MTR",
+        "subProvider": "",
+        "distance": { "unitCode": "wmoUnit:m", "value": 21983.162028704 },
+        "bearing": { "unitCode": "wmoUnit:degree_(angle)", "value": 45 },
+        "forecast": "https://api.weather.gov/zones/forecast/GUZ001",
+        "county": "https://api.weather.gov/zones/county/GUC010",
+        "fireWeatherZone": "https://api.weather.gov/zones/fire/GUZ001"
+      }
+    },
+    {
+      "id": "https://api.weather.gov/stations/PGRO",
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [145.25, 14.18333] },
+      "properties": {
+        "@id": "https://api.weather.gov/stations/PGRO",
+        "@type": "wx:ObservationStation",
+        "elevation": { "unitCode": "wmoUnit:m", "value": 185.0136 },
+        "stationIdentifier": "PGRO",
+        "name": "Rota Island, N. Mariana Is, Rota International Airport",
+        "timeZone": "Pacific/Saipan",
+        "provider": "NonFedAWOS",
+        "subProvider": "TG",
+        "distance": { "unitCode": "wmoUnit:m", "value": 96025.258545714 },
+        "bearing": { "unitCode": "wmoUnit:degree_(angle)", "value": 31 },
+        "forecast": "https://api.weather.gov/zones/forecast/MPZ001",
+        "county": "https://api.weather.gov/zones/county/MPC100",
+        "fireWeatherZone": "https://api.weather.gov/zones/fire/MPZ001"
+      }
+    },
+    {
+      "id": "https://api.weather.gov/stations/PGWT",
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [145.61667, 14.98333] },
+      "properties": {
+        "@id": "https://api.weather.gov/stations/PGWT",
+        "@type": "wx:ObservationStation",
+        "elevation": { "unitCode": "wmoUnit:m", "value": 81.9912 },
+        "stationIdentifier": "PGWT",
+        "name": "Tinian Island, N. Mariana Is, West Tinian Airport",
+        "timeZone": "Pacific/Saipan",
+        "provider": "OTHER-MTR",
+        "subProvider": "",
+        "distance": { "unitCode": "wmoUnit:m", "value": 192920.41941618 },
+        "bearing": { "unitCode": "wmoUnit:degree_(angle)", "value": 27 },
+        "forecast": "https://api.weather.gov/zones/forecast/MPZ002",
+        "county": "https://api.weather.gov/zones/county/MPC120",
+        "fireWeatherZone": "https://api.weather.gov/zones/fire/MPZ002"
+      }
+    },
+    {
+      "id": "https://api.weather.gov/stations/PGSN",
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [145.73333, 15.11667] },
+      "properties": {
+        "@id": "https://api.weather.gov/stations/PGSN",
+        "@type": "wx:ObservationStation",
+        "elevation": { "unitCode": "wmoUnit:m", "value": 66.1416 },
+        "stationIdentifier": "PGSN",
+        "name": "Saipan Island, Saipan International Airport",
+        "timeZone": "Pacific/Saipan",
+        "provider": "OTHER-MTR",
+        "subProvider": "",
+        "distance": { "unitCode": "wmoUnit:m", "value": 211914.74937413 },
+        "bearing": { "unitCode": "wmoUnit:degree_(angle)", "value": 28 },
+        "forecast": "https://api.weather.gov/zones/forecast/MPZ003",
+        "county": "https://api.weather.gov/zones/county/MPC110",
+        "fireWeatherZone": "https://api.weather.gov/zones/fire/MPZ003"
+      }
+    }
+  ],
+  "observationStations": [
+    "https://api.weather.gov/stations/PGUM",
+    "https://api.weather.gov/stations/PGUA",
+    "https://api.weather.gov/stations/PGRO",
+    "https://api.weather.gov/stations/PGWT",
+    "https://api.weather.gov/stations/PGSN"
+  ],
+  "pagination": {
+    "next": "https://api.weather.gov/stations?id%5B0%5D=PGRO&id%5B1%5D=PGSN&id%5B2%5D=PGUA&id%5B3%5D=PGUM&id%5B4%5D=PGWT&cursor=eyJzIjo1MDB9"
+  }
+}

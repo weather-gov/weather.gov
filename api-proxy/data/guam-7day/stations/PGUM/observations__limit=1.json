@@ -1,0 +1,132 @@
+{
+  "@context": [
+    "https://geojson.org/geojson-ld/geojson-context.jsonld",
+    {
+      "@version": "1.1",
+      "wx": "https://api.weather.gov/ontology#",
+      "s": "https://schema.org/",
+      "geo": "http://www.opengis.net/ont/geosparql#",
+      "unit": "http://codes.wmo.int/common/unit/",
+      "@vocab": "https://api.weather.gov/ontology#",
+      "geometry": { "@id": "s:GeoCoordinates", "@type": "geo:wktLiteral" },
+      "city": "s:addressLocality",
+      "state": "s:addressRegion",
+      "distance": { "@id": "s:Distance", "@type": "s:QuantitativeValue" },
+      "bearing": { "@type": "s:QuantitativeValue" },
+      "value": { "@id": "s:value" },
+      "unitCode": { "@id": "s:unitCode", "@type": "@id" },
+      "forecastOffice": { "@type": "@id" },
+      "forecastGridData": { "@type": "@id" },
+      "publicZone": { "@type": "@id" },
+      "county": { "@type": "@id" }
+    }
+  ],
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "id": "https://api.weather.gov/stations/PGUM/observations/2026-05-14T15:54:00+00:00",
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [144.8, 13.48] },
+      "properties": {
+        "@id": "https://api.weather.gov/stations/PGUM/observations/2026-05-14T15:54:00+00:00",
+        "@type": "wx:ObservationStation",
+        "elevation": { "unitCode": "wmoUnit:m", "value": 91 },
+        "station": "https://api.weather.gov/stations/PGUM",
+        "stationId": "PGUM",
+        "stationName": "Guam International Airport",
+        "timestamp": "date:now -2482 seconds",
+        "rawMessage": "PGUM 141554Z 10008KT 10SM BKN047 27/24 A2983 RMK AO2 SLP093 T02720244",
+        "textDescription": "Mostly Cloudy",
+        "icon": "https://api.weather.gov/icons/land/night/bkn?size=medium",
+        "presentWeather": [],
+        "temperature": {
+          "unitCode": "wmoUnit:degC",
+          "value": 27.2,
+          "qualityControl": "S"
+        },
+        "dewpoint": {
+          "unitCode": "wmoUnit:degC",
+          "value": 24.4,
+          "qualityControl": "S"
+        },
+        "windDirection": {
+          "unitCode": "wmoUnit:degree_(angle)",
+          "value": 100,
+          "qualityControl": "S"
+        },
+        "windSpeed": {
+          "unitCode": "wmoUnit:km_h-1",
+          "value": 14.76,
+          "qualityControl": "S"
+        },
+        "windGust": {
+          "unitCode": "wmoUnit:km_h-1",
+          "value": null,
+          "qualityControl": "Z"
+        },
+        "barometricPressure": {
+          "unitCode": "wmoUnit:Pa",
+          "value": 101020,
+          "qualityControl": "S"
+        },
+        "seaLevelPressure": {
+          "unitCode": "wmoUnit:Pa",
+          "value": 100930,
+          "qualityControl": "S"
+        },
+        "visibility": {
+          "unitCode": "wmoUnit:m",
+          "value": 16090,
+          "qualityControl": "C"
+        },
+        "maxTemperatureLast24Hours": {
+          "unitCode": "wmoUnit:degC",
+          "value": null
+        },
+        "minTemperatureLast24Hours": {
+          "unitCode": "wmoUnit:degC",
+          "value": null
+        },
+        "precipitationLastHour": {
+          "unitCode": "wmoUnit:mm",
+          "value": null,
+          "qualityControl": "Z"
+        },
+        "precipitationLast3Hours": {
+          "unitCode": "wmoUnit:mm",
+          "value": null,
+          "qualityControl": "Z"
+        },
+        "precipitationLast6Hours": {
+          "unitCode": "wmoUnit:mm",
+          "value": null,
+          "qualityControl": "Z"
+        },
+        "relativeHumidity": {
+          "unitCode": "wmoUnit:percent",
+          "value": 84.708481304408,
+          "qualityControl": "S"
+        },
+        "windChill": {
+          "unitCode": "wmoUnit:degC",
+          "value": null,
+          "qualityControl": "S"
+        },
+        "heatIndex": {
+          "unitCode": "wmoUnit:degC",
+          "value": 30.70172395369111,
+          "qualityControl": "S"
+        },
+        "cloudLayers": [
+          {
+            "base": { "unitCode": "wmoUnit:m", "value": 1430 },
+            "amount": "BKN"
+          }
+        ]
+      }
+    }
+  ],
+  "pagination": {
+    "next": "https://api.weather.gov/stations/PGUM/observations?cursor=eyJzIjoiMjAyNi0wNS0xNFQxNTo1NDowMCswMDowMCJ9"
+  }
+}

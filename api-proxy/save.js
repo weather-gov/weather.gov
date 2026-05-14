@@ -38,13 +38,12 @@ const getRelativeTimestamp = (str) => {
 
 const getRelativeDayFixedHourTimestamp = (start, next, dayOffset) => {
   const match = next.match(ISO_REGEX);
-  if(!match){
+  if (!match) {
     throw new Error(`Could not find offset for GHWO timestamp: ${next}`);
   }
   const offset = match[1];
 
   return `date:today 06:00:${offset} +${dayOffset} day`;
-  
 };
 
 const replaceTimestamps = (obj) => {
@@ -88,40 +87,47 @@ const replaceGHWOTimestamps = (ghwoData) => {
   if (typeof replaced !== "object") {
     return ghwoData;
   }
+  if (!replaced.countries) {
+    return ghwoData;
+  }
 
   // Timestamps in this dataobject are actually the
   // keys under the county
   const countyKeys = Object.keys(replaced.counties);
-  countyKeys.forEach(countyFips => {
+  countyKeys.forEach((countyFips) => {
     const countyData = replaced.counties[countyFips];
-    const timestampKeys = Object.keys(countyData).filter(key => {
-      // Filter to remove the countyName key, which is the only
-      // non-timestamp based key in this object
-      return key !== "countyName";
-    }).map((timestampKey, idx, arr) => {
-      // Map the timestamp keys to arrays which map to
-      // a relative timestamp used by the proxy system.
-      // The first day should be completely relative to <now>,
-      // while subsequent days should all start at 6am that day
-      let timeObject;
-      if(idx === 0){
-        timeObject = getRelativeTimestamp(timestampKey);
-      } else {
-        timeObject = getRelativeDayFixedHourTimestamp(arr[0], timestampKey, idx);
-      }
-      
-      return [
-        timestampKey,
-        timeObject
-      ];
-    }).forEach(([timestamp, relativeTimestamp]) => {
-      // For each of these lookup lists that
-      // map a timestamp key to a relative timestamp,
-      // add the timestamp's data under the new relative
-      // timestamp key. Then remove the older key (and its data)
-      countyData[relativeTimestamp] = countyData[timestamp];
-      delete countyData[timestamp];
-    });
+    const timestampKeys = Object.keys(countyData)
+      .filter((key) => {
+        // Filter to remove the countyName key, which is the only
+        // non-timestamp based key in this object
+        return key !== "countyName";
+      })
+      .map((timestampKey, idx, arr) => {
+        // Map the timestamp keys to arrays which map to
+        // a relative timestamp used by the proxy system.
+        // The first day should be completely relative to <now>,
+        // while subsequent days should all start at 6am that day
+        let timeObject;
+        if (idx === 0) {
+          timeObject = getRelativeTimestamp(timestampKey);
+        } else {
+          timeObject = getRelativeDayFixedHourTimestamp(
+            arr[0],
+            timestampKey,
+            idx,
+          );
+        }
+
+        return [timestampKey, timeObject];
+      })
+      .forEach(([timestamp, relativeTimestamp]) => {
+        // For each of these lookup lists that
+        // map a timestamp key to a relative timestamp,
+        // add the timestamp's data under the new relative
+        // timestamp key. Then remove the older key (and its data)
+        countyData[relativeTimestamp] = countyData[timestamp];
+        delete countyData[timestamp];
+      });
   });
 
   return replaced;
@@ -156,7 +162,11 @@ const apiFetchAndSave = async (urlPath, savePath) => {
 
 const ghwoFetchAndSave = async (urlPath, savePath) => {
   const url = URL.parse(urlPath, "https://www.weather.gov");
-  const data = await fetch(url).then(r => r.json());
+  const data = await fetch(url)
+    .then((r) => r.json())
+    .catch(() => {
+      return {};
+    });
 
   const wfoCode = urlPath.match(/\/source\/([a-zA-Z]+)\//)[1];
 
@@ -169,15 +179,15 @@ const ghwoFetchAndSave = async (urlPath, savePath) => {
   // timestamps should not matter -- they are for
   // metadata purposes only and can be saved as-is
   let outputData = data;
-  if(urlPath.endsWith("hazByCounty.json")){
+  if (urlPath.endsWith("hazByCounty.json")) {
     outputData = replaceGHWOTimestamps(data);
   }
 
-  await fs.mkdir(path.dirname(filePath), { recursive: true});
+  await fs.mkdir(path.dirname(filePath), { recursive: true });
 
   fs.writeFile(
     filePath,
-    await format(JSON.stringify(outputData), { parser: "json"})
+    await format(JSON.stringify(outputData), { parser: "json" }),
   );
 
   return outputData;
@@ -243,12 +253,21 @@ const saveBundle = async (lat, lon) => {
     return output;
   }
 
-  if(output.wfo){
+  if (output.wfo) {
     // Fetch and save the GHWO data for the point,
     // as given by its WFO
-    await ghwoFetchAndSave(`/source/${output.wfo.toLowerCase()}/ghwo/hazByCounty.json`, dataPath);
-    await ghwoFetchAndSave(`/source/${output.wfo.toLowerCase()}/ghwo/legend.json`, dataPath);
-    await ghwoFetchAndSave(`/source/${output.wfo.toLowerCase()}/ghwo/chicklet.json`, dataPath);
+    await ghwoFetchAndSave(
+      `/source/${output.wfo.toLowerCase()}/ghwo/hazByCounty.json`,
+      dataPath,
+    );
+    await ghwoFetchAndSave(
+      `/source/${output.wfo.toLowerCase()}/ghwo/legend.json`,
+      dataPath,
+    );
+    await ghwoFetchAndSave(
+      `/source/${output.wfo.toLowerCase()}/ghwo/chicklet.json`,
+      dataPath,
+    );
   }
 
   await apiFetchAndSave("/alerts/active?status=actual", dataPath);
