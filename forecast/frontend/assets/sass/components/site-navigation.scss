@@ -271,8 +271,13 @@
     .usa-nav {
       justify-content: flex-start;
 
-      /* undo the padding at the bottom given by USWDS defaults */
+      // undo the padding at the bottom given by USWDS defaults //
       padding-bottom: 0;
+
+      // override default USWDS left padding on larger screens
+      @include at-media("tablet-lg") {
+        padding-left: 0;
+      }
     }
   }
 

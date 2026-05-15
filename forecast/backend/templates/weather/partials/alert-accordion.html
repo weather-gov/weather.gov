@@ -12,13 +12,13 @@
   {# djlint:on #}
   <h3 class="usa-accordion__heading font-heading-md">
     <button type="button"
-            class="usa-accordion__button text-ls-1"
+            class="usa-accordion__button text-ls-1 wx-line-height-tight"
             aria-expanded="false"
             aria-controls="a{{ alert.unique_id }}"
             data-button-for="#alert_{{ alert.unique_id }}">
       {% if icon %}
         <div class="display-flex flex-align-start">
-          <div class="maxw-3 height-3 margin-right-05">
+          <div class="maxw-3 height-3 margin-right-1">
             <svg role="img" aria-hidden="true" class="width-full height-full">
               <use xlink:href="{% static 'images/uswds/sprite.svg' %}#warning"></use>
             </svg>

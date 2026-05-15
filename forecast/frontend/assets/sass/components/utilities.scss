@@ -180,3 +180,14 @@
     padding-right: units(1.5);
   }
 }
+
+/* Custom line height utilities in 
+ * between USWDS values 
+------------------------------------- */
+.wx-line-height-tighter {
+  line-height: 1.27;
+}
+
+.wx-line-height-tight {
+  line-height: 1.35;
+}

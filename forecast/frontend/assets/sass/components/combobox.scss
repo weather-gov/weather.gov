@@ -1,8 +1,5 @@
-@use "uswds-core" as *;
-
 /* stylelint-disable scss/at-extend-no-missing-placeholder */
 @use "uswds-core" as *;
-@forward "uswds-theme";
 @forward "uswds";
 
 :root {
@@ -14,7 +11,7 @@ wx-combobox {
   @extend .usa-combo-box;
 
   display: block;
-  border: 1px solid #1c1d1f;
+  border: 1px solid color("base-dark");
   background-color: transparent;
   position: relative;
   z-index: var(--combobox-z-index);
