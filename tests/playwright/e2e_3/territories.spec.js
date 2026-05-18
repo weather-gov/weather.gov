@@ -7,14 +7,26 @@ describe.skip("territory places are supported", () => {
   beforeEach(async ({ page }) => page.goto(services.apiProxy("/stop")));
 
   [
-    ["/point/13.466/144.746", "Guam (GU)", "Agana Heights Village, GU"],
-    ["/point/18.212/-66.051", "Puerto Rico (PR)", "Caguas, PR"],
-    ["/point/15.199/145.777", "Northern Mariana Islands (MP)", "Saipan, MP"],
-    ["/point/17.736/-64.748", "US Virgin Islands (VI)", "Saint Croix, VI"],
+    [
+      "/forecast/point/13.466/144.746",
+      "Guam (GU)",
+      "Agana Heights Village, GU",
+    ],
+    ["/forecast/point/18.212/-66.051", "Puerto Rico (PR)", "Caguas, PR"],
+    [
+      "/forecast/point/15.199/145.777",
+      "Northern Mariana Islands (MP)",
+      "Saipan, MP",
+    ],
+    [
+      "/forecast/point/17.736/-64.748",
+      "US Virgin Islands (VI)",
+      "Saint Croix, VI",
+    ],
 
     // ----- We know the ones below this line don't work.
     // The API returns a WFO but no grid coordinates for AS.
-    // ["/point/-14.273/-170.703", "American Samoa (AS)", "Pago Pago, AS"],
+    // ["/forecast/point/-14.273/-170.703", "American Samoa (AS)", "Pago Pago, AS"],
 
     // Our own database doesn't contain any places from the Minor Outlying
     // Islands. This is because there are no permanent residents or settlements

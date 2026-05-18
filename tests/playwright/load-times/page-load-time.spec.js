@@ -11,18 +11,18 @@ describe.skip("pages load", () => {
      * We want to assume translation cache has been loaded
      * but not individual point location caches.
      */
-    page.goto("/point/40.693/-73.991"),
+    page.goto("/forecast/point/40.693/-73.991"),
   );
 
   test("average less than 3 seconds, max less than 5 seconds", async ({
     page,
   }) => {
     const pages = [
-      { name: "Hoboken, NJ", url: "/point/40.737/-74.031" },
-      { name: "Huntington Park, CA", url: "/point/34.005/-118.23" },
-      { name: "Chicago, IL", url: "/point/41.884/-87.632" },
-      { name: "Houston, TX", url: "/point/29.7819/-95.3805" },
-      { name: "Guadalupe, AZ", url: "/point/33.365/-111.963" },
+      { name: "Hoboken, NJ", url: "/forecast/point/40.737/-74.031" },
+      { name: "Huntington Park, CA", url: "/forecast/point/34.005/-118.23" },
+      { name: "Chicago, IL", url: "/forecast/point/41.884/-87.632" },
+      { name: "Houston, TX", url: "/forecast/point/29.7819/-95.3805" },
+      { name: "Guadalupe, AZ", url: "/forecast/point/33.365/-111.963" },
     ];
 
     const measurements = [];

@@ -6,23 +6,23 @@ const pages = [
   { name: "front page", path: "/" },
   {
     name: "location page with alerts (alerts tab)",
-    path: "/point/33.521/-86.812/#alerts",
+    path: "/forecast/point/33.521/-86.812/#alerts",
   },
   {
     name: "location page with alerts (today tab)",
-    path: "/point/33.521/-86.812/#today",
+    path: "/forecast/point/33.521/-86.812/#today",
   },
   {
     name: "location page with alerts (daily tab)",
-    path: "/point/33.521/-86.812/#daily",
+    path: "/forecast/point/33.521/-86.812/#daily",
   },
   {
     name: "location page without alerts (today tab)",
-    path: "/point/35.198/-111.651/#today",
+    path: "/forecast/point/35.198/-111.651/#today",
   },
   {
     name: "location page without alerts (daily tab)",
-    path: "/point/35.198/-111.651/#daily",
+    path: "/forecast/point/35.198/-111.651/#daily",
   },
   {
     name: "about page",

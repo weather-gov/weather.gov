@@ -35,7 +35,7 @@ def point_location(request, lat, lon):  # noqa: C901
         # Round them both to 3 decimal places and carry on
         lat = float(f"{lat:.3f}")
         lon = float(f"{lon:.3f}")
-        return redirect(f"/point/{lat}/{lon}/")
+        return redirect(f"/forecast/point/{lat}/{lon}/")
 
     # If the latitude or longitude are invalid, bail with an out-of-bounds
     # error. This will result in a 404 page.

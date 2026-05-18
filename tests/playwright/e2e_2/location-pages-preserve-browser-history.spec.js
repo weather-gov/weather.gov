@@ -5,7 +5,7 @@ const { describe } = test;
 
 describe.skip("location search", () => {
   test("properly handles browser history", async ({ page }) => {
-    const start = "/point/36.168/-86.778";
+    const start = "/forecast/point/36.168/-86.778";
 
     await page.goto(services.apiProxy("/stop"));
     await page.goto(start, { waitUntil: "load" });

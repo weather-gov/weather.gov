@@ -8,10 +8,10 @@ beta.weather.gov represents a complete architectural overhaul designed to be mob
 
 The beta site currently supports three primary navigation structures:
 
-- **Location Forecasts** (`/point/<float:latitude>/<float:longitude>/`):
+- **Location Forecasts** (`/forecast/point/<float:latitude>/<float:longitude>/`):
   - The primary view for specific point-based forecasts.
   - Replaces legacy zip-code or city-based routing with precise coordinate routing.
-  - Example: `/point/37.8715/-122.2730/`
+  - Example: `/forecast/point/37.8715/-122.2730/`
 
 - **County/Zone Pages** (`/county/<countyfips>/`):
   - Aggregated weather information, alerts, and hazards for specific counties.

@@ -5,7 +5,7 @@
     // Submit the form, so we get the same behavior regardless of how we end up
     // navigating to the location page.
     const form = document.querySelector("form[data-location-search]");
-    form.setAttribute("action", `/point/${latitude}/${longitude}`);
+    form.setAttribute("action", `/forecast/point/${latitude}/${longitude}`);
 
     form.submit();
   };

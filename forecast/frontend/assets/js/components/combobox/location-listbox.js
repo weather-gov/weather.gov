@@ -142,7 +142,7 @@ export default class LocationListbox extends Listbox {
           element.setAttribute("data-lat", geoData.lat);
           element.setAttribute("data-lon", geoData.lon);
           if (this.getAttribute("auto-submit") === "true") {
-            const formUrl = `/point/${geoData.lat}/${geoData.lon}`;
+            const formUrl = `/forecast/point/${geoData.lat}/${geoData.lon}`;
             addSavedLocation({
               text: element.innerText,
               url: formUrl,

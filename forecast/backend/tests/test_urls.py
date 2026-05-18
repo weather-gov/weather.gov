@@ -80,11 +80,11 @@ class TestUrls(TestCase):
 
     def test_point(self):
         """Test point forecast."""
-        resolver = resolve("/point/-82.537/42.535/")
+        resolver = resolve("/forecast/point/-82.537/42.535/")
         back = reverse("point", kwargs={"lat": 40.235, "lon": 34.532})
         self.assertEqual(resolver.func, point.point_location)
         self.assertEqual(resolver.kwargs, {"lat": -82.537, "lon": 42.535})
-        self.assertEqual(back, "/point/40.235/34.532/")
+        self.assertEqual(back, "/forecast/point/40.235/34.532/")
 
     def test_place(self):
         """Test place forecast."""
