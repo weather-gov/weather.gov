@@ -24,7 +24,7 @@
     <h1>{% trans_with_args "error.404.forecast.message.01" place=requested.place state=requested.state %}</h1>
     <p>
       {% if suggested %}
-        <a href="{{ suggested.url }}">{% trans_with_args "error.404.forecast.suggested.01" place=suggested.place %}</a>
+        <a class="usa-link" href="{{ suggested.url }}">{% trans_with_args "error.404.forecast.suggested.01" place=suggested.place %}</a>
       {% endif %}
     </p>
   </div>
