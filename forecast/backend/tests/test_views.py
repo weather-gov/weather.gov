@@ -100,7 +100,7 @@ class TestViews(TestCase):
             "weatherstory": [self.weather_story],
         }
 
-        response = self.client.get("/point/11.1/22.2", follow=True)
+        response = self.client.get("/forecast/point/11.1/22.2", follow=True)
 
         mock_get_point_forecast.assert_called_once_with(11.1, 22.2)
         self.assertTemplateUsed(response, "weather/point/overview.html")
@@ -113,9 +113,9 @@ class TestViews(TestCase):
 
     def test_point_location_truncate(self):
         """Test the point location view where lat/lon needs to be truncated."""
-        response = self.client.get("/point/1.234567/9.87654/")
+        response = self.client.get("/forecast/point/1.234567/9.87654/")
         self.assertEqual(response.status_code, 302)
-        self.assertEqual(response.url, "/point/1.235/9.877/")
+        self.assertEqual(response.url, "/forecast/point/1.235/9.877/")
 
     @mock.patch("backend.views.point.interop.get_point_forecast")
     def test_point_location_update(self, mock_get_point_forecast):
@@ -127,7 +127,7 @@ class TestViews(TestCase):
             "weatherstory": [self.weather_story],
         }
 
-        response = self.client.get("/point/11.1/22.2?update", follow=True)
+        response = self.client.get("/forecast/point/11.1/22.2?update", follow=True)
 
         mock_get_point_forecast.assert_called_once_with(11.1, 22.2)
         self.assertTemplateUsed(response, "weather/point/point.update.html")
@@ -146,7 +146,7 @@ class TestViews(TestCase):
             "weatherstory": [],
         }
 
-        response = self.client.get("/point/11.1/22.2", follow=True)
+        response = self.client.get("/forecast/point/11.1/22.2", follow=True)
 
         mock_get_point_forecast.assert_called_once_with(11.1, 22.2)
 
@@ -181,7 +181,7 @@ class TestViews(TestCase):
             "weatherstory": [weather_story],
         }
 
-        response = self.client.get("/point/11.1/22.2", follow=True)
+        response = self.client.get("/forecast/point/11.1/22.2", follow=True)
 
         mock_get_point_forecast.assert_called_once_with(11.1, 22.2)
 
@@ -195,7 +195,7 @@ class TestViews(TestCase):
     @disable_logging_for_quieter_tests
     def test_point_location_with_lat_too_high(self):
         """Test the point location view when the latitude is over 90."""
-        response = self.client.get("/point/127/22.2", follow=True)
+        response = self.client.get("/forecast/point/127/22.2", follow=True)
 
         self.assertEqual(response.status_code, 404)
         self.assertTemplateUsed(response, "errors/404/point-out-of-bounds.html")
@@ -203,7 +203,7 @@ class TestViews(TestCase):
     @disable_logging_for_quieter_tests
     def test_point_location_with_lat_too_low(self):
         """Test the point location view when the latitude is below -90."""
-        response = self.client.get("/point/-93.623/22.2", follow=True)
+        response = self.client.get("/forecast/point/-93.623/22.2", follow=True)
 
         self.assertEqual(response.status_code, 404)
         self.assertTemplateUsed(response, "errors/404/point-out-of-bounds.html")
@@ -211,7 +211,7 @@ class TestViews(TestCase):
     @disable_logging_for_quieter_tests
     def test_point_location_with_lon_too_high(self):
         """Test the point location view when the longitude is over 180."""
-        response = self.client.get("/point/43.342/181", follow=True)
+        response = self.client.get("/forecast/point/43.342/181", follow=True)
 
         self.assertEqual(response.status_code, 404)
         self.assertTemplateUsed(response, "errors/404/point-out-of-bounds.html")
@@ -219,7 +219,7 @@ class TestViews(TestCase):
     @disable_logging_for_quieter_tests
     def test_point_location_with_lon_too_low(self):
         """Test the point location view when the longitude is below -180."""
-        response = self.client.get("/point/127/-197", follow=True)
+        response = self.client.get("/forecast/point/127/-197", follow=True)
 
         self.assertEqual(response.status_code, 404)
         self.assertTemplateUsed(response, "errors/404/point-out-of-bounds.html")
@@ -234,7 +234,7 @@ class TestViews(TestCase):
             "reason": "out-of-bounds",
         }
 
-        response = self.client.get("/point/11.1/22.2", follow=True)
+        response = self.client.get("/forecast/point/11.1/22.2", follow=True)
 
         mock_get_point_forecast.assert_called_once_with(11.1, 22.2)
 
@@ -250,7 +250,7 @@ class TestViews(TestCase):
             "reason": "not-supported",
         }
 
-        response = self.client.get("/point/11.1/22.2", follow=True)
+        response = self.client.get("/forecast/point/11.1/22.2", follow=True)
 
         mock_get_point_forecast.assert_called_once_with(11.1, 22.2)
         self.assertEqual(response.status_code, 200)
@@ -278,7 +278,7 @@ class TestViews(TestCase):
             },
         }
 
-        response = self.client.get("/point/11.1/22.2", follow=True)
+        response = self.client.get("/forecast/point/11.1/22.2", follow=True)
 
         mock_get_point_forecast.assert_called_once_with(11.1, 22.2)
         self.assertEqual(response.status_code, 200)
@@ -295,7 +295,7 @@ class TestViews(TestCase):
             "observations": {"error": True},
         }
 
-        response = self.client.get("/point/11.1/22.2", follow=True)
+        response = self.client.get("/forecast/point/11.1/22.2", follow=True)
 
         mock_get_point_forecast.assert_called_once_with(11.1, 22.2)
         self.assertEqual(response.status_code, 200)
@@ -306,7 +306,7 @@ class TestViews(TestCase):
     @mock.patch("backend.views.point.interop.get_point_forecast", side_effect=Http429())
     def test_point_location_interop_429(self, mock_interop_get_point_forecast):  # noqa: ARG002
         """Test that the point location renders 429 when interop does."""
-        response = self.client.get("/point/11.1/22.2", follow=True)
+        response = self.client.get("/forecast/point/11.1/22.2", follow=True)
 
         self.assertEqual(response.status_code, 429)
         self.assertTemplateUsed(response, "errors/429.html")
@@ -320,7 +320,7 @@ class TestViews(TestCase):
             "isMarine": True,
         }
 
-        response = self.client.get("/point/11.1/22.2", follow=True)
+        response = self.client.get("/forecast/point/11.1/22.2", follow=True)
 
         self.assertTemplateUsed(response, "errors/404/marine-point.html")
 

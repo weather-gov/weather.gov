@@ -14,8 +14,8 @@ describe.skip("invalid location-based routes return 404", () => {
       ["with non-numeric longitude", "123", "abc"],
     ].forEach(([name, lat, lon]) => {
       test(name, async ({ page }) => {
-        const response = await page.goto(`/point/${lat}/${lon}`, {
-          waitUnfil: "load",
+        const response = await page.goto(`/forecast/point/${lat}/${lon}`, {
+          waitUntil: "load",
         });
         await expect(response.status()).toEqual(404);
       });
@@ -30,7 +30,7 @@ describe.skip("invalid location-based routes return 404", () => {
     ].forEach(([name, wfo]) => {
       test(name, async ({ page }) => {
         const response = await page.goto(`/local/${wfo}/1/1`, {
-          waitUnfil: "load",
+          waitUntil: "load",
         });
         await expect(response.status()).toEqual(404);
       });
@@ -44,7 +44,7 @@ describe.skip("invalid location-based routes return 404", () => {
     ].forEach(([name, x, y]) => {
       test(name, async ({ page }) => {
         const response = await page.goto(`/local/TST/${x}/${y}`, {
-          waitUnfil: "load",
+          waitUntil: "load",
         });
         await expect(response.status()).toEqual(404);
       });

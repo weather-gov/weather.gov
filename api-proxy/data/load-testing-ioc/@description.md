@@ -4,16 +4,16 @@ listed here.
 
 ## Point forecasts
 
-- [http://localhost:8080/point/45.000/-93.000](http://localhost:8080/point/45.000/-93.000)  
+- [http://localhost:8080/forecast/point/45.000/-93.000](http://localhost:8080/forecast/point/45.000/-93.000)  
   Has alerts and a weather story
 
-- [http://localhost:8080/point/40.743/-74.029](http://localhost:8080/point/40.743/-74.029)  
+- [http://localhost:8080/forecast/point/40.743/-74.029](http://localhost:8080/forecast/point/40.743/-74.029)  
   Has a weather story, but no alerts
 
-- [http://localhost:8080/point/37.869/-122.27/](http://localhost:8080/point/37.869/-122.27/)  
+- [http://localhost:8080/forecast/point/37.869/-122.27/](http://localhost:8080/forecast/point/37.869/-122.27/)  
   Has alerts, but no weather story
 
-- [http://localhost:8080/point/47.603/-122.33/](http://localhost:8080/point/47.603/-122.33/)  
+- [http://localhost:8080/forecast/point/47.603/-122.33/](http://localhost:8080/forecast/point/47.603/-122.33/)  
   No alerts or weather story
 
 ## County pages

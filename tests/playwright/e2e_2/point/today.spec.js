@@ -12,7 +12,7 @@ describe("Point forecast › Today tab", () => {
   });
 
   beforeEach(async ({ page }) => {
-    await page.goto(services.webApp("/point/34.749/-92.275/#today"), {
+    await page.goto(services.webApp("/forecast/point/34.749/-92.275/#today"), {
       waitUntil: "load",
     });
     const djdt = page.getByRole("link", { name: "Hide »" });
@@ -23,7 +23,7 @@ describe("Point forecast › Today tab", () => {
 
   describe("When viewing today's forecast", () => {
     test("I do not expect to see marine alerts", async ({ page }) => {
-      await page.goto(services.webApp("/point/33.521/-86.812/"), {
+      await page.goto(services.webApp("/forecast/point/33.521/-86.812/"), {
         waitUntil: "load",
       });
       const alerts = page.getByRole("alert");
@@ -43,7 +43,7 @@ describe("Point forecast › Today tab", () => {
     });
 
     test("I expect to see N/A when there is no wind data", async ({ page }) => {
-      await page.goto(services.webApp("/point/33.211/-87.566/"), {
+      await page.goto(services.webApp("/forecast/point/33.211/-87.566/"), {
         waitUntil: "load",
       });
       const row = page.getByRole("rowheader", { name: "WIND" });

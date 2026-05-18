@@ -6,7 +6,7 @@ const { describe, beforeEach } = test;
 describe.skip("alerts in the daily tab", () => {
   beforeEach(async ({ page }) => {
     await page.goto(services.apiProxy("/proxy/play/testing"));
-    await page.goto("/point/34.749/-92.275", { waitUntil: "load" });
+    await page.goto("/forecast/point/34.749/-92.275", { waitUntil: "load" });
     await page.locator("#daily-tab-button").first().click();
   });
 

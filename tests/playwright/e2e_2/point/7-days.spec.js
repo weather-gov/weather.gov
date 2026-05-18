@@ -13,7 +13,7 @@ describe("Point forecast › 7 Days tab", () => {
   });
 
   beforeEach(async ({ page }) => {
-    await page.goto(services.webApp("/point/34.749/-92.275/#daily"), {
+    await page.goto(services.webApp("/forecast/point/34.749/-92.275/#daily"), {
       waitUntil: "load",
     });
     const djdt = page.getByRole("link", { name: "Hide »" });
