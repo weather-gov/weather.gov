@@ -24,8 +24,8 @@ describe("Saved locations tests", () => {
 
     it("returns the locations from localStorage", () => {
       const expected = [
-        {text: "Hobbiton, The Shire", url: "/middle-earth/shire/hobbiton/"},
-        { text: "Edoras, Rohan", url: "/middle-earth/rohan/edoras/"}
+        { text: "Hobbiton, The Shire", url: "/middle-earth/shire/hobbiton/" },
+        { text: "Edoras, Rohan", url: "/middle-earth/rohan/edoras/" }
       ];
       global.localStorage.getItem.returns(JSON.stringify(expected));
 
@@ -35,6 +35,42 @@ describe("Saved locations tests", () => {
       const getItemCall = global.localStorage.getItem.getCall(0);
       expect(getItemCall.args[0]).to.equal("wxgov_recent_locations");
       expect(actual).to.deep.equal(expected);
+    });
+
+    it("returns the point locations adding '/forecast' if needed", () => {
+      const stored = [
+        { text: "Hobbiton, The Shire", url: "/point/-38/176" },
+        { text: "Edoras, Rohan", url: "/point/-44/170" }
+      ];
+      global.localStorage.getItem.returns(JSON.stringify(stored));
+
+      const actual = getSavedLocations();
+
+      expect(global.localStorage.getItem.callCount).to.equal(1);
+      const getItemCall = global.localStorage.getItem.getCall(0);
+      expect(getItemCall.args[0]).to.equal("wxgov_recent_locations");
+      expect(actual[0].text).to.equal(stored[0].text);
+      expect(actual[0].url).to.equal("/forecast/point/-38/176");
+      expect(actual[1].text).to.equal(stored[1].text);
+      expect(actual[1].url).to.equal("/forecast/point/-44/170");
+    });
+
+    it("returns the point locations without adding forecast if present", () => {
+      const stored = [
+        { text: "Hobbiton, The Shire", url: "/forecast/point/-38/176" },
+        { text: "Edoras, Rohan", url: "/forecast/point/-44/170" }
+      ];
+      global.localStorage.getItem.returns(JSON.stringify(stored));
+
+      const actual = getSavedLocations();
+
+      expect(global.localStorage.getItem.callCount).to.equal(1);
+      const getItemCall = global.localStorage.getItem.getCall(0);
+      expect(getItemCall.args[0]).to.equal("wxgov_recent_locations");
+      expect(actual[0].text).to.equal(stored[0].text);
+      expect(actual[0].url).to.equal("/forecast/point/-38/176");
+      expect(actual[1].text).to.equal(stored[1].text);
+      expect(actual[1].url).to.equal("/forecast/point/-44/170");
     });
   });
 
