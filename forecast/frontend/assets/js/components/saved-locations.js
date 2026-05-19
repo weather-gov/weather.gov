@@ -13,7 +13,22 @@
  */
 export function getSavedLocations() {
   try {
-    return JSON.parse(localStorage.getItem("wxgov_recent_locations") ?? "[]");
+    const existing = localStorage.getItem("wxgov_recent_locations");
+    const parsed = JSON.parse(existing ?? "[]");
+
+    // Check if any saved locations still have the old /point/lat/long url format
+    const needsUpdate = parsed.filter(({ url }) => url.startsWith("/point"));
+
+    if (needsUpdate.length > 0) {
+      // Prepend the forecast path to any URLs that need it
+      const updated = parsed.map(({ url, ...rest }) => ({
+        ...rest,
+        url: url.startsWith("/forecast") ? url : `/forecast${url}`,
+      }));
+      localStorage.setItem("wxgov_recent_locations", JSON.stringify(updated));
+      return updated;
+    }
+    return parsed;
   } catch (e) {
     return [];
   }
