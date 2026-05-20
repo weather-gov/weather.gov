@@ -180,7 +180,7 @@ deploy-to-staging:
     - >
       echo {
       \"django_secret_key\": \"$CI_STAGING_DJANGO_SECRET_KEY\",
-      \"newrelic_license\": \"$CI_NEW_RELIC_LICENSE\",
+      \"newrelic_license\": \"\",
       \"sp_private_key\": \"$CI_STAGING_SP_PRIVATE_KEY\",
       \"sp_public_key\": \"$CI_STAGING_SP_PUBLIC_KEY\"
       } > credentials-staging.json

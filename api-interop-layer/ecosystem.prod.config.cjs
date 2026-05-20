@@ -1,3 +1,4 @@
+const enableNewRelic = !!process.env.NEW_RELIC_LICENSE_KEY;
 module.exports = {
   apps: [{
     name: "api-interop-layer",
@@ -6,7 +7,7 @@ module.exports = {
     exec_mode: "cluster",
     ignore_watch: ["newrelic_agent.log", "node_modules", ".pm2"],
     args: "--update-env",
-    interpreter_args: "--experimental-loader newrelic/esm-loader.mjs -r newrelic",
+    interpreter_args: enableNewRelic ? "--experimental-loader newrelic/esm-loader.mjs -r newrelic" : "",
     watch: ["**/*.js"],
     API_INTEROP_PRODUCTION: true
   }]
