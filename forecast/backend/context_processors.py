@@ -1,3 +1,4 @@
+import json
 import os
 from contextvars import ContextVar
 
@@ -21,6 +22,7 @@ def route_info(request):
     # timings are only available in dev/staging environments
     if settings.API_TIMINGS_METADATA:
         defaults["timings"] = TIMING_CONTEXT.get()
+        defaults["timings_serialized"] = json.dumps(TIMING_CONTEXT.get())
 
     return defaults
 

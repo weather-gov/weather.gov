@@ -185,6 +185,13 @@
         </div>
       </div>
     </div>
-    {% endif %}
+  {% endif %}
+  {% if timings_serialized %}
+    <template>
+      BEGIN_INTEROP_TIMINGS
+      {{timings_serialized}}
+      END_INTEROP_TIMINGS
+    </template>
+  {% endif %}
 
 </footer>
