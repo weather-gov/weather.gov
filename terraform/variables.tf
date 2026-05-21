@@ -162,7 +162,13 @@ variable "api_timings_metadata" {
 }
 
 variable "internal_gridpoint_lookup" {
-  type       = bool
-  default    = false
+  type        = bool
+  default     = false
   description = "Whether or not to attempt internal geodata lookup for resolving lat/lon into grid cells"
+}
+
+variable "django_interop_timeout" {
+  type        = number
+  default     = 65
+  description = "How long Django should wait for the interop, in seconds"
 }

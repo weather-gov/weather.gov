@@ -31,6 +31,7 @@ env = environs.Env()
 DEBUG = env.bool("DJANGO_DEBUG", default=False)
 TESTING = "test" in sys.argv or "PYTEST_VERSION" in os.environ
 API_TIMINGS_METADATA = env.bool("API_TIMINGS_METADATA", default=False)
+API_INTEROP_TIMEOUT = env.int("API_INTEROP_TIMEOUT", 65)
 
 # CSRF_COOKIE_SECURE = True
 # SESSION_COOKIE_SECURE = True
