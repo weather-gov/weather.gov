@@ -23,8 +23,8 @@ urlpatterns = [
     path("afd/<wfo>/", point.afd_by_office, name="afd_by_office"),
     path("afd/<wfo>/<afd_id>/", point.afd_by_office_and_id, name="afd_by_office_and_id"),
     # County pages
-    path("county/", county.index, name="county_index"),
-    path("county/<countyfips>/", county.county_overview, name="county_overview"),
+    path("forecast/county/", county.index, name="county_index"),
+    path("forecast/county/<countyfips>/", county.county_overview, name="county_overview"),
     path("forecast/county/<str:county_fips>/risk-overview/", risk.risk_details_by_county, name="county_risk_overview"),
     # State pages
     path("forecast/state/", state.index, name="state_index"),
