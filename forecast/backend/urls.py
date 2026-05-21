@@ -4,7 +4,7 @@ from django.views.generic.base import RedirectView, TemplateView
 from wagtail.admin import urls as wagtailadmin_urls
 from wagtail.documents import urls as wagtaildocs_urls
 
-from backend.views import county, index, offices, partials, point, risk, state
+from backend.views import county, errors, index, offices, partials, point, risk, state
 
 from .url_converters import FloatConverter
 
@@ -26,6 +26,7 @@ urlpatterns = [
     path("forecast/county/", county.index, name="county_index"),
     path("forecast/county/<countyfips>/", county.county_overview, name="county_overview"),
     path("forecast/county/<str:county_fips>/risk-overview/", risk.risk_details_by_county, name="county_risk_overview"),
+    path("county<path:rest>", errors.deprecated_path, name="deprecated_county_pages"),
     # State pages
     path("forecast/state/", state.index, name="state_index"),
     path("forecast/state/<state>/", state.state_alerts, name="state_overview"),
@@ -50,6 +51,7 @@ urlpatterns = [
     path("documents/", include(wagtaildocs_urls)),
     # Point forecast related, etc
     path("forecast/point/<float:lat>/<float:lon>/", point.point_location, name="point"),
+    path("point/<float:lat>/<float:lon>/", errors.deprecated_path, name="deprecated_point"),
     path("place/<state>/<place>/", point.place_forecast, name="place_forecast"),
     path("health/", index.health, name="health"),
     path("llms.txt", TemplateView.as_view(template_name="llms.txt", content_type="text/plain")),

@@ -1076,6 +1076,12 @@ msgstr "Something went wrong on our end. Please wait a few moments and reload th
 msgid "error.404.generic.message.01"
 msgstr "404: The requested page was not found."
 
+msgid "error.404.deprecated-path.h1.01"
+msgstr "404: Page not found."
+
+msgid "error.404.deprecated-path.message.01"
+msgstr "You're trying to visit an outdated URL. Please visit <a href='https://beta.weather.gov' class='usa-link'>beta.weather.gov</a> and search for your location again. We're sorry for the inconvenience."
+
 msgid "error.404.not-supported.message.01"
 msgstr "The requested location is not available."
 
