@@ -227,8 +227,11 @@ msgstr "National Oceanic and Atmospheric Administration logo"
 msgid "footer.noaa-motto.01"
 msgstr "Science. Service. Stewardship"
 
+msgid "footer.link.scroll-to-top.01"
+msgstr "Back to Top"
+
 msgid "footer.link.touchpoints.01"
-msgstr "Help improve this site"
+msgstr "Give Feedback"
 
 msgid "footer.text.usa-gov-site-alt.01"
 msgstr "An official website of the United States government"

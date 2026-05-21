@@ -1,17 +1,119 @@
 @use "uswds-core" as *;
 
-/* Touchpoints button overrides
-------------------------------------- */
-@include at-media(mobile) {
-  .touchpoints-button {
-    right: unset;
-    width: 100vw;
+/**
+ * Touchpoints and "scroll to top" button overrides
+ *
+ * The scroll to top button comes in both SVG and hyperlink forms.
+ * SVG is for mobile screens. Hyperlink is styled as a button on larger screens.
+ */
+
+#hover-buttons {
+  width: 100%;
+  right: 0;
+  bottom: 0;
+}
+
+.ride-up-button--tablet {
+  background-color: white;
+  display: none;
+  visibility: hidden;
+  opacity: 0;
+  transition:
+    opacity 0.5s linear,
+    visibility 0s linear 0.5s;
+
+  &:active,
+  &:focus,
+  &:hover {
+    background-color: white;
   }
 }
 
+.ride-up-button--tablet.ride-up-button--visible {
+  visibility: visible;
+  opacity: 1;
+  transition:
+    opacity 0.5s linear,
+    visibility 0s linear;
+}
+
+.ride-up-button--mobile {
+  display: block;
+  margin: auto;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  visibility: hidden;
+  opacity: 0;
+  overflow: hidden;
+  transform: translateY(100%);
+  transition:
+    opacity 0.5s linear,
+    transform 0.5s ease-in,
+    visibility 0s linear 0.5s;
+}
+
+button.ride-up-button--mobile:focus {
+  outline: none;
+}
+
+.ride-up-button--mobile > svg {
+  --wx-to-top-arrow-color: var(--color-primary);
+  --wx-to-top-arrow-bg-color: white;
+}
+
+@media (hover: hover) {
+  .ride-up-button--mobile:hover > svg {
+    --wx-to-top-arrow-color: var(--color-primary-dark);
+    --wx-to-top-arrow-bg-color: var(--color-base-lighter);
+  }
+}
+
+.ride-up-button--mobile:active > svg {
+  --wx-to-top-arrow-color: var(--color-primary-darker);
+  --wx-to-top-arrow-bg-color: var(--color-base-lighter);
+}
+
+.ride-up-button--mobile.ride-up-button--visible {
+  visibility: visible;
+  opacity: 1;
+  transform: translateY(0%);
+  transition:
+    opacity 0.5s linear,
+    transform 0.5s ease-out,
+    visibility 0s linear;
+}
+
+a.touchpoints-button {
+  width: 100%;
+}
+
 @include at-media(tablet-lg) {
-  .touchpoints-button {
-    right: units(3);
+  #hover-buttons {
     width: unset;
+    right: units(2);
+    bottom: units(2);
+  }
+
+  .ride-up-button--tablet {
+    display: inline-flex;
+  }
+
+  .ride-up-button--mobile {
+    display: none;
+  }
+
+  a.touchpoints-button {
+    width: unset;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ride-up-button--tablet,
+  .ride-up-button--mobile,
+  .ride-up-button--mobile.ride-up-button--visible,
+  .ride-up-button--tablet.ride-up-button--visible {
+    transition: none;
   }
 }

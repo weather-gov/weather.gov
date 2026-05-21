@@ -8,6 +8,7 @@ import "./components/timer.js";
 
 // For site nav
 import "./components/site-nav.js";
+import "./components/scroll-to-top.js";
 
 // For location search
 import "./components/wx-loader.js";
