@@ -189,7 +189,7 @@
   {% if timings_serialized %}
     <template>
       BEGIN_INTEROP_TIMINGS
-      {{timings_serialized}}
+      {{timings_serialized|safe}}
       END_INTEROP_TIMINGS
     </template>
   {% endif %}
