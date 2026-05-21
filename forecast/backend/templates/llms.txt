@@ -13,10 +13,10 @@ The beta site currently supports three primary navigation structures:
   - Replaces legacy zip-code or city-based routing with precise coordinate routing.
   - Example: `/forecast/point/37.8715/-122.2730/`
 
-- **County/Zone Pages** (`/county/<countyfips>/`):
+- **County/Zone Pages** (`/forecast/county/<countyfips>/`):
   - Aggregated weather information, alerts, and hazards for specific counties.
   - Uses the 5-digit FIPS code standard.
-  - Example: `/county/06001/` (Alameda County, CA)
+  - Example: `/forecast/county/06001/` (Alameda County, CA)
 
 - **About Pages** (`/about`):
   - Organizational information, mission statements, and details regarding the beta rollout.

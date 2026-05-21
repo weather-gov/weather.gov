@@ -20,62 +20,62 @@ listed here.
 
 ### ⏵ with alerts
 
-- [http://localhost:8080/county/27123/](http://localhost:8080/county/27123/)  
+- [http://localhost:8080/forecast/county/27123/](http://localhost:8080/forecast/county/27123/)  
   Has briefing, weather story, and risk overview
 
-- [http://localhost:8080/county/42101/](http://localhost:8080/county/42101/)  
+- [http://localhost:8080/forecast/county/42101/](http://localhost:8080/forecast/county/42101/)  
   Has briefing and weather story, but no risk overview
 
-- [http://localhost:8080/county/48439/](http://localhost:8080/county/48439/)  
+- [http://localhost:8080/forecast/county/48439/](http://localhost:8080/forecast/county/48439/)  
   Has briefing and risk overview, but no weather story
 
-- [http://localhost:8080/county/06001/](http://localhost:8080/county/06001/)  
+- [http://localhost:8080/forecast/county/06001/](http://localhost:8080/forecast/county/06001/)  
   Has briefing, but no weather story or risk overview
 
-- [http://localhost:8080/county/06037/](http://localhost:8080/county/06037/)  
+- [http://localhost:8080/forecast/county/06037/](http://localhost:8080/forecast/county/06037/)  
   Has weather story and risk overview, but no briefing
 
-- [http://localhost:8080/county/21111/](http://localhost:8080/county/21111/)  
+- [http://localhost:8080/forecast/county/21111/](http://localhost:8080/forecast/county/21111/)  
   Has weather story, but no briefing or risk overview
 
-- [http://localhost:8080/county/22071/](http://localhost:8080/county/22071/)  
+- [http://localhost:8080/forecast/county/22071/](http://localhost:8080/forecast/county/22071/)  
   Has risk overview, but no briefing or weather story
 
-- [http://localhost:8080/county/22087/](http://localhost:8080/county/22087/)  
+- [http://localhost:8080/forecast/county/22087/](http://localhost:8080/forecast/county/22087/)  
   Has no briefing, weather story, or risk over view
 
 ### ⏵ without alerts
 
-- [http://localhost:8080/county/15003/](http://localhost:8080/county/15003/)  
+- [http://localhost:8080/forecast/county/15003/](http://localhost:8080/forecast/county/15003/)  
   Has briefing, weather story, and risk overview
 
-- [http://localhost:8080/county/34017/](http://localhost:8080/county/34017/)  
+- [http://localhost:8080/forecast/county/34017/](http://localhost:8080/forecast/county/34017/)  
   Has briefing and weather story, but no risk overview
 
-- [http://localhost:8080/county/55009/](http://localhost:8080/county/55009/)  
+- [http://localhost:8080/forecast/county/55009/](http://localhost:8080/forecast/county/55009/)  
   Has briefing and risk overview, but no weather story
 
-- [http://localhost:8080/county/56021/](http://localhost:8080/county/56021/)  
+- [http://localhost:8080/forecast/county/56021/](http://localhost:8080/forecast/county/56021/)  
   Has briefing, but no weather story or risk overview
 
-- [http://localhost:8080/county/26055/](http://localhost:8080/county/26055/)  
+- [http://localhost:8080/forecast/county/26055/](http://localhost:8080/forecast/county/26055/)  
   Has weather story and risk overview, but no briefing
 
-- [http://localhost:8080/county/48303/](http://localhost:8080/county/48303/)  
+- [http://localhost:8080/forecast/county/48303/](http://localhost:8080/forecast/county/48303/)  
   Has weather story, but no briefing or risk overview
 
-- [http://localhost:8080/county/02110/](http://localhost:8080/county/02110/)  
+- [http://localhost:8080/forecast/county/02110/](http://localhost:8080/forecast/county/02110/)  
   Has risk overview, but no briefing or weather story
 
-- [http://localhost:8080/county/04013/](http://localhost:8080/county/04013/)  
+- [http://localhost:8080/forecast/county/04013/](http://localhost:8080/forecast/county/04013/)  
   Has no briefing, weather story, or risk over view
 
 ## Risk overview
 
-- [http://localhost:8080/counties/ghwo/27123](http://localhost:8080/counties/ghwo/27123)  
+- [http://localhost:8080/forecast/county/27123/risk-overview/](http://localhost:8080/forecast/county/27123/risk-overview/)  
   Has risk overview
 
-- [http://localhost:8080/counties/ghwo/34017](http://localhost:8080/counties/ghwo/34017)  
+- [http://localhost:8080/forecast/county/34017/risk-overview/](http://localhost:8080/forecast/county/34017/risk-overview/)  
   Does not have risk overview
 
 ## Products

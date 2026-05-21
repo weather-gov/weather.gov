@@ -217,7 +217,7 @@ export default class StateAlertsHandler {
         const link = liClone.querySelector(".js-county-link");
 
         // Populate link data slots
-        link.href = `/county/${fips}/`;
+        link.href = `/forecast/county/${fips}/`;
         liClone.querySelector(".js-county-name").textContent = name;
         liClone.querySelector(".js-subdivision-label").textContent =
           ` ${this.meta.trans.subdivision_name}`;
