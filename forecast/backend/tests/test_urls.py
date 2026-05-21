@@ -1,14 +1,7 @@
 from django.test import TestCase
 from django.urls import resolve, reverse
 
-from backend.views import (
-    county,
-    index,
-    offices,
-    partials,
-    point,
-    state,
-)
+from backend.views import county, errors, index, offices, partials, point, state
 
 
 class TestUrls(TestCase):
@@ -86,6 +79,14 @@ class TestUrls(TestCase):
         self.assertEqual(resolver.kwargs, {"lat": -82.537, "lon": 42.535})
         self.assertEqual(back, "/forecast/point/40.235/34.532/")
 
+    def test_deprecated_point_url(self):
+        """Test custom 404 page for bookmarked /point/lat/lon urls."""
+        resolver = resolve("/point/-82.537/42.535/")
+        back = reverse("deprecated_point", kwargs={"lat": 40.235, "lon": 34.532})
+        self.assertEqual(resolver.func, errors.deprecated_path)
+        self.assertEqual(resolver.kwargs, {"lat": -82.537, "lon": 42.535})
+        self.assertEqual(back, "/point/40.235/34.532/")
+
     def test_place(self):
         """Test place forecast."""
         resolver = resolve("/place/State/Of_Mind/")
@@ -118,6 +119,14 @@ class TestUrls(TestCase):
         self.assertEqual(resolver.func, county.index)
         self.assertEqual(back, "/forecast/county/")
 
+    def test_deprecated_county_index_url(self):
+        """Test custom 404 page for bookmarked /county/ urls."""
+        resolver = resolve("/county/")
+        back = reverse("deprecated_county_pages", kwargs={"rest": "/"})
+        self.assertEqual(resolver.func, errors.deprecated_path)
+        self.assertEqual(resolver.kwargs, {"rest": "/"})
+        self.assertEqual(back, "/county/")
+
     def test_county_overview(self):
         """Test county overview page."""
         resolver = resolve("/forecast/county/12345/")
@@ -125,6 +134,18 @@ class TestUrls(TestCase):
         self.assertEqual(resolver.func, county.county_overview)
         self.assertEqual(resolver.kwargs, {"countyfips": "12345"})
         self.assertEqual(back, "/forecast/county/54321/")
+
+    def test_deprecated_county_sub_urls(self):
+        """Test custom 404 page for bookmarked /county/{fips} urls."""
+        resolver = resolve("/county/12345/")
+        # These URLs are irrelevant because we set them up with the <path:rest> pattern,
+        # so they can really be anything at all
+        # That also means we can't test the "countyfips" syntax here because they will be
+        # whatever the user entered, (or technically, whatever they had bookmarked)
+        back = reverse("deprecated_county_pages", kwargs={"rest": "/54321/"})
+        self.assertEqual(resolver.func, errors.deprecated_path)
+        self.assertEqual(resolver.kwargs, {"rest": "/12345/"})
+        self.assertEqual(back, "/county/54321/")
 
     def test_state_index(self):
         """Test state index."""

@@ -3,6 +3,11 @@ from django.shortcuts import render
 from spatial.models import WeatherPlace
 
 
+def deprecated_path(request, **kwargs):
+    """Render a 404 for the old URL structures, i.e. /point/lat/lon/, /county/25049/."""
+    return render(request, "errors/404/deprecated-path.html", status=404)
+
+
 def handle_404(request, exception=None):
     """Handle 404 errors."""
     context = {}
