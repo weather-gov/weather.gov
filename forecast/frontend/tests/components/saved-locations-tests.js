@@ -1,155 +1,119 @@
 import { expect } from "chai";
 import { beforeEach, afterEach } from "mocha";
 import { createSandbox } from "sinon";
-import {
-  getSavedLocations,
-  hasSavedLocation,
-  addSavedLocation,
-  removeSavedLocation,
-} from "../../assets/js/components/saved-locations.js";
+import { getSavedLocations, addSavedLocation } from "../../assets/js/components/saved-locations.js";
 
 describe("Saved locations tests", () => {
-  let sandbox;
-  const savedLocalStorageKey = "wxgov_saved_locations";
-
-  const sampleData = {
-    hashed: {
-      "edoras, rohan": "/middle-earth/rohan/edoras/",
-      "hobbiton, the shire": "/middle-earth/shire/hobbiton/",
-    },
-    sorted: [
-      { text: "Edoras, Rohan", url: "/middle-earth/rohan/edoras/" },
-      { text: "Hobbiton, The Shire", url: "/middle-earth/shire/hobbiton/" },
-    ],
-  };
-
-  beforeEach(() => {
-    sandbox = createSandbox();
-    global.localStorage = {
-      getItem: sandbox.stub(),
-      setItem: sandbox.stub(),
-    };
-  });
-
-  afterEach(() => {
-    sandbox.restore();
-  });
-
+  // before(async () => {
+  //   await import("../../assets/js/components/saved-locations.js");
+  // });
+  
   describe("getSavedLocations", () => {
-    it("returns the sorted saved locations from localStorage", () => {
-      global.localStorage.getItem.returns(JSON.stringify(sampleData));
+    let sandbox;
+    beforeEach(() => {
+      sandbox = createSandbox();
+      global.localStorage = {
+        getItem: sandbox.stub(),
+        setItem: sandbox.stub()
+      };
+    });
+
+    afterEach(() => {
+      sandbox.restore();
+    });
+
+    it("returns the locations from localStorage", () => {
+      const expected = [
+        { text: "Hobbiton, The Shire", url: "/middle-earth/shire/hobbiton/" },
+        { text: "Edoras, Rohan", url: "/middle-earth/rohan/edoras/" }
+      ];
+      global.localStorage.getItem.returns(JSON.stringify(expected));
 
       const actual = getSavedLocations();
 
       expect(global.localStorage.getItem.callCount).to.equal(1);
       const getItemCall = global.localStorage.getItem.getCall(0);
-      expect(getItemCall.args[0]).to.equal(savedLocalStorageKey);
-      expect(actual).to.deep.equal(sampleData.sorted);
+      expect(getItemCall.args[0]).to.equal("wxgov_recent_locations");
+      expect(actual).to.deep.equal(expected);
     });
-  });
 
-  describe("hasSavedLocation", () => {
-    it("returns true that location is in localStorage", () => {
-      const loc = "Edoras, Rohan";
-      global.localStorage.getItem.returns(JSON.stringify(sampleData));
+    it("returns the point locations adding '/forecast' if needed", () => {
+      const stored = [
+        { text: "Hobbiton, The Shire", url: "/point/-38/176" },
+        { text: "Edoras, Rohan", url: "/point/-44/170" }
+      ];
+      global.localStorage.getItem.returns(JSON.stringify(stored));
 
-      const found = hasSavedLocation(loc);
+      const actual = getSavedLocations();
 
       expect(global.localStorage.getItem.callCount).to.equal(1);
       const getItemCall = global.localStorage.getItem.getCall(0);
-      expect(getItemCall.args[0]).to.equal(savedLocalStorageKey);
-      expect(found).to.be.true;
+      expect(getItemCall.args[0]).to.equal("wxgov_recent_locations");
+      expect(actual[0].text).to.equal(stored[0].text);
+      expect(actual[0].url).to.equal("/forecast/point/-38/176");
+      expect(actual[1].text).to.equal(stored[1].text);
+      expect(actual[1].url).to.equal("/forecast/point/-44/170");
     });
 
-    it("returns false that location is in localStorage", () => {
-      const loc = "Dol Guldur, Mirkwood";
-      global.localStorage.getItem.returns(JSON.stringify(sampleData));
+    it("returns the point locations without adding forecast if present", () => {
+      const stored = [
+        { text: "Hobbiton, The Shire", url: "/forecast/point/-38/176" },
+        { text: "Edoras, Rohan", url: "/forecast/point/-44/170" }
+      ];
+      global.localStorage.getItem.returns(JSON.stringify(stored));
 
-      const found = hasSavedLocation(loc);
+      const actual = getSavedLocations();
 
       expect(global.localStorage.getItem.callCount).to.equal(1);
       const getItemCall = global.localStorage.getItem.getCall(0);
-      expect(getItemCall.args[0]).to.equal(savedLocalStorageKey);
-      expect(found).to.be.false;
+      expect(getItemCall.args[0]).to.equal("wxgov_recent_locations");
+      expect(actual[0].text).to.equal(stored[0].text);
+      expect(actual[0].url).to.equal("/forecast/point/-38/176");
+      expect(actual[1].text).to.equal(stored[1].text);
+      expect(actual[1].url).to.equal("/forecast/point/-44/170");
     });
   });
 
   describe("addSavedLocation", () => {
-    it("adds a new saved location to localStorage", () => {
-      const newLoc = {
-        text: "Dol Guldur, Mirkwood",
-        url: "/middle-earth/mirkwood/dol-guldur",
+    let sandbox;
+    beforeEach(() => {
+      sandbox = createSandbox();
+      global.localStorage = {
+        getItem: sandbox.stub(),
+        setItem: sandbox.stub()
       };
+    });
 
-      const expected = {
-        hashed: {
-          [newLoc.text.toLowerCase()]: newLoc.url,
-          ...sampleData.hashed,
-        },
-        sorted: [newLoc, ...sampleData.sorted].sort((first, second) => {
-          if (first.text.toLowerCase() < second.text.toLowerCase()) return -1;
-          if (first.text.toLowerCase() > second.text.toLowerCase()) return 1;
-          return 0;
-        }),
-      };
+    afterEach(() => {
+      sandbox.restore();
+    });
 
-      global.localStorage.getItem.returns(JSON.stringify(sampleData));
+    it("saves the location to localStorage when there are no other saved items", () => {
+      const example = { text: "Hobbiton, The Shire", url: "/middle-earth/shire/hobbiton/"};
+      const expected = JSON.stringify([example]);
 
-      addSavedLocation(newLoc);
+      addSavedLocation(example);
+
+      expect(global.localStorage.setItem.callCount).to.equal(1);
+      const setCall = global.localStorage.setItem.getCall(0);
+      expect(setCall.args[1]).to.equal(expected);
+      expect(setCall.args[0]).to.equal("wxgov_recent_locations");
+    });
+
+    it("prepends the location to exiting list in localStorage, when there are already saved items", () => {
+      const existingItems = [
+        {text: "Hobbiton, The Shire", url: "/middle-earth/shire/hobbiton/"}
+      ];
+      global.localStorage.getItem.returns(JSON.stringify(existingItems));
+      const newItem = { text: "Edoras, Rohan", url: "/middle-earth/rohan/edoras/"};
+      const expected = JSON.stringify([ newItem, ...existingItems ]);
+
+      addSavedLocation(newItem);
+
       expect(global.localStorage.setItem.callCount).to.equal(1);
       const setItemCall = global.localStorage.setItem.getCall(0);
-      expect(setItemCall.args[0]).to.equal(savedLocalStorageKey);
-      expect(JSON.parse(setItemCall.args[1])).to.deep.equal(expected);
+      expect(setItemCall.args[0]).to.equal("wxgov_recent_locations");
+      expect(setItemCall.args[1]).to.equal(expected);
     });
-
-    it("does not add an existing saved location to localStorage", () => {
-      const newLoc = sampleData.sorted[1];
-      global.localStorage.getItem.returns(JSON.stringify(sampleData));
-
-      addSavedLocation(newLoc);
-      expect(global.localStorage.setItem.callCount).to.equal(0);
-    });
-  });
-
-  describe("removeSavedLocation", () => {
-    it("removes the location from saved locations in localStorage", () => {
-      const removalLoc = "Edoras, Rohan";
-      const modifiedSampleData = { ...sampleData };
-      delete modifiedSampleData.hashed[removalLoc.toLowerCase()];
-      modifiedSampleData.sorted = sampleData.sorted.filter((item) => {
-        return item.text !== removalLoc;
-      });
-
-      global.localStorage.getItem.returns(JSON.stringify(sampleData));
-
-      removeSavedLocation(removalLoc);
-
-      expect(global.localStorage.getItem.callCount).to.equal(1);
-      const setItemCall = global.localStorage.setItem.getCall(0);
-      expect(setItemCall.args[0]).to.equal(savedLocalStorageKey);
-
-      const callJson = JSON.parse(setItemCall.args[1]);
-      expect(callJson).to.have.property("hashed");
-      expect(callJson).to.have.property("sorted");
-      expect(callJson.sorted).to.deep.equal(modifiedSampleData.sorted);
-      expect(callJson.hashed).to.deep.equal(modifiedSampleData.hashed);
-    });
-  });
-  it("does not remove the location not included from saved locations in localStorage", () => {
-    const removalLoc = "Dol Guldur, Mirkwood";
-    const modifiedSampleData = { ...sampleData };
-    delete modifiedSampleData.hashed[removalLoc.toLowerCase()];
-    modifiedSampleData.sorted = sampleData.sorted.filter((item) => {
-      return item.text !== removalLoc;
-    });
-
-    global.localStorage.getItem.returns(JSON.stringify(sampleData));
-
-    removeSavedLocation(removalLoc);
-
-    expect(global.localStorage.getItem.callCount).to.equal(1);
-    const getItemCall = global.localStorage.getItem.getCall(0);
-    expect(getItemCall.args[0]).to.equal(savedLocalStorageKey);
-    expect(global.localStorage.setItem.callCount).to.equal(0);
   });
 });

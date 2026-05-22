@@ -560,15 +560,6 @@ msgstr "Explore other radar views"
 msgid "safety.labels.tips.01"
 msgstr "Tips to Stay Safe"
 
-msgid "saved-locations.heading.section-main.01"
-msgstr "Saved locations"
-
-msgid "saved-locations.heading.section-nav.01"
-msgstr "Saved Locations"
-
-msgid "saved-locations.title.button.01"
-msgstr "Saved location"
-
 msgid "satellite.heading.satellite.01"
 msgstr "Satellite"
 
