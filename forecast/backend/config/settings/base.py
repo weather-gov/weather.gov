@@ -110,6 +110,8 @@ MIDDLEWARE = [
     # Custom middleware for catching interop errors
     "backend.middleware.TooManyRequestsMiddleware",
     "backend.middleware.GatewayTimeoutMiddleware",
+    # Custom middleware for timing/profiling django in a prod env
+    "backend.middleware.DjangoTimingMiddleware",
 ]
 
 ROOT_URLCONF = "backend.config.urls"
