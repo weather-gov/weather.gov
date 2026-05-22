@@ -1,3 +1,5 @@
+from time import time
+
 from django.shortcuts import render
 
 from backend.exceptions import Http429, Http504
@@ -64,3 +66,20 @@ class GatewayTimeoutMiddleware:
             response.status_code = 504
             return response
         return None
+
+
+class DjangoTimingMiddleware:
+    """Measure the time it takes for Django to render any page."""
+
+    def __init__(self, get_response):
+        self.get_response = get_response
+
+    def __call__(self, request):
+        """Inject timings (milliseconds) for a request."""
+        starting = time() * 1000
+        response = self.get_response(request)
+        ending = time() * 1000
+        duration = ending - starting
+        response["X-Django-Timing-Ms"] = f"{duration:.2f}"
+
+        return response
