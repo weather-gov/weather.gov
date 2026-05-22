@@ -3,6 +3,7 @@ from datetime import datetime
 from zoneinfo import ZoneInfo
 
 from django.db.models import Prefetch
+from django.http import Http404
 from django.shortcuts import get_object_or_404, render
 from django.views.decorators.cache import cache_control, never_cache
 from shapely import MultiPolygon, Polygon
@@ -35,10 +36,22 @@ def index(request):
 
 
 @never_cache
-def county_overview(request, countyfips):  # noqa: C901
+def county_overview(request, countyfips=None, county_name=None, state=None):  # noqa: C901
     """Render the main page for a particular county."""
-    county = get_object_or_404(WeatherCounties.objects.defer("shape"), countyfips=countyfips)
-    county_data = interop.get_county_data(countyfips)
+    county = None
+    if (countyfips):
+        county = get_object_or_404(WeatherCounties.objects.defer("shape"), countyfips=countyfips)
+    elif (county_name and state):
+        regex_county = county_name.replace("-", " ").replace(" ", r"\W*")
+        county = WeatherCounties.objects.defer("shape").filter(
+            st__iexact=state,
+            countyname__iregex=rf"{regex_county}").first()
+        if not county:
+            raise Http404()
+    else:
+        raise Http404()
+
+    county_data = interop.get_county_data(county.countyfips)
 
     localtz = ZoneInfo("UTC")
     if county.timezone:
@@ -130,7 +143,7 @@ def county_overview(request, countyfips):  # noqa: C901
         request,
         "weather/county/overview.html",
         {
-            "countyfips": countyfips,
+            "countyfips": county.countyfips,
             "data": {
                 "alert_levels": levels,
                 "alert_level_days": level_days,
@@ -145,3 +158,4 @@ def county_overview(request, countyfips):  # noqa: C901
             },
         },
     )
+

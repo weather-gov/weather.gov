@@ -1,0 +1,253 @@
+@use "uswds-core" as *;
+
+// Mixins
+@mixin saved-location-bg {
+  background-image:
+    linear-gradient(90deg, color("primary-darker") 40%, transparent),
+    url("/public/images/front-page/wx_isobars.svg");
+  background-color: color("primary-darker");
+  background-repeat: repeat;
+  background-size: cover;
+}
+
+@mixin set-columns($media-type: "mobile") {
+  .use-columns {
+    column-gap: units(2);
+  }
+
+  @if $media-type == "tablet" {
+    .use-columns {
+      &--x2 {
+        columns: 2;
+      }
+
+      &--x3,
+      &--x4 {
+        columns: 3;
+      }
+    }
+  }
+
+  @if $media-type == "tablet-lg" {
+    .use-columns {
+      &--x2 {
+        columns: 2;
+      }
+
+      &--x3 {
+        columns: 3;
+      }
+
+      &--x4 {
+        columns: 4;
+      }
+    }
+  }
+
+  @if $media-type == "desktop" {
+    .use-columns {
+      column-gap: units(4);
+
+      &--x2 {
+        columns: 2;
+      }
+
+      &--x3 {
+        columns: 3;
+      }
+
+      &--x4 {
+        columns: 4;
+      }
+    }
+  }
+}
+
+// Saved locations section
+.saved-locations-section {
+  @include at-media("tablet") {
+    @include set-columns("tablet");
+  }
+
+  @include at-media("tablet-lg") {
+    @include set-columns("tablet-lg");
+  }
+
+  @include at-media("desktop") {
+    @include set-columns("desktop");
+  }
+
+  // Front-page and point page sections
+  &--front,
+  &--point {
+    background-color: color("primary-darker");
+    color: color("primary-lightest");
+
+    @include u-font-family("sans");
+
+    a {
+      color: color("primary-lighter");
+
+      &:hover {
+        color: color("primary-lightest");
+      }
+
+      &:active {
+        color: color("white");
+      }
+    }
+
+    h2 {
+      font-size: 28px; /* mobile */
+      font-weight: 400;
+    }
+
+    @include at-media("desktop") {
+      h2 {
+        font-size: 40px;
+      }
+    }
+  }
+
+  // Front-page section
+  &--front {
+    @include at-media("tablet-lg") {
+      @include saved-location-bg;
+    }
+
+    @include at-media("desktop") {
+      @include saved-location-bg;
+    }
+  }
+
+  // Nav section
+  &--nav {
+    @include u-font-family("sans");
+
+    padding-bottom: units(2);
+
+    // Adding class specificity due to stylelint "no-descending-specificity" error
+    a.saved-locations-item {
+      color: color("primary");
+
+      &:hover {
+        color: color("primary-dark");
+      }
+
+      &:active {
+        color: color("primary-darker");
+      }
+    }
+
+    @include at-media("tablet-lg") {
+      max-height: 25rem;
+      overflow-y: scroll;
+    }
+
+    @include at-media("desktop") {
+      max-height: 25rem;
+      overflow-y: scroll;
+    }
+  }
+}
+
+// Button and SVG icon styling
+// Set base icon no fill and stroke width
+svg.saved-locations-icon {
+  fill: none;
+  stroke-width: 2px;
+}
+
+.saved-locations-button-mode {
+  // Dark
+  &--dark {
+    .saved-locations-icon {
+      stroke: color("accent-cool");
+    }
+
+    &:hover,
+    &:active {
+      background-color: rgb(255 255 255 / 10%);
+
+      .saved-locations-icon {
+        stroke: color("accent-cool-lighter");
+      }
+    }
+
+    &[aria-checked="true"] {
+      .saved-locations-icon {
+        fill: color("accent-cool");
+      }
+
+      &:hover .saved-locations-icon {
+        fill: color("accent-cool-lighter");
+      }
+
+      &:active .saved-locations-icon {
+        fill: color("accent-cool-lighter");
+        fill-opacity: 0.4;
+      }
+    }
+
+    &[aria-checked="false"] {
+      &:hover .saved-locations-icon {
+        stroke: color("accent-cool-lighter");
+      }
+
+      &:active .saved-locations-icon {
+        fill: color("accent-cool-lighter");
+        fill-opacity: 0.4;
+      }
+    }
+  }
+
+  // Light
+  &--light {
+    svg.saved-locations-icon {
+      stroke: color("accent-cool-dark");
+    }
+
+    &:hover,
+    &:active {
+      background-color: color("base-lightest");
+
+      svg.saved-locations-icon {
+        stroke: color("accent-cool-darker");
+      }
+    }
+
+    &[aria-checked="false"] {
+      &:hover {
+        .saved-locations-icon {
+          stroke: color("accent-cool-darker");
+        }
+      }
+
+      &:active {
+        .saved-locations-icon {
+          fill: color("accent-cool-dark");
+          fill-opacity: 0.4;
+        }
+      }
+    }
+
+    &[aria-checked="true"] {
+      svg.saved-locations-icon {
+        fill: color("accent-cool-dark");
+      }
+
+      &:hover {
+        .saved-locations-icon {
+          fill: color("accent-cool-darker");
+        }
+      }
+
+      &:active {
+        .saved-locations-icon {
+          fill: color("accent-cool-dark");
+          fill-opacity: 0.4;
+        }
+      }
+    }
+  }
+}

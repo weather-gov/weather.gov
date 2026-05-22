@@ -218,7 +218,7 @@ describe("Location listbox tests", () => {
     expect(window.customElements.get("wx-location-listbox")).to.exist;
   });
 
-  describe("Saved search functionality", () => {
+  describe("Saved recent search functionality", () => {
     let sandbox;
     beforeEach(() => {
       sandbox = createSandbox();
@@ -233,7 +233,7 @@ describe("Location listbox tests", () => {
       sandbox.restore();
     });
 
-    it("calls addSavedLocation if the place data attribute is set on the element", () => {
+    it("calls addRecentLocation if the place data attribute is set on the element", () => {
       const newMarkup = `<wx-location-listbox id="listbox" data-place="Narnia, Closet"></wx-location-listbox>`;
       document.body.innerHTML = newMarkup;
       const listbox = document.getElementById("listbox");
@@ -249,7 +249,7 @@ describe("Location listbox tests", () => {
       }]));
     });
 
-    it("appends the place data to exiting list in localStorage, when there are already saved items", () => {
+    it("appends the recent place data to exiting list in localStorage, when there are already saved items", () => {
       const existingItems = [
         {text: "Hobbiton, The Shire", url: "/middle-earth/shire/hobbiton/"}
       ];

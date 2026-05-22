@@ -1,63 +1,116 @@
 /** @file Manage a visitor's recent/favorite locations in local storage. */
 
+const SAVED_LOC_STORAGE = "wxgov_saved_locations";
+const RECENT_LOC_STORAGE = "wxgov_recent_locations";
+
+/**
+ * @typedef {Object} SavedLocations from local storage
+ * @property {Object.<string, string>} hashed object of saved location (lowercase-text : url)
+ * @property {Array<SavedLocation>} sorted sorted list of saved locations
+ */
+
 /**
  * @typedef {Object} SavedLocation from local storage
- * @property {string} url the point forecast url for the location
  * @property {string} text the human-readable location name
+ * @property {string} url the point forecast url for the location
  */
 
 /**
- * Get the list of saved locations from local storage.
- *
- * @returns {SavedLocation}
+ * Get JSON parsed local storage for saved locations
+ * @returns {SavedLocations}
+ */
+function getParsedSavedLocationStorage() {
+  const storage = localStorage.getItem(SAVED_LOC_STORAGE);
+  const parsedStorage = JSON.parse(storage ?? "{}");
+  return parsedStorage;
+}
+
+/**
+ * Set saved location local storage to new JSON item
+ * @param {SavedLocations} newStorage saved location collection to set
+ */
+function setSavedLocationStorage(newStorage) {
+  localStorage.setItem(SAVED_LOC_STORAGE, JSON.stringify(newStorage));
+}
+
+/**
+ * Get the sorted list of saved locations from local storage
+ * @returns {Array<SavedLocation>}
  */
 export function getSavedLocations() {
-  try {
-    const existing = localStorage.getItem("wxgov_recent_locations");
-    const parsed = JSON.parse(existing ?? "[]");
+  const current = getParsedSavedLocationStorage();
 
-    // Check if any saved locations still have the old /point/lat/long url format
-    const needsUpdate = parsed.filter(({ url }) => url.startsWith("/point"));
+  return current?.sorted ? current.sorted : [];
+}
 
-    if (needsUpdate.length > 0) {
-      // Prepend the forecast path to any URLs that need it
-      const updated = parsed.map(({ url, ...rest }) => ({
-        ...rest,
-        url: url.startsWith("/forecast") ? url : `/forecast${url}`,
-      }));
-      localStorage.setItem("wxgov_recent_locations", JSON.stringify(updated));
-      return updated;
+/**
+ * Returns if location is within the saved location local storage
+ * @param {string} locText location to match if in saved location storage
+ * @returns {boolean}
+ */
+export function hasSavedLocation(locText) {
+  let found = false;
+  if (locText?.length) {
+    const locLower = locText?.toLowerCase();
+    const existing = getParsedSavedLocationStorage();
+    found = existing?.hashed && Object.hasOwn(existing.hashed, locLower);
+  }
+  return found;
+}
+
+/**
+ * Adds a new location to saved locations in local storage, maintaining sorted order
+ * @param {SavedLocation} obj saved location object to add to storage
+ */
+export function addSavedLocation(obj) {
+  // Validate obj
+  if (!obj && !obj?.text?.toLowerCase() && !obj?.url) return;
+
+  const textLower = obj.text.toLowerCase();
+  const existing = getParsedSavedLocationStorage();
+  const hashed = existing?.hashed ?? {};
+  const sorted = existing?.sorted ?? [];
+
+  if (!Object.hasOwn(hashed, textLower)) {
+    if (sorted?.length) {
+      // Find the correct sorted location to insert new element based on text
+      const largerElemIndex = sorted.findIndex((item) => {
+        return item?.text?.toLowerCase() > textLower;
+      });
+      // Insert new element before the larger element
+      if (largerElemIndex === -1) {
+        sorted.push(obj);
+      } else {
+        sorted.splice(largerElemIndex, 0, obj);
+      }
+    } else {
+      sorted.push(obj);
     }
-    return parsed;
-  } catch (e) {
-    return [];
+    hashed[textLower] = obj?.url;
+    setSavedLocationStorage({
+      hashed: hashed,
+      sorted: sorted,
+    });
   }
 }
 
 /**
- * Insert a saved location into local storage.
- * If the location already exists, move it to the top.
- *
- * @param {SavedLocation} obj - the saved location
+ * Removes the saved location from storage that matches the location string
+ * @param {string} loc location string to remove from storage
  */
-export function addSavedLocation(obj) {
-  try {
-    // First we need to see if there are any existing
-    // items already saved in the saved searches array
-    const existing = localStorage.getItem("wxgov_recent_locations");
-    const parsed = JSON.parse(existing ?? "[]");
-    // Now remove any items for the same URL. This way we don't
-    // end up having a whole list of the same place
-    const filtered = parsed.filter(({ url }) => url !== obj.url);
-    // Just keep the most recent ten.
-    const sliced = filtered.slice(0, 9);
+export function removeSavedLocation(loc) {
+  const locLower = loc?.toLowerCase();
+  const existing = getParsedSavedLocationStorage();
+  const existingSorted = existing?.sorted ?? [];
+  const existingHashed = existing?.hashed ?? {};
+  const existingElemIdx = existingSorted.findIndex((item) => {
+    return item?.text?.toLowerCase() === locLower;
+  });
 
-    // Put the new entry at the front of the list
-    sliced.unshift(obj);
-
-    // Now serialize and save
-    localStorage.setItem("wxgov_recent_locations", JSON.stringify(sliced));
-  } catch (e) {
-    /* do nothing */
+  if (existingElemIdx > -1) {
+    // Remove element in place and update storage with new collection
+    existingSorted.splice(existingElemIdx, 1);
+    delete existingHashed[loc.toLowerCase()];
+    setSavedLocationStorage({ sorted: existingSorted, hashed: existingHashed });
   }
 }

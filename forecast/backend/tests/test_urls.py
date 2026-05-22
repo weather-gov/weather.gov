@@ -135,6 +135,14 @@ class TestUrls(TestCase):
         self.assertEqual(resolver.kwargs, {"countyfips": "12345"})
         self.assertEqual(back, "/forecast/county/54321/")
 
+    def test_county_state_overview(self):
+        """Test county state overview page."""
+        resolver = resolve("/forecast/county/test-county-st/")
+        back = reverse("county_state_overview", kwargs={"county_name": "county-place", "state": "tr"})
+        self.assertEqual(resolver.func, county.county_overview)
+        self.assertEqual(resolver.kwargs, {"county_name": "test-county", "state": "st"})
+        self.assertEqual(back, "/forecast/county/county-place-tr/")
+
     def test_deprecated_county_sub_urls(self):
         """Test custom 404 page for bookmarked /county/{fips} urls."""
         resolver = resolve("/county/12345/")

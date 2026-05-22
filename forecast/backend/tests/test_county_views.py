@@ -172,6 +172,23 @@ class TestCountyViews(TestCase):
         self.assertContains(response, link)
 
     @mock.patch("backend.interop.get_county_data")
+    def test_county_state_overview_link_to_county_risk_overview(self, mock_get_county_data):
+        """Test that county overview links to detailed risk analysis."""
+        mock_get_county_data.return_value = {
+            "riskOverview": self.ghwo,
+            "alerts": {"items": []},
+            "alertDays": [],
+            "county": {"wfos": ["YND"]},
+            "weatherstories": [],
+            "briefings": [],
+        }
+
+        response = self.client.get(reverse("county_state_overview", kwargs={"county_name":"Anansi", "state":"gh"}))
+        self.assertTemplateUsed(response, "weather/county/overview.html")
+        link = reverse("county_risk_overview", kwargs={"county_fips": "44444"})
+        self.assertContains(response, link)
+
+    @mock.patch("backend.interop.get_county_data")
     def test_overview_without_timezone(self, mock_get_county_data):
         """Test the overview view without timezone."""
         mock_get_county_data.return_value = {
@@ -403,6 +420,12 @@ class TestCountyViews(TestCase):
     def test_overview_404(self):
         """Test the overview view."""
         response = self.client.get(reverse("county_overview", kwargs={"countyfips": "99999"}))
+        self.assertEqual(response.status_code, 404)
+
+    @disable_logging_for_quieter_tests
+    def test_name_state_overview_404(self):
+        """Test the overview view with county name, state."""
+        response = self.client.get(reverse("county_state_overview", kwargs={"county_name": "abc", "state": "xy"}))
         self.assertEqual(response.status_code, 404)
 
     @disable_logging_for_quieter_tests
