@@ -16,6 +16,7 @@ import "./charts/hourly-wind.js";
 import "./charts/hourly-dewpoint.js";
 import "./charts/qpf.js";
 import "./components/quick-forecast-toggle.js";
+import "./components/saved-locations-button.js";
 import "./components/Satellite.js";
 import "./components/TabbedNavigator.js";
 import "./components/HourlyTable.js";

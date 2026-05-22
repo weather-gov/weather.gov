@@ -27,6 +27,7 @@ global.HTMLElement = window.HTMLElement;
 global.Event = window.Event;
 global.CustomEvent = window.CustomEvent;
 global.FormData = window.FormData;
+global.HTMLButtonElement = window.HTMLButtonElement;
 global.HTMLInputElement = window.HTMLInputElement;
 global.requestAnimationFrame = window.requestAnimationFrame;
 global.localStorage = window.localStorage;

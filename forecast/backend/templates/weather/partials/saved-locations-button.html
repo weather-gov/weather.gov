@@ -1,0 +1,19 @@
+{% comment %} 
+-- Template purpose:
+--   Display button reflecting Saved Locations status for given place
+-- Used by: partials/place-banner.html
+{% endcomment %}
+<wx-saved-locations-button data-place="{% place_label place %}" data-url="{{ request.path }}" class="display-flex flex-align-center">
+  <button aria-checked="false"
+    type="button"
+    role="switch"
+    data-testid="wx-saved-locations-button"
+    class="bg-transparent saved-locations-button saved-locations-button-mode--dark cursor-pointer display-flex flex-align-center border-0 padding-105 margin-right-05 margin-left-neg-1">
+    <svg class="usa-icon saved-locations-icon height-205 width-205"
+        aria-hidden="false"
+        role="img">
+      <title class="usa-sr-only">{{ "saved-locations.title.button.01" | t}}</title>
+      <use xlink:href="{% static 'images/uswds/sprite.svg' %}#star"></use>
+    </svg>
+  </button>
+</wx-saved-locations-button>

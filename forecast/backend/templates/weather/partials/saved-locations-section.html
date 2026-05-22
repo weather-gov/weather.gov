@@ -1,0 +1,47 @@
+{% comment %} 
+-- Template purpose: 
+-- Display "Saved locations" section widget
+-- 
+{% endcomment %}
+<wx-saved-locations-section data-type="{{type}}" data-testid="wx-saved-locations-section--{{type}}" {% if allowColumns %}data-columns="{{allowColumns}}"{% endif %}>
+  <section id="saved-locations-section-{{type}}" class="padding-y-3 saved-locations-section saved-locations-section--{{type}}">
+    
+    <div class="grid-container {% if type == "nav" %}padding-x-0 desktop:padding-x-2{% endif %}">    
+      <div class="grid-row">
+        {% if type == "nav" %}
+        <span class="font-body-xs margin-bottom-05">{{ heading | t }}</span>
+        {% else %}
+        <h2 class="margin-y-2">
+          {{ heading | t }}
+        </h2>
+        {% endif %}
+      </div>
+      <div class="grid-row">
+        <div class="saved-locations-list">
+          
+          <ul class="usa-list usa-list--unstyled {% if type == "nav" %}font-body-xs{% else %}font-body-md{% endif %}">
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <template id="saved-locations-section-{{type}}-li">
+    <li class="display-flex flex-align-center">
+      <button 
+        id="saved-locations-section-btn-" 
+        type="button" 
+        role="switch" aria-checked="true"
+        class="bg-transparent saved-locations-button saved-locations-button-mode--{{mode}} cursor-pointer display-flex flex-align-center border-0 padding-105 margin-right-05 margin-left-neg-1"
+      >
+        <svg class="usa-icon saved-locations-icon height-205 width-205" aria-hidden"false" role="img">
+            <title class="usa-sr-only">{{ "saved-locations.title.button.01" | t }}</title>
+            <use xlink:href="/public/images/uswds/sprite.svg#star"></use>
+        </svg>
+      </button>
+      <label>
+        <a class="saved-locations-item text-normal"></a>
+      </label>
+    </li>
+  </template>
+</wx-saved-locations-section>
