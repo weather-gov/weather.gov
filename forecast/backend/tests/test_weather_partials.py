@@ -441,6 +441,7 @@ class TestWeatherPartials(TestCase):
                 "point": "Burgers",
                 "bounds": None,
                 "radar_metadata": "ping? PONG!",
+                "timezone": "UTC",
                 "intensities": weather_partials.RADAR_INTENSITIES,
                 "heading_level": "h2",
                 "heading_class": None,

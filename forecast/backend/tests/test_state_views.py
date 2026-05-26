@@ -98,9 +98,7 @@ class TestStateViews(TestCase):
     def test_analysis(self, mock_get_wfo_data, mock_get_analysis_data):
         """Test the analysis page."""
         mock_get_wfo_data.return_value = self.state_fr_wfo_data
-        mock_get_analysis_data.return_value = {
-            "briefings": [{"briefing": None, "officeId": "ARD"}]
-        }
+        mock_get_analysis_data.return_value = {"briefings": [{"briefing": None, "officeId": "ARD"}]}
         response = self.client.get(reverse("state_analysis", kwargs={"state": "FR"}))
         self.assertTemplateUsed(response, "weather/state/analysis.html")
         self.assertEqual(response.context["state_abbrev"], self.state_fr.state)
@@ -113,21 +111,27 @@ class TestStateViews(TestCase):
         """Test analysis briefings ordering."""
         mock_get_wfo_data.return_value = self.state_fr_wfo_data
         briefings = [
-            { "briefing": None, "officeId": "ARD" },
-            { "briefing": {}, "officeId": "ZRB" },
-            { "briefing": {}, "officeId": "FLN" },
-            { "briefing": {}, "officeId": "FRD" },
+            {"briefing": None, "officeId": "ARD"},
+            {"briefing": {}, "officeId": "ZRB"},
+            {"briefing": {}, "officeId": "FLN"},
+            {"briefing": {}, "officeId": "FRD"},
         ]
         mock_get_state_data.return_value = {"briefings": briefings}
         response = self.client.get(reverse("state_analysis", kwargs={"state": "FR"}))
-        self.assertEqual(response.context["active_briefings"], [
-            { "briefing": {}, "officeId": "FLN", "wfo_name": "Cat" },
-            { "briefing": {}, "officeId": "FRD", "wfo_name": "Fred" },
-            { "briefing": {}, "officeId": "ZRB", "wfo_name": "Zebra" },
-        ])
-        self.assertEqual(response.context["empty_briefings"], [
-            { "briefing": None, "officeId": "ARD", "wfo_name": "Aardvark" },
-        ])
+        self.assertEqual(
+            response.context["active_briefings"],
+            [
+                {"briefing": {}, "officeId": "FLN", "wfo_name": "Cat"},
+                {"briefing": {}, "officeId": "FRD", "wfo_name": "Fred"},
+                {"briefing": {}, "officeId": "ZRB", "wfo_name": "Zebra"},
+            ],
+        )
+        self.assertEqual(
+            response.context["empty_briefings"],
+            [
+                {"briefing": None, "officeId": "ARD", "wfo_name": "Aardvark"},
+            ],
+        )
 
     @disable_logging_for_quieter_tests
     def test_overview_404(self):

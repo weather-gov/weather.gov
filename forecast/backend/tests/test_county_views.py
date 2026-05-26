@@ -413,5 +413,3 @@ class TestCountyViews(TestCase):
         with self.assertRaises(Exception):  # noqa: PT027, B017 (we want generic Exception)
             response = self.client.get(reverse("county_overview", kwargs={"countyfips": "44444"}))
             self.assertEqual(response.status_code, 500)
-
-

@@ -25,19 +25,21 @@
         type="text/css"
         href="{% static 'css/radar/cmi-radar.54fb0324.css' %}" />
 {% endblock %}
-
 {% block page_content %}
   <div class="height-full display-flex flex-column">
     {% include "weather/state/name.html" with state_name=state.name %}
     <wx-tabbed-nav class="display-block position-relative flex-1" id="state-page-tabbed-nav">
     {% include "weather/state/tabs.html" with url_name=request.resolver_match.url_name %}
     <div class="bg-white padding-bottom-4">
-      <div class="wx-focus-offset-205" id="radar" aria-labelledby="radar-tab-button" tabindex="0">
+      <div class="wx-focus-offset-205"
+           id="radar"
+           aria-labelledby="radar-tab-button"
+           tabindex="0">
         <div id="radar-enable" class="grid-container">
           <div id="state-radar-panel">
             <div class="grid-row">
               <div class="grid-col-12 wx-radar-wrapper">
-                {% radar place=state.name bounds=data.bounds|json_encode large_map="true" heading_level="h2" heading_class="text-normal text-primary-dark margin-top-3 font-sans-xl" %}
+                {% radar place=state.name bounds=data.bounds|json_encode timezone=timezone large_map="true" heading_level="h2" heading_class="text-normal text-primary-dark margin-top-3 font-sans-xl" %}
               </div>
             </div>
           </div>
