@@ -16,6 +16,7 @@ For the moment, the overall process of converting and uploading gridpoints data 
 ---
 
 ## Stage 1: Manual, one-time conversion of GeoJSON data into CSV
+
 We use Docker to run `ogr2ogr`. This transforms the nested GeoJSON properties into a flat CSV and extracts the geometry into explicit `X` (Longitude) and `Y` (Latitude) columns.
 
 ```bash
@@ -25,23 +26,32 @@ docker run --rm -v "$(pwd):/data" osgeo/gdal:alpine-small-3.6.3 \
   -sql "SELECT cwa, gridX AS x, gridY AS y FROM \"gridpoints\""
 ```
 
-**Note** that this conversion only needs to be done _once_ per source gridpoints GeoJSON file data, and that the resulting CSV can be stored locally and/or remotely and reused by Stage 2 until the source data needs updating. This means that in we can use the same CSV source file, once generated, to run Stage 2 multiple times in each of the environments we need to populate gridpoints data for.
+**Note** that this conversion only needs to be done _once_ per source gridpoints GeoJSON file data, and that the resulting CSV can be stored locally and/or remotely and reused by Stage 2 until the source data needs updating. This means that in we can reuse the same CSV source file, once generated, to run Stage 2 multiple times in each of the environments we need to populate gridpoints data for.
 
-## Stage 2: Automatic ingestion of csv data into the `weathergov_geo_gridpoints` table, followed by additional processing.
-For this stage, we make use of a Django management command:
-```python manage.py loadgridpoints <path-to-csv-file>```
+## Stage 2: Automatic ingestion of CSV data into the `weathergov_geo_gridpoints` table, followed by additional processing.
 
-**The path to this file assumes the /forecast prefix.** So if you have placed your CSV file in `/forecast/spatial/management/commands/file.csv`, for example, you would run `python manage.py loadgridpoints spatial/management/commands/file.csv`
-  
+We ingest gridpoints data via a `loadgridpoints.py` Django management command.
+
 If you are running this in a local dev environment, you can simply:
+```
+just load-gridpoints <path-to-csv-file>
+```
+
+Or `docker-compose` manually:
 ```
 docker compose exec web python manage.py loadgridpoints <path-to-csv-file>
 ```
-where the path represents the container's notion of the path to the csv file.
-  
+
+**The path to this CSV file assumes the /forecast prefix.**  In other words, the path represents the container's notion of the path to the CSV file.
+
+To upload to cloud.gov environments, we can `cf ssh` the base64'd stdin:
+```
+base64 ./gridpoints.csv | cf ssh weathergov-staging -t -c "base64 -d > app/gridpoints.csv"
+```
+
 This command will perform the following steps automatically, assuming it can find a valid CSV data file at the given path:
 1. Create a temporary staging table
-2. Load CSV data into the staging table
+2. Stream CSV data into the staging table
 3. Reformat columns and insert temp values unto the real gridpoints table
 4. Optimize indexing on the table
 5. Cross-reference marine zone tables and update `is_marine` and `type` columns to have correct marine values for each gridpoints
