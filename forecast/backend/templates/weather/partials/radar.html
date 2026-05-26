@@ -11,9 +11,9 @@
   <div class="grid-container padding-0 bg-white shadow-1">
     <div class="grid-row wx-radar-container position-relative wx-{% if large_map %}large{% else %}small{% endif %}-map">
       {% if bounds %}
-        <wx-radar class="grid-col-12" bounds="{{bounds}}" data-timezone="{{ place.timezone }}">
+        <wx-radar class="grid-col-12" bounds="{{ bounds }}" data-timezone="{{ timezone }}">
       {% else %}
-        <wx-radar class="grid-col-12" lat="{{ point.latitude }}" lon="{{ point.longitude }}" data-timezone="{{ place.timezone }}">
+        <wx-radar class="grid-col-12" lat="{{ point.latitude }}" lon="{{ point.longitude }}" data-timezone="{{ timezone }}">
       {% endif %}
       <div id="wx-radar-container"></div>
       </wx-radar>

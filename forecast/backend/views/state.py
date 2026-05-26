@@ -151,7 +151,7 @@ def state_risks(request, state):
                     "riskOverview": risk_overview,
                 },
             },
-        }
+        },
     )
 
 
@@ -178,10 +178,9 @@ def state_radar(request, state):
         {
             "state": state,
             "state_abbrev": state.state,
+            "timezone": state.timezone,
             "wfo_data": get_wfo_data_for_state(state),
-            "data": {
-                "bounds": bounds
-            }
+            "data": {"bounds": bounds},
         },
     )
 
@@ -200,11 +199,12 @@ def state_analysis(request, state):
     wfo_codes = [wfo["code"] for wfo in wfo_data]
     state_data = get_analysis_data_for_state({"wfos": wfo_codes})
 
-    wfo_instance_lookup  = {
+    wfo_instance_lookup = {
         wfo["code"]: {
             "name": wfo["name"],
             "code": wfo["code"],
-        } for wfo in wfo_data
+        }
+        for wfo in wfo_data
     }
 
     # Modify the briefings with the extra WFO information.
@@ -248,5 +248,5 @@ def state_analysis(request, state):
             "active_briefings": active_briefings,
             "empty_briefings": empty_briefings,
             **state_data,
-        }
+        },
     )
