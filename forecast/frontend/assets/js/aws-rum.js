@@ -38,14 +38,25 @@ const APPLICATION_REGION = "us-east-1";
   config,
 );
 const pageGroups = (path) => {
-  const match = path.match(/^\/(county|state|cms|point|place)/);
+  const match = path.match(
+    /^\/(forecast\/county|forecast\/state|cms|forecast\/point|place)/,
+  );
   if (!match) {
     // this pathname is not part of a RUM page group
     return null;
   }
   const what = match[1];
-  // rename "point" to "forecast"
-  return what === "point" ? "forecast" : what;
+  // rename endpoints for clarity on the RUM side
+  switch (what) {
+    case "forecast/point":
+      return "forecast";
+    case "forecast/county":
+      return "county";
+    case "forecast/state":
+      return "state";
+    default:
+      return what;
+  }
 };
 // set up a IIFE so we capture a page group if applicable
 (function () {
