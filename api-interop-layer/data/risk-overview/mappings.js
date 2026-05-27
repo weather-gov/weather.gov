@@ -40,6 +40,45 @@ export const riskNameToKeyMapping = new Map([
   ["Waterspout Risk", "Waterspout"],
 ]);
 
+/**
+ * Maps the canonical 2 or 3 letter state/territory
+ * abbreviated code to the name of the state as used
+ * in state-level GHWO legend and chicklet filenames.
+ * For example, `chickletSouth_Dakota.json` or
+ * `legendNY.json`
+ */
+export const stateAbbrevToLegendKeyMapping = {
+  VA: "Virginia",
+  NY: "NY",
+  MA: "MA",
+  RI: "RI",
+  CT: "CT",
+  SC: "SC",
+  PA: "PA",
+  ME: "Maine",
+  NH: "NewHampshire",
+  OH: "Ohio",
+  MD: "Maryland",
+  WV: "WV",
+  SD: "South_Dakota",
+  WY: "WY",
+  IL: "Illinois",
+  IN: "Indiana",
+  MO: "Missouri",
+  WI: "Wisconsin",
+  MN: "MN",
+  AL: "Alabama",
+  GA: "GA",
+  LA: "Louisiana",
+  TN: "Tennessee",
+  OK: "OK",
+  AZ: "Arizona",
+};
+
+export const getStateDataViewName = (stateCode) => {
+  return stateAbbrevToLegendKeyMapping[stateCode.toUpperCase()];
+};
+
 // Create the reverse lookup mapping from key
 // names to full risk names
 export const keyToRiskNameMapping = new Map();

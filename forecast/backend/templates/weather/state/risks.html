@@ -25,8 +25,14 @@
           {% include "weather/partials/risk-overview-summary.html" with ghwo=data.public.riskOverview for_state=True %}
           {% if not data.public.riskOverview.error %}
             <div class="margin-top-2">
+              {% if data.public.hasDetails %}
               <a href="{% url 'state_risk_overview' state_code=state.state %}"
-                  class="usa-link">{{ "ghwo.overview.link-to-ghwo-analysis.01" | t }}</a>
+                 class="usa-link">{{ "ghwo.overview.link-to-ghwo-analysis.01" | t }}</a>
+              {% else %}
+              <p class="text-base-dark font-body-xs">
+                {% trans_with_args "ghwo.summary.message.no-details.01" state_name=state.name %}
+              </p>
+              {% endif %}
             </div>
           {% endif %}
         </div>

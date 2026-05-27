@@ -126,6 +126,10 @@
     </div>
   </div>
   </wx-ghwo-details-table>
+{% elif not ghwo.hasDetailedGHWO %}
+  <p class="text-base-dark font-body-xs tablet-lg:grid-col-7">
+    {% trans_with_args "ghwo.details.message.no-details.01" state_name=state.name %}
+  </p>
 {% else %}
   {% comment %}
   This will be displayed if the GHWO table rows are empty.

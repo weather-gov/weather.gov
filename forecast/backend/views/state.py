@@ -149,6 +149,7 @@ def state_risks(request, state):
             "data": {
                 "public": {
                     "riskOverview": risk_overview,
+                    "hasDetails": risk_overview.get("hasDetailedGHWO", False)
                 },
             },
         },

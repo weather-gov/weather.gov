@@ -782,6 +782,12 @@ msgstr "We couldn't load the data for this county. Please try again later."
 msgid "ghwo.heading.no-data.01"
 msgstr "We don't have data for this county"
 
+msgid "ghwo.details.message.no-details.01"
+msgstr "State-level risk details aren't available for {state_name}. Please select a county to see its risk details."
+
+msgid "ghwo.summary.message.no-details.01"
+msgstr "State-wide risk details aren't available for {state_name}. Select your county below for more risk details in your area."
+
 msgid "ghwo.heading.no-data-description.01"
 msgstr "Please use the forecast search to see data for a specific point near this location."
 

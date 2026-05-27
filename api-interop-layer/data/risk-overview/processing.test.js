@@ -6,6 +6,7 @@ import {
   processChickletData,
   getImageUrlForRisk,
   getMaxScaleFromLegend,
+  processComposite,
 } from "./processing.js";
 import { getFallbackLevelName } from "./levelnames.js";
 
@@ -309,6 +310,21 @@ describe("risk overview: processing utilities", () => {
 
     expect(days).to.eql(expected);
     expect(noRisks).to.eql(["Waterspout Risk"]);
+  });
+
+  it("processes the composite", () => {
+    const result = {};
+    const { days } = processDays(data, legend);
+    const expected = {
+      days: [
+        { max: 2, scaled: 1, timestamp: "1978-09-17T12:00:00-05:00" },
+        { max: 1, scaled: 0.5, timestamp: "1978-10-01T14:00:00+00:00" },
+        { max: 3, scaled: 0.6, timestamp: "1978-12-06T13:30:00+00:00" },
+      ],
+    };
+    processComposite(result, days);
+
+    expect(result.composite).to.eql(expected);
   });
 
   it("transmogrifies risk data into the shape that the site needs", () => {

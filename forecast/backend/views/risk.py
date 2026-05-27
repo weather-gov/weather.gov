@@ -29,6 +29,7 @@ def process_ghwo_data(ghwo_data, localtz): # noqa: C901
         # Get basis description for each risk, if we have it.
         for risk_id, risk in ghwo_data["legend"].items():
             risk["basis"] = get_basis_for_ghwo_risk(ghwo_data["wfo"], risk_id)
+
         # Now map those from the global legend into the risk-specific legends
         for risk_id, risk in ghwo_data["risks"].items():
             # GHWO legends don't always contain entries for every risk type.

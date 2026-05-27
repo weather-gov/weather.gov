@@ -5,7 +5,9 @@ import {
   processDays,
   processLegend,
   processChickletData,
+  processComposite,
 } from "./processing.js";
+import { getStateDataViewName } from "./mappings.js";
 import { logger } from "../../util/monitoring/index.js";
 import { requestJSON } from "../../util/request.js";
 import { Client } from "undici";
@@ -37,13 +39,7 @@ const upsert = async (id, data) =>
     ),
   );
 
-const processState = async ({
-  state,
-  data: stateData,
-  wfo,
-  legend,
-  chicklet,
-}) => {
+const processState = async ({ state, data: stateData, wfo, legend }) => {
   const db = await openDatabase();
   const stateName = await db
     .query("SELECT name FROM weathergov_geo_states WHERE state=$1::text", [
@@ -51,16 +47,80 @@ const processState = async ({
     ])
     .then(({ rows }) => rows.pop().name);
 
-  const { days, noRisks } = processDays(stateData, legend);
-
   const data = {
+    isState: true,
+    isCounty: false,
     state: stateName,
-    days,
+    days: [],
+    noRisks: [],
     wfo,
-    noRisks,
+    hasDetailedGHWO: false,
+    legend: {},
+    risks: {},
   };
 
-  addRisksToResult(data, wfo, days, legend, chicklet);
+  // The viewName is based on the hard coded dictionary in
+  // mappings.js
+  // If there is a value in the lookup, we assume that there is
+  // detailed GHWO data for the given state at the state level,
+  // and that we should attempt to fetch data from the corresponding
+  // legend and chicklet endpoints.
+  // If the value is undefined or falsy, then we do not have
+  // detailed state GHWO data available, and only care about
+  // the composite data.
+  const stateDataViewName = getStateDataViewName(state);
+  if (stateDataViewName) {
+    const legendEndpoint = `/source/${wfo}/ghwo/legend${stateDataViewName}.json`;
+    const chickletEndpoint = `/source/${wfo}/ghwo/chicklet${stateDataViewName}.json`;
+
+    try {
+      const [stateLegend, stateChicklet] = await Promise.all([
+        requestJSON(client, legendEndpoint, { "wx-host": "www.weather.gov" }),
+        requestJSON(client, chickletEndpoint, { "wx-host": "www.weather.gov" }),
+      ]);
+
+      const processedLegend = processLegend(stateLegend);
+      const processedChicklet = processChickletData(stateChicklet);
+
+      const { days, noRisks } = processDays(stateData, processedLegend);
+      data.days = days;
+      data.noRisks = noRisks;
+      data.hasDetailedGHWO = true;
+
+      addRisksToResult(
+        data,
+        wfo,
+        data.days,
+        processedLegend,
+        processedChicklet,
+      );
+    } catch (err) {
+      // Catch any of the requestJSON errors and log them.
+      // We don't need to do anything else, because we assume there
+      // is no GHWO data for the state, so we skip writing anything to
+      // the db
+      if (err.cause?.statusCode === 404 || err.statusCode === 404) {
+        // If we get here, we could not get either the legend
+        // or chicklet data for the given state
+        riskOverviewLogger.trace(
+          { wfo, endpoint: err.url, legendEndpoint, chickletEndpoint, state },
+          "Could not retrieve legend and/or chicklet data for state",
+        );
+      } else {
+        throw err;
+      }
+    }
+  } else {
+    // If we get here, there is no legend or chicklet data
+    // specific to the state that is available, and we cannot
+    // process detailed GHWO data.
+    // We can still create the daily composite data, however.
+    const { days, noRisks } = processDays(stateData, {});
+    data.days = days;
+    data.noRisks = noRisks;
+
+    processComposite(data, data.days);
+  }
 
   await upsert(state, data);
 };
@@ -83,6 +143,8 @@ const processCounty = async ({
   const { days, noRisks } = processDays(countyData, legend);
 
   const data = {
+    isState: false,
+    isCounty: true,
     state: county.st,
     county: county.countyname,
     fips: countyFips,
