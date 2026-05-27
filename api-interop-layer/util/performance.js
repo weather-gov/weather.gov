@@ -52,6 +52,12 @@ class PerformanceMeta {
       if (headers && headers["x-correlation-id"]) {
         meta.correlationId = headers["x-correlation-id"];
       }
+      if (headers && headers["x-request-id"]) {
+        meta.requestId = headers["x-request-id"];
+      }
+      if (headers && headers["x-server-id"]) {
+        meta.serverId = headers["x-server-id"];
+      }
       store.push(meta);
     }
   }
