@@ -16,6 +16,9 @@ import "./locationSearch.js";
 import "./components/combobox/combobox.js";
 import "./components/combobox/location-listbox.js";
 
+// For saved locations
+import "./components/saved-locations-section.js";
+
 // RUM
 import "./aws-rum.js";
 

@@ -1,5 +1,5 @@
 import Listbox from "./listbox.js";
-import { getSavedLocations, addSavedLocation } from "../saved-locations.js";
+import { getRecentLocations, addRecentLocation } from "../recent-locations.js";
 import Timer from "../timer.js";
 
 const debouncer = new Timer();
@@ -83,7 +83,7 @@ export default class LocationListbox extends Listbox {
     // If there is a place set via attribute, we add
     // it to the saved search results
     if (this.dataset.place) {
-      addSavedLocation({
+      addRecentLocation({
         text: this.dataset.place,
         url: window.location.pathname,
       });
@@ -113,7 +113,7 @@ export default class LocationListbox extends Listbox {
     if (element.getAttribute("data-url")) {
       return new Promise((resolve) => {
         if (this.getAttribute("auto-submit") === "true") {
-          addSavedLocation({
+          addRecentLocation({
             text: element.innerText,
             url: element.getAttribute("data-url"),
           });
@@ -143,7 +143,7 @@ export default class LocationListbox extends Listbox {
           element.setAttribute("data-lon", geoData.lon);
           if (this.getAttribute("auto-submit") === "true") {
             const formUrl = `/forecast/point/${geoData.lat}/${geoData.lon}`;
-            addSavedLocation({
+            addRecentLocation({
               text: element.innerText,
               url: formUrl,
             });
@@ -191,7 +191,7 @@ export default class LocationListbox extends Listbox {
       '[role="heading"].saved-searches',
     );
     if (savedSearchesGroup) {
-      let saved = getSavedLocations();
+      let saved = getRecentLocations();
 
       // Clear any existing search items in the element.
       // We will regenerate them.
