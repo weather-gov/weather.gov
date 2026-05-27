@@ -6,7 +6,6 @@ from spatial.management.commands._spatial_util import cache_path, clean_cache
 from spatial.management.commands.v1.data import (
     load_counties,
     load_cwas,
-    load_grid_points,
     load_places,
     load_states,
     load_zones,
@@ -31,8 +30,6 @@ class Command(BaseCommand):
             load_zones(force=force)
         if load_options["places"] or load_options["all"]:
             load_places(force=force)
-        if load_options["gridpoints"]:
-            load_grid_points(load_options["gridpoints"], force=force)
 
         # Cleanup the cache, if requested.
         if load_options["cleanup"]:

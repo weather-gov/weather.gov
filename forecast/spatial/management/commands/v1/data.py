@@ -1,7 +1,6 @@
 import csv
 import logging
 
-from django.contrib.gis.gdal import DataSource
 from django.contrib.gis.geos import GEOSGeometry
 from django.db import connection
 from django.db.models import Count, Min
@@ -18,7 +17,6 @@ from spatial.management.commands._spatial_util import (
 from spatial.models import (
     WeatherCounties,
     WeatherCountyWarningAreas,
-    WeatherGridPoints,
     WeatherPlace,
     WeatherSpatialMetadata,
     WeatherStates,
@@ -525,54 +523,3 @@ def load_places(force=False):
 
     csvfile.close()
     logger.info(f"loaded {str(WeatherPlace.objects.count())} places")
-
-
-def load_grid_points(gpkg_path, force=False):
-    """Load grid point data from a GeoPackage file."""
-    if WeatherGridPoints.objects.exists() and not force:
-        logger.info("Grid points already loaded. Use --force to reload.")
-        return
-
-    logger.info(f"Loading grid points from {gpkg_path}...")
-
-    # Use a transaction to ensure database integrity during the heavy load
-    with connection.cursor() as cursor:
-        cursor.execute(f"TRUNCATE TABLE {WeatherGridPoints._meta.db_table} RESTART IDENTITY")
-
-    ds = DataSource(gpkg_path)
-    layer = ds[0]
-
-    batch_size = 5000
-    objs = []
-
-    try:
-        # Iterate through the layer directly to avoid index/FID issues
-        for feature in tqdm(iterable=layer, total=len(layer), ncols=50, leave=False):
-            # We map from GPKG 'gridX/gridY' to Model 'x/y'
-            objs.append(
-                WeatherGridPoints(
-                    cwa=feature.get("cwa"),
-                    x=int(feature.get("gridX")),
-                    y=int(feature.get("gridY")),
-                    point=GEOSGeometry(feature.geom.json),
-                )
-            )
-
-            # Performance: Bulk insert in chunks
-            if len(objs) >= batch_size:
-                WeatherGridPoints.objects.bulk_create(objs)
-                objs = []
-
-        # Catch the remaining objects
-        if objs:
-            WeatherGridPoints.objects.bulk_create(objs)
-
-        # Update Metadata
-        WeatherSpatialMetadata.objects.update_or_create(table=WeatherGridPoints._meta.db_table)
-
-        logger.info(f"Successfully loaded {WeatherGridPoints.objects.count()} grid points.")
-
-    except Exception:
-        model = WeatherGridPoints
-        logger.exception(f"!! error when loading {model.__name__}")
-        model.objects.all().delete()
