@@ -145,6 +145,23 @@ export const addRisksToResult = (result, wfo, days, legend, chicklet) => {
   result.legend = dataLegend;
 };
 
+/**
+ * Given an object with a `days` key corresponding to WFO
+ * data days, attach a new `composite` key that maps the composite
+ * data with the timestamp in a format that Django can more easily
+ * deal with.
+ */
+export const processComposite = (result, days) => {
+  result.composite = {
+    days: days.map(({ composite, timestamp }) => {
+      return {
+        ...composite,
+        timestamp,
+      };
+    }),
+  };
+};
+
 // Risk overview data is arranged as an object, some of whose keys are timestamps.
 // This method pulls out the timestamp keys and returns an array of days containing
 // that data instead of an object.
