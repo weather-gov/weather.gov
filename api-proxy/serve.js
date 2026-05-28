@@ -58,7 +58,7 @@ export default async (request, response) => {
       "Content-Type": "application/geo+json",
       "access-control-allow-origin": "*",
       "access-control-expose-headers":
-        "X-Correlation-Id, X-Request-Id, X-Server-Id",
+        "X-Correlation-Id, X-Request-Id, X-Server-Id, X-Cache, X-Cache-Remote, X-Check-Cacheable",
     });
     response.write(JSON.stringify(output, null, 2));
     response.end();

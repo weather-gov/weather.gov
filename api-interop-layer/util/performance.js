@@ -49,14 +49,26 @@ class PerformanceMeta {
         timing: this.timing,
         url: this.url,
       };
-      if (headers && headers["x-correlation-id"]) {
-        meta.correlationId = headers["x-correlation-id"];
-      }
-      if (headers && headers["x-request-id"]) {
-        meta.requestId = headers["x-request-id"];
-      }
-      if (headers && headers["x-server-id"]) {
-        meta.serverId = headers["x-server-id"];
+      // record headers for traceability and observability purposes
+      if (headers) {
+        if (headers["x-correlation-id"]) {
+          meta.correlationId = headers["x-correlation-id"];
+        }
+        if (headers["x-request-id"]) {
+          meta.requestId = headers["x-request-id"];
+        }
+        if (headers["x-server-id"]) {
+          meta.serverId = headers["x-server-id"];
+        }
+        if (headers["x-cache"]) {
+          meta.akamaiCache = headers["x-cache"];
+        }
+        if (headers["x-cache-remote"]) {
+          meta.akamaiCacheRemote = headers["x-cache-remote"];
+        }
+        if (headers["x-check-cacheable"]) {
+          meta.akamaiCacheable = headers["x-check-cacheable"];
+        }
       }
       store.push(meta);
     }

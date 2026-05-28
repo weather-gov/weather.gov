@@ -30,6 +30,7 @@ export default (req, res) => {
     method: "GET",
     headers: {
       "user-agent": "weather.gov dev proxy",
+      ...(req.headers.pragma && { pragma: req.headers.pragma }),
     },
   };
 
