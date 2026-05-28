@@ -1,8 +1,17 @@
-import getTimer from "./performance.js";
+import getTimer, { API_TIMINGS_METADATA } from "./performance.js";
 
 const STANDARD_HEADERS = {
   "User-Agent": "beta.weather.gov interop",
   Accept: "application/json",
+  // Pragma directives ask Akamai to expose cache diagnostics in the response.
+  // https://techdocs.akamai.com/edge-diagnostics/docs/pragma-headers
+  // x-cache:           edge server cache hit/miss
+  // x-cache-remote:    parent (tier 2) cache hit/miss
+  // x-check-cacheable: was the response cacheable at all (YES/NO)
+  ...(API_TIMINGS_METADATA && {
+    Pragma:
+      "akamai-x-cache-on, akamai-x-cache-remote-on, akamai-x-check-cacheable",
+  }),
 };
 
 /**
