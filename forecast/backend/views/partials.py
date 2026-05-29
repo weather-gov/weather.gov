@@ -83,7 +83,7 @@ def wx_state_alerts_pbf(_, state):
         features.append({"type": "Feature", "geometry": geom_dict, "properties": properties})
 
     # Process alerts by sorting by timestamp and severity
-    sorted_features = process_state_alerts(features)
+    sorted_features = process_state_alerts(alert_geojsons=features, state_timezone=state_obj.timezone or "UTC")
 
     # Encode and return
     pbf_data = geobuf.encode({"type": "FeatureCollection", "features": sorted_features})
@@ -196,12 +196,9 @@ def wx_ghwo_counties(request, county_fips):
     return render(
         request,
         "weather/partials/ghwo-details.html",
-        {
-            "ghwo": ghwo_data,
-            "county": county,
-            "state": county.state
-        },
+        {"ghwo": ghwo_data, "county": county, "state": county.state},
     )
+
 
 @require_GET
 @never_cache
@@ -212,10 +209,7 @@ def wx_ghwo_all_counties_for_state(request, state_code):
     using the state abbrev code provided in the URL
     param.
     """
-    state = get_object_or_404(
-        WeatherStates.objects.defer("shape"),
-        state=state_code
-    )
+    state = get_object_or_404(WeatherStates.objects.defer("shape"), state=state_code)
 
     # Get timezone information
     localtz = ZoneInfo("UTC")
@@ -237,5 +231,5 @@ def wx_ghwo_all_counties_for_state(request, state_code):
             "ghwo": ghwo_data,
             "county": None,
             "state": state,
-        }
+        },
     )
