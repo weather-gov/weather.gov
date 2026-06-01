@@ -23,23 +23,25 @@
             <span class="font-sans-xs">{{ "menu.navigation.forecast.01" | t }}</span>
           </button>
           <ul id="nav-section-forecast" class="usa-nav__submenu font-body-xs">
-            <li class="usa-nav__submenu-item">
+            <li class="usa-nav__submenu-item" id="nav-section-forecast-search">
               <a href="{% url 'index' %}">
                 <span class="font-sans-xs">{{ "menu.navigation.forecast.find-forecast.01" | t }}</span>
               </a>
             </li>
-            <li class="usa-nav__submenu-item">
-              <a href="{% url 'county_index' %}"><span class="font-sans-xs">{{ "menu.navigation.forecast.county.01" | t }}</span></a>
+            <li class="usa-nav__submenu-item" id="nav-section-forecast-county">
+              <a href="{% url 'county_index' %}">
+                <span class="font-sans-xs">{{ "menu.navigation.forecast.county.01" | t }}</span>
+              </a>
             </li>
-            {% if debug_show_all_menu_links %}
-              <li class="usa-nav__submenu-item">
-                <a href="{% url 'state_index' %}"><span class="font-sans-xs">{{ "menu.navigation.forecast.state.01" | t }}</span></a>
-              </li>
-            {% endif %}
+            <li class="usa-nav__submenu-item" id="nav-section-forecast-state">
+              <a href="{% url 'state_index' %}">
+                <span class="font-sans-xs">{{ "menu.navigation.forecast.state.01" | t }}</span>
+              </a>
+            </li>
           </ul>
         </li>
         {% if debug_show_all_menu_links %}
-          <li class="usa-nav__primary-item">
+          <li class="usa-nav__primary-item" id="nav-section-observations">
             <a href="javascript:void(0);" class="usa-nav__link">
               <span class="font-sans-xs text-normal">{{ "menu.navigation.observations.01" | t }}</span>
             </a>
