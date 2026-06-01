@@ -352,12 +352,19 @@ def load_zones(force=False):
             return "id=%s", [getid(feature)]
 
         def create_model(feature, type=type):
+            # All zone source files have a column for CWA, which
+            # we should include. The exception is the marine zones,
+            # which use WFO as the column name.
+            wfo_column_name = "CWA"
+            if type.startswith("marine"):
+                wfo_column_name = "WFO"
             WeatherZone(
                 id=getid(feature),
                 # Marine zones don't have states
                 state=None if type.startswith("marine:") else feature.get("STATE"),
                 type=type,
                 shape=GEOSGeometry(feature.geom.json),
+                wfo=feature.get(wfo_column_name),
             ).save()
 
         __load_from_shapefile(
