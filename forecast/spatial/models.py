@@ -21,6 +21,8 @@ class WeatherZone(models.Model):
     state = models.CharField(max_length=2, null=True)
     shape = models.GeometryField()
     type = models.TextField(null=True)
+    wfo = models.CharField(max_length=3, null=True)
+
 
     class Meta:  # noqa: D106
         db_table = "weathergov_geo_zones"
