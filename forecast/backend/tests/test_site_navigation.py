@@ -36,4 +36,9 @@ class SiteNavigationPartialMenuTests(TestCase):
         self.assertContains(response, 'id="nav-section-forecast"')
         self.assertNotContains(response, 'id="nav-section-preparedness"')
         self.assertNotContains(response, 'id="nav-section-resources"')
+        self.assertNotContains(response, 'id="nav-section-observations"')
         self.assertContains(response, 'id="nav-section-about"')
+        """Verify that only expected forecast submenu items are present."""
+        self.assertContains(response, 'id="nav-section-forecast-search"')
+        self.assertContains(response, 'id="nav-section-forecast-county"')
+        self.assertContains(response, 'id="nav-section-forecast-state"')
