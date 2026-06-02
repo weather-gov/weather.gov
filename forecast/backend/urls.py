@@ -1,5 +1,5 @@
 from django.conf import settings
-from django.urls import include, path, register_converter
+from django.urls import include, path, re_path, register_converter
 from django.views.generic.base import RedirectView, TemplateView
 from wagtail.admin import urls as wagtailadmin_urls
 from wagtail.documents import urls as wagtaildocs_urls
@@ -24,7 +24,9 @@ urlpatterns = [
     path("afd/<wfo>/<afd_id>/", point.afd_by_office_and_id, name="afd_by_office_and_id"),
     # County pages
     path("forecast/county/", county.index, name="county_index"),
-    path("forecast/county/<countyfips>/", county.county_overview, name="county_overview"),
+    re_path(r"forecast/county/(?P<county_slug>[\w|-]+-\w+)/$", county.county_overview,
+            name="county_state_overview"),
+    path("forecast/county/<str:countyfips>/", county.county_overview, name="county_overview"),
     path("forecast/county/<str:county_fips>/risk-overview/", risk.risk_details_by_county, name="county_risk_overview"),
     path("county<path:rest>", errors.deprecated_path, name="deprecated_county_pages"),
     # State pages

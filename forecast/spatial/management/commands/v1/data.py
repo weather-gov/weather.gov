@@ -1,5 +1,6 @@
 import csv
 import logging
+import re
 
 from django.contrib.gis.geos import GEOSGeometry
 from django.db import connection
@@ -206,20 +207,6 @@ def __get_countyname(feature):
     elif countyfips == "69085":
         countyname = "Northern Islands"
 
-    # The Federate States of Micronesia are freely associated with the
-    # United States, and they don't really have "counties" per se. They have
-    # states, as suggested by the name. Anyway, the organization of
-    # Micronesian political subunits is not captured well with FIPS.
-    # 64001 includes places in three different states, which it should not
-    # do. I don't know enough about Micronesia to suss out we ought to
-    # address it, so I've opted to stick with the boundaries are set forth
-    # in the shapefile on the assumption that the folks at NWS have put in
-    # plenty of thought of the best way to represent this for their users.
-    # And for our purposes, where we need a canonical name, I picked the
-    # state that most of the features are in or associated with.
-    elif countyfips == "64001":
-        countyname = "Pohnpei"
-
     return countyname
 
 
@@ -241,12 +228,14 @@ def load_counties(force=False):
 
     def create_model(feature):
         countyname = __get_countyname(feature)
-
         timezone = feature.get("TIME_ZONE")
+        county_slug = re.sub(r"[^a-zA-Z0-9\-]", "", countyname.replace(" ", "-"))
+
         county = WeatherCounties(
             countyname=countyname,
             countyfips=feature.get("FIPS"),
             st=feature.get("STATE"),
+            slug="{0}-{1}".format(county_slug, feature.get("STATE")).lower(),
             # The shapefile indicates whether a county observes DST by
             # capitalizing the timezone code.
             dst=timezone == timezone.upper(),

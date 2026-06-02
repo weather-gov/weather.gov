@@ -35,10 +35,12 @@ def index(request):
 
 
 @never_cache
-def county_overview(request, countyfips):  # noqa: C901
+def county_overview(request, countyfips=None, county_slug=None):  # noqa: C901
     """Render the main page for a particular county."""
-    county = get_object_or_404(WeatherCounties.objects.defer("shape"), countyfips=countyfips)
-    county_data = interop.get_county_data(countyfips)
+    query_opts = {"countyfips": countyfips} if countyfips else {"slug__iexact": county_slug}
+    county = get_object_or_404(WeatherCounties.objects.defer("shape"), **query_opts)
+
+    county_data = interop.get_county_data(county.countyfips)
 
     localtz = ZoneInfo("UTC")
     if county.timezone:
@@ -130,7 +132,7 @@ def county_overview(request, countyfips):  # noqa: C901
         request,
         "weather/county/overview.html",
         {
-            "countyfips": countyfips,
+            "countyfips": county.countyfips,
             "data": {
                 "alert_levels": levels,
                 "alert_level_days": level_days,
@@ -145,3 +147,4 @@ def county_overview(request, countyfips):  # noqa: C901
             },
         },
     )
+

@@ -146,6 +146,7 @@ class WeatherCounties(models.Model):
     countyfips = models.CharField(max_length=5, unique=True, db_index=True)
     timezone = models.TextField(null=True)
     dst = models.BooleanField(null=True)
+    slug = models.TextField(null=True)
     shape = models.GeometryField()
     cwas = models.ManyToManyField(WeatherCountyWarningAreas)
     primarywfo = models.ForeignKey(WeatherCountyWarningAreas, related_name="primary_counties", on_delete=models.CASCADE)
