@@ -194,7 +194,7 @@ describe("point method", () => {
     });
   });
 
-  it("includes astronimcal data", async () => {
+  it("includes astronomical data", async () => {
     response.body.text.resolves(
       JSON.stringify({
         properties: {
@@ -236,7 +236,7 @@ describe("point method", () => {
       rows: [
         {
           name: "Townsville",
-          timezone: "Imaginary",
+          timezone: "UTC",
         },
         {
           some: "other place",
@@ -257,6 +257,10 @@ describe("point method", () => {
     });
 
     const actual = await points(1, 2);
+    // astronomical data (sunrise/sunset) depends on when you ask for it, so
+    // let's just check that we have this property instead.
+    expect(actual["point"]).to.have.property("astronomicalData");
+    delete actual["point"]["astronomicalData"];
 
     expect(actual).to.eql({
       point: { latitude: 1, longitude: 2 },
@@ -267,7 +271,7 @@ describe("point method", () => {
         state: "",
         statename: "Visibilia",
         county: "Parishville",
-        timezone: "Imaginary",
+        timezone: "UTC",
         statefips: "99",
         countyfips: "000",
       },
@@ -286,7 +290,7 @@ describe("point method", () => {
       rows: [
         {
           name: "Townsville",
-          timezone: "Imaginary",
+          timezone: "UTC",
         },
       ],
     });
@@ -304,6 +308,10 @@ describe("point method", () => {
     });
 
     const actual = await points(1, 2);
+    // astronomical data (sunrise/sunset) depends on when you ask for it, so
+    // let's just check that we have this property instead.
+    expect(actual["point"]).to.have.property("astronomicalData");
+    delete actual["point"]["astronomicalData"];
 
     expect(actual).to.eql({
       point: { latitude: 1, longitude: 2 },
@@ -314,7 +322,7 @@ describe("point method", () => {
         state: "OT",
         statename: "Overthere",
         county: "Countbackwardsylvania",
-        timezone: "Imaginary",
+        timezone: "UTC",
         statefips: "55",
         countyfips: "444",
         fullName: "Townsville, OT",

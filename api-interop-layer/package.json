@@ -25,6 +25,7 @@
     "pino": "^10.3.0",
     "pm2": "^6.0.14",
     "redis": "^5.10.0",
+    "suncalc": "^1.9.0",
     "undici": "^8.3.0"
   },
   "devDependencies": {
