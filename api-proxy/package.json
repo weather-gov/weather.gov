@@ -12,7 +12,7 @@
     "markdown-it": "^14.1.1",
     "mustache": "^4.2.0",
     "pino": "^10.3.0",
-    "pm2": "^6.0.14",
+    "pm2": "^7.0.0",
     "prettier": "^3.2.0"
   },
   "devDependencies": {
