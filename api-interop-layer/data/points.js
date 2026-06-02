@@ -30,7 +30,7 @@ export const getClosestPlace = async (latitude, longitude) => {
       `SELECT
        name,timezone
        FROM weathergov_geo_places
-       ORDER BY point::geography <-> ${pointGeom}::geography
+       ORDER BY point <-> ${pointGeom}
        LIMIT 1`,
     )
     .then((result) => {
