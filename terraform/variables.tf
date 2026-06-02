@@ -169,6 +169,6 @@ variable "internal_gridpoint_lookup" {
 
 variable "django_interop_timeout" {
   type        = number
-  default     = 65
+  default     = 15
   description = "How long Django should wait for the interop, in seconds"
 }
