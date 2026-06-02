@@ -69,6 +69,7 @@ class TestCountyViews(TestCase):
             countyname="Frankenstein",
             countyfips="22222",
             st="MA",
+            slug="frankenstein-ma",
             state=self.state2,
             shape=GEOSGeometry("POINT(0 0)"),
             primarywfo=cwa,
@@ -77,6 +78,7 @@ class TestCountyViews(TestCase):
             countyname="Sanderson Sisters",
             countyfips="33333",
             st="MA",
+            slug="sanderson-sisters-ma",
             state=self.state2,
             shape=GEOSGeometry("POINT(0 0)"),
             primarywfo=cwa,
@@ -86,6 +88,7 @@ class TestCountyViews(TestCase):
             countyname="Anansi",
             countyfips="44444",
             st="GH",
+            slug="anansi-gh",
             state=self.state3,
             shape=GEOSGeometry("POINT(0 0)"),
             primarywfo=cwa,
@@ -95,6 +98,7 @@ class TestCountyViews(TestCase):
             countyname="Keelut",
             countyfips="55555",
             st="AK",
+            slug="keelut-ak",
             state=self.state1,
             shape=GEOSGeometry("POINT(0 0)"),
             timezone="America/Anchorage",
@@ -164,9 +168,28 @@ class TestCountyViews(TestCase):
             "county": {"wfos": ["YND"]},
             "weatherstories": [],
             "briefings": [],
+            "slug": "anansi-gh",
         }
 
         response = self.client.get(reverse("county_overview", kwargs={"countyfips": "44444"}))
+        self.assertTemplateUsed(response, "weather/county/overview.html")
+        link = reverse("county_risk_overview", kwargs={"county_fips": "44444"})
+        self.assertContains(response, link)
+
+    @mock.patch("backend.interop.get_county_data")
+    def test_county_state_overview_link_to_county_risk_overview(self, mock_get_county_data):
+        """Test that county overview links to detailed risk analysis."""
+        mock_get_county_data.return_value = {
+            "riskOverview": self.ghwo,
+            "alerts": {"items": []},
+            "alertDays": [],
+            "county": {"wfos": ["YND"]},
+            "weatherstories": [],
+            "briefings": [],
+            "slug": "anansi-gh",
+        }
+
+        response = self.client.get(reverse("county_state_overview", kwargs={"county_slug":"Anansi-GH"}))
         self.assertTemplateUsed(response, "weather/county/overview.html")
         link = reverse("county_risk_overview", kwargs={"county_fips": "44444"})
         self.assertContains(response, link)
@@ -181,6 +204,7 @@ class TestCountyViews(TestCase):
             "county": {"wfos": ["YND"]},
             "weatherstories": [],
             "briefings": [],
+            "slug": "anansi-gh",
         }
 
         response = self.client.get(reverse("county_overview", kwargs={"countyfips": "44444"}))
@@ -200,6 +224,7 @@ class TestCountyViews(TestCase):
                     "county": {"wfos": ["YND"]},
                     "weatherstories": [],
                     "briefings": [],
+                    "slug": "anansi-gh",
                 },
                 "briefings": [],
                 "weather_stories": [
@@ -220,6 +245,7 @@ class TestCountyViews(TestCase):
             "county": {"wfos": ["YND"]},
             "weatherstories": [],
             "briefings": [],
+            "slug": "",
         }
 
         response = self.client.get(reverse("county_overview", kwargs={"countyfips": "55555"}))
@@ -239,6 +265,7 @@ class TestCountyViews(TestCase):
                     "county": {"wfos": ["YND"]},
                     "weatherstories": [],
                     "briefings": [],
+                    "slug": "",
                 },
                 "briefings": [],
                 "radar": {"radarMetadata": {}},
@@ -263,6 +290,7 @@ class TestCountyViews(TestCase):
             "county": {"wfos": []},
             "weatherstories": [],
             "briefings": [],
+            "slug": "",
         }
 
         response = self.client.get(reverse("county_overview", kwargs={"countyfips": "33333"}))
@@ -281,6 +309,7 @@ class TestCountyViews(TestCase):
                     "county": {"wfos": []},
                     "weatherstories": [],
                     "briefings": [],
+                    "slug": "",
                 },
                 "briefings": [],
                 "weather_stories": [],
@@ -403,6 +432,12 @@ class TestCountyViews(TestCase):
     def test_overview_404(self):
         """Test the overview view."""
         response = self.client.get(reverse("county_overview", kwargs={"countyfips": "99999"}))
+        self.assertEqual(response.status_code, 404)
+
+    @disable_logging_for_quieter_tests
+    def test_name_state_overview_404(self):
+        """Test the overview view with county name, state."""
+        response = self.client.get(reverse("county_state_overview", kwargs={"county_slug": "abc-xy"}))
         self.assertEqual(response.status_code, 404)
 
     @disable_logging_for_quieter_tests
