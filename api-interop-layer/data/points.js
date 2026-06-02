@@ -19,7 +19,7 @@ const POSTGRES_UNDEFINED_TABLE = "42P01";
 const USE_INTERNAL_LOOKUP = process.env.INTERNAL_GRIDPOINT_LOOKUP === "true";
 
 export const getClosestPlace = async (latitude, longitude) => {
-  const pointGeom = `ST_GEOMFROMTEXT('POINT(${longitude} ${latitude})',${SPATIAL_PROJECTION.WGS84})`;
+  const pointGeom = `ST_SetSRID(ST_Point(${longitude}, ${latitude}), ${SPATIAL_PROJECTION.WGS84})`;
 
   const db = await openDatabase();
   const place = await db
@@ -30,7 +30,7 @@ export const getClosestPlace = async (latitude, longitude) => {
       `SELECT
        name,timezone
        FROM weathergov_geo_places
-       ORDER BY point <-> ${pointGeom}
+       ORDER BY point::geography <-> ${pointGeom}::geography
        LIMIT 1`,
     )
     .then((result) => {
@@ -168,7 +168,7 @@ export const getPointData = async (lat, lon) => {
   const placePromise = getClosestPlace(latitude, longitude);
 
   // Check if the requested point is inside a marine zone.
-  const pointGeom = `ST_GEOMFROMTEXT('POINT(${longitude} ${latitude})',${SPATIAL_PROJECTION.WGS84})`;
+  const pointGeom = `ST_SetSRID(ST_Point(${longitude}, ${latitude}), ${SPATIAL_PROJECTION.WGS84})`;
   const isMarinePromise = openDatabase().then((db) =>
     db.query(
       `SELECT id
@@ -215,7 +215,7 @@ const getInternalGridData = async (latitude, longitude) => {
       SELECT UPPER(cwa) as wfo, x, y, ST_AsGeoJSON(point) as geometry
       FROM weathergov_geo_gridpoints
       WHERE ST_DWithin(point::geography, ${pointGeom}::geography, ${MAX_DISTANCE_METERS})
-      ORDER BY point <-> ${pointGeom}
+      ORDER BY point::geography <-> ${pointGeom}::geography
       LIMIT 1
     `;
 
