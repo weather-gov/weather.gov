@@ -5,6 +5,7 @@ import { parseTTLFromHeaders } from "../util/caching.js";
 import connectionPool from "./connectionPool.js";
 import openDatabase from "./db.js";
 import { saveToRedis, getFromRedis } from "../redis.js";
+import astronomicalData from "./astronomical.js";
 
 const pointLogger = logger.child({ subsystem: "point" });
 
@@ -181,6 +182,16 @@ export const getPointData = async (lat, lon) => {
   );
 
   const [place, isMarine] = await Promise.all([placePromise, isMarinePromise]);
+
+  if (USE_INTERNAL_LOOKUP && place) {
+    // because we are skipping the points API call, astronomical data is not
+    // available. in that case, let's add it back in via suncalc.
+    point.astronomicalData = astronomicalData(
+      place.timezone,
+      latitude,
+      longitude,
+    );
+  }
 
   if (grid.wfo === null) {
     // If we did not get an error but the WFO is empty, then it's within our
