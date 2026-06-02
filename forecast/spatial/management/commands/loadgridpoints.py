@@ -79,12 +79,13 @@ class Command(BaseCommand):
             # geometry
             self.stdout.write("Inserting and formatting from temp tables")
             cursor.execute("""
-            INSERT INTO weathergov_geo_gridpoints (cwa, x, y, point)
+            INSERT INTO weathergov_geo_gridpoints (cwa, x, y, point, is_marine)
             SELECT
                 UPPER(raw_cwa),
                 raw_x::integer,
                 raw_y::integer,
-                ST_SetSRID(ST_Point(raw_lon::float, raw_lat::float), 4326)
+                ST_SetSRID(ST_Point(raw_lon::float, raw_lat::float), 4326),
+                false
             FROM temp_grid;""")
 
             self.stdout.write("Optimizing table")
@@ -131,6 +132,8 @@ class Command(BaseCommand):
         We need to exclude any gridpoints that are not in the US.
         We do this by cross referencing each point with the existing
         forecast zones that we have.
+        Note that we ignore the fire zones for now. These comprise
+        some amount of 'bleed' between adjacent CWAs
         """
         with connection.cursor() as cursor:
             self.stdout.write("Removing non-US gridpoints (this might take a few minutes)")
@@ -138,7 +141,11 @@ class Command(BaseCommand):
             DELETE FROM weathergov_geo_gridpoints AS g
             WHERE NOT EXISTS
             (SELECT 1 FROM weathergov_geo_zones AS z
-             WHERE ST_Contains(z.shape, g.point) LIMIT 1);
+             WHERE z.wfo=g.cwa
+             AND
+             z.type != 'fire'
+             AND
+             ST_Contains(z.shape, g.point) LIMIT 1);
             """)
             self.stdout.write(f"Removed {cursor.rowcount} gridpoints that were not in the US")
 
