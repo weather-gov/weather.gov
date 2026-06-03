@@ -104,7 +104,8 @@ const getDataForPoint = async (lat, lon) => {
 
   // If we don't have a grid, we can't fetch satellite metadata, forecast, or
   // observations – all of these are based around WFO and WFO grid.
-  if (!grid.error) {
+  // additionally, if we have a marine location then bail out early.
+  if (!grid.error && !isMarine) {
     // Cache grid point information
     // This is a synchronous push to an array. Fire and Forget
     if (gridCache) {
