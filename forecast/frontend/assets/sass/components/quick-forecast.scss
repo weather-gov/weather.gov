@@ -147,6 +147,10 @@
       span {
         @include u-font("body", "3xs");
       }
+
+      &.wx-quick-na {
+        @include u-font("mono", "sm");
+      }
     }
 
     .wx-alert-icon {

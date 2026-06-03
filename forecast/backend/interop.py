@@ -78,8 +78,12 @@ def _set_high_low_pops(day, is_marine):
         periods = day["periods"]
         day["temps"] = [period["data"]["temperature"]["degF"] for period in periods]
         valid_temps = [temp for temp in day["temps"] if temp is not None]
-        day["low"] = min(valid_temps)
-        day["high"] = max(valid_temps)
+        # If there's only one period, set correctly if daytime
+        # If only one period and is non-daytime hour, set the low. Otherwise there is not a low supplied
+        if (len(periods) > 1 or not periods[0]["isDaytime"]):
+            day["low"] = min(valid_temps)
+        if(len(periods) > 1 or periods[0]["isDaytime"]):
+            day["high"] = max(valid_temps)
         day["pop"] = day.get("maxPop", 0)
 
     if day["pop"] is None:

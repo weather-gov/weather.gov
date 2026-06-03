@@ -52,7 +52,7 @@
       {% if day.isNightPeriod %}
         <div class="wx-quick-high">
           <span class="wx-quick-label">{% trans "daily-forecast.labels.high.01" %}</span>
-          <span class="wx-quick-temp">{% trans "abbreviations.not-applicable.01" %}</span>
+          <span class="wx-quick-temp wx-quick-na">{% trans "abbreviations.not-applicable.01" %}</span>
         </div>
       {% else %}
         <div class="wx-quick-high">
@@ -64,6 +64,12 @@
           </span>
         </div>
       {% endif %}
+      {% if day.low is None %}
+      <div class="wx-quick-low">
+        <span class="wx-quick-label">{% trans "daily-forecast.labels.low.01" %}</span>
+        <span class="wx-quick-temp wx-quick-na">{% trans "abbreviations.not-applicable.01" %}</span>
+      </div>
+      {% else %} 
       <div class="wx-quick-low">
         <span class="wx-quick-label">{% trans "daily-forecast.labels.low.01" %}</span>
         <span class="wx-quick-temp">
@@ -72,6 +78,7 @@
           <span class="usa-sr-only">℉</span>
         </span>
       </div>
+      {% endif %}
     </div>
     <span class="display-block tablet:display-none">
       <svg class="usa-icon usa-icon--size-3"
