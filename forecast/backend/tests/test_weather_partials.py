@@ -433,14 +433,13 @@ class TestWeatherPartials(TestCase):
 
     def test_radar(self):
         """Tests the radar partial."""
-        actual = weather_partials.radar(place="Bob's", point="Burgers", radar_metadata="ping? PONG!")
+        actual = weather_partials.radar(place="Bob's", point="Burgers")
         self.assertEqual(
             actual,
             {
                 "place": "Bob's",
                 "point": "Burgers",
                 "bounds": None,
-                "radar_metadata": "ping? PONG!",
                 "timezone": "UTC",
                 "intensities": weather_partials.RADAR_INTENSITIES,
                 "heading_level": "h2",

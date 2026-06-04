@@ -10,12 +10,8 @@
       {% trans "radar.time-shown.label.01" %}<span class="desktop:display-none">:</span>
     </div>
     <div class="grid-col-auto" id="wx-radar-timestamp-label">
-      {% if radar_metadata.start and radar_metadata.end %}
-        {{ radar_metadata.start }} - {{ radar_metadata.end }}
-      {% else %}
-        {# JS will inject text here #}
-        <span class="usa-sr-only">{% trans "radar.loading.01" %}</span>
-      {% endif %}
+      {# JS will inject text here #}
+      <span class="usa-sr-only">{% trans "radar.loading.01" %}</span>
     </div>
   </div>
 </div>

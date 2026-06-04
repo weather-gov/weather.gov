@@ -230,7 +230,6 @@ class TestCountyViews(TestCase):
                 "weather_stories": [
                     {"is_empty": True, "officeId": "YND", "wfo_name": "Yondertown", "wfo_url": "/offices/YND/"}
                 ],
-                "radar": {"radarMetadata": {}},
                 "wfo_codes": [self.wfo.code],
             },
         )
@@ -268,7 +267,6 @@ class TestCountyViews(TestCase):
                     "slug": "",
                 },
                 "briefings": [],
-                "radar": {"radarMetadata": {}},
                 "wfo_codes": [self.wfo.code],
                 "weather_stories": [
                     {"is_empty": True, "officeId": "YND", "wfo_name": "Yondertown", "wfo_url": "/offices/YND/"}
@@ -313,7 +311,6 @@ class TestCountyViews(TestCase):
                 },
                 "briefings": [],
                 "weather_stories": [],
-                "radar": {"radarMetadata": {}},
                 "primary_wfo": None,
                 "wfo_codes": [],
             },

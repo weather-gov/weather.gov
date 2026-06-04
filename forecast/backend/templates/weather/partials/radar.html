@@ -7,7 +7,7 @@
   <{{ heading_level }} class="{{ heading_class }}">
   {% trans "radar.labels.radar.01" %}
   </{{ heading_level }}>
-  {% include "weather/partials/radar-timestamp.html" with radar_metadata=radar_metadata %}
+  {% include "weather/partials/radar-timestamp.html" %}
   <div class="grid-container padding-0 bg-white shadow-1">
     <div class="grid-row wx-radar-container position-relative wx-{% if large_map %}large{% else %}small{% endif %}-map">
       {% if bounds %}
@@ -63,8 +63,8 @@
       </div>
     </div>
     <div class="padding-2 padding-top-0">
-      <a href="https://radar.weather.gov/?settings=v1_{{ radar_metadata.settings }}"
-         class="usa-link">{% trans "radar.link.explore-other.01" %}</a>
+      <a id="radar-point-link" href="https://radar.weather.gov/"
+         class="usa-link usa-link--external">{% trans "radar.link.explore-other.01" %}</a>
     </div>
   </div>
 </div>
