@@ -43,6 +43,24 @@ class TestInteropAstronomicalData(TestCase):
         self.assertEqual("astronomicalData" in actual["point"], True, "there is astronomical data")
 
     @responses.activate
+    def test_null_astronomical_data(self):
+        """Tests that there are no errors if astronomical data is null."""
+        os.environ["INTEROP_URL"] = "https://interop"
+        responses.add(
+            responses.GET,
+            "https://interop/point/1/2",
+            json=self.forecast["astronomical_data_null"],
+            status=200,
+        )
+
+        actual = interop.get_point_forecast(1, 2)
+
+        self.assertEqual("astronomicalData" in actual["point"], True, "there is astronomical data")
+        self.assertEqual(
+            actual["point"]["astronomicalData"]["isNull"], True, "all null astronomical data adds isNull key"
+        )
+
+    @responses.activate
     def test_happy_path(self):
         """Tests that astronomical data is processed as expected."""
         os.environ["INTEROP_URL"] = "https://interop"

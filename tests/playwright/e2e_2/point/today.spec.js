@@ -99,4 +99,46 @@ describe("Point forecast › Today tab", () => {
       });
     });
   });
+
+  describe("Sunrise/sunset fallbacks", () => {
+    beforeEach(() => {
+      // For use with point endpoint
+      process.env.INTERNAL_GRIDPOINT_LOOKUP = "false";
+    });
+
+    test("I expect to see a missing suntimes message for midnight sun", async ({
+      page,
+    }) => {
+      // Force suncalc to return a date within midnight sun conditions
+      await page.clock.setFixedTime(new Date("2025-06-01T13:39:00"));
+      // Barrow, AK
+      await page.goto(services.webApp("/forecast/point/69.519/-157.105/"), {
+        waitUntil: "load",
+      });
+      const sunriseContainer = page.locator(".wx-sunrise-sunset-container");
+
+      await expect(sunriseContainer).toHaveCount(1);
+      await expect(sunriseContainer).toContainText(
+        "Currently there are no sunrise or sunset times",
+      );
+    });
+
+    test("I expect to see N/A when there is missing suntimes data", async ({
+      page,
+    }) => {
+      // Force suncalc to return a date within midnight sun conditions
+      await page.clock.setFixedTime(new Date("2025-06-01T13:39:00"));
+      // Fort Yukon, AK
+      await page.goto(services.webApp("/forecast/point/66.564/-145.252/"), {
+        waitUntil: "load",
+      });
+
+      await page.getByRole("button", { name: "show more" }).click();
+
+      const row = page.getByRole("rowheader", { name: "first light" });
+      const firstLight = row.locator("//following-sibling::td");
+
+      await expect(firstLight).toContainText("N/A");
+    });
+  });
 });

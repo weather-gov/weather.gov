@@ -1,0 +1,74 @@
+{
+  "@context": [
+    "https://geojson.org/geojson-ld/geojson-context.jsonld",
+    {
+      "@version": "1.1",
+      "wx": "https://api.weather.gov/ontology#",
+      "s": "https://schema.org/",
+      "geo": "http://www.opengis.net/ont/geosparql#",
+      "unit": "http://codes.wmo.int/common/unit/",
+      "@vocab": "https://api.weather.gov/ontology#",
+      "geometry": { "@id": "s:GeoCoordinates", "@type": "geo:wktLiteral" },
+      "city": "s:addressLocality",
+      "state": "s:addressRegion",
+      "distance": { "@id": "s:Distance", "@type": "s:QuantitativeValue" },
+      "bearing": { "@type": "s:QuantitativeValue" },
+      "value": { "@id": "s:value" },
+      "unitCode": { "@id": "s:unitCode", "@type": "@id" },
+      "forecastOffice": { "@type": "@id" },
+      "forecastGridData": { "@type": "@id" },
+      "publicZone": { "@type": "@id" },
+      "county": { "@type": "@id" }
+    }
+  ],
+  "id": "https://api.weather.gov/points/66.564,-145.252",
+  "type": "Feature",
+  "geometry": { "type": "Point", "coordinates": [-145.252, 66.564] },
+  "properties": {
+    "@id": "https://api.weather.gov/points/66.564,-145.252",
+    "@type": "wx:Point",
+    "cwa": "AFG",
+    "type": "land",
+    "forecastOffice": "https://api.weather.gov/offices/AFG",
+    "gridId": "AFG",
+    "gridX": 526,
+    "gridY": 184,
+    "forecast": "https://api.weather.gov/gridpoints/AFG/526,184/forecast",
+    "forecastHourly": "https://api.weather.gov/gridpoints/AFG/526,184/forecast/hourly",
+    "forecastGridData": "https://api.weather.gov/gridpoints/AFG/526,184",
+    "observationStations": "https://api.weather.gov/gridpoints/AFG/526,184/stations",
+    "relativeLocation": {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [-145.229192, 66.587608] },
+      "properties": {
+        "city": "Fort Yukon",
+        "state": "AK",
+        "distance": { "unitCode": "wmoUnit:m", "value": 2812.044113541 },
+        "bearing": { "unitCode": "wmoUnit:degree_(angle)", "value": 201 }
+      }
+    },
+    "forecastZone": "https://api.weather.gov/zones/forecast/AKZ833",
+    "county": "https://api.weather.gov/zones/county/AKC290",
+    "fireWeatherZone": "https://api.weather.gov/zones/fire/AKZ933",
+    "timeZone": "America/Anchorage",
+    "radarStation": "PAPD",
+    "astronomicalData": {
+      "sunrise": "date:today 01:30:-08",
+      "sunset": null,
+      "transit": "date:today 13:39:-08",
+      "civilTwilightBegin": null,
+      "civilTwilightEnd": null,
+      "nauticalTwilightBegin": null,
+      "nauticalTwilightEnd": null,
+      "astronomicalTwilightBegin": null,
+      "astronomicalTwilightEnd": null
+    },
+    "nwr": {
+      "transmitter": "WXJ81",
+      "sameCode": "002290",
+      "areaBroadcast": "https://api.weather.gov/radio/WXJ81/broadcast",
+      "pointBroadcast": "https://api.weather.gov/points/66.564,-145.252/radio"
+    }
+  },
+  "@bundle": { "name": "Fort Yukon, AK - no sunset" }
+}

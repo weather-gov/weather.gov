@@ -754,5 +754,30 @@
         "astronomicalTwilightEnd": "2026-03-06T18:00:00Z"
       }
     }
+  },
+    "astronomical_data_null": {
+    "isMarine": false,
+    "place": {
+      "timezone": "America/Chicago"
+    },
+    "observed": {
+      "timestamp": "2010-01-03T01:32:42Z"
+    },
+    "forecast": {
+      "days": []
+    },
+    "point": {
+    "astronomicalData": {
+        "sunrise": null,
+        "sunset": null,
+        "transit": "2026-05-22T14:23:53-08:00",
+        "civilTwilightBegin": null,
+        "civilTwilightEnd": null,
+        "nauticalTwilightBegin": null,
+        "nauticalTwilightEnd": null,
+        "astronomicalTwilightBegin": null,
+        "astronomicalTwilightEnd": null
+      }
+    }
   }
 }

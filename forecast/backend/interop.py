@@ -125,16 +125,25 @@ def _set_day_period_info(day, tz):
 def _process_astronomical_data(data, tz):
     """Process astronomical data."""
     astronomical_data = data.get("point", {}).get("astronomicalData", {})
+    null_count = 0
     for key, value in astronomical_data.items():
         # under certain conditions the API will return null, e.g., parts of
         # Alaska will not have nautical twilight during summer months.
         if not value:
+            null_count += 1
             continue
 
         astronomical_data[key] = datetime.fromisoformat(value).astimezone(tz=tz)
 
-    if ("sunrise" in astronomical_data and astronomical_data["sunrise"]) and \
-       ("sunset" in astronomical_data and astronomical_data["sunset"]):
+    # Check if all values (except "transit") are null/unset
+    non_transit_keys = [k for k in astronomical_data if k != "transit"]
+    if null_count == len(non_transit_keys):
+        astronomical_data["isNull"] = True
+        return
+
+    if ("sunrise" in astronomical_data and astronomical_data["sunrise"]) and (
+        "sunset" in astronomical_data and astronomical_data["sunset"]
+    ):
         day_length = astronomical_data["sunset"] - astronomical_data["sunrise"]
         total_seconds = day_length.total_seconds()
         hours = int(total_seconds / 3600)
@@ -142,8 +151,9 @@ def _process_astronomical_data(data, tz):
         minutes = round(total_seconds / 60)
         astronomical_data["dayLength"] = f"{hours}h {minutes}m"
 
-    if ("civilTwilightBegin" in astronomical_data and astronomical_data["civilTwilightBegin"]) and \
-       ("civilTwilightEnd" in astronomical_data and astronomical_data["civilTwilightEnd"]):
+    if ("civilTwilightBegin" in astronomical_data and astronomical_data["civilTwilightBegin"]) and (
+        "civilTwilightEnd" in astronomical_data and astronomical_data["civilTwilightEnd"]
+    ):
         day_length = astronomical_data["civilTwilightEnd"] - astronomical_data["civilTwilightBegin"]
         total_seconds = day_length.total_seconds()
         hours = int(total_seconds / 3600)
