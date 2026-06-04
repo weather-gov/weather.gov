@@ -41,14 +41,7 @@ export default async (id) => {
     }
 
     // Cache and return the result
-    let ttl = parseTTLFromHeaders(cacheControl);
-    if (!ttl) {
-      // The API appears to specify 120s as
-      // the ttl for product based endpoints,
-      // so let's use that as the default
-      ttl = 120;
-    }
-
+    const ttl = parseTTLFromHeaders(cacheControl, 120);
     await saveToRedis(productKey, productData, ttl);
     return productData;
   } catch (err) {

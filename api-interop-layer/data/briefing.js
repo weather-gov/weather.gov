@@ -44,7 +44,7 @@ export const getBriefing = async (wfo) => {
         ? { briefing: result.briefing }
         : { briefing: null };
 
-    let ttl = parseTTLFromHeaders(headers) || DEFAULT_BRIEFING_CACHE_TTL;
+    const ttl = parseTTLFromHeaders(headers, DEFAULT_BRIEFING_CACHE_TTL);
     await saveToRedis(url, briefing, ttl);
 
     return briefing;

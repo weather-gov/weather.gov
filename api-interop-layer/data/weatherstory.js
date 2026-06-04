@@ -45,10 +45,7 @@ export default async (wfo) => {
     const stories = result?.stories;
     if (stories) {
       // Attempt to cache the value
-      let ttl = parseTTLFromHeaders(headers);
-      if (!ttl) {
-        ttl = DEFAULT_STORIES_CACHE_TTL;
-      }
+      const ttl = parseTTLFromHeaders(headers, DEFAULT_STORIES_CACHE_TTL);
       await saveToRedis(url, stories, ttl);
       return stories;
     }
