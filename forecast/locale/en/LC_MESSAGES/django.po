@@ -1275,4 +1275,10 @@ msgstr ""
 
 msgid "hide"
 msgstr ""
+
+msgid "suntimes.missing"
+msgstr "Currently there are no sunrise or sunset times"
+
+msgid "suntimes.error"
+msgstr "There was an error loading the sun times data. Please check again later."
 ###########################################################
