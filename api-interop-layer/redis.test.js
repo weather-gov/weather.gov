@@ -2,7 +2,10 @@ import { expect } from "chai";
 import quibble from "quibble";
 import sinon from "sinon";
 
-import { getTTLFromResponse } from "./util/caching.js";
+import {
+  getTTLFromResponse,
+  GLOBAL_REDIS_DEFAULT_TTL,
+} from "./util/caching.js";
 
 describe("redis utilities", () => {
   let redisClient, createClient, redis, sandbox;
@@ -80,19 +83,19 @@ describe("redis utilities", () => {
   describe("parses TTL from cache headers", () => {
     it("with no headers", () => {
       const actual = getTTLFromResponse({});
-      expect(actual).to.equal(null);
+      expect(actual).to.equal(GLOBAL_REDIS_DEFAULT_TTL);
     });
 
     it("with no cache-control header", () => {
       const actual = getTTLFromResponse({ headers: {} });
-      expect(actual).to.equal(null);
+      expect(actual).to.equal(GLOBAL_REDIS_DEFAULT_TTL);
     });
 
     it("with no smax-age cache-control header", () => {
       const actual = getTTLFromResponse({
         headers: { "cache-control": "max-age:300" },
       });
-      expect(actual).to.equal(null);
+      expect(actual).to.equal(GLOBAL_REDIS_DEFAULT_TTL);
     });
 
     it("with cache-control header and s-maxage", () => {

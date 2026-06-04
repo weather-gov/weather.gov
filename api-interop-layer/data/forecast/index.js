@@ -34,10 +34,7 @@ const fetchHourlyPromise = async (url, hours) => {
 
       // Here we are caching the data response from
       // the request (unprocessed), as mentioned above
-      let ttl = parseTTLFromHeaders(headers);
-      if (!ttl) {
-        ttl = DEFAULT_CACHE_TTL;
-      }
+      const ttl = parseTTLFromHeaders(headers, DEFAULT_CACHE_TTL);
       await saveToRedis(url, data, ttl);
 
       dataToProcess = data;
@@ -81,10 +78,7 @@ const fetchGridpointPromise = async (url, place, hours) => {
     // (1) It modifies and uses the shared Map for hours
     // (2) It modifies the quantitative percipitation data
     // in the raw data object.
-    let ttl = parseTTLFromHeaders(headers);
-    if (!ttl) {
-      ttl = DEFAULT_CACHE_TTL;
-    }
+    const ttl = parseTTLFromHeaders(headers, DEFAULT_CACHE_TTL);
     await saveToRedis(url, data, ttl);
 
     return gridpoint(data, hours, place);
@@ -117,10 +111,7 @@ const fetchDailyPromise = async (url, place) => {
     // If processing the data did not return an error,
     // let's cache the result
     if (!dailyData.error) {
-      let ttl = parseTTLFromHeaders(headers);
-      if (!ttl) {
-        ttl = DEFAULT_CACHE_TTL;
-      }
+      const ttl = parseTTLFromHeaders(headers, DEFAULT_CACHE_TTL);
       await saveToRedis(url, dailyData, ttl);
     }
     return dailyData;

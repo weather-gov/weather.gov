@@ -29,11 +29,7 @@ export default async () => {
     const [data, headers] = await requestJSONWithHeaders(connectionPool, url);
 
     // Cache and return the result
-    let ttl = parseTTLFromHeaders(headers);
-    if (!ttl) {
-      // API headers seem to indicate 120 as the ttl
-      ttl = 120;
-    }
+    const ttl = parseTTLFromHeaders(headers, 120);
     await saveToRedis(url, data, ttl);
     return data;
   } catch (e) {
@@ -65,10 +61,7 @@ export const byWFO = async (wfo) => {
     const [data, headers] = await requestJSONWithHeaders(connectionPool, url);
 
     // Cache and return the result
-    let ttl = parseTTLFromHeaders(headers);
-    if (!ttl) {
-      ttl = 120;
-    }
+    const ttl = parseTTLFromHeaders(headers, 120);
     await saveToRedis(url, data, ttl);
     return data;
   } catch (e) {

@@ -84,10 +84,7 @@ const fetchObservation = async (station) => {
 
     // Attempt to cache the result according to the
     // TTL given by the header
-    let ttl = parseTTLFromHeaders(headers);
-    if (!ttl) {
-      ttl = DEFAULT_OBSERVATIONS_CACHE_TTL;
-    }
+    const ttl = parseTTLFromHeaders(headers, DEFAULT_OBSERVATIONS_CACHE_TTL);
     await saveToRedis(url, data.features[0].properties, ttl);
 
     return data.features[0].properties;

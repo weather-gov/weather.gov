@@ -1,5 +1,19 @@
 /** @file Helpers for caching in Redis. */
 
+export const GLOBAL_REDIS_DEFAULT_TTL = 30;
+
+/**
+ * Given an incoming TTL, determine if it is valid
+ * If so, return the number as-is.
+ * If not, return the global default
+ */
+const getValidTTL = (ttl) => {
+  if (ttl && ttl > 0) {
+    return ttl;
+  }
+  return GLOBAL_REDIS_DEFAULT_TTL;
+};
+
 /**
  * Attempt retrieve a TTL for caching from a
  * Cache-Control header of a Headers object.
@@ -11,10 +25,14 @@
  * for the cache TTL, otherwise null if the header is not
  * present.
  */
-export const parseTTLFromHeaders = (headers) => {
+export const parseTTLFromHeaders = (
+  headers,
+  fallbackTTL = GLOBAL_REDIS_DEFAULT_TTL,
+) => {
   const cacheHeader = headers?.["cache-control"];
+
   if (!cacheHeader) {
-    return null;
+    return getValidTTL(fallbackTTL);
   }
 
   // For our purposes, we only care about the s-maxage directive,
@@ -22,7 +40,7 @@ export const parseTTLFromHeaders = (headers) => {
   const rx = /s-maxage=([0-9]+)/;
   const match = cacheHeader.match(rx);
   if (!match) {
-    return null;
+    return getValidTTL(fallbackTTL);
   }
 
   // The second item in the match response will be the
@@ -30,9 +48,9 @@ export const parseTTLFromHeaders = (headers) => {
   // that we care about, so return it.
   const parsedNum = parseInt(match[1]);
   if (isNaN(parsedNum)) {
-    return null;
+    return getValidTTL(fallbackTTL);
   }
-  return parsedNum;
+  return getValidTTL(parsedNum);
 };
 
 /**

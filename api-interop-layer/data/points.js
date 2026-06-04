@@ -90,10 +90,7 @@ const createPointsPromise = async (pointsUrl) => {
       pointsUrl,
     );
 
-    let ttl = parseTTLFromHeaders(gridHeaders);
-    if (!ttl) {
-      ttl = DEFAULT_POINTS_CACHE_TTL;
-    }
+    const ttl = parseTTLFromHeaders(gridHeaders, DEFAULT_POINTS_CACHE_TTL);
     await saveToRedis(pointsUrl, gridData, ttl);
 
     return gridData;
