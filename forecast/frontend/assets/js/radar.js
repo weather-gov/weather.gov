@@ -172,6 +172,10 @@ const setupRadar = () => {
 
   window.app = window.cmiRadar.createApp("#wx-radar-container", options);
 
+  // update the radar external link.
+  const link = document.querySelector("#radar-point-link");
+  link.href = `https://radar.weather.gov/?settings=${options.settings.bookmark}`;
+
   [".cmi-radar-container .menu", ".cmi-radar-menu-agendas"].forEach(
     (selector) => {
       const element = document.querySelector(selector);

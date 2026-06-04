@@ -143,7 +143,6 @@ def county_overview(request, countyfips=None, county_slug=None):  # noqa: C901
                 "primary_wfo": wfo or None,
                 "wfo_codes": wfo_codes,
                 "bounds": county_data["county"].get("bounds", None),
-                "radar": { "radarMetadata": {} },
             },
         },
     )

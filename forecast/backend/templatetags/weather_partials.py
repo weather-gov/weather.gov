@@ -159,7 +159,6 @@ def radar(**kwargs):
     place = kwargs.get("place", None)
     point = kwargs.get("point", None)
     bounds = kwargs.get("bounds", None)
-    radar_metadata = kwargs.get("radar_metadata")
     timezone = kwargs.get("timezone", "UTC")
     radar_heading_level = "h2"  # default value
     if "heading_level" in kwargs:
@@ -171,7 +170,6 @@ def radar(**kwargs):
         "place": place,
         "point": point,
         "bounds": bounds,
-        "radar_metadata": radar_metadata,
         "timezone": timezone,
         "intensities": RADAR_INTENSITIES,
         "heading_level": radar_heading_level,
