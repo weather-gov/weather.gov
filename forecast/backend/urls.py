@@ -18,17 +18,15 @@ urlpatterns = [
     # trailing slashes to requests that don't have them, so if our URLs DON'T
     # have trailing slashes, they'll never match.
     # Forecast specific URLS
-    path("offices/<wfo>/", offices.offices_specific, name="office"),
+    path("about/offices/<wfo>/", offices.offices_specific, name="office"),
     path("afd/", point.afd_index, name="afd_index"),
     path("afd/<wfo>/", point.afd_by_office, name="afd_by_office"),
     path("afd/<wfo>/<afd_id>/", point.afd_by_office_and_id, name="afd_by_office_and_id"),
     # County pages
     path("forecast/county/", county.index, name="county_index"),
-    re_path(r"forecast/county/(?P<county_slug>[\w|-]+-\w+)/$", county.county_overview,
-            name="county_state_overview"),
+    re_path(r"forecast/county/(?P<county_slug>[\w|-]+-\w+)/$", county.county_overview, name="county_state_overview"),
     path("forecast/county/<str:countyfips>/", county.county_overview, name="county_overview"),
     path("forecast/county/<str:county_fips>/risk-overview/", risk.risk_details_by_county, name="county_risk_overview"),
-    path("county<path:rest>", errors.deprecated_path, name="deprecated_county_pages"),
     # State pages
     path("forecast/state/", state.index, name="state_index"),
     path("forecast/state/<state>/", state.state_alerts, name="state_overview"),
@@ -53,14 +51,19 @@ urlpatterns = [
     path("documents/", include(wagtaildocs_urls)),
     # Point forecast related, etc
     path("forecast/point/<float:lat>/<float:lon>/", point.point_location, name="point"),
-    path("point/<float:lat>/<float:lon>/", errors.deprecated_path, name="deprecated_point"),
     path("place/<state>/<place>/", point.place_forecast, name="place_forecast"),
     path("health/", index.health, name="health"),
     path("llms.txt", TemplateView.as_view(template_name="llms.txt", content_type="text/plain")),
     path("robots.txt", TemplateView.as_view(template_name="robots.txt", content_type="text/plain")),
+    # Deprecated URLs with custom 404 pages
+    path("offices/<wfo>/", errors.deprecated_office, name="deprecated_office"),
+    path("point/<float:lat>/<float:lon>/", errors.deprecated_path, name="deprecated_point"),
+    path("county<path:rest>", errors.deprecated_path, name="deprecated_county_pages"),
 ]
 
 if settings.DEBUG is True:
     urlpatterns += [
-        path("offices/", offices.offices, name="offices"),
+        path("about/offices/", offices.offices, name="offices"),
+        # Because this is only used for debugging, go ahead and redirect to the new URL
+        path("offices/", RedirectView.as_view(url="/about/offices/")),
     ]

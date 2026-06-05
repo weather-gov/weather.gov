@@ -228,7 +228,7 @@ class TestCountyViews(TestCase):
                 },
                 "briefings": [],
                 "weather_stories": [
-                    {"is_empty": True, "officeId": "YND", "wfo_name": "Yondertown", "wfo_url": "/offices/YND/"}
+                    {"is_empty": True, "officeId": "YND", "wfo_name": "Yondertown", "wfo_url": "/about/offices/YND/"}
                 ],
                 "wfo_codes": [self.wfo.code],
             },
@@ -269,7 +269,7 @@ class TestCountyViews(TestCase):
                 "briefings": [],
                 "wfo_codes": [self.wfo.code],
                 "weather_stories": [
-                    {"is_empty": True, "officeId": "YND", "wfo_name": "Yondertown", "wfo_url": "/offices/YND/"}
+                    {"is_empty": True, "officeId": "YND", "wfo_name": "Yondertown", "wfo_url": "/about/offices/YND/"}
                 ],
             },
         )

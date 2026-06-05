@@ -35,7 +35,7 @@ class TestNWSConnectUtil(TestCase):
             "endTime": datetime.fromisoformat("1991-01-01T00:00:00Z").astimezone(tz=tz),
             "updateTime": datetime.fromisoformat("1990-01-01T00:00:00Z").astimezone(tz=tz),
             "wfo_name": "Test WFO",
-            "wfo_url": "/offices/NWC/",
+            "wfo_url": "/about/offices/NWC/",
         }
 
         actual = nwsconnect.get_office_briefing(self.wfo1, tz)
@@ -65,7 +65,7 @@ class TestNWSConnectUtil(TestCase):
         expected = {
             "error": True,
             "wfo_name": "Test WFO",
-            "wfo_url": "/offices/NWC/",
+            "wfo_url": "/about/offices/NWC/",
         }
 
         actual = nwsconnect.get_office_briefing(self.wfo1, tz)

@@ -63,7 +63,7 @@ describe("State WFO footer links", () => {
       // Find the expected WFO links within this section
       ["BTV", "BUF", "OKX", "ALY", "BGM"].forEach(async (wfoCode) => {
         await expect(
-          await page.locator(`[href="/offices/${wfoCode}/"]`),
+          await page.locator(`[href="/about/offices/${wfoCode}/"]`),
         ).toBeVisible();
       });
     });
