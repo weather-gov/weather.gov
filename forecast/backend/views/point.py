@@ -210,7 +210,7 @@ def afd_by_office_and_id(request, wfo, afd_id):
         # Otherwise, let's grab all the references for the WFO
         # so we can use them in the select dropdown
         afd_references = interop.get_wx_afd_versions_by_wfo(wfo_uppercase)["@graph"]
-        all_wfos = WFO.objects.values("code", "name")
+        all_wfos = WFO.objects.order_by("name").values("code", "name")
         wfo_combo_box_data = [
             {"value": wfo["code"], "selected": wfo["code"] == wfo_uppercase, "text": f"{wfo['name']} ({wfo['code']})"}
             for wfo in all_wfos
