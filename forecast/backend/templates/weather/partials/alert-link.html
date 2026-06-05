@@ -3,7 +3,7 @@
 --   Display the alert link in the daily summary.
 -- Used by: backend.templatetags.weather_partials.summary_alert_link
 -- Expected variables:
---   alertID: the ID used to link to this specific alert, or null to link
+--   alertId: the ID used to link to this specific alert, or null to link
 --            to the alerts tab
 --   alertType: the event type, such as "Severe Thunderstorm Warning"
 --   alertLevel: the severity level of the event type, such as "Warning"
@@ -22,7 +22,7 @@
         vertically aligns with the icon.
       {% endcomment %}
       class="line-height-sans-2 margin-top-05"
-      href="#{% if alertID == null %}alerts{% else %}alert_{{ alertID }}{% endif %}">
+      href="#{% if alertId == null %}alerts{% else %}alert_{{ alertId }}{% endif %}">
       {{ alertType }}
     </a>
   </div>
