@@ -8,6 +8,11 @@ def deprecated_path(request, **kwargs):
     return render(request, "errors/404/deprecated-path.html", status=404)
 
 
+def deprecated_office(request, wfo):
+    """Render a 404 for the old URL offices structure, i.e. /offices/EAX."""
+    return render(request, "errors/404/deprecated-office.html", context={"wfo": wfo}, status=404)
+
+
 def handle_404(request, exception=None):
     """Handle 404 errors."""
     context = {}

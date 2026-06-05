@@ -157,7 +157,7 @@ class TestCountyViewWeatherStories(TestCase):
         self.assertTemplateUsed(response, "weather/partials/county-weather-stories.html")
         self.assertEqual(
             response.context["data"]["weather_stories"],
-            [{"officeId": "YND", "wfo_url": "/offices/YND/", "wfo_name": "Yondertown", "is_empty": True}],
+            [{"officeId": "YND", "wfo_url": "/about/offices/YND/", "wfo_name": "Yondertown", "is_empty": True}],
         )
 
     @mock.patch("backend.interop.get_county_data")
@@ -177,5 +177,5 @@ class TestCountyViewWeatherStories(TestCase):
         self.assertTemplateUsed(response, "weather/partials/county-weather-stories.html")
         self.assertEqual(
             response.context["data"]["weather_stories"],
-            [{"error": "this", "officeId": "YND", "wfo_url": "/offices/YND/", "wfo_name": "Yondertown"}],
+            [{"error": "this", "officeId": "YND", "wfo_url": "/about/offices/YND/", "wfo_name": "Yondertown"}],
         )

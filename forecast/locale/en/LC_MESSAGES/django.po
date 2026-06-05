@@ -1095,7 +1095,10 @@ msgid "error.404.deprecated-path.h1.01"
 msgstr "404: Page not found."
 
 msgid "error.404.deprecated-path.message.01"
-msgstr "You're trying to visit an outdated URL. Please visit <a href='https://beta.weather.gov' class='usa-link'>beta.weather.gov</a> and search for your location again. We're sorry for the inconvenience."
+msgstr "You're trying to visit an outdated URL. Please visit <a href='/' class='usa-link'>beta.weather.gov</a> and search for your location again. We're sorry for the inconvenience."
+
+msgid "error.404.deprecated-office.message.01"
+msgstr "You're trying to visit an outdated URL. Please visit <a href='/about/offices/{wfo}' class='usa-link'>beta.weather.gov/about/offices/{wfo}</a> to update your bookmark. We're sorry for the inconvenience."
 
 msgid "error.404.not-supported.message.01"
 msgstr "The requested location is not available."

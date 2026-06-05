@@ -2,6 +2,7 @@ from unittest import mock
 
 from django.contrib.gis.geos import GEOSGeometry
 from django.test import TestCase
+from django.urls import reverse
 
 import spatial.models as spatial
 from backend import models
@@ -154,7 +155,7 @@ class TestViews(TestCase):
             response.context["point"],
             {"grid": {"wfo": "TST"}, "wfo": self.wfo, "isMarine": False, "place": {"timezone": "America/New_York"}},
         )
-        expected = {"is_empty": True, "officeId": "TST", "wfo_name": "Test WFO", "wfo_url": "/offices/TST/"}
+        expected = {"is_empty": True, "officeId": "TST", "wfo_name": "Test WFO", "wfo_url": "/about/offices/TST/"}
         self.assertEqual(response.context["weather_story"], expected)
         self.assertTemplateUsed("weather/partials/point-weather-storys.html")
 
@@ -255,7 +256,6 @@ class TestViews(TestCase):
         mock_get_point_forecast.assert_called_once_with(11.1, 22.2)
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "weather/point/overview.html")
-
 
     @mock.patch("backend.views.point.interop.get_point_forecast")
     def test_point_location_with_minimal_data(self, mock_get_point_forecast):
@@ -379,7 +379,9 @@ class TestViews(TestCase):
 
     def test_office_specific(self):
         """Test the specific-office view."""
-        response = self.client.get("/offices/HUN", follow=True)  # use a pre-existing WFO so that the image can be found
+        response = self.client.get(
+            reverse("office", kwargs={"wfo": "HUN"}), follow=True
+        )  # use a pre-existing WFO so that the image can be found
         self.assertTemplateUsed(response, "weather/office/overview.html")
         self.assertEqual(response.context["office"], models.WFO.objects.get(code="HUN"))
 

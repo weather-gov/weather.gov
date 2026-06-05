@@ -26,11 +26,11 @@ class TestUrls(TestCase):
 
     def test_office_url(self):
         """Test WFO office."""
-        resolver = resolve("/offices/WFO/")
+        resolver = resolve("/about/offices/WFO/")
         back = reverse("office", kwargs={"wfo": "Howdy"})
         self.assertEqual(resolver.func, offices.offices_specific)
         self.assertEqual(resolver.kwargs, {"wfo": "WFO"})
-        self.assertEqual(back, "/offices/Howdy/")
+        self.assertEqual(back, "/about/offices/Howdy/")
 
     def test_afd_index(self):
         """Test AFD index."""
