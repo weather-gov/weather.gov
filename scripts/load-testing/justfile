@@ -1,0 +1,6 @@
+notebook:
+    docker build -t beta-viz .
+    docker run --rm -it -p 8888:8888 -v "$PWD:/work" beta-viz
+
+load-test:
+  BETA_WEATHER_BASE_URI=http://localhost:8080 k6 run ./beta_weather_load_test.js
