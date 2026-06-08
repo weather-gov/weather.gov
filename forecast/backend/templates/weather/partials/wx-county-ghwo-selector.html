@@ -4,7 +4,9 @@
 -- Used by: county/ghwo.html, state/ghwo.html
 --          backend.views.partials.wx_select_ghwo_counties
 {% endcomment %}
-<form method="post" action="{% url 'risk_index' %}" class="grid-row padding-y-2">
+<form method="post"
+      action="{% url 'risk_index' %}"
+      class="grid-row padding-y-2">
   {% csrf_token %}
   <div class="grid-col-12 tablet-lg:grid-col-4 line-height-sans-5 tablet-lg:margin-right-4">
     <label for="state-select" class="text-base-darker">{{ "ghwo.selector.label.state.01" | t }}</label>
@@ -55,10 +57,10 @@
             aria-label="{{ "afd.aria.toggle-dropdown.01" | t }}"
             slot="toggle-button">&nbsp;</button>
     <wx-filterable-listbox slot="popup" id="county-select--list" role="listbox">
-      <div role="option"
-           id="county-selector--all-counties"
-           data-value="all"
-           aria-selected="{% if not county %}true{% else %}false{% endif %}">{{"ghwo.selector.label.all-counties.01"|t}}</div>
+    <div role="option"
+         id="county-selector--all-counties"
+         data-value="all"
+         aria-selected="{% if not county %}true{% else %}false{% endif %}">{{ "ghwo.selector.label.all-counties.01"|t }}</div>
     {% for county in counties %}
       <div role="option"
            id="county-selector--{{ county.value }}-{{ forloop.counter0 }}"
@@ -76,15 +78,25 @@
            name="current-state"
            value="{{ state.state }}" />
   </div>
-  <div class="grid-col-12 tablet-lg:grid-col-3 line-height-sans-5 display-flex flex-column flex-justify-center tablet-lg:border-left-1px border-base-light margin-top-3 tablet-lg:margin-top-0">
-    <div class="tablet-lg:margin-top-1 tablet-lg:padding-left-4 desktop:padding-left-5">
+  <div class="grid-col-12 tablet-lg:grid-col-3 line-height-sans-5 display-flex flex-row tablet-lg:flex-column flex-align-left flex-justify-left tablet-lg:flex-align-left tablet-lg:flex-justify-center tablet-lg:border-left-1px border-base-light margin-top-3 tablet-lg:margin-top-0">
+    <div id="view-county-details-container"
+         class="padding-right-2 tablet-lg:padding-right-0 border-right-1px tablet-lg:border-right-0 border-base-light tablet-lg:padding-left-4 desktop:padding-left-5{% if not county %} display-none{% endif %}">
       {% if county %}
         <a href="{% url 'county_overview' countyfips=county.countyfips %}"
-           class="usa-link" id="view-county-details-link">{{ "ghwo.selector.label.county-link.01" | t }}</a>
+           class="usa-link"
+           id="view-county-details-link">{{ "ghwo.selector.label.county-link.01" | t }}</a>
       {% else %}
         <a href="{% url 'county_overview' countyfips='all' %}"
-           class="usa-link display-none" id="view-county-details-link" aria-hidden="true">{{ "ghwo.selector.label.county-link.01" | t }}</a>
+           class="usa-link"
+           id="view-county-details-link"
+           aria-hidden="true">{{ "ghwo.selector.label.county-link.01" | t }}</a>
       {% endif %}
+    </div>
+    <div id="view-state-details-container"
+         class="{% if county %}padding-left-2{% endif %} tablet-lg:padding-left-4 desktop:padding-left-5 tablet-lg:margin-top-1">
+      <a href="{% url 'state_overview' state=state.state %}"
+         class="usa-link"
+         id="view-state-details-link">{{ "ghwo.selector.label.state-link.01" | t }}</a>
     </div>
   </div>
 </form>

@@ -230,11 +230,19 @@ class GHWOCountySelector extends HTMLElement {
    * form's link to county details.
    * In cases where we are showing information for all counties
    * for a given state, we want to hide the link. In cases where
-   * we are showing a specific county, we want to show the link
+   * we are showing a specific county, we want to show the link.
+   * When showing the county link, we also want to ensure that padding
+   * and border styles are applied dynamically to both county + state links.
    */
   updateViewCountyDetailsLink(countyfips = false) {
+    const countyDetailsContainer = document.getElementById(
+      "view-county-details-container",
+    );
     const countyDetailsAnchor = document.getElementById(
       "view-county-details-link",
+    );
+    const stateDetailsContainer = document.getElementById(
+      "view-state-details-container",
     );
     if (!countyDetailsAnchor) {
       return;
@@ -244,11 +252,21 @@ class GHWOCountySelector extends HTMLElement {
       href = countyDetailsAnchor.href.replace("/all", `/${countyfips}`);
       countyDetailsAnchor.setAttribute("href", href);
       countyDetailsAnchor.removeAttribute("aria-hidden");
-      countyDetailsAnchor.classList.remove("display-none");
+      if (countyDetailsContainer) {
+        countyDetailsContainer.classList.remove("display-none");
+      }
+      if (stateDetailsContainer) {
+        stateDetailsContainer.classList.add("padding-left-2");
+      }
     } else {
       countyDetailsAnchor.setAttribute("href", href.replace(/[0-9]{5}/, "all"));
       countyDetailsAnchor.setAttribute("aria-hidden", true);
-      countyDetailsAnchor.classList.add("display-none");
+      if (countyDetailsContainer) {
+        countyDetailsContainer.classList.add("display-none");
+      }
+      if (stateDetailsContainer) {
+        stateDetailsContainer.classList.remove("padding-left-2");
+      }
     }
   }
 

@@ -131,6 +131,7 @@ def risk_details_by_county(request, county_fips):
             "counties": counties,
             "states": states,
             "county": county,
+            "state": county.state,
             "ghwo": ghwo_data,
         },
     )

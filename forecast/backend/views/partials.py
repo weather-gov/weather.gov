@@ -165,6 +165,7 @@ def wx_select_ghwo_counties(request):
             "counties": counties,
             "states": states,
             "county": county,
+            "state": state,
         },
     )
 
