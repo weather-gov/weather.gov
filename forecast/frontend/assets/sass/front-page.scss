@@ -88,7 +88,7 @@ $trapezoid-wrapper-height: 420px;
       @include u-font-family("sans");
       @include u-text("light");
 
-      font-size: 42px;
+      font-size: 2.625rem;
       line-height: 1.15;
       text-align: center;
       margin: 0;
@@ -106,7 +106,7 @@ $trapezoid-wrapper-height: 420px;
       @include u-font-family("sans");
 
       /* mobile only (I think) */
-      font-size: 14px;
+      font-size: 0.875rem;
 
       > .location-area-divider {
         margin-left: units("105");
@@ -123,7 +123,7 @@ $trapezoid-wrapper-height: 420px;
         color: white;
 
         /* mobile only (I think) */
-        font-size: 14px;
+        font-size: 0.875rem;
       }
     }
 
@@ -211,7 +211,7 @@ $trapezoid-wrapper-height: 420px;
   span:first-child {
     color: color("primary-lighter");
     font-weight: 400;
-    font-size: 32px;
+    font-size: 2rem;
   }
 
   span:last-child {
@@ -220,7 +220,7 @@ $trapezoid-wrapper-height: 420px;
     color: color("primary-lightest");
 
     /* mobile only */
-    font-size: 24px;
+    font-size: 1.5rem;
   }
 }
 
@@ -323,7 +323,7 @@ $trapezoid-wrapper-height: 420px;
     @include u-font-family("sans");
     @include u-text("thin");
 
-    font-size: 24px;
+    font-size: 1.5rem;
     color: color("primary-darker");
     background-color: color("primary-lightest");
     margin-top: 0;
@@ -423,7 +423,7 @@ $trapezoid-wrapper-height: 420px;
 
     @include u-font-family("sans"); /* Desktop */
 
-    font-size: 24px; /* mobile */
+    font-size: 1.5rem; /* mobile */
 
     @include u-text("thin");
 
@@ -519,7 +519,7 @@ $trapezoid-wrapper-height: 420px;
       padding-bottom: units(3);
 
       h2 {
-        font-size: 56px;
+        font-size: 3.5rem;
       }
 
       .use-location-area {
@@ -571,7 +571,7 @@ $trapezoid-wrapper-height: 420px;
     }
 
     .stats-text {
-      font-size: 22px;
+      font-size: 1.375rem;
       flex: 1;
       padding: units(1);
       padding-left: units(2);
@@ -625,7 +625,7 @@ $trapezoid-wrapper-height: 420px;
 
   #front-rebuilding {
     .front-rebuilding-header {
-      font-size: 28px; /* xl */
+      font-size: 1.75rem; /* xl */
     }
 
     .front-rebuilding-list-area {
@@ -650,11 +650,11 @@ $trapezoid-wrapper-height: 420px;
         padding-right: var(--trapezoid-triangle-length);
         span {
           &:first-child {
-            font-size: 32px;
+            font-size: 2rem;
           }
 
           &:last-child {
-            font-size: 28px;
+            font-size: 1.75rem;
           }
         }
       }
@@ -733,7 +733,7 @@ $trapezoid-wrapper-height: 420px;
       }
     }
     .stats-text {
-      font-size: 32px;
+      font-size: 2rem;
     }
 
     .stats-image-container {
@@ -746,11 +746,11 @@ $trapezoid-wrapper-height: 420px;
       .trapezoid-inner {
         span {
           &:first-child {
-            font-size: 48px;
+            font-size: 3rem;
           }
 
           &:last-child {
-            font-size: 42px;
+            font-size: 2.625rem;
           }
         }
       }
@@ -759,7 +759,7 @@ $trapezoid-wrapper-height: 420px;
 
   #front-rebuilding {
     .front-rebuilding-header {
-      font-size: 40px;
+      font-size: 2.5rem;
     }
 
     .front-rebuilding-list-area {
@@ -788,10 +788,10 @@ $trapezoid-wrapper-height: 420px;
 
     .find-block-wrapper {
       .use-location-area {
-        font-size: 16px;
+        font-size: 1rem;
 
         > label.usa-label {
-          font-size: 16px;
+          font-size: 1rem;
         }
       }
     }
@@ -814,7 +814,7 @@ $trapezoid-wrapper-height: 420px;
     }
 
     .stats-text {
-      font-size: 44px;
+      font-size: 2.75rem;
     }
 
     .stats-text-right {
@@ -840,11 +840,11 @@ $trapezoid-wrapper-height: 420px;
         padding-bottom: units(8);
         span {
           &:first-child {
-            font-size: 72px;
+            font-size: 4.5rem;
           }
 
           &:last-child {
-            font-size: 64px;
+            font-size: 4rem;
           }
         }
       }
@@ -853,7 +853,7 @@ $trapezoid-wrapper-height: 420px;
 
   #front-rebuilding {
     .front-rebuilding-header {
-      font-size: 44px;
+      font-size: 2.75rem;
     }
 
     .front-rebuilding-list-area {
