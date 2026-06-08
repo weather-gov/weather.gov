@@ -30,6 +30,19 @@ describe("Risk Overview Page Tests", () => {
       await expect(selector).toHaveCount(1);
     });
 
+    test("the link to the state overview page is present, county link is not", async ({
+      page,
+    }) => {
+      const stateLink = await page.locator(`#view-state-details-link`);
+
+      await expect(stateLink).toHaveCount(1);
+      await expect(stateLink).toHaveAttribute("href", /forecast\/state\/CA\//);
+
+      const countyLink = await page.locator(`#view-county-details-link`);
+
+      await expect(countyLink).toHaveAttribute("aria-hidden", "true");
+    });
+
     test("selecting a specific county updates the url to have the county version of the url", async ({
       page,
     }) => {
@@ -47,6 +60,14 @@ describe("Risk Overview Page Tests", () => {
         "/forecast/county/06007/risk-overview/",
       );
       await expect(page).toHaveURL(expectedLocation);
+
+      // Also updates the county page link to be visible and have the correct url
+      const countyLink = await page.locator(`#view-county-details-link`);
+
+      await expect(countyLink).toHaveAttribute(
+        "href",
+        /forecast\/county\/06007\//,
+      );
     });
   });
 

@@ -773,6 +773,9 @@ msgstr "All counties"
 msgid "ghwo.selector.label.county-link.01"
 msgstr "View county page"
 
+msgid "ghwo.selector.label.state-link.01"
+msgstr "View state page"
+
 msgid "ghwo.heading.error.01"
 msgstr "There was an error loading the data"
 
