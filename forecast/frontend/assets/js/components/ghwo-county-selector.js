@@ -50,7 +50,8 @@ class GHWOCountySelector extends HTMLElement {
       this.fetchUpdatedSelectComponent.bind(this);
     this.fetchAndUpdateDetailsElements =
       this.fetchAndUpdateDetailsElements.bind(this);
-    this.handleBackButton = this.handleBackButton.bind(this);
+    this.handleNavButton = this.handleNavButton.bind(this);
+    this.updateBrowserHistory = this.updateBrowserHistory.bind(this);
     this.showLoader = this.showLoader.bind(this);
     this.hideLoader = this.hideLoader.bind(this);
     this.updateViewCountyDetailsLink =
@@ -59,6 +60,8 @@ class GHWOCountySelector extends HTMLElement {
 
   connectedCallback() {
     this.addEventListener("change", this.handleChange);
+    window.addEventListener("popstate", this.handleNavButton);
+    this.updateBrowserHistory(window.location.href, true);
   }
 
   disconnectedCallback() {
@@ -132,25 +135,6 @@ class GHWOCountySelector extends HTMLElement {
       const html = await response.text();
       // Swap out the inner HTML of this component
       this.innerHTML = html;
-
-      // Update the browser history and url
-      const countyFips = formData.get("county");
-      const stateCode = formData.get("state");
-      const showAllCountiesForState = countyFips === "all";
-      if (showAllCountiesForState) {
-        window.history.pushState(
-          {},
-          stateCode,
-          STATE_GHWO_URL.replace("<stateCode>", stateCode),
-        );
-      } else {
-        window.history.pushState(
-          {},
-          countyFips,
-          COUNTY_GHWO_URL.replace("<countyFips>", countyFips),
-        );
-      }
-      window.addEventListener("popstate", this.handleBackButton);
     } else {
       // For now simply log the error
       console.error(
@@ -199,20 +183,15 @@ class GHWOCountySelector extends HTMLElement {
       // Update the browser history and url
       if (showAllCountiesForState) {
         this.updateViewCountyDetailsLink();
-        window.history.pushState(
-          {},
-          selectedStateCode,
+        this.updateBrowserHistory(
           STATE_GHWO_URL.replace("<stateCode>", selectedStateCode),
         );
       } else {
         this.updateViewCountyDetailsLink(selectedCountyFips);
-        window.history.pushState(
-          {},
-          selectedCountyFips,
+        this.updateBrowserHistory(
           COUNTY_GHWO_URL.replace("<countyFips>", selectedCountyFips),
         );
       }
-      window.addEventListener("popstate", this.handleBackButton);
     } else {
       const errorEl = document.createElement("pre");
       errorEl.innerHTML = `Could not retrieve GHWO details for county: ${selectedCountyFips}`;
@@ -276,12 +255,13 @@ class GHWOCountySelector extends HTMLElement {
   /**
    * When we pushState to the browser history
    * (as we do when fetching partials), we need to
-   * ensure that the back button does a full page
+   * ensure that the back and forward buttons do a full page
    * refresh. Otherwise only the URL will change.
    */
-  handleBackButton() {
-    window.removeEventListener("popstate", this.handleBackButton);
-    window.location.reload();
+  handleNavButton(event) {
+    if (event.state?.on_ghwo_page === true) {
+      window.location.reload();
+    }
   }
 
   /**
@@ -290,7 +270,9 @@ class GHWOCountySelector extends HTMLElement {
    * that can be cleared if the request returns fast enough.
    */
   showLoader(elements) {
+    this.loading = true;
     this.loaderTimeout = setTimeout(() => {
+      if (this.loading === false) return;
       const template = document.getElementById("ghwo-wx-loader");
       if (template) {
         elements.forEach((el) => {
@@ -308,8 +290,20 @@ class GHWOCountySelector extends HTMLElement {
    * or an error will already change the innerHTML
    */
   hideLoader() {
+    this.loading = false;
     if (this.loaderTimeout) {
       clearTimeout(this.loaderTimeout);
+    }
+  }
+
+  /**
+   * Helper function to keep the browser in sync with the selector.
+   */
+  updateBrowserHistory(url, replace = false) {
+    if (replace) {
+      window.history.replaceState({ on_ghwo_page: true }, "", url);
+    } else {
+      window.history.pushState({ on_ghwo_page: true }, "", url);
     }
   }
 

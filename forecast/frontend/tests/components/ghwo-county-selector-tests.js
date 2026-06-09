@@ -246,45 +246,7 @@ describe("<wx-ghwo-county-selector> component tests", () => {
     ).to.equal(true);
   });
 
-  // TODO: work out the bug with the county selector
-  it.skip("if #fetchUpdatedSelectComponent response is ok, history is pushed", async () => {
-    // Stub out fetch, so that it returns an OK response
-    global.fetch.resolves(new Response("", { status: 200 }));
-
-    // Stub the history pushState method
-    sandbox.stub(window.history, "pushState");
-
-    await component.fetchUpdatedSelectComponent();
-
-    const expectedCountySelectValue = "1";
-    const expectedHistoryURL = `/counties/ghwo/${expectedCountySelectValue}`;
-
-    expect(
-      window.history.pushState.calledWith(
-        {},
-        expectedCountySelectValue,
-        expectedHistoryURL,
-      ),
-    ).to.equal(true);
-  });
-
-  it("if #fetchUpdatedSelectComponent response is ok, adds the popstate handler for back button", async () => {
-    // Stub out fetch, so that it returns an OK response
-    global.fetch.resolves(new Response("", { status: 200 }));
-
-    // Stub adding the event listener to the window
-    // object
-    sandbox.stub(window, "addEventListener");
-
-    await component.fetchUpdatedSelectComponent();
-
-    expect(
-      window.addEventListener.calledWith(
-        "popstate",
-        component.handleBackButton,
-      ),
-    ).to.equal(true);
-  });
+  
 
   it("Appends the loader to the DOM if the request is taking longer than the timeout", async () => {
     // Mock the fetch call so it takes longer than the timeout
