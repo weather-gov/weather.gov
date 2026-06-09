@@ -249,7 +249,10 @@ class GHWOCountySelector extends HTMLElement {
     }
     let href = countyDetailsAnchor.href;
     if (countyfips) {
-      href = countyDetailsAnchor.href.replace("/all", `/${countyfips}`);
+      href = countyDetailsAnchor.href.replace(
+        /\/(all|[0-9]{5})/,
+        `/${countyfips}`,
+      );
       countyDetailsAnchor.setAttribute("href", href);
       countyDetailsAnchor.removeAttribute("aria-hidden");
       if (countyDetailsContainer) {
