@@ -81,7 +81,7 @@ describe("Risk Overview Page Tests", () => {
       );
     });
 
-    test("the correct state and county are  pre-selected in the state dropdown", async ({
+    test("the correct state and county are pre-selected in the state dropdown", async ({
       page,
     }) => {
       const stateSelector = await page.locator(
@@ -98,6 +98,14 @@ describe("Risk Overview Page Tests", () => {
     test("selecting another county updates to the URL of that county", async ({
       page,
     }) => {
+      // Validate the county page link to have the expected href
+      const countyLink = await page.locator(`#view-county-details-link`);
+
+      await expect(countyLink).toHaveAttribute(
+        "href",
+        /forecast\/county\/06007\//,
+      );
+
       const countyToggleButton = await page.locator(
         `#county-selector [slot="toggle-button"]`,
       );
@@ -112,6 +120,14 @@ describe("Risk Overview Page Tests", () => {
         "/forecast/county/06003/risk-overview/",
       );
       await expect(page).toHaveURL(expectedLocation);
+
+      // Validate the county page link has updated
+      const newCountyLink = await page.locator(`#view-county-details-link`);
+
+      await expect(newCountyLink).toHaveAttribute(
+        "href",
+        /forecast\/county\/06003\//,
+      );
     });
 
     test("selecting 'all' counties updates the URL to the state overview url", async ({
@@ -155,6 +171,10 @@ describe("Risk Overview Page Tests", () => {
         `[role="option"][data-value="all"][aria-selected="true"]`,
       );
       expect(allCountySelector).toHaveCount(1);
+
+      const stateLink = await page.locator(`#view-state-details-link`);
+      await expect(stateLink).toHaveCount(1);
+      await expect(stateLink).toHaveAttribute("href", /forecast\/state\/VA\//);
     });
   });
 
