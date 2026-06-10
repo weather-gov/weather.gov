@@ -23,8 +23,7 @@ export default (req, res) => {
     .join("&");
 
   const proxyRequestSettings = {
-    // If there's a wx-host header, use that as our hostname
-    host: req.headers["wx-host"] ?? "api.weather.gov",
+    host: "api.weather.gov",
     port: 443,
     path: `${req.path}?${qs}`,
     method: "GET",
