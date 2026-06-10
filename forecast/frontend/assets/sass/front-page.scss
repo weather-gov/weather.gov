@@ -26,12 +26,12 @@
 
 :root {
   --find-forecast-background-rgb: 17, 24, 29;
-  --stats-area-image-max-height: 300px;
+  --stats-area-image-max-height: 18.75em;
   --trapezoid-triangle-length: 20%;
-  --trapezoid-height-mobile: 160px;
+  --trapezoid-height-mobile: 10em;
 }
 
-$trapezoid-wrapper-height: 420px;
+$trapezoid-wrapper-height: 26.25em;
 /* stylelint-disable */
 #front-find-forecast-section {
   background-image: url("/public/images/front-page/backgrounds/wx_glacier_1440_70_cr.jpg");
@@ -440,7 +440,7 @@ $trapezoid-wrapper-height: 420px;
       100% 100%,
       0% 100%
     );
-    padding-right: 10%;
+    padding-right: var(--trapezoid-triangle-length);
 
     > span {
       position: relative;
