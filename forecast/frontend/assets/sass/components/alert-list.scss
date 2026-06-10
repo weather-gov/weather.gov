@@ -15,21 +15,21 @@
   }
 }
 
-wx-alerts .usa-accordion {
-  scroll-padding-top: units(6);
-}
-
-.wx-alerts-county-daily .usa-accordion {
+.wx-alerts-county-daily .usa-accordion,
+.wx-alerts-point .usa-accordion {
   margin-top: 0;
   margin-bottom: 0.5rem;
+  scroll-padding-top: units(6);
 
   h3 {
-    color: color("black");
+    color: color("ink");
+    margin: 0;
 
     button {
       border: 1px solid color("base");
       font-weight: normal;
-      color: color("black");
+      color: color("ink");
+      padding: units(1.5) units(4) units(1.5) units(2);
 
       &[aria-expanded="false"] {
         background-image:
@@ -48,6 +48,8 @@ wx-alerts .usa-accordion {
   .usa-accordion__content {
     border: 1px solid color("base");
     border-top: 0;
+    padding: units(2);
+    background-color: color("white");
   }
 
   &.alert-level__other h3 {
