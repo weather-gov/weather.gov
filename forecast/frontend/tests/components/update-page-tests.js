@@ -63,4 +63,19 @@ describe("page updater", () => {
       <div wx-auto-update="one">You too!</div>
     `);
   });
+
+  it("triggers wx-auto-update event", async () => {
+    sandbox.spy(window, "dispatchEvent");
+    global.document.body.innerHTML = `
+      <div wx-auto-update="tester">Internal item</div>
+    `;
+    global.fetch.withArgs(`${global.window.location.href}?update=`).resolves({
+      text: async () => `<div wx-auto-update="tester">Replacement</div>`,
+    });
+    await update();
+    expect(window.dispatchEvent.callCount).to.equal(1);
+    const spyDispatch = window.dispatchEvent.getCall(0);
+    expect(spyDispatch.args[0].type).to.equal("wx-auto-update");
+    expect(spyDispatch.args[0]?.detail?.target).to.equal("tester");
+  });
 });
