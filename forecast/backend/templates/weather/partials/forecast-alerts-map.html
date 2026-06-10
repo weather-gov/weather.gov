@@ -8,16 +8,28 @@
 <div class="grid-container padding-x-2 desktop:padding-x-4">
   <div class="grid-row">
     <div class="grid-col-12">
-      <wx-alerts class="display-block">
+      <wx-alerts class="display-block wx-alerts-point">
       {% for alert in alerts %}
-        <div class="usa-accordion usa-accordion--bordered margin-bottom-1"
+        <div class="usa-accordion usa-accordion--bordered margin-bottom-1 alert-level__{{ alert.metadata.level.text|lower }}"
              id="alert_{{ alert.id }}">
           <h3 class="usa-accordion__heading font-heading-lg">
             <button type="button"
                     class="usa-accordion__button text-ls-1"
                     aria-expanded="true"
                     aria-controls="a{{ alert.id }}"
-                    data-button-for="#alert_{{ alert.id }}">{{ alert.event | t }}</button>
+                    data-button-for="#alert_{{ alert.id }}">
+              <span class="display-flex">
+                <div class="maxw-3 height-3 margin-right-1 margin-top-2px">
+                  <svg role="img"
+                       aria-hidden="true"
+                       class="width-full height-full"
+                       fill="currentColor">
+                    <use href="{% static 'images/uswds/sprite.svg' %}#warning"></use>
+                  </svg>
+                </div>
+                <span class="wx-line-height-tight">{{ alert.event | t }}</span>
+              </span>
+            </button>
           </h3>
           <div id="a{{ alert.id }}" class="usa-accordion__content usa-prose">
             <p class="font-sans-md text-bold text-primary-darker margin-y-0">
