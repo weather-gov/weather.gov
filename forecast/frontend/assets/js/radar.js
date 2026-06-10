@@ -199,6 +199,12 @@ const setupRadar = () => {
       buttonContainer.style.top = `${tabList.offsetHeight}px`;
     }
   }
+
+  window.addEventListener("wx-auto-update", (e) => {
+    if (e?.detail?.target === "radar") {
+      updateRadarTimestamps(container);
+    }
+  });
 };
 
 const scriptEl = document.querySelector("[data-wx-radar-cmi]");

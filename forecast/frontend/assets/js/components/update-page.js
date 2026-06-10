@@ -13,6 +13,11 @@ export const update = async () => {
     const updated = container.querySelector(`[wx-auto-update="${target}"]`);
     if (updated) {
       node.innerHTML = updated.innerHTML;
+      window.dispatchEvent(
+        new CustomEvent("wx-auto-update", {
+          detail: { target: target },
+        }),
+      );
     }
   });
 };
