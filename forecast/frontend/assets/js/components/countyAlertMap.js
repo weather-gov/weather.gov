@@ -72,12 +72,12 @@ const setupMap = () => {
     },
 
     buttonSetToExpand: function () {
-      this.button.innerHTML = `<svg role="img" class="width-full height-full"><use xlink:href="/public/images/uswds/sprite.svg#zoom_out_map"></use></svg>`;
+      this.button.innerHTML = `<svg role="img" aria-hidden="true" class="width-full height-full"><use xlink:href="/public/images/uswds/sprite.svg#zoom_out_map"></use></svg>`;
       this.button.setAttribute("aria-label", "Expand the county alert map");
     },
 
     buttonSetToCollapse: function () {
-      this.button.innerHTML = `<svg role="img" class="width-full height-full"><use xlink:href="/public/images/spritesheet.svg#wx_zoom-in-map"></use></svg>`;
+      this.button.innerHTML = `<svg role="img" aria-hidden="true" class="width-full height-full"><use xlink:href="/public/images/spritesheet.svg#wx_zoom-in-map"></use></svg>`;
       this.button.setAttribute("aria-label", "Collapse the county alert map");
     },
 
