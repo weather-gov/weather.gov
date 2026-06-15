@@ -25,6 +25,10 @@ const pages = [
     path: "/forecast/point/35.198/-111.651/#daily",
   },
   {
+    name: "county page - coconino county, az",
+    path: "/forecast/county/04005/",
+  },
+  {
     name: "about page",
     path: "/about/",
   },

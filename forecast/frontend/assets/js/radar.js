@@ -9,7 +9,7 @@ const toggleMapExpand = (() => {
   return (event) => {
     const container = event.target.closest(".wx-radar-container");
     const wrapper = event.target.closest(".wx-radar-wrapper");
-    const svgUse = document.querySelector("button.wx-radar-expand svg use");
+    const svgUse = container.querySelector("button.wx-radar-expand svg use");
     const isLargeMap = container.classList.contains("wx-large-map");
 
     expanded = !expanded;
