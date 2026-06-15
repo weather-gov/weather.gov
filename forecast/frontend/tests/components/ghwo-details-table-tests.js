@@ -6,27 +6,27 @@ const TEST_MARKUP = `
 <wx-ghwo-details-table target="wx-ghwo-table-details-pane">
     <table id="wx-ghwo-table">
         <tr>
-            <td><div class="ghwo-chiclet chiclet-detail-cell chiclet-detail-cell-empty" data-risk-level="0" data-risk-factor="Rain" tabindex="0"></div></td>
-            <td>
-                <button class="ghwo-chiclet" role="button" data-risk-level="4" data-risk-factor="HighWinds" data-day-number="2" data-day-name="Tuesday" aria-selected="true">
+            <td role="gridcell"><div class="ghwo-chiclet chiclet-detail-cell chiclet-detail-cell-empty" data-risk-level="0" data-risk-factor="Rain" tabindex="0"></div></td>
+            <td role="gridcell" aria-selected="true">
+                <button class="ghwo-chiclet" role="button" data-risk-level="4" data-risk-factor="HighWinds" data-day-number="2" data-day-name="Tuesday" aria-pressed="true">
                     4
                 </button>
             </td>
-            <td aria-selected="false">
-                <button class="ghwo-chiclet" role="button" data-risk-level="2" data-risk-factor="HighWinds" data-day-number="3" data-day-name="Wednesday" aria-selected="false">
+            <td role="gridcell">
+                <button class="ghwo-chiclet" role="button" data-risk-level="2" data-risk-factor="HighWinds" data-day-number="3" data-day-name="Wednesday" aria-pressed="false">
                     2
                 </button>
             </td>
         </tr>
         <tr>
-            <td>
+            <td role="gridcell">
                 <div class="ghwo-chiclet chiclet-detail-cell chiclet-detail-cell-empty" data-risk-level="0" data-risk-factor="Rain" tabindex="0"></div>
             </td>
-            <td>
+            <td role="gridcell">
                 <div class="ghwo-chiclet chiclet-detail-cell chiclet-detail-cell-empty" data-risk-level="0" data-risk-factor="Rain" tabindex="0"></div>
             </td>
-            <td>
-                <button class="ghwo-chiclet" role="button" data-risk-level="3" data-risk-factor="Rain" data-day-number="3" data-day-name="Monday" aria-selected="false">
+            <td role="gridcell">
+                <button class="ghwo-chiclet" role="button" data-risk-level="3" data-risk-factor="Rain" data-day-number="3" data-day-name="Monday" aria-pressed="false">
                     2
                 </button>
             </td>
@@ -50,7 +50,7 @@ describe("GHWO Daily Details Table component tests", () => {
     sandbox = createSandbox();
     document.body.innerHTML = TEST_MARKUP;
     const component = document.querySelector("wx-ghwo-details-table");
-    const selected = component.querySelector(`[aria-selected="true"]`);
+    const selected = component.querySelector(`[aria-pressed="true"]`);
     selected.focus();
   });
 
@@ -61,7 +61,7 @@ describe("GHWO Daily Details Table component tests", () => {
   it("Has one and only one button selected by default", () => {
     const component = document.querySelector("wx-ghwo-details-table");
     const selected = Array.from(
-      component.querySelectorAll(`td [aria-selected="true"]`),
+      component.querySelectorAll(`td [aria-pressed="true"]`),
     );
 
     expect(selected).to.have.length(1);
@@ -75,7 +75,7 @@ describe("GHWO Daily Details Table component tests", () => {
     const thirdButton = buttons[2];
 
     // To start, we expect the third button is not selected
-    expect(thirdButton.getAttribute("aria-selected")).to.not.equal("true");
+    expect(thirdButton.getAttribute("aria-pressed")).to.not.equal("true");
 
     // Click the button
     thirdButton.click();
@@ -87,11 +87,39 @@ describe("GHWO Daily Details Table component tests", () => {
         return button !== thirdButton;
       })
       .forEach((button) => {
-        expect(button.getAttribute("aria-selected")).to.not.equal("true");
+        expect(button.getAttribute("aria-pressed")).to.not.equal("true");
       });
 
     // And now the third button should be the selected one
-    expect(thirdButton.getAttribute("aria-selected")).to.equal("true");
+    expect(thirdButton.getAttribute("aria-pressed")).to.equal("true");
+  });
+
+  it("Clicking the third in the table selects the corresponding gridcell and de-selects the others", () => {
+    const component = document.querySelector("wx-ghwo-details-table");
+    const buttons = Array.from(
+      component.querySelectorAll(`[role="button"].ghwo-chiclet`)
+    );
+    const thirdButton = buttons[2];
+    const gridcells = Array.from(
+      component.querySelectorAll(`[role="gridcell"]`)
+    );
+    const thirdGridcell = thirdButton.closest(`[role="gridcell"]`);
+
+    // To start, we expect that the third button is not
+    // set to pressed, and the third gridcell is not selected
+    expect(thirdButton.getAttribute("aria-pressed")).to.not.equal("true");
+    expect(thirdGridcell.getAttribute("aria-selected")).to.not.equal("true");
+
+    // Click the button
+    thirdButton.click();
+
+    // Third gridcell should be selected
+    expect(thirdGridcell.getAttribute("aria-selected")).to.equal("true");
+
+    // Other gridcells should not be selected
+    gridcells.filter(gridcell => gridcell !== thirdGridcell).forEach(gridcell =>{
+      expect(gridcell.getAttribute("aria-selected")).to.not.equal("true");
+    });
   });
 
   it("Clicking the last button in the table will display its corresponding pane and hide the other panes", async () => {

@@ -75,16 +75,17 @@
                   <span class="font-mono-xs padding-right-3 text-normal">{{ risk.name }}</span>
                 </th>
                 {% for day in risk.days %}
-                  <td role="gridcell" aria-selected="false">
+                <td role="gridcell" aria-selected="{% if day.is_first %}true{% else %}false{% endif %}">
                     <div class="ghwo-chiclet-wrapper">
                       {% if day.category > 0 %}
-                        <button class="ghwo-chiclet chiclet-detail-cell"
-                                role="button"
-                                data-risk-level="{{ day.category }}"
-                                data-risk-factor="{{ id }}"
-                                data-day-number="{{ forloop.counter }}"
-                                data-day-name="{{ day.timestamp|datetime|date:"l" }}"
-                                aria-selected="{% if day.is_first %}true{% else %}false{% endif %}">
+                      <button class="ghwo-chiclet chiclet-detail-cell"
+                              role="button"
+                              data-risk-level="{{ day.category }}"
+                              data-risk-factor="{{ id }}"
+                              data-day-number="{{ forloop.counter }}"
+                              data-day-name="{{ day.timestamp|datetime|date:"l" }}"
+                              aria-pressed="{% if day.is_first %}true{% else %}false{% endif %}"
+                      >
                           <span class="usa-sr-only">{{ risk.name }}: {{ "ghwo.details.table.risk-level.lower.01" | t }} {{ day.category }}</span>
                           <span class="font-mono-2x text-medium" aria-hidden="true">{{ day.category }}</span>
                         </button>
