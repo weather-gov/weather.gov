@@ -58,12 +58,24 @@ class GHWODetailsTable extends HTMLElement {
     const riskFactor = event.target.dataset.riskFactor;
     const dayNumber = event.target.dataset.dayNumber;
 
-    // Update the clicked chiclet to be aria-selected,
-    // and all others to be not selected
     const table = event.target.closest("table");
+
+    // Update gridcell to be aria-selected
+    Array.from(table.querySelectorAll(`[role="gridcell"]`)).forEach(
+      (gridcell) => {
+        if (gridcell.contains(event.target)) {
+          gridcell.setAttribute("aria-selected", true);
+        } else {
+          gridcell.setAttribute("aria-selected", false);
+        }
+      },
+    );
+
+    // Update the clicked chiclet to be aria-pressed,
+    // and all others to be not selected
     Array.from(table.querySelectorAll(`.ghwo-chiclet[role="button"]`)).forEach(
       (button) => {
-        button.setAttribute("aria-selected", button === event.target);
+        button.setAttribute("aria-pressed", button === event.target);
       },
     );
 

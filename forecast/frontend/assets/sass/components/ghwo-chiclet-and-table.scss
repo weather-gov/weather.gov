@@ -23,7 +23,7 @@
   }
 
   &[role="button"]:active,
-  &[role="button"][aria-selected="true"] {
+  &[role="button"][aria-pressed="true"] {
     background-color: color("green-20v");
     border-color: color("green-50v");
   }
@@ -41,7 +41,7 @@
   }
 
   &[role="button"]:active,
-  &[role="button"][aria-selected="true"] {
+  &[role="button"][aria-pressed="true"] {
     background-color: color("yellow-30v");
     border-color: color("yellow-50v");
   }
@@ -59,7 +59,7 @@
   }
 
   &[role="button"]:active,
-  &[role="button"][aria-selected="true"] {
+  &[role="button"][aria-pressed="true"] {
     background-color: color("orange-40v");
     border-color: color("orange-60v");
   }
@@ -74,7 +74,7 @@
   }
 
   &[role="button"]:active,
-  &[role="button"][aria-selected="true"] {
+  &[role="button"][aria-pressed="true"] {
     background-color: color("red-60v");
     border-color: color("red-80v");
   }
@@ -94,7 +94,7 @@
   }
 
   &[role="button"]:active,
-  &[role="button"][aria-selected="true"] {
+  &[role="button"][aria-pressed="true"] {
     background-color: color("violet-warm-70v");
     border-color: color("violet-warm-90");
   }

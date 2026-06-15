@@ -60,7 +60,7 @@
   <div class="risk-summary-table-wrapper padding-bottom-2">
     <table class="risk-summary-table"
            aria-labelledby="risk-summary-table-header"
-           aria-describedby="risk-summary-table-description">
+           aria-describedby="risk-summary-table-description risk-summary-table-legend">
       <thead>
         <tr>
           <th scope="col" aria-hidden="true"></th>
@@ -96,9 +96,9 @@
       </tbody>
     </table>
   </div>
-  <div class="risk-summary-table-legend display-inline-block font-body-xs text-normal text-base-darker"
-       aria-label="{{ 'ghwo.table.legend.label.01'|t }}">
-    <div class="display-flex flex-align-center margin-right-2 margin-top-2 tablet:margin-top-05 margin-bottom-105">
+  <div id="risk-summary-table-legend" class="risk-summary-table-legend display-inline-block font-body-xs text-normal text-base-darker">
+    <span class="usa-sr-only">{{ 'ghwo.table.legend.label.01'|t }}</span>
+      <div class="display-flex flex-align-center margin-right-2 margin-top-2 tablet:margin-top-05 margin-bottom-105">
       <div class="risk-summary-table-legend-square"></div>
       <span>{{"ghwo.summary.levels.sr-labels.0.01"|t}}</span>
     </div>
