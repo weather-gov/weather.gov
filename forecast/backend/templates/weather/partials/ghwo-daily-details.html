@@ -57,7 +57,7 @@
             <tr>
               <td class="position-sticky left-0 bg-white"></td>
               {% for day in ghwo.days %}
-                <th scope="col">
+                <th scope="col" role="columnheader">
                   <time datetime="{{ day.timestamp|date:"c" }}"
                         data-day-number="{{ day.dayNumber }}"
                         class="font-mono-2x tablet-lg:font-mono-xs text-normal">
