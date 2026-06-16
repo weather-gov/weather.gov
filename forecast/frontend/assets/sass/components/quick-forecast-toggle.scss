@@ -165,9 +165,10 @@
   @include u-font("mono", "xs");
 
   text-transform: uppercase;
-  width: 100;
+  width: 100%;
   color: color("primary-darker");
   padding: units(1.5);
+  padding-right: units(4);
 
   @include grid-row;
 }
@@ -185,6 +186,10 @@
 }
 
 @include at-media("tablet") {
+  .wx-quick-forecast-header {
+    padding-right: units(1.5);
+  }
+
   .wx-quick-toggle-item-bottom {
     @include grid-col;
 
