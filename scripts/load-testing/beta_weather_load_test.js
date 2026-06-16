@@ -71,7 +71,7 @@ const cumulativeWeights = (() => {
 })();
 
 function pickRequestType() {
-  const r = Math.random();
+  const r = Math.random(); // nosemgrep
   for (let i = 0; i < cumulativeWeights.length; i++) {
     if (r < cumulativeWeights[i]) {
       return requestTypes[i];
@@ -93,7 +93,7 @@ const gridCumulativeWeights = (() => {
 
 // do a binary search per sample. this is essentially inverse CDF sampling.
 function pickGridPoint() {
-  const r = Math.random();
+  const r = Math.random(); // nosemgrep
   let lo = 0;
   let hi = gridCumulativeWeights.length - 1;
   while (lo < hi) {
@@ -106,13 +106,13 @@ function pickGridPoint() {
   }
   const [lat, lon] = gridData.points[lo];
   return {
-    lat: lat + Math.random() * gridData.gridSize,
-    lon: lon + Math.random() * gridData.gridSize,
+    lat: lat + Math.random() * gridData.gridSize, // nosemgrep
+    lon: lon + Math.random() * gridData.gridSize, // nosemgrep
   };
 }
 
 function pickCountyFips() {
-  return countyData[Math.floor(Math.random() * countyData.length)];
+  return countyData[Math.floor(Math.random() * countyData.length)]; // nosemgrep
 }
 
 const marineCounter = new Counter("marine");
