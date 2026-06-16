@@ -17,10 +17,9 @@ export default (req, res) => {
     return;
   }
 
-  // Reassemble the query string, if any.
-  const qs = Object.entries(req.query)
-    .map(([key, value]) => `${key}=${value}`)
-    .join("&");
+  // Reassemble the query string, if any. Do not map over req.query, see CWE-606.
+  const qp = req.url.split('?');
+  const qs = qp.length === 2 ? qp[1] : "";
 
   const proxyRequestSettings = {
     // If there's a wx-host header, use that as our hostname
