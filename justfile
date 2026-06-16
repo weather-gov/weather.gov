@@ -177,6 +177,15 @@ lint-style:
 lint-template:
   docker compose exec web djlint backend/templates/ --extension=html
 
+[group("code quality")]
+gitlab-sast:
+  docker run --rm \
+  -v "$PWD:/tmp/app" \
+  -w /tmp/app \
+  -e SAST_EXCLUDED_PATHS="spec,test,tests,tmp,forecast/frontend/assets/js/uswds*.js,forecast/frontend/assets/js/third-party,forecast/frontend/assets/js/cmi-radar*.js,forecast/frontend/public/js" \
+  registry.gitlab.com/security-products/semgrep:latest /analyzer run && \
+  cat gl-sast-report.json | jq ".vulnerabilities[].name" | sort | uniq -c
+
 ##### Testing #####
 alias a11y := test-a11y
 # Run automated accessibility testing in Playwright

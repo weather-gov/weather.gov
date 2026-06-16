@@ -135,7 +135,13 @@ const replaceGHWOTimestamps = (ghwoData) => {
 
 const apiFetchAndSave = async (urlPath, savePath) => {
   const url = URL.parse(urlPath, "https://api.weather.gov");
-  const data = await fetch(url).then((r) => r.json());
+  if (
+    url?.host !== "api.weather.gov" &&
+    url?.host !== "preview-api.weather.gov"
+  ) {
+    throw new Error(`Unknown host: ${url?.host}`);
+  }
+  const data = await fetch(url).then((r) => r.json()); // nosemgrep
 
   const search = url.search ? `__${url.search.slice(1)}` : "";
 
@@ -162,7 +168,10 @@ const apiFetchAndSave = async (urlPath, savePath) => {
 
 const ghwoFetchAndSave = async (urlPath, savePath) => {
   const url = URL.parse(urlPath, "https://www.weather.gov");
-  const data = await fetch(url)
+  if (url?.host !== "www.weather.gov") {
+    throw new Error(`Unknown host: ${url?.host}`);
+  }
+  const data = await fetch(url) // nosemgrep
     .then((r) => r.json())
     .catch(() => {
       return {};
