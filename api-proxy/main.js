@@ -221,6 +221,18 @@ app.get("*any", async (req, res) => {
   }
 });
 
+app.use((req, res, next) => {
+  res.setHeader("access-control-allow-methods", "GET, POST, OPTIONS");
+  res.setHeader(
+    "access-control-expose-headers",
+    "X-Correlation-Id, X-Request-Id, X-Server-Id, X-Cache, X-Cache-Remote, X-Check-Cacheable",
+  );
+  if (config.allowedOrigins.includes(request.headers.origin)) {
+    res.setHeader("access-control-allow-origin", req.headers.origin);
+  }
+  next();
+});
+
 app.listen(port, () => {
   mainLogger.info({ port }, "Now listening");
   mainLogger.info(
