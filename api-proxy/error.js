@@ -25,9 +25,6 @@ export default async (request, response) => {
   response.writeHead(config.playError, {
     server: "weather.gov dev proxy",
     "Content-Type": "application/geo+json",
-    "access-control-allow-origin": "*",
-    "access-control-expose-headers":
-      "X-Correlation-Id, X-Request-Id, X-Server-Id, X-Cache, X-Cache-Remote, X-Check-Cacheable",
   });
   response.write(JSON.stringify({ error: config.playError }, null, 2));
   response.end();

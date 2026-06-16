@@ -45,6 +45,17 @@ const getNow = () => {
 };
 
 export default {
+  allowedOrigins: [
+    "api-proxy-weathergov-test.app.cloud.gov",
+    "api-proxy-weathergov-staging.app.cloud.gov",
+    "weathergov-test.app.cloud.gov",
+    "weathergov-staging.app.cloud.gov",
+    "api-weathergov-test.app.cloud.gov",
+    "api-weathergov-staging.app.cloud.gov",
+    "localhost",
+    "web",
+    "0.0.0.0"
+  ],
   get play() {
     return play;
   },
