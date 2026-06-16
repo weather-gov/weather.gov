@@ -18,7 +18,7 @@ describe("cms: confirm deleting items from inline panel", () => {
     // the import cache will catch it and it won't re-run its initialiaation,
     // which is when it attaches the one-shot event handler.
     await import(
-      `../../../assets/js/cms/inline-panel-confirm-delete.js?cache-buster=${Math.random()}`
+      `../../../assets/js/cms/inline-panel-confirm-delete.js?cache-buster=${Math.random()}` // nosemgrep
     );
 
     sandbox.resetBehavior();

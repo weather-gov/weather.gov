@@ -86,7 +86,9 @@ const replaceFetch = () => {
         if (tries <= maxRetries) {
           options.wxTries = tries + 1;
           options.wxMaxRetries = maxRetries;
-          const jitter = Math.floor(Math.random() * 100) + 1;
+          const array = new Uint32Array(1);
+          const rand = crypto.getRandomValues(array)[0];
+          const jitter = (rand % 100) + 1;
           const delay = Math.min(500 * 2 ** tries + jitter, maxDelay);
           return wait(delay).then(() => window.fetch(resource, options));
         } else {

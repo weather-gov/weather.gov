@@ -480,3 +480,5 @@ interop-test:
 
 sast:
   stage: test
+  variables:
+    SAST_EXCLUDED_PATHS: "spec, test, tests, tmp, node_modules, forecast/frontend/assets/js/uswds*.js, forecast/frontend/assets/js/third-party, forecast/frontend/assets/js/cmi-radar*.js, forecast/frontend/public/js"
