@@ -12,6 +12,7 @@ class SatelliteVideo extends HTMLElement {
     playing: false,
     discardPause: false,
     inLoopPause: false,
+    failed: false,
   };
 
   async connectedCallback() {
@@ -23,11 +24,17 @@ class SatelliteVideo extends HTMLElement {
     const wfo = this.getAttribute("wfo");
     const timezone = this.getAttribute("timezone");
 
-    if (!wfo) return;
+    if (!wfo || this.#state.failed) return;
 
     try {
       const url = `https://cdn.star.nesdis.noaa.gov/WFO/catalogs/WFO_02_${wfo.toLowerCase()}_catalog.json`;
-      const response = await fetch(url);
+      const response = await window._fetch(url, { wxMaxRetries: 1 });
+
+      if (!response.ok) {
+        this.#state.failed = true;
+        this.renderError();
+        return;
+      }
       const satelliteMetadata = await response.json();
 
       const satellite = satelliteMetadata?.meta?.satellite;
