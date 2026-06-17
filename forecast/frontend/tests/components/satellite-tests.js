@@ -13,6 +13,7 @@ describe("SatelliteVideo Component", () => {
 
   beforeEach(() => {
     sandbox = createSandbox();
+    global.window._fetch = global.fetch;
   });
 
   afterEach(() => {
