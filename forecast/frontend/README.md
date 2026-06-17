@@ -3,6 +3,16 @@ US WEB DESIGN SYSTEM
 This theme uses the US Web Design System. For installation and configuration,
 please refer to the [documentation](https://designsystem.digital.gov/documentation/getting-started/developers/phase-two-compile/)
 
+NOTE:
+-----------------
+A recent USWDS update (3.13.0) is interacting with our custom styles, sometimes causing styling to get wonky. When you run `just css` to compile new css files when changing style, confirm that the output in the terminal shows `Compiling with USWDS 3.8.1`. If not, follow these steps to remove the existing USWDS image and rebuild the app using the locked 3.8.1 version.
+
+1. `docker compose run --rm uswds`
+2. `just rebuild web`
+3. `just css`
+
+You should now see the terminal showing the correct version in the compile command output.
+
 USING GULP AND `uswds-compile`
 -----------------
 We use the NPM project `uswds-compile` to compile the Design System source code
