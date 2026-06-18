@@ -18,7 +18,7 @@
     "@opentelemetry/sdk-node": "^0.213.0",
     "convert": "^7.0.0",
     "dayjs": "^1.11.12",
-    "fastify": "^5.7.0",
+    "fastify": "^5.8.5",
     "mysql2": "^3.11.3",
     "newrelic": "^13.9.2",
     "pg": "^8.13.3",
