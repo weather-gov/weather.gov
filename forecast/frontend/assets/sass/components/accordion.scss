@@ -21,3 +21,29 @@
     }
   }
 }
+
+button.wx-accordion-chevron {
+  gap: units(0.5);
+
+  &[aria-expanded="false"]::after {
+    content: "";
+    height: units(2.5);
+    width: units(2.5);
+    background-image:
+      url("/public/images/uswds/usa-icons/expand_more.svg"),
+      linear-gradient(transparent, transparent);
+    background-size: contain;
+    background-repeat: no-repeat;
+  }
+
+  &[aria-expanded="true"]::after {
+    content: "";
+    height: units(2.5);
+    width: units(2.5);
+    background-image:
+      url("/public/images/uswds/usa-icons/expand_less.svg"),
+      linear-gradient(transparent, transparent);
+    background-size: contain;
+    background-repeat: no-repeat;
+  }
+}

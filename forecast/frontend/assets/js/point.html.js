@@ -17,6 +17,7 @@ import "./charts/hourly-dewpoint.js";
 import "./charts/qpf.js";
 import "./components/quick-forecast-toggle.js";
 import "./components/saved-locations-button.js";
+import "./components/Accordion.js";
 import "./components/Satellite.js";
 import "./components/TabbedNavigator.js";
 import "./components/HourlyTable.js";
@@ -25,5 +26,3 @@ import "./components/DailyForecast.js";
 
 // For refreshing the radar
 import "./components/update-page.js";
-
-import "./components/expander.js";

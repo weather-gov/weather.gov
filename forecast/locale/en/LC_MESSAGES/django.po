@@ -692,6 +692,9 @@ msgstr "X (Twitter)"
 msgid "wfo.labels.youtube.01"
 msgstr "YouTube"
 
+msgid "weather-story.alt-text.legend.01"
+msgstr "Image Description"
+
 msgid "weather-story.heading.from-forecaster.01"
 msgstr "From the Forecaster"
 

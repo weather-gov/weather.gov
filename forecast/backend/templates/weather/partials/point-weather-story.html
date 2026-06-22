@@ -53,7 +53,25 @@
           {# Image area #}
           {% if weather_story.download %}
             <div class="display-block desktop:width-full desktop:padding-bottom-3 margin-right-neg-2 margin-left-neg-2 desktop:margin-right-0 desktop:margin-left-0 desktop:margin-top-3">
-              <img src="{{ weather_story.download }}" alt="" aria-hidden="true">
+              <img src="{{ weather_story.download }}" alt="{{ weather_story.altText }}">
+              {% if weather_story.altText|length > 170 %}
+                <wx-accordion aria-hidden="true">
+                <button type="button"
+                        class="wx-accordion-chevron usa-button usa-button--unstyled desktop:padding-x-0 padding-x-2 font-body-xs text-base-darker"
+                        aria-expanded="true"
+                        aria-controls="wx-story-alt-text">{% trans "weather-story.alt-text.legend.01" %}</button>
+                <template>
+                  {% trans "weather-story.alt-text.legend.01" %}
+                </template>
+                <p id="wx-story-alt-text"
+                   class="desktop:padding-x-0 padding-x-2 font-body-xs text-base-darker">
+                  {{ weather_story.altText }}
+                </p>
+                </wx-accordion>
+              {% else %}
+                <p class="margin-0 desktop:padding-x-0 padding-x-2 font-body-xs text-base-darker"
+                   aria-hidden="true">{{ weather_story.altText }}</p>
+              {% endif %}
             </div>
           {% endif %}
           {# if image #}
