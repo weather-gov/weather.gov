@@ -10,6 +10,10 @@ from .url_converters import FloatConverter
 
 register_converter(FloatConverter, "float")
 
+# Page titles are in django.po with keys like "site.meta.titles.<url_name>".
+# These are parsed by the set_title_and_description templatetag.
+# IF YOU ADD ROUTES (or change their names), please update django.po.
+
 urlpatterns = [
     path("", index.index, name="index"),
     # Temporary redirect to volunteer sign-up bage for IAEM.

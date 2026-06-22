@@ -22,8 +22,9 @@ def offices(request):  # pragma: no cover
             wfo_entry = {"id": wfo.code.upper(), "name": wfo.name, "weight": wfo.weight}
             entry["wfos"].append(wfo_entry)
         regions.append(entry)
+    context = {"regions": regions}
 
-    return render(request, "weather/office/index.html", {"regions": regions})
+    return render(request, "weather/office/index.html", context)
 
 
 def offices_specific(request, wfo):
@@ -44,9 +45,15 @@ def offices_specific(request, wfo):
         counties[-1] = f"{counties[-1]}{',' if len(counties) > 2 else ''} and {last}"  # noqa: PLR2004
 
     briefing = get_office_briefing(office, ZoneInfo("UTC"))
+    context = {
+        "office": office,
+        "counties": ", ".join(counties),
+        "briefing": briefing,
+        "title_trans_args": {"wfo": wfo.upper()},
+    }
 
     return render(
         request,
         "weather/office/overview.html",
-        {"office": office, "counties": ", ".join(counties), "briefing": briefing},
+        context,
     )

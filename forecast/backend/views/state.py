@@ -123,6 +123,9 @@ def state_alerts(request, state):
             "subdivision_name": subdivision_name,
             "subdivision_name_plural": subdivision_name_plural,
             "wfo_data": get_wfo_data_for_state(state_orm),
+            "title_trans_args": {
+                "state": state_orm.name,
+            },
         },
     )
 
@@ -146,11 +149,11 @@ def state_risks(request, state):
             "state": state,
             "state_abbrev": state.state,
             "wfo_data": get_wfo_data_for_state(state),
+            "title_trans_args": {
+                "state": state.name,
+            },
             "data": {
-                "public": {
-                    "riskOverview": risk_overview,
-                    "hasDetails": risk_overview.get("hasDetailedGHWO", False)
-                },
+                "public": {"riskOverview": risk_overview, "hasDetails": risk_overview.get("hasDetailedGHWO", False)},
             },
         },
     )
@@ -181,6 +184,9 @@ def state_radar(request, state):
             "state_abbrev": state.state,
             "timezone": state.timezone,
             "wfo_data": get_wfo_data_for_state(state),
+            "title_trans_args": {
+                "state": state.name,
+            },
             "data": {"bounds": bounds},
         },
     )
@@ -248,6 +254,9 @@ def state_analysis(request, state):
             "wfo_data": wfo_data,
             "active_briefings": active_briefings,
             "empty_briefings": empty_briefings,
+            "title_trans_args": {
+                "state": state_instance.name,
+            },
             **state_data,
         },
     )

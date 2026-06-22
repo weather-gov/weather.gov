@@ -764,6 +764,111 @@ msgstr "Privacy policy"
 msgid "site.meta.titles.ghwo.risk.01"
 msgstr "Risk Overview"
 
+msgid "site.meta.titles.index"
+msgstr "National Weather Service"
+msgid "site.meta.description.index"
+msgstr "The National Weather Service (NWS) provides science-based forecasts and warnings to protect life and property."
+
+msgid "site.meta.titles.point"
+msgstr "%(fullName)s Forecast"
+msgid "site.meta.description.point"
+msgstr "%(fullName)s Forecast"
+
+msgid "site.meta.titles.place_forecast"
+msgstr "%(fullName)s Forecast"
+msgid "site.meta.description.place_forecast"
+msgstr "%(fullName)s Forecast"
+
+msgid "site.meta.titles.office"
+msgstr "%(wfo)s Weather Forecasting Office"
+msgid "site.meta.description.office"
+msgstr "Your local Weather Forecast Office provides regional weather outlooks and alerts. Find out more about the weather in the %(wfo)s area."
+
+msgid "site.meta.titles.afd_index"
+msgstr "Area Forecast Discussions"
+msgid "site.meta.description.afd_index"
+msgstr "Area forecast discussions explain the science behind a forecast."
+
+msgid "site.meta.titles.afd_by_office"
+msgstr "%(wfo)s Area Forecast Discussions"
+msgid "site.meta.description.afd_by_office"
+msgstr "Area forecast discussions explain the science behind a forecast. Read the AFD for %(wfo)s to learn more about the why behind your local meteorologist's forecast."
+
+msgid "site.meta.titles.afd_by_office_and_id"
+msgstr "%(wfo)s Area Forecast Discussion %(afd_id)s"
+msgid "site.meta.description.afd_by_office_and_id"
+msgstr "Area forecast discussions explain the science behind a forecast. Read the AFD for %(wfo)s to learn more about the why behind your local meteorologist's forecast."
+
+msgid "site.meta.titles.county_index"
+msgstr "County Forecast"
+msgid "site.meta.description.county_index"
+msgstr "Search for any county in the U.S. or its territories to find the most recent local forecast from the National Weather Service."
+
+msgid "site.meta.titles.county_state_overview"
+msgstr "%(county)s, %(state)s Forecast"
+msgid "site.meta.description.county_state_overview"
+msgstr "Read the weather forecast for %(county)s, %(state)s. Explore local observations and learn about any active weather hazards from the National Weather Service."
+
+msgid "site.meta.titles.county_overview"
+msgstr "%(county)s, %(state)s Forecast"
+msgid "site.meta.description.county_overview"
+msgstr "Read the weather forecast for %(county)s, %(state)s. Explore local observations and learn about any active weather hazards from the National Weather Service."
+
+msgid "site.meta.titles.county_risk_overview"
+msgstr "Risk Overview"
+msgid "site.meta.description.county_risk_overview"
+msgstr "Learn more about any NWS-predicted weather hazards for the coming seven days."
+
+msgid "site.meta.titles.state_index"
+msgstr "State Forecast"
+msgid "site.meta.description.state_index"
+msgstr "Search for any state or territory in the U.S. to learn more about its active weather hazards and observations from the National Weather Service."
+
+msgid "site.meta.titles.state_overview"
+msgstr "%(state)s Forecast"
+msgid "site.meta.description.state_overview"
+msgstr "View local weather forecasts and observations for %(state)s from the National Weather Service."
+
+msgid "site.meta.titles.state_alerts"
+msgstr "%(state)s Alerts"
+msgid "site.meta.description.state_alerts"
+msgstr "Learn more about any active weather alerts and warnings for %(state)s from the National Weather Service."
+
+msgid "site.meta.titles.state_risks"
+msgstr "%(state)s Risk Overview"
+msgid "site.meta.description.state_risks"
+msgstr "See any NWS-predicted weather hazards for %(state)s for the coming seven days."
+
+msgid "site.meta.titles.state_risk_overview"
+msgstr "Risk Overview"
+msgid "site.meta.description.state_risk_overview"
+msgstr "Learn more about the factors behind NWS-predicted weather hazards for the coming seven days."
+
+msgid "site.meta.titles.state_radar"
+msgstr "%(state)s Radar"
+msgid "site.meta.description.state_radar"
+msgstr "View weather radar for %(state)s from the National Weather Service."
+
+msgid "site.meta.titles.state_analysis"
+msgstr "%(state)s Analysis"
+msgid "site.meta.description.state_analysis"
+msgstr "View and download all available National Weather Service area forecast discussions and severe weather briefings for %(state)s."
+
+msgid "site.meta.titles.deprecated_office"
+msgstr "Error: Page Not Found"
+msgid "site.meta.description.deprecated_office"
+msgstr "Visit beta.weather.gov for the latest NWS forecast for your area."
+
+msgid "site.meta.titles.deprecated_point"
+msgstr "Error: Page Not Found"
+msgid "site.meta.description.deprecated_point"
+msgstr "Visit beta.weather.gov for the latest NWS forecast for your area."
+
+msgid "site.meta.titles.deprecated_county_pages"
+msgstr "Error: Page Not Found"
+msgid "site.meta.description.deprecated_county_pages"
+msgstr "Visit beta.weather.gov for the latest NWS forecast for your area."
+
 msgid "ghwo.selector.label.state.01"
 msgstr "Select state"
 

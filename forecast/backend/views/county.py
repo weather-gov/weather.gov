@@ -133,6 +133,10 @@ def county_overview(request, countyfips=None, county_slug=None):  # noqa: C901
         "weather/county/overview.html",
         {
             "countyfips": county.countyfips,
+            "title_trans_args": {
+                "county": county.countyname,
+                "state": county.st,
+            },
             "data": {
                 "alert_levels": levels,
                 "alert_level_days": level_days,
@@ -146,4 +150,3 @@ def county_overview(request, countyfips=None, county_slug=None):  # noqa: C901
             },
         },
     )
-

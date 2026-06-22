@@ -53,13 +53,15 @@ def point_location(request, lat, lon):  # noqa: C901
         )
 
     point = interop.get_point_forecast(lat, lon)
+    fullname = point.get("place", {}).get("fullName", None)
+    context = {"point": point, "title_trans_args": {"fullName": fullname}}
 
     if "status" in point and point["status"] == HTTPStatus.NOT_FOUND:
         raise Http404(point)
 
     # we do not currently support marine.
     if "isMarine" in point and point["isMarine"]:
-        return render(request, "errors/404/marine-point.html", {"point": point}, status=404)
+        return render(request, "errors/404/marine-point.html", context, status=404)
 
     # Get the local timezone for the current point place
     # If there was an error retrieving the place API endpoint,
@@ -91,16 +93,14 @@ def point_location(request, lat, lon):  # noqa: C901
         return render(
             request,
             "weather/point/point.update.html",
-            {
-                "point": point,
-            },
+            context,
         )
 
     return render(
         request,
         "weather/point/overview.html",
         {
-            "point": point,
+            **context,
             "weather_story": weather_story,
         },
     )
@@ -222,6 +222,10 @@ def afd_by_office_and_id(request, wfo, afd_id):
             "afd": afd_data,
             "wfo_list": wfo_combo_box_data,
             "version_list": afd_references,
+            "title_trans_args": {
+                "wfo": wfo_uppercase,
+                "afd_id": afd_id,
+            },
         }
     except Exception as e:
         raise Http404() from e
