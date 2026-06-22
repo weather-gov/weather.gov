@@ -61,38 +61,33 @@
                 <span class="font-family-mono font-mono-xs text-base">{{ "abbreviations.not-applicable.01" | t }}</span>
               {% endif %}
             </div>
-            <div wx-expander="#astronomical-data">
-              <button wx-expand
-                      aria-controls="astronomical-data"
-                      aria-expanded="false"
-                      class="usa-button usa-button--unstyled"
-                      type="button">
-                <span class="usa-icon--size-3 display-block text-primary">
-                  <svg class="usa-icon usa-icon--size-3"
-                       aria-hidden="true"
-                       focusable="false"
-                       role="img">
-                    <use xlink:href="{% static 'images/uswds/sprite.svg' %}#add_circle"></use>
-                  </svg>
-                  <span class="sr-only">{{ "show more "}}</span>
-                </span>
-              </button>
-              <button wx-collapse
-                      aria-controls="astronomical-data"
-                      aria-expanded="true"
-                      class="usa-button usa-button--unstyled display-none"
-                      type="button">
-                <span class="usa-icon--size-3 display-block text-primary">
-                  <svg class="usa-icon usa-icon--size-3"
-                       aria-hidden="true"
-                       focusable="false"
-                       role="img">
-                    <use xlink:href="{% static 'images/uswds/sprite.svg' %}#remove_circle"></use>
-                  </svg>
-                  <span class="sr-only">{{ "hide "}}</span>
-                </span>
-              </button>
-            </div>
+            <wx-accordion>
+            <button type="button"
+                    aria-controls="astronomical-data"
+                    aria-expanded="true"
+                    class="usa-button usa-button--unstyled">
+              <span class="usa-icon--size-3 display-block text-primary">
+                <svg class="usa-icon usa-icon--size-3"
+                     aria-hidden="true"
+                     focusable="false"
+                     role="img">
+                  <use xlink:href="{% static 'images/uswds/sprite.svg' %}#remove_circle"></use>
+                </svg>
+                <span class="sr-only">{{ "Hide sun times table" | t }}</span>
+              </span>
+            </button>
+            <template>
+              <span class="usa-icon--size-3 display-block text-primary">
+                <svg class="usa-icon usa-icon--size-3"
+                     aria-hidden="true"
+                     focusable="false"
+                     role="img">
+                  <use xlink:href="{% static 'images/uswds/sprite.svg' %}#add_circle"></use>
+                </svg>
+                <span class="sr-only">{{ "Show sun times table" | t }}</span>
+              </span>
+            </template>
+            </wx-accordion>
           </div>
           <table id="astronomical-data"
                  class="usa-table usa-table--borderless width-full margin-0 display-none">

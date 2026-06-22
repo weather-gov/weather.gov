@@ -6,6 +6,7 @@
 // Nota bene: JS used on every page goes in page.html.js.
 import "../page.html.js";
 
+import "../components/Accordion.js";
 import "../components/Tabs.js";
 import "../components/county-alert-daily-alert-handler.js";
 import "../components/countyAlertMap.js";
