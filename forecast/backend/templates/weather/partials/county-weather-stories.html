@@ -71,7 +71,7 @@
           {% if weather_story.altText|length > 170 %}
             <wx-accordion aria-hidden="true">
             <button type="button"
-                    class="wx-accordion-chevron usa-button usa-button--unstyled desktop:padding-x-0 padding-x-2 font-body-xs text-base-darker"
+                    class="wx-accordion-chevron usa-button usa-button--unstyled desktop:padding-x-0 padding-x-2 padding-top-1 font-body-xs text-primary"
                     aria-expanded="true"
                     aria-controls="wx-story-alt-text">{% trans "weather-story.alt-text.legend.01" %}</button>
             <template>
@@ -81,7 +81,7 @@
                class="desktop:padding-x-0 padding-x-2 font-body-xs text-base-darker">{{ weather_story.altText }}</p>
             </wx-accordion>
           {% else %}
-            <p class="margin-0 desktop:padding-x-0 padding-x-2 font-body-xs text-base-darker"
+            <p class="margin-0 desktop:padding-x-0 padding-x-2 padding-top-1 font-body-xs text-base-darker"
                aria-hidden="true">{{ weather_story.altText }}</p>
           {% endif %}
         </div>
