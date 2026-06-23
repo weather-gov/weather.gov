@@ -23,6 +23,11 @@
 }
 
 button.wx-accordion-chevron {
+  /* Storing the colors to apply to the in-line svg without the '#' so that it be used in the url encoding */
+  $default-color: "005ea2"; // primary
+  $hover-color: "0B4778"; // primary-dark
+  $active-color: "112F4E"; // primary-dark
+
   gap: units(0.5);
 
   &[aria-expanded="false"]::after {
@@ -30,10 +35,22 @@ button.wx-accordion-chevron {
     height: units(2.5);
     width: units(2.5);
     background-image:
-      url("/public/images/uswds/usa-icons/expand_more.svg"),
+      url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="%23#{$default-color}" d="M16.59 8.59 12 13.17 7.41 8.59 6 10l6 6 6-6z"/> </svg>'),
       linear-gradient(transparent, transparent);
     background-size: contain;
     background-repeat: no-repeat;
+  }
+
+  &:hover[aria-expanded="false"]::after {
+    background-image:
+      url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="%23#{$hover-color}" d="M16.59 8.59 12 13.17 7.41 8.59 6 10l6 6 6-6z"/> </svg>'),
+      linear-gradient(transparent, transparent);
+  }
+
+  &:active[aria-expanded="false"]::after {
+    background-image:
+      url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="%23#{$active-color}" d="M16.59 8.59 12 13.17 7.41 8.59 6 10l6 6 6-6z"/> </svg>'),
+      linear-gradient(transparent, transparent);
   }
 
   &[aria-expanded="true"]::after {
@@ -41,9 +58,21 @@ button.wx-accordion-chevron {
     height: units(2.5);
     width: units(2.5);
     background-image:
-      url("/public/images/uswds/usa-icons/expand_less.svg"),
+      url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="%23#{$default-color}" d="m12 8-6 6 1.41 1.41L12 10.83l4.59 4.58L18 14z"/> </svg>'),
       linear-gradient(transparent, transparent);
     background-size: contain;
     background-repeat: no-repeat;
+  }
+
+  &:hover[aria-expanded="true"]::after {
+    background-image:
+      url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="%23#{$hover-color}" d="m12 8-6 6 1.41 1.41L12 10.83l4.59 4.58L18 14z"/> </svg>'),
+      linear-gradient(transparent, transparent);
+  }
+
+  &:active[aria-expanded="true"]::after {
+    background-image:
+      url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="%23#{$active-color}" d="m12 8-6 6 1.41 1.41L12 10.83l4.59 4.58L18 14z"/> </svg>'),
+      linear-gradient(transparent, transparent);
   }
 }
