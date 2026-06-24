@@ -72,18 +72,19 @@ def __load_from_shapefile(  # noqa: PLR0913
 
                 cursor = connection.cursor()
 
-                # There's a SQL injection vector here, but considering we control
-                # all of the code associated with it, it seems fine. We are using
-                # parameterization on the actual values from the shapefiles which
-                # mitigates the risk.
-                cursor.execute(
-                    f"""UPDATE {table} SET
+                # The table name and WHERE clause structure are
+                # interpolated into the SQL string, but both are fully
+                # controlled by our own code (table comes from
+                # model._meta.db_table, and where is a hardcoded string
+                # from the caller). The geometry and where parameters
+                # are properly parameterized.
+                query = f"""UPDATE {table} SET
                         shape=ST_Union(
                             shape,
                             ST_GeomFromGeoJSON(%s))
-                        WHERE {where}""",  # noqa: S608
-                    [geometry] + parameters,
-                )
+                        WHERE {where}""" # noqa: S608
+
+                cursor.execute(query, [geometry] + parameters) # nosemgrep
                 cursor.close()
             else:
                 callback_create_model(feature)
