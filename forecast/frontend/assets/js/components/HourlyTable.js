@@ -17,6 +17,8 @@ class HourlyTable extends HTMLElement {
     if (wrapper) {
       wrapper.addEventListener("scroll", this.handleScrollEvent);
     }
+
+    this._offsetCalculated = false;
   }
 
   disconnectedCallback() {
@@ -31,7 +33,21 @@ class HourlyTable extends HTMLElement {
     }
   }
 
+  ensureOffset() {
+    if (!this._offsetCalculated) {
+      const firstColumn = this.querySelector("table th[scope='row']");
+      if (firstColumn && firstColumn.offsetWidth > 0) {
+        this.style.setProperty(
+          "--sticky-presence-offset",
+          `${firstColumn.offsetWidth}px`,
+        );
+        this._offsetCalculated = true;
+      }
+    }
+  }
+
   handleArrowButtonClick(event) {
+    this.ensureOffset();
     const wrapper = this.querySelector(".usa-table-container--scrollable");
 
     if (event.currentTarget.dataset.direction === "right") {
@@ -104,6 +120,7 @@ class HourlyTable extends HTMLElement {
   }
 
   handleScrollEvent(event) {
+    this.ensureOffset();
     if (event.target.scrollLeft > 0) {
       this.setAttribute("data-scrolled", "true");
     } else {

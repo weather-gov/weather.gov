@@ -5,6 +5,33 @@
 .wx-alert-link {
   border: 1px solid;
   padding: units(1) units(1.5);
+  display: inline-block;
+  width: max-content;
+  box-sizing: border-box;
+
+  .wx-alert-link-inner {
+    display: flex;
+    align-items: center;
+  }
+
+  .hourly-table & {
+    display: block;
+    width: 100%;
+
+    .wx-alert-link-inner {
+      position: sticky;
+      left: calc(var(--sticky-presence-offset, 6rem) + #{units(1.5)});
+      width: auto;
+      max-width: calc(100vw - var(--sticky-presence-offset, 7rem) - 1.75rem);
+      white-space: normal;
+
+      @include at-media("tablet") {
+        width: max-content;
+        max-width: none;
+        white-space: nowrap;
+      }
+    }
+  }
 
   & a {
     color: color("primary");
