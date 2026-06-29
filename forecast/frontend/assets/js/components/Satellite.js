@@ -61,6 +61,7 @@ class SatelliteVideo extends HTMLElement {
       }
     } catch (e) {
       console.error("Error getting satellite metadata", e);
+      this.#state.failed = true;
       this.renderError();
     }
   }
@@ -131,6 +132,19 @@ class SatelliteVideo extends HTMLElement {
     this.loader?.classList.add("display-none");
     this.content?.classList.add("display-none");
     this.error?.classList.remove("display-none");
+
+    // Hide the outer satellite container (shadow box) and timestamp container
+    const outerContainer = document.querySelector(
+      "[wx-outer-satellite-container]",
+    );
+    const timeContainer = document.querySelector("#satellite-time-container");
+    outerContainer?.classList.add("display-none");
+    timeContainer?.classList.add("display-none");
+
+    const outerError = document.querySelector(
+      "[wx-outer-radar-container] > [data-wx-satellite-error]",
+    );
+    outerError?.classList.remove("display-none");
   }
 
   disconnectedCallback() {

@@ -1,0 +1,21 @@
+{% comment %}
+-- Template purpose:
+--   Display a non-critical component error alert.
+-- Used by: many pages
+
+    component:
+        the non-critical-component that had an error for the message
+        
+{% endcomment %}
+<div class="padding-x-2 tablet:padding-x-0">
+  <div class="non-critical-component-error">
+    <svg class="usa-icon height-3 width-3"
+         aria-hidden="true"
+         role="img">
+      <use xlink:href="/public/images/uswds/sprite.svg#report"></use>
+    </svg>
+    <p class="font-body-sm">
+      {% trans_with_args "error.non-critical.01" component=component %}
+    </p>
+  </div>
+</div>

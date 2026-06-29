@@ -1196,6 +1196,15 @@ msgstr "{count} of {total} {subdivision}"
 msgid "spatial.status.see-list.01"
 msgstr "See List of {subdivision}"
 
+msgid "error.non-critical.01"
+msgstr "There was an error loading {component}. Please wait a moment and try refreshing the page."
+
+msgid "error.wfo-non-critical.message.01"
+msgstr "There was an error loading {component} for this location"
+
+msgid "error.wfo-non-critical.message-with-wfo.01"
+msgstr "There was an error loading {component} for the {wfo_name} WFO"
+
 msgid "error.500.generic.message.01"
 msgstr "Something went wrong on our end. Please wait a few moments and reload the page or visit <a href='https://www.weather.gov' class='usa-link'>weather.gov</a> for current forecast information."
 

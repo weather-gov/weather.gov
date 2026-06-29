@@ -593,18 +593,25 @@ def get_weather_stories_from_county_data(county_data, wfo_instances, time_zone_i
 
 def get_weather_story_from_point_data(point_data, wfo_instance, time_zone_info):
     """Format and return weather story data from point interop response data."""
-    story_data = point_data.get("weatherstory", [])
+    story_data = point_data.get("weatherstory", None)
     story = None
-    if len(story_data):
-        # For now, we only care about the first weather story
-        # present in the data.
-        story = story_data[0]
+    if story_data and len(story_data):
+        # First check that there's not an error from the API endpoint
+        # If there is, instead of an array it will be a dictionary with an error message
+        if isinstance(story_data, dict):
+            error = story_data.get("error", "Unknown error")
+            story = {"error": error}
+        else:
+            # For now, we only care about the first weather story
+            # present in the data.
+            story = story_data[0]
 
     if story and "error" not in story:
         story["wfo_name"] = wfo_instance.name
         story["wfo_url"] = wfo_instance.url
         timestamps_to_datetime_in_dict(story, ["startTime", "updateTime", "endTime"], time_zone_info)
     elif story and "error" in story:
+        story["officeId"] = wfo_instance.code
         story["wfo_name"] = wfo_instance.name
         story["wfo_url"] = wfo_instance.url
     else:

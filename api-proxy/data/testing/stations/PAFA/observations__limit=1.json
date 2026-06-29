@@ -23,8 +23,8 @@
   ],
   "type": "FeatureCollection",
   "features": null,
-  "@bundle": { "name": "stations/PAFB 503", "status": 503 },
+  "@bundle": { "name": "stations/PAFA 503", "status": 503 },
   "pagination": {
-    "next": "https://api.weather.gov/stations/PAFB/observations?cursor=eyJzIjoiMjAyNi0wNi0xMlQxMzo1NzowMCswMDowMCJ9"
+    "next": "https://api.weather.gov/stations/PAFA/observations?cursor=eyJzIjoiMjAyNi0wNi0xMlQxMzo1MzowMCswMDowMCJ9"
   }
 }

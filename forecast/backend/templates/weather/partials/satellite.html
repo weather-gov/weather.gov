@@ -7,7 +7,8 @@
   <h3 class="wx-visual-h2 text-normal text-primary-darker margin-top-3 margin-bottom-2 padding-left-2 tablet:padding-left-0">
     {% trans "satellite.heading.satellite.01" %}
   </h3>
-  <div class="grid-container font-family-mono text-base-dark font-mono-xs margin-bottom-1 padding-left-2 tablet:padding-left-0">
+  <div id="satellite-time-container"
+       class="grid-container font-family-mono text-base-dark font-mono-xs margin-bottom-1 padding-left-2 tablet:padding-left-0">
     <div class="grid-row">
       <div class="grid-col-auto desktop:grid-col-12 margin-right-1 desktop:margin-right-0 text-uppercase">
         {% trans "satellite.time-shown.label.01" %}<span class="desktop:display-none">:</span>
@@ -15,7 +16,11 @@
       <div class="grid-col-auto" data-wx-satellite-times>{# To be populated by JS #}</div>
     </div>
   </div>
-  <div class="grid-container padding-0 bg-white shadow-1">
+  <div data-wx-satellite-error class="display-none">
+    {% include "errors/partials/non-critical-component-error.html" with component="the Satellite" %}
+  </div>
+  <div class="grid-container padding-0 bg-white shadow-1"
+       wx-outer-satellite-container>
     <div class="grid-row wx-satellite-container position-relative">
       <wx-satellite-video class="grid-col-12" wfo="{{ point.wfo.normalized_code | lower }}" timezone="{{ point.place.timezone }}">
       <div data-wx-satellite-loading class="padding-4 width-full text-center">{% trans "satellite.video.loading.01" %}</div>
@@ -23,8 +28,6 @@
         <video id="satellite-video-player" controls class="width-full display-block">
         </video>
       </div>
-      <div data-wx-satellite-error
-           class="display-none padding-4 text-secondary-dark text-center">{% trans "satellite.video.fail.01" %}</div>
       </wx-satellite-video>
     </div>
     <div class="padding-2">
