@@ -37,16 +37,18 @@ export default async (request, response) => {
     // If the bundle contains a `now` key, override any
     // configured value for the current time with the timestamp
     // present in the bundle
-    if (output["@bundle"]?.now) {
-      config.now = output["@bundle"].now;
+    const bundle = output.get("@bundle");
+
+    if (bundle?.get("now")) {
+      config.now = bundle.get("now");
     }
 
-    if (output["@bundle"]?.status) {
+    if (bundle?.get("status")) {
       serveLogger.info(
-        { status: output["@bundle"].status },
+        { status: bundle.get("status") },
         "local file has response status",
       );
-      response.writeHead(output["@bundle"].status);
+      response.writeHead(bundle.get("status"));
       response.end();
       return;
     }

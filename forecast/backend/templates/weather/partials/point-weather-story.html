@@ -14,18 +14,19 @@
 <div class="bg-accent-cool-lightest border-top-1px border-bottom-1px border-base-light margin-top-4 wx-weather-story-block-section">
   <div class="grid-container">
     {% if weather_story %}
-      <div class="{% if weather_story.error %}weatherstory-error-wrapper margin-top-3{% elif not weather_story.is_empty %}wx-weather-story-wrapper{% endif %}">
+      <div class="{% if weather_story.error %}margin-top-3 margin-bottom-0{% elif not weather_story.is_empty %}wx-weather-story-wrapper{% endif %}">
         {% if weather_story.error %}
-          <div class="usa-alert usa-alert--error margin-bottom-2">
-            <div class=" usa-alert__body">
-              <div class="usa-alert__text">
-                {% if weather_story.wfo_name %}
-                  {% trans_with_args "weather-story.error.message-with-wfo.01" wfo_name=weather_story.wfo_name %}
-                {% else %}
-                  {{"weather-story.error.message.01"|t}}
-                {% endif %}
-              </div>
-            </div>
+          <div>
+            <h3 class="wx-visual-h2 text-normal text-primary-darker margin-top-3 margin-bottom-2 mobile-lg:display-flex flex-wrap">
+              <span class="margin-right-0 mobile-lg:margin-right-2 desktop:margin-right-0">
+                {{ "weather-story.heading.from-forecaster.01" | t }}
+              </span>
+            </h3>
+            {% if weather_story.wfo_name %}
+              {% include "errors/partials/wfo-component-error.html" with component="weather stories" wfo=weather_story.wfo_name %}
+            {% else %}
+              {% include "errors/partials/wfo-component-error.html" with component="weather stories" %}
+            {% endif %}
           </div>
         {% elif not weather_story.is_empty %}
           <div class="margin-bottom-2">
@@ -81,8 +82,8 @@
         -- ok, we always render this part of it, which contains
         -- the AFD link and other WFO information
         {% endcomment %}
-        <div class="display-flex flex-column flex-justify-end margin-y-3">
-          {% if not weather_story.error and not weather_story.is_empty %}
+        <div class="display-flex flex-column flex-justify-end {% if weather_story.error %}margin-bottom-3{% else %}margin-y-3{% endif %}">
+          {% if not weather_story.is_empty %}
             <hr class="margin-x-0 border-accent-cool-darker border-top-0 margin-top-2" />
           {% endif %}
           {# AFD Link #}

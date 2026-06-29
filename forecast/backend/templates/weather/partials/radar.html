@@ -8,7 +8,11 @@
   {% trans "radar.labels.radar.01" %}
   </{{ heading_level }}>
   {% include "weather/partials/radar-timestamp.html" %}
-  <div class="grid-container padding-0 bg-white shadow-1">
+  <div id="wx-radar-error-container" class="display-none padding-0">
+    {% include "errors/partials/non-critical-component-error.html" with component="the Radar" %}
+  </div>
+  <div id="wx-radar-outer-container"
+       class="grid-container padding-0 bg-white shadow-1">
     <div class="grid-row wx-radar-container position-relative wx-{% if large_map %}large{% else %}small{% endif %}-map">
       {% if bounds %}
         <wx-radar class="grid-col-12" bounds="{{ bounds }}" data-timezone="{{ timezone }}">
@@ -63,7 +67,8 @@
       </div>
     </div>
     <div class="padding-2 padding-top-0">
-      <a id="radar-point-link" href="https://radar.weather.gov/"
+      <a id="radar-point-link"
+         href="https://radar.weather.gov/"
          class="usa-link usa-link--external">{% trans "radar.link.explore-other.01" %}</a>
     </div>
   </div>

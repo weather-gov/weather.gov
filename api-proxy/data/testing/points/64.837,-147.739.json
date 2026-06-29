@@ -21,41 +21,41 @@
       "county": { "@type": "@id" }
     }
   ],
-  "id": "https://api.weather.gov/points/66.564,-145.252",
+  "id": "https://api.weather.gov/points/64.837,-147.739",
   "type": "Feature",
-  "geometry": { "type": "Point", "coordinates": [-145.252, 66.564] },
+  "geometry": { "type": "Point", "coordinates": [-147.739, 64.837] },
   "properties": {
-    "@id": "https://api.weather.gov/points/66.564,-145.252",
+    "@id": "https://api.weather.gov/points/64.837,-147.739",
     "@type": "wx:Point",
     "cwa": "AFG",
     "type": "land",
     "forecastOffice": "https://api.weather.gov/offices/AFG",
     "gridId": "AFG",
-    "gridX": 526,
-    "gridY": 184,
-    "forecast": "https://api.weather.gov/gridpoints/AFG/526,184/forecast",
-    "forecastHourly": "https://api.weather.gov/gridpoints/AFG/526,184/forecast/hourly",
-    "forecastGridData": "https://api.weather.gov/gridpoints/AFG/526,184",
-    "observationStations": "https://api.weather.gov/gridpoints/AFG/526,184/stations",
+    "gridX": 492,
+    "gridY": 119,
+    "forecast": "https://api.weather.gov/gridpoints/AFG/492,119/forecast",
+    "forecastHourly": "https://api.weather.gov/gridpoints/AFG/492,119/forecast/hourly",
+    "forecastGridData": "https://api.weather.gov/gridpoints/AFG/492,119",
+    "observationStations": "https://api.weather.gov/gridpoints/AFG/492,119/stations",
     "relativeLocation": {
       "type": "Feature",
-      "geometry": { "type": "Point", "coordinates": [-145.229192, 66.587608] },
+      "geometry": { "type": "Point", "coordinates": [-147.787752, 64.809734] },
       "properties": {
-        "city": "Fort Yukon",
+        "city": "South Van Horn",
         "state": "AK",
-        "distance": { "unitCode": "wmoUnit:m", "value": 2812.044113541 },
-        "bearing": { "unitCode": "wmoUnit:degree_(angle)", "value": 201 }
+        "distance": { "unitCode": "wmoUnit:m", "value": 3809.2482449865 },
+        "bearing": { "unitCode": "wmoUnit:degree_(angle)", "value": 37 }
       }
     },
-    "forecastZone": "https://api.weather.gov/zones/forecast/AKZ833",
-    "county": "https://api.weather.gov/zones/county/AKC290",
-    "fireWeatherZone": "https://api.weather.gov/zones/fire/AKZ933",
+    "forecastZone": "https://api.weather.gov/zones/forecast/AKZ844",
+    "county": "https://api.weather.gov/zones/county/AKC090",
+    "fireWeatherZone": "https://api.weather.gov/zones/fire/AKZ944",
     "timeZone": "America/Anchorage",
     "radarStation": "PAPD",
     "astronomicalData": {
-      "sunrise": "date:today 01:30:-08",
-      "sunset": null,
-      "transit": "date:today 13:39:-08",
+      "sunrise": "2026-06-12T02:55:14-08:00",
+      "sunset": "2026-06-13T00:46:37-08:00",
+      "transit": "2026-06-12T13:50:56-08:00",
       "civilTwilightBegin": null,
       "civilTwilightEnd": null,
       "nauticalTwilightBegin": null,
@@ -65,10 +65,10 @@
     },
     "nwr": {
       "transmitter": "WXJ81",
-      "sameCode": "002290",
+      "sameCode": "002090",
       "areaBroadcast": "https://api.weather.gov/radio/WXJ81/broadcast",
-      "pointBroadcast": "https://api.weather.gov/points/66.564,-145.252/radio"
+      "pointBroadcast": "https://api.weather.gov/points/64.837,-147.739/radio"
     }
   },
-  "@bundle": { "name": "Fort Yukon, AK - no sunset" }
+  "@bundle": { "name": "Fairbanks, AK - non-critical component errors" }
 }

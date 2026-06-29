@@ -84,7 +84,7 @@ const getPointFileInfo = async () => {
         };
 
         let hostName = "http://localhost:8080";
-        const link = `${hostName}/point/${path.basename(pointFile, ".json").split(",").join("/")}`;
+        const link = `${hostName}/forecast/point/${path.basename(pointFile, ".json").split(",").join("/")}`;
         const interop = `http://localhost:8082/point/${path.basename(pointFile, ".json").split(",").join("/")}`;
 
         return {

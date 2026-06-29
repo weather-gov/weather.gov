@@ -1,0 +1,28 @@
+/* stylelint-disable scss/at-extend-no-missing-placeholder */
+@use "uswds-core" as *;
+
+/* Non-critical component error alert
+------------------------------------- */
+.non-critical-component-error {
+  display: flex;
+  align-items: flex-start;
+  justify-content: left;
+  flex-direction: row;
+  border: 1px solid color("error-dark");
+  padding: units(2);
+  margin: 0;
+  background-color: white;
+  width: 100%;
+
+  svg {
+    color: color("error-dark");
+    flex-shrink: 0;
+    margin-right: units(1);
+  }
+
+  p {
+    color: color("error-darker");
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+}

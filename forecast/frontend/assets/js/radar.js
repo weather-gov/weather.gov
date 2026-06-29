@@ -170,6 +170,11 @@ const setupRadar = () => {
       "AAPTxy8BH1VEsoebNVZXo8HurNPcJD0FIYgRqKcG6xxTBL9nh-VFBFPksbJUeCAaOBmIl7l_u3FU4qHnugzOvbnCvb7RMvR4FD_D4AhbAn2hMpcV-vKc8Oz6Kb0itTkdvSjaBCv5EHG20BLTk7jV0VSlPq_N9FhOT2bn2z510HsHPTf4N2TkszfZwmZgzRYHS06-OFp40ixlJ2vLLRK8a_L_ojVp3FXtRCXPNFWXFKQzYdiNzx12uaMvJ_riiEvC7vfrAT1_JWn0gzIT",
   };
 
+  // TODO: Figure out how to detect error
+  // if error, target:
+  // id="wx-radar-outer-container" and add class display-none,
+  // id="radar-timestamp-container" and add class display-none,
+  // id="wx-radar-error-container" and remove class display-none
   window.app = window.cmiRadar.createApp("#wx-radar-container", options);
 
   // update the radar external link.
