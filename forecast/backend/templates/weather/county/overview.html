@@ -37,51 +37,61 @@
       </div>
     </div>
   </div>
-  <div class="grid-container margin-top-2 margin-bottom-4">
-    <h2 class="text-normal text-primary-darker margin-bottom-2">{{ "county.heading.alerts.01" | t }}</h2>
-    <div class="grid-col-12 desktop:grid-col-12">
-      <wx-tabs id="county-alerts">
-        <div class="usa-button-group usa-button-group--segmented overflow-x-auto"
-             role="tablist">
-          <button id="alert-day-all-button"
-                  type="button"
-                  class="usa-button padding-x-105"
-                  role="tab"
-                  data-alert-day="all"
-                  aria-controls="alert-day"
-                  aria-selected="true">{{ "county.alert-tabs.day.all.01" | t }}</button>
-          {% for day in data.public.alertDays %}
-            <button id="alert-day-{{ forloop.counter }}-button"
+  <div class="grid-container margin-top-2 margin-bottom-4 padding-x-0 tablet:padding-x-2 desktop:padding-x-4">
+    <h2 class="text-normal text-primary-darker margin-bottom-2 padding-x-2 tablet:padding-x-0 ">
+      {{ "county.heading.alerts.01" | t }}
+    </h2>
+    <div class="grid-col-12">
+      {% if alerts_error %}
+        {% include "errors/partials/non-critical-component-error.html" with component="alerts" %}
+      {% else %}
+        <div class="padding-x-2 tablet:padding-x-0">
+          <wx-tabs id="county-alerts">
+          <div class="usa-button-group usa-button-group--segmented overflow-x-auto"
+               role="tablist">
+            <button id="alert-day-all-button"
                     type="button"
                     class="usa-button padding-x-105"
                     role="tab"
-                    data-alert-day="{{ forloop.counter }}"
-                    data-alert-levels="{{ data.alert_level_days | item_at_index:forloop.counter0 }}"
+                    data-alert-day="all"
                     aria-controls="alert-day"
-                    aria-selected="false">{{ "county.alert-tabs.day." | add:day.day | add:".01" | t }}</button>
-          {% endfor %}
-        </div>
-      </wx-tabs>
-      <div id="alert-day"
-           role="tabpanel"
-           aria-labelledby="alert-day-all-button"
-           class="margin-top-2">
-        <div class="grid-row grid-gap">
-          <div class="grid-col-12 tablet:grid-col-7 margin-bottom-205">
-            {% include 'weather/partials/county-alerts-map.html' with levels=data.alert_levels %}
+                    aria-selected="true">{{ "county.alert-tabs.day.all.01" | t }}</button>
+            {% for day in data.public.alertDays %}
+              <button id="alert-day-{{ forloop.counter }}-button"
+                      type="button"
+                      class="usa-button padding-x-105"
+                      role="tab"
+                      data-alert-day="{{ forloop.counter }}"
+                      data-alert-levels="{{ data.alert_level_days | item_at_index:forloop.counter0 }}"
+                      aria-controls="alert-day"
+                      aria-selected="false">{{ "county.alert-tabs.day." | add:day.day | add:".01" | t }}</button>
+            {% endfor %}
           </div>
-          <div class="grid-col-12 tablet:grid-col-5">
-            {% include "weather/county/dailyAlertAccordion.html" with alerts=data.public.alerts.items alert_days=data.public.alertDays county=data.county_label %}
+          </wx-tabs>
+          <div id="alert-day"
+               role="tabpanel"
+               aria-labelledby="alert-day-all-button"
+               class="margin-top-2">
+            <div class="grid-row grid-gap">
+              <div class="grid-col-12 tablet:grid-col-7 margin-bottom-205">
+                {% include 'weather/partials/county-alerts-map.html' with levels=data.alert_levels %}
+              </div>
+              <div class="grid-col-12 tablet:grid-col-5">
+                {% include "weather/county/dailyAlertAccordion.html" with alerts=data.public.alerts.items alert_days=data.public.alertDays county=data.county_label %}
+              </div>
+            </div>
           </div>
         </div>
-      </div>
+      {% endif %}
     </div>
-    <div class="grid-row border-top-2px border-base-light margin-y-4">{% include "weather/county/briefings.html" %}</div>
+    <div class="grid-row border-top-2px border-base-light margin-y-4 padding-x-2 tablet:padding-x-0">
+      {% include "weather/county/briefings.html" %}
+    </div>
   </div>
   {% include 'weather/partials/county-weather-stories.html' with weather_stories=data.weather_stories wfo_codes=data.wfo_codes %}
   <div class="bg-base-lightest">
-    <div class="grid-container padding-y-4 padding-x-0 desktop:padding-x-4">
-      <div class="grid-col-12 bg-white padding-2 padding-top-1 shadow-1">
+    <div class="grid-container padding-y-4 padding-x-0 tablet:padding-x-2 desktop:padding-x-4">
+      <div class="grid-col-12 {% if not data.public.riskOverview.error %}padding-2 bg-white padding-top-1 shadow-1{% endif %}">
         {% include "weather/partials/risk-overview-summary.html" with ghwo=data.public.riskOverview %}
         {% if not data.public.riskOverview.error %}
           <div class="margin-top-2">
@@ -92,12 +102,13 @@
       </div>
     </div>
   </div>
-  <div id="radar-enable" class="grid-container margin-bottom-4">
-    <div class="grid-row grid-gap">
-      <div class="desktop:grid-col-6 wx-radar-wrapper margin-bottom-1 desktop:margin-bottom-0">
+  <div id="radar-enable"
+       class="grid-container tablet:padding-x-2 desktop:padding-x-4 padding-x-0 margin-bottom-4">
+    <div class="grid-row desktop__wx-grid-gap-lg">
+      <div class="desktop:grid-col-6 wx-radar-wrapper">
         {% radar bounds=data.bounds|json_encode timezone=data.public.county.timezone heading_level="h2" heading_class="text-normal text-primary-darker padding-x-2 tablet:padding-x-0 margin-top-3 margin-bottom-2" %}
       </div>
-      {% include 'weather/county/wfo-promo.html' %}
+      <div class="desktop:grid-col-6">{% include 'weather/county/wfo-promo.html' %}</div>
     </div>
   </div>
   <div class="bg-primary-lightest padding-bottom-8 desktop:padding-bottom-10">

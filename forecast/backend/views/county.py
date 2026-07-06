@@ -46,6 +46,23 @@ def county_overview(request, countyfips=None, county_slug=None):  # noqa: C901
     if county.timezone:
         localtz = ZoneInfo(county.timezone)
 
+    # Alerts + Risk Overview are required components
+    # If BOTH have errors, render the full error page.
+    # If only one is in error, we can still render the page with the other components.
+    alerts_error = county_data.get("alerts", {}).get("metadata", {}).get("error", False)
+    county_risks_error = county_data.get("riskOverview", {}).get("error", False)
+
+    if alerts_error and county_risks_error:
+        context = {
+            "title_trans_args": {
+                "county": county.countyname,
+                "state": county.st,
+            },
+        }
+        # This is a placeholder until the re-designed Error page is implemented.
+        # For now, render the generic 500 error page.
+        return render(request, "errors/500.html", context)
+
     level_priorities = {
         "warning": 1024,
         "watch": 512,
@@ -133,6 +150,7 @@ def county_overview(request, countyfips=None, county_slug=None):  # noqa: C901
         "weather/county/overview.html",
         {
             "countyfips": county.countyfips,
+            "alerts_error": alerts_error,
             "title_trans_args": {
                 "county": county.countyname,
                 "state": county.st,

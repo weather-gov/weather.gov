@@ -50,7 +50,8 @@ const getWeatherStories = async (wfos) => {
   return Promise.all(
     wfos.map((wfo) => {
       return getWeatherStory(wfo).then((storydata) => {
-        if (storydata.error) {
+        // An error response from the API might be an object with an error or status property
+        if (storydata.error || (storydata.status && storydata.status !== 200)) {
           storydata.officeId = wfo;
           return [storydata];
         } else if (storydata.length > 0) {

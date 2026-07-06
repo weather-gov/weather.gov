@@ -123,28 +123,57 @@ export const postProcessAlerts = (alerts, { timezone }) => {
 };
 
 export const getAlertsForCountyFIPS = async (fips, { timezone }) => {
-  const db = await openDatabase();
-  alertsCache.db = db;
+  try {
+    const db = await openDatabase();
+    alertsCache.db = db;
 
-  const alerts = await alertsCache.getAlertsForCountyFIPS(fips);
-  return postProcessAlerts(alerts, { timezone });
+    const alerts = await alertsCache.getAlertsForCountyFIPS(fips);
+
+    // For local error testing uncomment this line and comment the return statement below it.
+    // to simulate an error in the alerts retrieval process.
+
+    // return { items: [], highestLevel: null, metadata: { ...metadata, error: true } };
+
+    return postProcessAlerts(alerts, { timezone });
+  } catch (e) {
+    alertsLogger.error({ err: e }, "error retrieving alerts for county FIPS");
+    return {
+      items: [],
+      highestLevel: null,
+      metadata: { ...metadata, error: true },
+    };
+  }
 };
 
 export const getAlertsForPoint = async ({
   point: { latitude, longitude },
   place: { timezone },
 }) => {
-  // Open a new database connection
-  // (or existing pool instance -- see import)
-  const db = await openDatabase();
-  alertsCache.db = db;
+  try {
+    // Open a new database connection
+    // (or existing pool instance -- see import)
+    const db = await openDatabase();
+    alertsCache.db = db;
 
-  const alerts = await alertsCache.getIntersectingAlertsForPoint(
-    latitude,
-    longitude,
-  );
+    const alerts = await alertsCache.getIntersectingAlertsForPoint(
+      latitude,
+      longitude,
+    );
 
-  return postProcessAlerts(alerts, { timezone });
+    // For local error testing uncomment this line and comment the return statement below it.
+    // to simulate an error in the alerts retrieval process.
+
+    // return { items: [], highestLevel: null, metadata: { ...metadata, error: true } };
+
+    return postProcessAlerts(alerts, { timezone });
+  } catch (e) {
+    alertsLogger.error({ err: e }, "error retrieving alerts for point");
+    return {
+      items: [],
+      highestLevel: null,
+      metadata: { ...metadata, error: true },
+    };
+  }
 };
 
 export default getAlertsForPoint;

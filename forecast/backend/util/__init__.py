@@ -513,13 +513,14 @@ def format_briefing_timestamps(briefing, wfo_instance, time_zone_info):
         return briefing
 
     # Briefing objects are returned as a dict with an inner
-    # 'breifing' key. This value can be None if there are no
+    # 'briefing' key. This value can be None if there are no
     # briefings for the given location
     briefing_inner = briefing.get("briefing", None)
+
     if briefing_inner:
         timestamps_to_datetime_in_dict(briefing_inner, ["startTime", "endTime", "updateTime"], time_zone_info)
         briefing_inner["wfo_url"] = wfo_instance.url
-        briefing_inner["wfi_name"] = wfo_instance.name
+        briefing_inner["wfo_name"] = wfo_instance.name
 
         # If the briefing was updated prior to its start time, we don't
         # care about that update. However, if it was updated after the

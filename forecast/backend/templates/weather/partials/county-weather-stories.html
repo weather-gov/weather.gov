@@ -24,20 +24,13 @@
         <hr class="margin-y-3 height-1px bg-base border-width-0">
       </hr>
     {% endif %}
-    <div class="margin-top-3 {% if weather_story.error %}weatherstory-error-wrapper{% elif not weather_story.is_empty %}wx-weather-story-wrapper{% endif %}">
+    <div class="margin-top-3 {% if weather_story.error %}margin-y-0{% elif not weather_story.is_empty %}wx-weather-story-wrapper{% endif %}">
       {% if weather_story.error %}
-        <div class="usa-alert usa-alert--error margin-bottom-2">
-          <div class=" usa-alert__body">
-            <div class="usa-alert__text">
-              {% if weather_story.wfo_name %}
-                {% trans_with_args "weather-story.error.message-with-wfo.01" wfo_name=weather_story.wfo_name %}
-              {% else %}
-                {{"weather-story.error.message.01"|t}}
-              {% endif %}
-            </div>
-          </div>
-        </div>
-        {#% include "weather/partials/uswds-alert.html" with level="error" body="weather-story.error.message.01"|t %#}
+        {% if weather_story.wfo_name %}
+          {% include "errors/partials/wfo-component-error.html" with component="weather stories" wfo=weather_story.wfo_name %}
+        {% else %}
+          {% include "errors/partials/wfo-component-error.html" with component="weather stories" %}
+        {% endif %}
       {% elif not weather_story.is_empty %}
         <div class="margin-bottom-3">
           {% comment %}
@@ -92,7 +85,7 @@
         -- the AFD link and other WFO information
       {% endcomment %}
       <div class="display-flex flex-column flex-justify-end{% if forloop.last %} margin-bottom-3{% endif %}">
-        {% if not weather_story.error and not weather_story.is_empty %}
+        {% if not weather_story.is_empty %}
           <hr class="margin-x-0 border-accent-cool-darker border-top-0 margin-top-2" />
         {% endif %}
         {# AFD Link #}

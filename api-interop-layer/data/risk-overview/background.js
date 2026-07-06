@@ -174,6 +174,8 @@ const processWFO = async (wfo, statuses) => {
       // restart quite frequently.
       if (result.rows.length > 0) {
         const updated = result.rows.pop().updated.getTime();
+        // For local development, if you're having trouble getting the interop layer to update,
+        // you can change this value to a smaller number (like 10) to force it to update more frequently.
         const thirtyMinutesAgo = new Date(Date.now() - 1_800_000).getTime();
 
         // If the last update was less than 30 minutes ago, don't bother doing
@@ -314,6 +316,8 @@ const setTimer = () => {
     // Run every 30 minutes and one second. This is to create some buffer around
     // the update timestamp checking that happens later. This timing buffer is a
     // little bit messy, but this code is presumably temporary anyway.
+    // For local development, if you're having trouble getting the interop layer to update the risk factors,
+    // you can change this value to a smaller number (like 60) to force it to update more frequently.
   }, 1_801_000)
     // Tell Node not to keep a reference to this timer. Otherwise, Node will think
     // the process is still active forever. This is not an issue in production,
