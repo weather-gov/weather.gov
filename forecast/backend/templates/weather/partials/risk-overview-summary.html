@@ -24,21 +24,7 @@
 --
 {% endcomment %}
 {% if ghwo.error %}
-  {% if ghwo.error.status == 404 %}
-    <div>
-      <p>{{ "ghwo.summary.error.not-found.01" | t }}</p>
-      <img class="height-8"
-           src="{% static "images/weather/wx_error-cloud_missing.svg" %}"
-           alt="" />
-    </div>
-  {% else %}
-    <div>
-      <p>{{ "ghwo.summary.error.loading.01" | t }}</p>
-      <img class="height-8"
-           src="{% static "images/weather/wx_error-cloud_error.svg" %}"
-           alt="" />
-    </div>
-  {% endif %}
+  {% include "errors/partials/non-critical-component-error.html" with component="the daily risk summary" %}
 {% else %}
   <h2 
     {% if for_state %}

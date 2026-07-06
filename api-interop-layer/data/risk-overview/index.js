@@ -37,6 +37,8 @@ const ensureDatabaseExists = openDatabase().then(async (db) => {
   // If the TRUNCATE_HAZARD_OUTLOOKS env variable
   // is set to true, we drop the GHWO metadata
   // from the meta table on each restart.
+  // For local development, if you're having trouble getting the interop layer to update,
+  // you can change comment out the if statement to force it to truncate, then run just init.
   if (process.env.TRUNCATE_HAZARD_OUTLOOKS === "true") {
     riskOverviewLogger.info(
       "Truncating weathergov_temp_ghwo_meta, weathergov_temp_ghwo...",

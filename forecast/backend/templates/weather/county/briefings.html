@@ -9,13 +9,11 @@
           {% if data.briefings|length > 1 %}<h3 class="text-normal text-primary">{{ briefing.wfo_name }}</h3>{% endif %}
         </div>
         {% if briefing.error %}
-          <div class="usa-alert usa-alert--error margin-bottom-2">
-            <div class=" usa-alert__body">
-              <div class="usa-alert__text">
-                {% trans_with_args "There was an error loading briefings for the {wfo} WFO" wfo=briefing.wfo_name %}
-              </div>
-            </div>
-          </div>
+          {% if briefing.wfo_name %}
+            {% include "errors/partials/wfo-component-error.html" with component="briefings" wfo=briefing.wfo_name %}
+          {% else %}
+            {% include "errors/partials/wfo-component-error.html" with component="briefings" %}
+          {% endif %}
         {% elif not briefing.is_empty %}
           <div class="grid-row font-family-mono">
             <div class="grid-col-12 display-inline-block tablet:grid-col-auto text-uppercase margin-right-1">

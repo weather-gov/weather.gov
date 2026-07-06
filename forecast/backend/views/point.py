@@ -54,7 +54,11 @@ def point_location(request, lat, lon):  # noqa: C901
 
     point = interop.get_point_forecast(lat, lon)
     fullname = point.get("place", {}).get("fullName", None)
-    context = {"point": point, "title_trans_args": {"fullName": fullname}}
+
+    # Check if there was an error retrieving alerts from the cache/background process
+    alerts_error = point.get("alerts", {}).get("metadata", {}).get("error", False)
+
+    context = {"point": point, "alerts_error": alerts_error, "title_trans_args": {"fullName": fullname}}
 
     if "status" in point and point["status"] == HTTPStatus.NOT_FOUND:
         raise Http404(point)

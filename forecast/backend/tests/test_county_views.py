@@ -189,7 +189,7 @@ class TestCountyViews(TestCase):
             "slug": "anansi-gh",
         }
 
-        response = self.client.get(reverse("county_state_overview", kwargs={"county_slug":"Anansi-GH"}))
+        response = self.client.get(reverse("county_state_overview", kwargs={"county_slug": "Anansi-GH"}))
         self.assertTemplateUsed(response, "weather/county/overview.html")
         link = reverse("county_risk_overview", kwargs={"county_fips": "44444"})
         self.assertContains(response, link)
@@ -445,3 +445,74 @@ class TestCountyViews(TestCase):
         with self.assertRaises(Exception):  # noqa: PT027, B017 (we want generic Exception)
             response = self.client.get(reverse("county_overview", kwargs={"countyfips": "44444"}))
             self.assertEqual(response.status_code, 500)
+
+    @disable_logging_for_quieter_tests
+    @mock.patch("backend.interop.get_county_data")
+    def test_overview_renders_500_when_alerts_and_risk_overview_both_error(self, mock_get_county_data):
+        """Test that when both alerts and risk overview have errors, the 500 page is rendered."""
+        mock_get_county_data.return_value = {
+            "alerts": {"items": [], "metadata": {"error": True}},
+            "riskOverview": {"error": True},
+            "alertDays": [],
+            "county": {"wfos": ["YND"]},
+            "weatherstories": [],
+            "briefings": [],
+            "slug": "anansi-gh",
+        }
+
+        response = self.client.get(reverse("county_overview", kwargs={"countyfips": "44444"}))
+        self.assertTemplateUsed(response, "errors/500.html")
+
+    @disable_logging_for_quieter_tests
+    @mock.patch("backend.interop.get_county_data")
+    def test_overview_renders_normally_when_only_alerts_error(self, mock_get_county_data):
+        """Test that when only alerts has an error but risk overview is fine, the page still renders.
+
+        Even if briefings and weather stories also fail, the page should render
+        with non-critical-component-error partials for each failing component.
+        """
+        mock_get_county_data.return_value = {
+            "alerts": {"items": [], "metadata": {"error": True}},
+            "riskOverview": self.ghwo,
+            "alertDays": [],
+            "county": {"wfos": ["YND"]},
+            "weatherstories": [{"error": "connection refused", "officeId": "YND"}],
+            "briefings": [{"error": "connection refused", "officeId": "YND"}],
+            "slug": "anansi-gh",
+        }
+
+        response = self.client.get(reverse("county_overview", kwargs={"countyfips": "44444"}))
+        self.assertTemplateUsed(response, "weather/county/overview.html")
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(response.context["alerts_error"])
+        # Verify the non-critical-component-error partial is rendered for alerts, weather stories, and briefings
+        error_count = response.content.decode().count("non-critical-component-error")
+        # The count includes one hidden (display-none) component (for the radar), so we expect 4 total
+        self.assertEqual(error_count, 4)
+
+    @disable_logging_for_quieter_tests
+    @mock.patch("backend.interop.get_county_data")
+    def test_overview_renders_normally_when_only_risk_overview_error(self, mock_get_county_data):
+        """Test that when only risk overview has an error but alerts are fine, the page still renders.
+
+        The risk overview section should show the non-critical-component-error partial,
+        while alerts render normally.
+        """
+        mock_get_county_data.return_value = {
+            "alerts": {"items": [], "metadata": {"error": False}},
+            "riskOverview": {"error": True},
+            "alertDays": [],
+            "county": {"wfos": ["YND"]},
+            "weatherstories": [],
+            "briefings": [],
+            "slug": "anansi-gh",
+        }
+
+        response = self.client.get(reverse("county_overview", kwargs={"countyfips": "44444"}))
+        self.assertTemplateUsed(response, "weather/county/overview.html")
+        self.assertEqual(response.status_code, 200)
+        self.assertFalse(response.context["alerts_error"])
+        # Verify the non-critical-component-error partial is rendered for risk overview
+        error_count = response.content.decode().count("non-critical-component-error")
+        # The count includes one hidden (display-none) component (for the radar), so we expect 2 total
+        self.assertEqual(error_count, 2)
