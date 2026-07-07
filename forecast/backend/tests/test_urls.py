@@ -34,26 +34,26 @@ class TestUrls(TestCase):
 
     def test_afd_index(self):
         """Test AFD index."""
-        resolver = resolve("/afd/")
+        resolver = resolve("/tools/afd/")
         back = reverse("afd_index")
         self.assertEqual(resolver.func, point.afd_index)
-        self.assertEqual(back, "/afd/")
+        self.assertEqual(back, "/tools/afd/")
 
     def test_afd_by_office(self):
         """Test AFD by office."""
-        resolver = resolve("/afd/WFO/")
+        resolver = resolve("/tools/afd/WFO/")
         back = reverse("afd_by_office", kwargs={"wfo": "Doody"})
         self.assertEqual(resolver.func, point.afd_by_office)
         self.assertEqual(resolver.kwargs, {"wfo": "WFO"})
-        self.assertEqual(back, "/afd/Doody/")
+        self.assertEqual(back, "/tools/afd/Doody/")
 
     def test_afd_by_office_and_id(self):
         """Test AFD by office and ID."""
-        resolver = resolve("/afd/WFO/afdid/")
+        resolver = resolve("/tools/afd/WFO/afdid/")
         back = reverse("afd_by_office_and_id", kwargs={"wfo": "To", "afd_id": "Fro"})
         self.assertEqual(resolver.func, point.afd_by_office_and_id)
         self.assertEqual(resolver.kwargs, {"wfo": "WFO", "afd_id": "afdid"})
-        self.assertEqual(back, "/afd/To/Fro/")
+        self.assertEqual(back, "/tools/afd/To/Fro/")
 
     def test_wx_afd_id(self):
         """Test AFD by ID fragment."""

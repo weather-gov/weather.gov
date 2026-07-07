@@ -23,7 +23,7 @@
               name="afd-selection-form"
               class="bg-primary-lightest padding-x-2 padding-y-3 border-bottom-2px border-primary desktop__wx-position-sticky margin-x-neg-2"
               method="get"
-              action="/afd">
+              action={% url 'afd_index' %}>
           <label for="wfo-selector" class="usa-label margin-top-0">{{ "afd.label.forecast-office.01" | t }}</label>
           <wx-combobox tabindex="0" id="combobox-afd-wfo">
           <input id="wfo-selector"

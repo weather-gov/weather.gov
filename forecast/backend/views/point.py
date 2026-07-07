@@ -173,15 +173,31 @@ def afd_index(request):
     if redirect_url:
         return redirect(redirect_url)
 
-    # Otherwise, we get the most recent AFD from anywhere
-    # in the country, determine the WFO to which it applies,
-    # and we redirect to the full url for that resource
-    afd_references = interop.get_wx_afd_versions()["@graph"]
-    afd_id = afd_references[0]["id"]
-    afd_data = interop.get_wx_afd_by_id(afd_id)
-    wfo = get_wfo_from_afd(afd_data)
-    url = reverse("afd_by_office_and_id", kwargs={"wfo": wfo.lower(), "afd_id": afd_id})
-    return redirect(url)
+    # Otherwise, we render a version of the page with the first
+    # alphabetical WFO and its most recent AFD, but without the body
+    # of the AFD displayed
+    all_wfos = WFO.objects.order_by("name").values("code", "name")
+    first_wfo = all_wfos[0]
+    wfo_combo_box_data = [
+        {
+            "value": wfo["code"],
+            "selected": wfo["code"] == first_wfo["code"].upper(),
+            "text": f"{wfo['name']} ({wfo['code']})"
+        }
+        for wfo in all_wfos
+    ]
+    afd_references = interop.get_wx_afd_versions_by_wfo(all_wfos[0]["code"].upper())["@graph"]
+    to_render = {
+        "wfo": all_wfos[0]["code"].upper(),
+        "afd": None,
+        "wfo_list": wfo_combo_box_data,
+        "version_list": afd_references,
+        "title_trans_args": {
+            "wfo": all_wfos[0]["code"].upper(),
+            "afd_id": afd_references[0]["id"]
+        }
+    }
+    return render(request, "weather/afd/afd_page.html", to_render)
 
 
 def afd_by_office(_, wfo):

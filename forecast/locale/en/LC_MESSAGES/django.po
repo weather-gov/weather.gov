@@ -39,7 +39,7 @@ msgid "afd.aria.toggle-dropdown.01"
 msgstr "Toggle the dropdown list"
 
 msgid "afd.button.update-selection.01"
-msgstr "Update selection"
+msgstr "Show Discussion"
 
 msgid "afd.heading.area-forecast-discussion.01"
 msgstr "Area Forecast Discussion"
