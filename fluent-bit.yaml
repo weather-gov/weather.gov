@@ -1,0 +1,89 @@
+service:
+  flush: 1
+  daemon: off
+  log_level: warn
+
+parsers:
+  - name: app_json
+    format: json
+    time_key: time
+
+pipeline:
+  inputs:
+    - name: forward
+      listen: 0.0.0.0
+      port: 24224
+
+  filters:
+    - name: parser
+      match: "*"
+      parser: app_json
+      key_name: log
+      reserve_data: true
+
+    # if the log cannot be parsed as json (such as django runserver
+    # messages) preserve the log and use the `messasge` key
+    - name: modify
+      match: "*"
+      condition:
+        - "Key_Exists log"
+        - "Key_Does_Not_Exist message"
+      rename: "log message"
+
+    # prettify logs via `docker compose logs -f fluent-bit`
+    # return the record unchanged so downstream outputs still get JSON.
+    - name: lua
+      match: "*"
+      call: pretty_print
+      code: |
+        local LEVEL_COLOR = {
+          TRACE    = "\27[90m",
+          DEBUG    = "\27[36m",
+          INFO     = "\27[32m",
+          WARNING  = "\27[33m",
+          ERROR    = "\27[31m",
+          CRITICAL = "\27[1;31m",
+        }
+        local RESET = "\27[0m"
+        local DIM   = "\27[2m"
+
+        function pretty_print(tag, ts, record)
+          local message = record["message"] or ""
+          -- drop records with blank or whitespace-only messages so they
+          -- neither print here nor get shipped to openobserve.
+          if message:match("^%s*$") then
+            return -1, ts, record
+          end
+          local secs = math.floor(ts)
+          local timestamp = os.date("%Y-%m-%d %H:%M:%S", secs)
+          local service = record["service"] or "docker"
+          local level = record["levelname"] or "-"
+          local err_message = record["err"] and record["err"]["stack"] or record["exc_info"]
+          local color = LEVEL_COLOR[level] or ""
+          io.write(string.format(
+            "%s%s%s  %-30s %s%-8s%s %s\n",
+            DIM, timestamp, RESET,
+            service,
+            color, level, RESET,
+            message
+          ))
+          if err_message and err_message ~= "" then
+            io.write(string.format(
+              "%s    ↳ %s%s\n",
+              LEVEL_COLOR["ERROR"], err_message, RESET
+            ))
+          end
+          io.flush()
+          return 0, ts, record
+        end
+
+  outputs:
+    - name: http
+      match: "*"
+      host: openobserve
+      port: 5080
+      uri: /api/default/default/_json
+      http_user: ${OO_ROOT_USER}
+      http_passwd: ${OO_ROOT_PASSWORD}
+      format: json
+      json_date_key: _timestamp

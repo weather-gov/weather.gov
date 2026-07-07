@@ -1,45 +1,42 @@
 import pino from "pino";
 
-const prodConfiguration = () =>
-  pino.transport({
-    targets: [
-      {
-        target: "pino/file",
-        options: { destination: 1 }, // fd 1 is stdout
-        level: process.env.LOG_LEVEL || "trace",
-      },
-    ],
-  });
+// match python's logging level names
+const LEVEL_NAMES = {
+  trace: "TRACE",
+  debug: "DEBUG",
+  info: "INFO",
+  warn: "WARNING",
+  error: "ERROR",
+  fatal: "CRITICAL",
+};
 
-// we want nicer looking logs for dev purposes; make this
-// a function so that the transport() method is ONLY called
-// if we actually want this config
-const devConfiguration = () =>
-  pino.transport({
-    serializers: {
-      req: pino.stdSerializers.req,
-      res: pino.stdSerializers.res,
+const transport = pino.transport({
+  serializers: {
+    req: pino.stdSerializers.req,
+    res: pino.stdSerializers.res,
+  },
+  targets: [
+    {
+      target: "pino/file",
+      options: { destination: 1 }, // fd 1 is stdout
+      level: process.env.LOG_LEVEL || "info",
     },
-    targets: [
-      {
-        target: "pino-pretty",
-        options: {
-          colorize: true,
-          sync: true
-         },
-        level: process.env.LOG_LEVEL || "trace",
-        minimumLevel: process.env.LOG_LEVEL || "trace",
-      },
-    ],
-  });
+  ],
+});
 
 export const logger = pino(
-  // pino can set levels globally or per-transport target. let's be explicit
-  // about setting levels globally, since for dev purposes we want trace logs
   {
-    level: process.env.LOG_LEVEL || "trace",
+    base: { service: "api-proxy" },
+    messageKey: "message",
+    formatters: {
+      level(label) {
+        return {
+          levelname: LEVEL_NAMES[label] ?? label.toUpperCase(),
+        };
+      },
+    },
   },
-  process.env.API_PROXY_PRODUCTION ? prodConfiguration() : devConfiguration(),
+  transport,
 );
 
-export default logger;
+export default { logger };

@@ -14,8 +14,5 @@
     "pino": "^10.3.0",
     "pm2": "^6.0.14",
     "prettier": "^3.2.0"
-  },
-  "devDependencies": {
-    "pino-pretty": "^13.1.3"
   }
 }

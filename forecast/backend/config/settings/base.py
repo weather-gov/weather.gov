@@ -427,6 +427,11 @@ LOGGING = {
     # define how to convert log messages into text;
     # each handler has its choice of format
     "formatters": {
+        "json": {
+            "()": "pythonjsonlogger.json.JsonFormatter",
+            "format": "%(asctime)s %(levelname)s %(name)s %(lineno)s %(message)s",
+            "defaults": {"service": "web"},
+        },
         "verbose": {
             "format": "[%(asctime)s] %(levelname)s [%(name)s:%(lineno)s] %(message)s",
             "datefmt": "%d/%b/%Y %H:%M:%S",
@@ -446,12 +451,12 @@ LOGGING = {
         "console": {
             "level": os.environ.get("DJANGO_LOG_LEVEL", "DEBUG"),
             "class": "logging.StreamHandler",
-            "formatter": "verbose",
+            "formatter": "json",
         },
         "django.server": {
             "level": "INFO",
             "class": "logging.StreamHandler",
-            "formatter": "django.server",
+            "formatter": "json",
         },
         # No file logger is configured,
         # because containerized apps

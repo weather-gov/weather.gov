@@ -1,3 +1,4 @@
+import base64
 import os
 
 from opentelemetry import trace
@@ -22,8 +23,17 @@ def enable_opentelemetry():
     resource = Resource.create({"service.name": name})
     provider = TracerProvider(resource=resource)
 
-    endpoint = os.environ.get("OTEL_EXPORTER_OTLP_ENDPOINT", "http://jaeger:4318")
-    exporter = OTLPSpanExporter(endpoint=f"{endpoint}/v1/traces")
+    endpoint = os.environ.get("OTEL_EXPORTER_OTLP_TRACES_ENDPOINT", "http://openobserve:5080/api/default/v1/traces")
+    username = os.environ.get("OTEL_USERNAME")
+    password = os.environ.get("OTEL_PASSWORD")
+
+    headers = {}
+    if username and password:
+        raw_auth = f"{username}:{password}"
+        encoded_auth = base64.b64encode(raw_auth.encode("utf-8")).decode("utf-8")
+        headers["Authorization"] = f"Basic {encoded_auth}"
+
+    exporter = OTLPSpanExporter(endpoint=endpoint, headers=headers)
     provider.add_span_processor(BatchSpanProcessor(exporter))
     trace.set_tracer_provider(provider)
 

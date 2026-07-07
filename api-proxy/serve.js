@@ -1,6 +1,6 @@
 import config from "./config.js";
 import { localData } from "./data.js";
-import logger from "./logger.js";
+import { logger } from "./logger.js";
 import proxy from "./proxy.js";
 
 const serveLogger = logger.child({ subsystem: "file service" });

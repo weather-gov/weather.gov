@@ -14,7 +14,16 @@ import { getNodeAutoInstrumentations } from "@opentelemetry/auto-instrumentation
 
 const name = process.env.OTEL_SERVICE_NAME || "weathergov-api-interop";
 const endpoint =
-  process.env.OTEL_EXPORTER_OTLP_ENDPOINT || "http://jaeger:4318";
+  process.env.OTEL_EXPORTER_OTLP_TRACES_ENDPOINT ||
+  "http://openobserve:5080/api/default/v1/traces";
+const username = process.env.OTEL_USERNAME;
+const password = process.env.OTEL_PASSWORD;
+
+const headers = {};
+if (username && password) {
+  const authString = Buffer.from(`${username}:${password}`).toString("base64");
+  headers["Authorization"] = `Basic ${authString}`;
+}
 
 const resource = resourceFromAttributes({
   [ATTR_SERVICE_NAME]: name,
@@ -25,7 +34,8 @@ const sdk = new NodeSDK({
   // detectors for env/process/host info
   resourceDetectors: [envDetector, processDetector, hostDetector],
   traceExporter: new OTLPTraceExporter({
-    url: `${endpoint}/v1/traces`,
+    url: endpoint,
+    headers,
   }),
   instrumentations: [getNodeAutoInstrumentations()],
 });

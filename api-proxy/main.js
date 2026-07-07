@@ -5,7 +5,7 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import config from "./config.js";
 import { loadBundle } from "./data.js";
-import logger from "./logger.js";
+import { logger } from "./logger.js";
 import getProductInfo from "./products.js";
 import proxyToApi from "./proxy.js";
 import save from "./save.js";
