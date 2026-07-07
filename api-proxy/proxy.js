@@ -1,5 +1,5 @@
 import https from "https";
-import logger from "./logger.js";
+import { logger } from "./logger.js";
 
 const proxyLogger = logger.child({ subsystem: "proxy" });
 
@@ -18,7 +18,7 @@ export default (req, res) => {
   }
 
   // Reassemble the query string, if any. Do not map over req.query, see CWE-606.
-  const qp = req.url.split('?');
+  const qp = req.url.split("?");
   const qs = qp.length === 2 ? qp[1] : "";
 
   const proxyRequestSettings = {

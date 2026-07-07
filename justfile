@@ -386,4 +386,8 @@ load-places:
 # Load grid points
 [group("spatial data loading")]
 load-gridpoints path:
-    docker compose exec web python manage.py loadgridpoints /code/{{path}}
+  docker compose exec web python manage.py loadgridpoints /code/{{path}}
+
+[group("logging")]
+logs:
+  docker compose logs -f fluent-bit
