@@ -11,7 +11,7 @@
 
   .wx-alert-link-inner {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
   }
 
   .hourly-table & {
@@ -52,6 +52,7 @@
 
   svg {
     fill: color("accent-warm-dark");
+    margin-top: 1px;
   }
 }
 
