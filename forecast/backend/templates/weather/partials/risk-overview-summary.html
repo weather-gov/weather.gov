@@ -26,19 +26,18 @@
 {% if ghwo.error %}
   {% include "errors/partials/non-critical-component-error.html" with component="the daily risk summary" %}
 {% else %}
+  {% if for_state %}
   <h2 
-    {% if for_state %}
     class="text-normal text-primary-dark margin-top-3 font-sans-xl"
-    {% else %}
-    class="font-sans-xl text-normal text-primary-dark margin-bottom-2 margin-top-1 desktop:margin-top-0"
-    {% endif %}
     id="risk-summary-table-header"
   >{{ "ghwo.table.caption.header.01"|t }}</h2>
-
-  {% if for_state %}
   <p class="text-left font-sans-md text-normal margin-bottom-205 measure-6"
      id="risk-summary-table-description">{{ "ghwo.table.caption.detailed-description.01"|t }}</p>
   {% else %}
+  <h2 
+    class="font-sans-xl text-normal text-primary-dark margin-bottom-2 margin-top-1 desktop:margin-top-0"
+    id="risk-summary-table-header"
+  >{{ "ghwo.table.caption.header.01"|t }}</h2>
   <p class="text-left font-sans-md text-normal text-primary-darker margin-bottom-2"
      id="risk-summary-table-description">{{ "ghwo.table.caption.description.01"|t }}</p>
   {% endif %}
