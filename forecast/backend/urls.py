@@ -23,9 +23,9 @@ urlpatterns = [
     # have trailing slashes, they'll never match.
     # Forecast specific URLS
     path("about/offices/<wfo>/", offices.offices_specific, name="office"),
-    path("afd/", point.afd_index, name="afd_index"),
-    path("afd/<wfo>/", point.afd_by_office, name="afd_by_office"),
-    path("afd/<wfo>/<afd_id>/", point.afd_by_office_and_id, name="afd_by_office_and_id"),
+    path("tools/afd/", point.afd_index, name="afd_index"),
+    path("tools/afd/<wfo>/", point.afd_by_office, name="afd_by_office"),
+    path("tools/afd/<wfo>/<afd_id>/", point.afd_by_office_and_id, name="afd_by_office_and_id"),
     # County pages
     path("forecast/county/", county.index, name="county_index"),
     re_path(r"forecast/county/(?P<county_slug>[\w|-]+-\w+)/$", county.county_overview, name="county_state_overview"),
