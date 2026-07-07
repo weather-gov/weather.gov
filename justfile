@@ -103,41 +103,68 @@ clear-alert-cache:
 ##### Code quality #####
 # Format Javascript
 [group("code quality")]
-format-js:
-  docker compose --profile utility \
-    run --rm \
-    -v "{{justfile_directory()}}/.prettierignore":"/app/.prettierignore" \
-    -v "{{justfile_directory()}}/prettier.config.js":"/app/prettier.config.js" \
-    -v "{{justfile_directory()}}/api-interop-layer":"/app/api-interop-layer" \
-    -v "{{justfile_directory()}}/api-proxy":"/app/api-proxy" \
-    -v "{{justfile_directory()}}/tests":"/app/tests" \
-    -v "{{justfile_directory()}}/spatial-data":"/app/spatial-data" \
-    -v "{{justfile_directory()}}/forecast/frontend":"/app/forecast/frontend" \
-    node \
-    npx --no-install prettier -w 'forecast/frontend/**/assets/**/*.js' 'tests/**/*.js' '*.js' 'api-interop-layer/**/*.js'
+[script]
+format-js *files:
+  if [[ -z "{{files}}" ]]; then
+    docker compose --profile utility \
+      run --rm \
+      -v "{{justfile_directory()}}/.prettierignore":"/app/.prettierignore" \
+      -v "{{justfile_directory()}}/prettier.config.js":"/app/prettier.config.js" \
+      -v "{{justfile_directory()}}/api-interop-layer":"/app/api-interop-layer" \
+      -v "{{justfile_directory()}}/api-proxy":"/app/api-proxy" \
+      -v "{{justfile_directory()}}/tests":"/app/tests" \
+      -v "{{justfile_directory()}}/spatial-data":"/app/spatial-data" \
+      -v "{{justfile_directory()}}/forecast/frontend":"/app/forecast/frontend" \
+      node \
+      npx --no-install prettier -w --list-different 'forecast/frontend/**/assets/**/*.js' 'tests/**/*.js' '*.js' 'api-interop-layer/**/*.js'
+  else
+    docker compose --profile utility \
+      run --rm \
+      -v "{{justfile_directory()}}/.prettierignore":"/app/.prettierignore" \
+      -v "{{justfile_directory()}}/prettier.config.js":"/app/prettier.config.js" \
+      -v "{{justfile_directory()}}/api-interop-layer":"/app/api-interop-layer" \
+      -v "{{justfile_directory()}}/api-proxy":"/app/api-proxy" \
+      -v "{{justfile_directory()}}/tests":"/app/tests" \
+      -v "{{justfile_directory()}}/spatial-data":"/app/spatial-data" \
+      -v "{{justfile_directory()}}/forecast/frontend":"/app/forecast/frontend" \
+      node \
+      npx --no-install prettier -w --list-different {{files}}
+  fi
 
 # Format Python code
 [group("code quality")]
-format-python:
-  docker compose exec web python -m ruff format .
+[script]
+format-python *files:
+  if [[ -z "{{files}}" ]]; then
+    target="."
+  else
+    target="{{files}}"
+  fi
+  docker compose exec web python -m ruff format $target
 
 # Format stylesheets
 [group("code quality")]
-format-style:
+[script]
+format-style *files:
+  if [[ -z "{{files}}" ]]; then
+    target="./**/*.scss"
+  else
+    target="{{files}}"
+  fi
   docker compose --profile utility \
     run --rm \
     -v "{{justfile_directory()}}/forecast/frontend":"/app" \
     node \
-    npx --no-install prettier -w ./**/*.scss
+    npx --no-install prettier -w --list-different $target
 
 # Format the Django HTML templates
 [group("code quality")]
 [script]
-format-template file="":
-  if [[ -z "{{file}}" ]]; then
-    docker compose exec web djlint backend/templates/ --reformat --extension=html
+format-template *files:
+  if [[ -z "{{files}}" ]]; then
+    docker compose exec web djlint backend/templates/ --reformat --extension=html || true
   else
-    docker compose exec web djlint {{file}} --reformat --extension=html
+    docker compose exec web djlint {{files}} --reformat --extension=html || true
   fi
 
 # Lints and formats Python and HTML templates in one go
@@ -146,7 +173,13 @@ lint: format-js lint-js format-python lint-python format-template lint-template 
 
 # Lint Javascript
 [group("code quality")]
-lint-js:
+[script]
+lint-js *files:
+  if [[ -z "{{files}}" ]]; then
+    target=""
+  else
+    target="{{files}}"
+  fi
   docker compose --profile utility \
     run --rm \
     -v "{{justfile_directory()}}/eslint.config.js":"/app/eslint.config.js" \
@@ -156,26 +189,44 @@ lint-js:
     -v "{{justfile_directory()}}/spatial-data":"/app/spatial-data" \
     -v "{{justfile_directory()}}/forecast/frontend":"/app/forecast/frontend" \
     node \
-    npx --no-install eslint --fix
+    npx --no-install eslint --fix $target
 
 # Lints Python code
 [group("code quality")]
-lint-python:
-  docker compose exec web python -m ruff check --fix .
+[script]
+lint-python *files:
+  if [[ -z "{{files}}" ]]; then
+    target="."
+  else
+    target="{{files}}"
+  fi
+  docker compose exec web python -m ruff check --fix $target
 
 # Lint Sass stylesheets
 [group("code quality")]
-lint-style:
+[script]
+lint-style *files:
+  if [[ -z "{{files}}" ]]; then
+    target="**/*.scss"
+  else
+    target="{{files}}"
+  fi
   docker compose --profile utility \
     run --rm \
     -v "{{justfile_directory()}}":"/app" \
     node \
-    npx --no-install stylelint **/*.scss --fix
+    npx --no-install stylelint $target --fix
 
 # Lint the Django HTML templates
 [group("code quality")]
-lint-template:
-  docker compose exec web djlint backend/templates/ --extension=html
+[script]
+lint-template *files:
+  if [[ -z "{{files}}" ]]; then
+    target="backend/templates/"
+  else
+    target="{{files}}"
+  fi
+  docker compose exec web djlint $target --extension=html
 
 [group("code quality")]
 gitlab-sast:

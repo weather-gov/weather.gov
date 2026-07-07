@@ -1,0 +1,25 @@
+assert_lefthook_installed: true
+glob_matcher: doublestar
+output: summary
+
+pre-commit:
+  parallel: true
+  commands:
+    lint-python:
+      glob: "**/*.py"
+      root: "forecast/"
+      run: just lint-python {staged_files}
+      stage_fixed: false   # Restages files if the linter alters them
+    format-style:
+      glob: "**/*.scss"
+      run: just format-style && just css
+      stage_fixed: true
+    format-lint-js:
+      glob: "**/*.{js,ts}"
+      run: just format-js {staged_files} && just lint-js {staged_files}
+      stage_fixed: true
+    lint-template:
+      root: "forecast/"
+      glob: "**/*.html"
+      run: just lint-template {staged_files}
+      stage_fixed: false
