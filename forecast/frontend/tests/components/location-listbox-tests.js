@@ -35,25 +35,25 @@ const SEARCH_RESULTS = {
     {
       text: "Arlington, TX, USA",
       magicKey:
-        "dHA9NCN0dj02NjAzMDhlYyNubT1Bcmxpbmd0b24sIFRYLCBVU0Ejc2M9VVNBOlBSSTpWSVI6R1VNOkFTTSNsbmc9NDAjbG49V29ybGQ=",
+      "dHA9NCN0dj02NjAzMDhlYyNubT1Bcmxpbmd0b24sIFRYLCBVU0Ejc2M9VVNBOlBSSTpWSVI6R1VNOkFTTSNsbmc9NDAjbG49V29ybGQ=",
       isCollection: false,
     },
     {
       text: "Arlington, VA, USA",
       magicKey:
-        "dHA9NCN0dj02NjAzMDhlYyNubT1Bcmxpbmd0b24sIFZBLCBVU0Ejc2M9VVNBOlBSSTpWSVI6R1VNOkFTTSNsbmc9NDAjbG49V29ybGQ=",
+      "dHA9NCN0dj02NjAzMDhlYyNubT1Bcmxpbmd0b24sIFZBLCBVU0Ejc2M9VVNBOlBSSTpWSVI6R1VNOkFTTSNsbmc9NDAjbG49V29ybGQ=",
       isCollection: false,
     },
     {
       text: "Arlington Heights, IL, USA (Cook County)",
       magicKey:
-        "dHA9NCN0dj02NjAzMDhlYyNubT1Bcmxpbmd0b24gSGVpZ2h0cywgSUwsIFVTQSAoQ29vayBDb3VudHkpI3NjPVVTQTpQUkk6VklSOkdVTTpBU00jbmVsPSNsbmc9NDAjbG49V29ybGQ=",
+      "dHA9NCN0dj02NjAzMDhlYyNubT1Bcmxpbmd0b24gSGVpZ2h0cywgSUwsIFVTQSAoQ29vayBDb3VudHkpI3NjPVVTQTpQUkk6VklSOkdVTTpBU00jbmVsPSNsbmc9NDAjbG49V29ybGQ=",
       isCollection: false,
     },
     {
       text: "Arlington, MA, USA",
       magicKey:
-        "dHA9NCN0dj02NjAzMDhlYyNubT1Bcmxpbmd0b24sIE1BLCBVU0Ejc2M9VVNBOlBSSTpWSVI6R1VNOkFTTSNsbmc9NDAjbG49V29ybGQ=",
+      "dHA9NCN0dj02NjAzMDhlYyNubT1Bcmxpbmd0b24sIE1BLCBVU0Ejc2M9VVNBOlBSSTpWSVI6R1VNOkFTTSNsbmc9NDAjbG49V29ybGQ=",
       isCollection: false,
     },
   ],
@@ -61,117 +61,113 @@ const SEARCH_RESULTS = {
 
 const SEARCH_RESULT_ITEMS = {
   "dHA9NCN0dj02NjAzMDhlYyNubT1Bcmxpbmd0b24sIFRYLCBVU0Ejc2M9VVNBOlBSSTpWSVI6R1VNOkFTTSNsbmc9NDAjbG49V29ybGQ=":
-    {
-      spatialReference: {
-        wkid: 4326,
-        latestWkid: 4326,
-      },
-      locations: [
-        {
-          name: "Arlington, Texas",
-          extent: {
-            xmin: -97.23211,
-            ymin: 32.610594,
-            xmax: -96.98211,
-            ymax: 32.860594,
-          },
-          feature: {
-            geometry: {
-              x: -97.10711,
-              y: 32.735594,
-            },
-            attributes: {
-              Score: 100,
-              Addr_Type: "Locality",
-            },
-          },
-        },
-      ],
+  {
+    spatialReference: {
+      wkid: 4326,
+      latestWkid: 4326,
     },
+    candidates: [
+      {
+        "address": "Arlington, Texas",
+        "location": {
+          "x": -97.10711,
+          "y": 32.735594
+        },
+        "score": 100,
+        "attributes": {
+          "Type": "City",
+          "RegionAbbr": "TX"
+        },
+        "extent": {
+          "xmin": -97.21411,
+          "ymin": 32.628594,
+          "xmax": -97.00011,
+          "ymax": 32.842594
+        }
+      },
+    ],
+  },
   "dHA9NCN0dj02NjAzMDhlYyNubT1Bcmxpbmd0b24sIFZBLCBVU0Ejc2M9VVNBOlBSSTpWSVI6R1VNOkFTTSNsbmc9NDAjbG49V29ybGQ=":
-    {
-      spatialReference: {
-        wkid: 4326,
-        latestWkid: 4326,
-      },
-      locations: [
-        {
-          name: "Arlington, Virginia",
-          extent: {
-            xmin: -77.146755,
-            ymin: 38.828763,
-            xmax: -77.022755,
-            ymax: 38.952763,
-          },
-          feature: {
-            geometry: {
-              x: -77.084755,
-              y: 38.890763,
-            },
-            attributes: {
-              Score: 100,
-              Addr_Type: "Locality",
-            },
-          },
-        },
-      ],
+  {
+    spatialReference: {
+      wkid: 4326,
+      latestWkid: 4326,
     },
+    candidates: [
+      {
+        "address": "Arlington, Virginia",
+        "location": {
+          "x": -77.084755,
+          "y": 38.890763
+        },
+        "score": 100,
+        "attributes": {
+          "Type": "City",
+          "RegionAbbr": "VA"
+        },
+        "extent": {
+          "xmin": -77.146755,
+          "ymin": 38.828763,
+          "xmax": -77.022755,
+          "ymax": 38.952763
+        }
+      },
+    ],
+  },
   "dHA9NCN0dj02NjAzMDhlYyNubT1Bcmxpbmd0b24gSGVpZ2h0cywgSUwsIFVTQSAoQ29vayBDb3VudHkpI3NjPVVTQTpQUkk6VklSOkdVTTpBU00jbmVsPSNsbmc9NDAjbG49V29ybGQ=":
-    {
-      spatialReference: {
-        wkid: 4326,
-        latestWkid: 4326,
-      },
-      locations: [
-        {
-          name: "Arlington Heights, Illinois",
-          extent: {
-            xmin: -88.0344577,
-            ymin: 42.0289775,
-            xmax: -87.9264577,
-            ymax: 42.1369775,
-          },
-          feature: {
-            geometry: {
-              x: -87.9804577,
-              y: 42.0829775,
-            },
-            attributes: {
-              Score: 100,
-              Addr_Type: "Locality",
-            },
-          },
-        },
-      ],
+  {
+    spatialReference: {
+      wkid: 4326,
+      latestWkid: 4326,
     },
+    candidates: [
+      {
+        "address": "Arlington Heights, Illinois",
+        "location": {
+          "x": -87.9804577,
+          "y": 42.0829775
+        },
+        "score": 100,
+        "attributes": {
+          "Type": "City",
+          "RegionAbbr": "IL"
+        },
+        "extent": {
+          "xmin": -88.0384577,
+          "ymin": 42.0249775,
+          "xmax": -87.9224577,
+          "ymax": 42.1409775
+        }
+      },
+    ],
+  },
   "dHA9NCN0dj02NjAzMDhlYyNubT1Bcmxpbmd0b24sIE1BLCBVU0Ejc2M9VVNBOlBSSTpWSVI6R1VNOkFTTSNsbmc9NDAjbG49V29ybGQ=":
-    {
-      spatialReference: {
-        wkid: 4326,
-        latestWkid: 4326,
-      },
-      locations: [
-        {
-          name: "Arlington, Massachusetts",
-          extent: {
-            xmin: -71.183669,
-            ymin: 42.389249,
-            xmax: -71.129669,
-            ymax: 42.443249,
-          },
-          feature: {
-            geometry: {
-              x: -71.156669,
-              y: 42.416249,
-            },
-            attributes: {
-              Score: 100,
-              Addr_Type: "Locality",
-            },
-          },
-        },
-      ],
+  {
+    spatialReference: {
+      wkid: 4326,
+      latestWkid: 4326,
     },
+    candidates: [
+      {
+        "address": "Arlington, Massachusetts",
+        "location": {
+          "x": -71.156669,
+          "y": 42.416249
+        },
+        "score": 100,
+        "attributes": {
+          "Type": "City",
+          "RegionAbbr": "MA"
+        },
+        "extent": {
+          "xmin": -71.184669,
+          "ymin": 42.388249,
+          "xmax": -71.128669,
+          "ymax": 42.444249
+        }
+      },
+    ],
+  },
 };
 
 /**
@@ -398,7 +394,7 @@ describe("Location listbox tests", () => {
         const listbox = document.getElementById("listbox");
         const processDataSpy = sandbox.spy(listbox, "processLocationGeodata");
         const resultItemKey = Object.keys(SEARCH_RESULT_ITEMS)[2];
-        const resultItem = { "lat": 42.083, "lon": -87.98 };
+        const resultItem = { "lat": 42.083, "lon": -87.98, "type": "City", "abbr": "IL" };
 
         const result = await listbox.getLocationGeodata(resultItemKey);
 

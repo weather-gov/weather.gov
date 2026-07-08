@@ -4,7 +4,7 @@ from django.views.generic.base import RedirectView, TemplateView
 from wagtail.admin import urls as wagtailadmin_urls
 from wagtail.documents import urls as wagtaildocs_urls
 
-from backend.views import county, errors, index, offices, partials, point, risk, state
+from backend.views import county, errors, index, location_search, offices, partials, point, risk, state
 
 from .url_converters import FloatConverter
 
@@ -63,6 +63,12 @@ urlpatterns = [
     path("offices/<wfo>/", errors.deprecated_office, name="deprecated_office"),
     path("point/<float:lat>/<float:lon>/", errors.deprecated_path, name="deprecated_point"),
     path("county<path:rest>", errors.deprecated_path, name="deprecated_county_pages"),
+    # Internal rerouting from location search
+    path(
+        "wx/location-search/county/<float:lat>/<float:lon>/",
+        location_search.by_county,
+        name="location_search_by_county"
+    ),
 ]
 
 if settings.DEBUG is True:

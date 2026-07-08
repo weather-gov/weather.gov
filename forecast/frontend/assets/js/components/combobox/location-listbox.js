@@ -4,6 +4,17 @@ import Timer from "../timer.js";
 
 const debouncer = new Timer();
 
+const getRedirectUrlFromAddressCandidate = (addressCandidate) => {
+  const { type, lat, lon, abbr } = addressCandidate;
+  const typeLowercase = type.toLowerCase();
+  if (typeLowercase === "county") {
+    return `/wx/location-search/county/${lat}/${lon}`;
+  } else if (typeLowercase === "state or province" && abbr) {
+    return `/forecast/state/${abbr}`;
+  }
+  return `/forecast/point/${lat}/${lon}`;
+};
+
 /**
  * @typedef {Object} Suggestion from geocode.arcgis.com
  * @property {boolean} isCollection
@@ -142,11 +153,13 @@ export default class LocationListbox extends Listbox {
           element.setAttribute("data-lat", geoData.lat);
           element.setAttribute("data-lon", geoData.lon);
           if (this.getAttribute("auto-submit") === "true") {
-            const formUrl = `/forecast/point/${geoData.lat}/${geoData.lon}`;
+            const formUrl = getRedirectUrlFromAddressCandidate(geoData);
+
             addRecentLocation({
               text: element.innerText,
               url: formUrl,
             });
+
             const form = this.closest("form[data-location-search]");
             form.setAttribute("action", formUrl);
             form.submit();
@@ -286,7 +299,7 @@ export default class LocationListbox extends Listbox {
   }
 
   async getLocationGeodata(magicKey) {
-    const url = `https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/find?magicKey=${magicKey}&f=json&_=1695666335115`;
+    const url = `https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/findAddressCandidates?magicKey=${magicKey}&f=json&_=1695666335115&outFields=Type,RegionAbbr`;
     const response = await fetch(url, {
       headers: { "Content-Type": "application/json" },
     });
@@ -297,21 +310,20 @@ export default class LocationListbox extends Listbox {
   processLocationGeodata(results) {
     if (
       !results.error &&
-      Array.isArray(results.locations) &&
-      results.locations.length > 0
+      Array.isArray(results.candidates) &&
+      results.candidates.length > 0
     ) {
-      const {
-        locations: [
-          {
-            feature: { geometry },
-          },
-        ],
-      } = results;
+      // Take the first available location (highest score)
+      const firstCandidate = results.candidates[0];
+      const { x, y } = firstCandidate.location;
+      const type = firstCandidate.attributes.Type;
+      const abbr = firstCandidate.attributes.RegionAbbr;
 
-      const lat = Math.round(geometry.y * 1_000) / 1_000;
-      const lon = Math.round(geometry.x * 1_000) / 1_000;
-      return { lat, lon };
+      const lat = Math.round(y * 1_000) / 1_000;
+      const lon = Math.round(x * 1_000) / 1_000;
+      return { lat, lon, type, abbr };
     }
+
     return null;
   }
 
