@@ -146,11 +146,11 @@ class SavedLocationsSection extends HTMLElement {
     liButton.id = `${liButton.id}${cleanedText}`;
     liButton.setAttribute("data-loctext", text);
     liButton.setAttribute("data-locurl", url);
-
-    const liLabel = clonedLi.querySelector("label");
-    liLabel.setAttribute("for", liButton.id);
+    liButton.setAttribute("aria-label", `Saved location ${text}`);
 
     const liAnchor = clonedLi.querySelector("a");
+    const anchorId = `saved-locations-section-label-${cleanedText}`;
+    liAnchor.id = anchorId;
     liAnchor.setAttribute("href", url);
     liAnchor.innerText = text;
 

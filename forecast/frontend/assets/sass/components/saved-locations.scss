@@ -126,7 +126,6 @@
 
     padding-bottom: units(2);
 
-    // Adding class specificity due to stylelint "no-descending-specificity" error
     a.saved-locations-item {
       color: color("primary");
 
