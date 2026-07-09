@@ -18,6 +18,10 @@ class DailyForecast extends HTMLElement {
   constructor() {
     super();
 
+    // Track the user's table/chart preference across days.
+    // Defaults to "hourly-table" (matching the template default).
+    this.detailsViewPreference = "hourly-table";
+
     // Bound methods
     this.tabClickHandler = this.tabClickHandler.bind(this);
     this.setupMediaEvents = this.setupMediaEvents.bind(this);
@@ -25,12 +29,16 @@ class DailyForecast extends HTMLElement {
     this.undoTabMode = this.undoTabMode.bind(this);
     this.handleDesktopMediaChange = this.handleDesktopMediaChange.bind(this);
     this.handleKeys = this.handleKeys.bind(this);
+    this.handleDetailsToggle = this.handleDetailsToggle.bind(this);
   }
 
   connectedCallback() {
     this.setupMediaEvents();
 
     this.addEventListener("keydown", this.handleKeys);
+
+    // Listen for table/chart toggle changes to persist the preference
+    window.addEventListener("wx-tab-focused", this.handleDetailsToggle);
   }
 
   disconnectedCallback() {
@@ -41,6 +49,7 @@ class DailyForecast extends HTMLElement {
     );
 
     this.removeEventListener("keydown", this.handleKeys);
+    window.removeEventListener("wx-tab-focused", this.handleDetailsToggle);
   }
 
   /**
@@ -176,6 +185,47 @@ class DailyForecast extends HTMLElement {
       const correspondingPanelId = event.target.getAttribute("aria-controls");
       const correspondingPanel = document.getElementById(correspondingPanelId);
       correspondingPanel.setAttribute("data-tabpanel-active", "true");
+
+      // Apply the persisted table/chart preference to the newly visible day
+      this.applyDetailsViewPreference(correspondingPanel);
+    }
+  }
+
+  /**
+   * When a details toggle (table/chart) tab is clicked,
+   * capture the preference so it can be applied to other days.
+   * We identify a "details toggle" tab by checking if the
+   * clicked tab lives inside a .wx-forecast-details-toggle element.
+   */
+  handleDetailsToggle(event) {
+    const tab = event.detail;
+    if (tab && tab.closest(".wx-forecast-details-toggle")) {
+      // Store the base prefix of the selection (e.g. "hourly-table" or "hourly-charts")
+      const panelId = tab.getAttribute("aria-controls");
+      // Panel IDs follow the pattern "hourly-table_dayX" or "hourly-charts_dayX"
+      const prefix = panelId.split("_")[0];
+      if (prefix) {
+        this.detailsViewPreference = prefix;
+      }
+    }
+  }
+
+  /**
+   * Apply the current table/chart preference to a given day panel.
+   * Finds the wx-tabs toggle inside the panel and programmatically
+   * clicks the tab matching the stored preference.
+   */
+  applyDetailsViewPreference(dayPanel) {
+    const toggle = dayPanel.querySelector(".wx-forecast-details-toggle");
+    if (!toggle) {
+      return;
+    }
+    // Find the tab whose aria-controls starts with the stored preference
+    const targetTab = toggle.querySelector(
+      `[role="tab"][aria-controls^="${this.detailsViewPreference}"]`,
+    );
+    if (targetTab && targetTab.getAttribute("aria-selected") !== "true") {
+      targetTab.click();
     }
   }
 
