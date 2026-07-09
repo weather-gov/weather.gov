@@ -135,6 +135,63 @@ describe("Point forecast › 7 Days tab", () => {
         panel.getByRole("heading", { name: day });
       });
     });
+
+    describe("When toggling table to chart", () => {
+      test("I expect to see the chart view persisted between days", async ({
+        page,
+      }) => {
+        const list = page.getByRole("tablist", {
+          name: "daily forecast tab navigation",
+        });
+        const dayButtons = list.getByRole("tab");
+
+        // Start on the first day (already selected by default)
+        await expect(dayButtons.first()).toHaveAttribute(
+          "aria-selected",
+          "true",
+        );
+
+        // Click the "Charts" toggle button to switch from Table to Charts
+        const chartsButton = page.getByRole("tab", { name: "Charts" }).first();
+        await chartsButton.click();
+        await expect(chartsButton).toHaveAttribute("aria-selected", "true");
+
+        // Get the panel ID from the Charts button's aria-controls
+        const firstDayPanelId =
+          await chartsButton.getAttribute("aria-controls");
+        const firstDayChartsPanel = page.locator(`#${firstDayPanelId}`);
+        await expect(firstDayChartsPanel).toHaveAttribute(
+          "data-tabpanel-selected",
+          "true",
+        );
+
+        // Now navigate to the next day
+        await dayButtons.nth(1).click();
+        await expect(dayButtons.nth(1)).toHaveAttribute(
+          "aria-selected",
+          "true",
+        );
+
+        // Get the Charts button for the now-visible day and read its aria-controls
+        // to find the correct panel ID
+        const secondDayChartsButton = page
+          .getByRole("tab", { name: "Charts" })
+          .first();
+        const secondDayPanelId =
+          await secondDayChartsButton.getAttribute("aria-controls");
+        const secondDayChartsPanel = page.locator(`#${secondDayPanelId}`);
+
+        // The charts panel for the new day should be visible (preference persisted)
+        await expect(secondDayChartsPanel).toHaveAttribute(
+          "data-tabpanel-selected",
+          "true",
+        );
+        await expect(secondDayChartsButton).toHaveAttribute(
+          "aria-selected",
+          "true",
+        );
+      });
+    });
   });
 
   describe("When navigating between days (on mobile)", () => {
