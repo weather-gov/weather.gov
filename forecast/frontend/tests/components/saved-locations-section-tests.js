@@ -35,9 +35,9 @@ const testingMarkupFront = `
             <use xlink:href="/public/images/uswds/sprite.svg#star"></use>
         </svg>
       </button>
-      <label>
+      <span>
         <a class="saved-locations-item text-normal"></a>
-      </label>
+      </span>
     </li>
   </template>
 </wx-saved-locations-section>
@@ -72,9 +72,9 @@ const testingMarkupNav = `
   <use xlink:href="/public/images/uswds/sprite.svg#star"></use>
   </svg>
   </button>
-  <label>
+  <span>
   <a class="saved-locations-item text-normal"></a>
-  </label>
+  </span>
   </li>
   </template>
 </wx-saved-locations-section>

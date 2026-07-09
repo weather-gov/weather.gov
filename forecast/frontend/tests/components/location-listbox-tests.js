@@ -31,29 +31,29 @@ const exampleMarkup = `
 `;
 
 const SEARCH_RESULTS = {
-  suggestions: [ 
+  suggestions: [
     {
       text: "Arlington, TX, USA",
       magicKey:
-      "dHA9NCN0dj02NjAzMDhlYyNubT1Bcmxpbmd0b24sIFRYLCBVU0Ejc2M9VVNBOlBSSTpWSVI6R1VNOkFTTSNsbmc9NDAjbG49V29ybGQ=",
+        "dHA9NCN0dj02NjAzMDhlYyNubT1Bcmxpbmd0b24sIFRYLCBVU0Ejc2M9VVNBOlBSSTpWSVI6R1VNOkFTTSNsbmc9NDAjbG49V29ybGQ=",
       isCollection: false,
     },
     {
       text: "Arlington, VA, USA",
       magicKey:
-      "dHA9NCN0dj02NjAzMDhlYyNubT1Bcmxpbmd0b24sIFZBLCBVU0Ejc2M9VVNBOlBSSTpWSVI6R1VNOkFTTSNsbmc9NDAjbG49V29ybGQ=",
+        "dHA9NCN0dj02NjAzMDhlYyNubT1Bcmxpbmd0b24sIFZBLCBVU0Ejc2M9VVNBOlBSSTpWSVI6R1VNOkFTTSNsbmc9NDAjbG49V29ybGQ=",
       isCollection: false,
     },
     {
       text: "Arlington Heights, IL, USA (Cook County)",
       magicKey:
-      "dHA9NCN0dj02NjAzMDhlYyNubT1Bcmxpbmd0b24gSGVpZ2h0cywgSUwsIFVTQSAoQ29vayBDb3VudHkpI3NjPVVTQTpQUkk6VklSOkdVTTpBU00jbmVsPSNsbmc9NDAjbG49V29ybGQ=",
+        "dHA9NCN0dj02NjAzMDhlYyNubT1Bcmxpbmd0b24gSGVpZ2h0cywgSUwsIFVTQSAoQ29vayBDb3VudHkpI3NjPVVTQTpQUkk6VklSOkdVTTpBU00jbmVsPSNsbmc9NDAjbG49V29ybGQ=",
       isCollection: false,
     },
     {
       text: "Arlington, MA, USA",
       magicKey:
-      "dHA9NCN0dj02NjAzMDhlYyNubT1Bcmxpbmd0b24sIE1BLCBVU0Ejc2M9VVNBOlBSSTpWSVI6R1VNOkFTTSNsbmc9NDAjbG49V29ybGQ=",
+        "dHA9NCN0dj02NjAzMDhlYyNubT1Bcmxpbmd0b24sIE1BLCBVU0Ejc2M9VVNBOlBSSTpWSVI6R1VNOkFTTSNsbmc9NDAjbG49V29ybGQ=",
       isCollection: false,
     },
   ],
@@ -61,113 +61,113 @@ const SEARCH_RESULTS = {
 
 const SEARCH_RESULT_ITEMS = {
   "dHA9NCN0dj02NjAzMDhlYyNubT1Bcmxpbmd0b24sIFRYLCBVU0Ejc2M9VVNBOlBSSTpWSVI6R1VNOkFTTSNsbmc9NDAjbG49V29ybGQ=":
-  {
-    spatialReference: {
-      wkid: 4326,
-      latestWkid: 4326,
-    },
-    candidates: [
-      {
-        "address": "Arlington, Texas",
-        "location": {
-          "x": -97.10711,
-          "y": 32.735594
-        },
-        "score": 100,
-        "attributes": {
-          "Type": "City",
-          "RegionAbbr": "TX"
-        },
-        "extent": {
-          "xmin": -97.21411,
-          "ymin": 32.628594,
-          "xmax": -97.00011,
-          "ymax": 32.842594
-        }
+    {
+      spatialReference: {
+        wkid: 4326,
+        latestWkid: 4326,
       },
-    ],
-  },
+      candidates: [
+        {
+          address: "Arlington, Texas",
+          location: {
+            x: -97.10711,
+            y: 32.735594,
+          },
+          score: 100,
+          attributes: {
+            Type: "City",
+            RegionAbbr: "TX",
+          },
+          extent: {
+            xmin: -97.21411,
+            ymin: 32.628594,
+            xmax: -97.00011,
+            ymax: 32.842594,
+          },
+        },
+      ],
+    },
   "dHA9NCN0dj02NjAzMDhlYyNubT1Bcmxpbmd0b24sIFZBLCBVU0Ejc2M9VVNBOlBSSTpWSVI6R1VNOkFTTSNsbmc9NDAjbG49V29ybGQ=":
-  {
-    spatialReference: {
-      wkid: 4326,
-      latestWkid: 4326,
-    },
-    candidates: [
-      {
-        "address": "Arlington, Virginia",
-        "location": {
-          "x": -77.084755,
-          "y": 38.890763
-        },
-        "score": 100,
-        "attributes": {
-          "Type": "City",
-          "RegionAbbr": "VA"
-        },
-        "extent": {
-          "xmin": -77.146755,
-          "ymin": 38.828763,
-          "xmax": -77.022755,
-          "ymax": 38.952763
-        }
+    {
+      spatialReference: {
+        wkid: 4326,
+        latestWkid: 4326,
       },
-    ],
-  },
+      candidates: [
+        {
+          address: "Arlington, Virginia",
+          location: {
+            x: -77.084755,
+            y: 38.890763,
+          },
+          score: 100,
+          attributes: {
+            Type: "City",
+            RegionAbbr: "VA",
+          },
+          extent: {
+            xmin: -77.146755,
+            ymin: 38.828763,
+            xmax: -77.022755,
+            ymax: 38.952763,
+          },
+        },
+      ],
+    },
   "dHA9NCN0dj02NjAzMDhlYyNubT1Bcmxpbmd0b24gSGVpZ2h0cywgSUwsIFVTQSAoQ29vayBDb3VudHkpI3NjPVVTQTpQUkk6VklSOkdVTTpBU00jbmVsPSNsbmc9NDAjbG49V29ybGQ=":
-  {
-    spatialReference: {
-      wkid: 4326,
-      latestWkid: 4326,
-    },
-    candidates: [
-      {
-        "address": "Arlington Heights, Illinois",
-        "location": {
-          "x": -87.9804577,
-          "y": 42.0829775
-        },
-        "score": 100,
-        "attributes": {
-          "Type": "City",
-          "RegionAbbr": "IL"
-        },
-        "extent": {
-          "xmin": -88.0384577,
-          "ymin": 42.0249775,
-          "xmax": -87.9224577,
-          "ymax": 42.1409775
-        }
+    {
+      spatialReference: {
+        wkid: 4326,
+        latestWkid: 4326,
       },
-    ],
-  },
+      candidates: [
+        {
+          address: "Arlington Heights, Illinois",
+          location: {
+            x: -87.9804577,
+            y: 42.0829775,
+          },
+          score: 100,
+          attributes: {
+            Type: "City",
+            RegionAbbr: "IL",
+          },
+          extent: {
+            xmin: -88.0384577,
+            ymin: 42.0249775,
+            xmax: -87.9224577,
+            ymax: 42.1409775,
+          },
+        },
+      ],
+    },
   "dHA9NCN0dj02NjAzMDhlYyNubT1Bcmxpbmd0b24sIE1BLCBVU0Ejc2M9VVNBOlBSSTpWSVI6R1VNOkFTTSNsbmc9NDAjbG49V29ybGQ=":
-  {
-    spatialReference: {
-      wkid: 4326,
-      latestWkid: 4326,
-    },
-    candidates: [
-      {
-        "address": "Arlington, Massachusetts",
-        "location": {
-          "x": -71.156669,
-          "y": 42.416249
-        },
-        "score": 100,
-        "attributes": {
-          "Type": "City",
-          "RegionAbbr": "MA"
-        },
-        "extent": {
-          "xmin": -71.184669,
-          "ymin": 42.388249,
-          "xmax": -71.128669,
-          "ymax": 42.444249
-        }
+    {
+      spatialReference: {
+        wkid: 4326,
+        latestWkid: 4326,
       },
-    ],
-  },
+      candidates: [
+        {
+          address: "Arlington, Massachusetts",
+          location: {
+            x: -71.156669,
+            y: 42.416249,
+          },
+          score: 100,
+          attributes: {
+            Type: "City",
+            RegionAbbr: "MA",
+          },
+          extent: {
+            xmin: -71.184669,
+            ymin: 42.388249,
+            xmax: -71.128669,
+            ymax: 42.444249,
+          },
+        },
+      ],
+    },
 };
 
 /**
@@ -220,7 +220,7 @@ describe("Location listbox tests", () => {
       sandbox = createSandbox();
       global.localStorage = {
         getItem: sandbox.stub(),
-        setItem: sandbox.stub()
+        setItem: sandbox.stub(),
       };
       window.history.replaceState(null, null, "http://localhost/");
     });
@@ -239,23 +239,27 @@ describe("Location listbox tests", () => {
 
       const setItemCall = global.localStorage.setItem.getCall(0);
       expect(setItemCall.args[0]).to.equal("wxgov_recent_locations");
-      expect(setItemCall.args[1]).to.equal(JSON.stringify([{
-        text: "Narnia, Closet",
-        url: "/"
-      }]));
+      expect(setItemCall.args[1]).to.equal(
+        JSON.stringify([
+          {
+            text: "Narnia, Closet",
+            url: "/",
+          },
+        ]),
+      );
     });
 
     it("appends the recent place data to exiting list in localStorage, when there are already saved items", () => {
       const existingItems = [
-        {text: "Hobbiton, The Shire", url: "/middle-earth/shire/hobbiton/"}
+        { text: "Hobbiton, The Shire", url: "/middle-earth/shire/hobbiton/" },
       ];
       global.localStorage.getItem.returns(JSON.stringify(existingItems));
 
       const newMarkup = `<wx-location-listbox id="listbox" data-place="Edoras, Rohan"></wx-location-listbox>`;
       document.body.innerHTML = newMarkup;
 
-      const newItem = { text: "Edoras, Rohan", url: "/"};
-      const expected = JSON.stringify([ newItem, ...existingItems ]);
+      const newItem = { text: "Edoras, Rohan", url: "/" };
+      const expected = JSON.stringify([newItem, ...existingItems]);
 
       expect(global.localStorage.setItem.callCount).to.equal(1);
 
@@ -271,7 +275,7 @@ describe("Location listbox tests", () => {
       sandbox = createSandbox();
       global.localStorage = {
         getItem: sandbox.stub(),
-        setItem: sandbox.stub()
+        setItem: sandbox.stub(),
       };
     });
 
@@ -281,16 +285,20 @@ describe("Location listbox tests", () => {
     describe("#updateSavedSearches", () => {
       it("adds the saved search item to the saved searches group", () => {
         global.localStorage.getItem.returns(
-          JSON.stringify([{
-            text: "Narnia, Closet",
-            url: "/the/way/to/narnia/"
-          }])
+          JSON.stringify([
+            {
+              text: "Narnia, Closet",
+              url: "/the/way/to/narnia/",
+            },
+          ]),
         );
         const listbox = document.getElementById("listbox");
 
         listbox.updateSavedSearches();
 
-        const savedItem = listbox.querySelector(`[data-url="/the/way/to/narnia/"]`);
+        const savedItem = listbox.querySelector(
+          `[data-url="/the/way/to/narnia/"]`,
+        );
         expect(global.localStorage.getItem.callCount).to.equal(1);
         expect(savedItem).to.exist;
         expect(savedItem.innerText).to.equal("Narnia, Closet");
@@ -302,7 +310,9 @@ describe("Location listbox tests", () => {
 
         listbox.updateSavedSearches();
 
-        const savedItemElements = listbox.querySelectorAll(`[slot="saved-searches"] > [role="option"]`);
+        const savedItemElements = listbox.querySelectorAll(
+          `[slot="saved-searches"] > [role="option"]`,
+        );
         expect(savedItemElements.length).to.equal(0);
       });
     });
@@ -322,7 +332,7 @@ describe("Location listbox tests", () => {
         const listbox = document.getElementById("listbox");
         const getSpy = sandbox.spy(listbox, "getLocationGeodata");
         window.sessionStorage.setItem("some-magic-key", "true");
-        
+
         await listbox.cacheLocationGeodata("some-magic-key");
 
         // We expect that getLocationGeodata is never called,
@@ -357,8 +367,11 @@ describe("Location listbox tests", () => {
 
       it("returns the cached value, if there is one", async () => {
         const listbox = document.getElementById("listbox");
-        const item = {ok: true};
-        const getLocationGeodataStub = sandbox.stub(listbox, "getLocationGeodata");
+        const item = { ok: true };
+        const getLocationGeodataStub = sandbox.stub(
+          listbox,
+          "getLocationGeodata",
+        );
         window.sessionStorage.setItem("some-magic-key", JSON.stringify(item));
 
         const result = await listbox.getGeodataForKey("some-magic-key");
@@ -369,8 +382,11 @@ describe("Location listbox tests", () => {
 
       it("fetches the value remotely if there is not a cached value for the key", async () => {
         const listbox = document.getElementById("listbox");
-        const item = {ok: true};
-        const getLocationGeodataStub = sandbox.stub(listbox, "getLocationGeodata");
+        const item = { ok: true };
+        const getLocationGeodataStub = sandbox.stub(
+          listbox,
+          "getLocationGeodata",
+        );
         getLocationGeodataStub.resolves(item);
 
         const result = await listbox.getGeodataForKey("some-magic-key");
@@ -394,7 +410,12 @@ describe("Location listbox tests", () => {
         const listbox = document.getElementById("listbox");
         const processDataSpy = sandbox.spy(listbox, "processLocationGeodata");
         const resultItemKey = Object.keys(SEARCH_RESULT_ITEMS)[2];
-        const resultItem = { "lat": 42.083, "lon": -87.98, "type": "City", "abbr": "IL" };
+        const resultItem = {
+          lat: 42.083,
+          lon: -87.98,
+          type: "City",
+          abbr: "IL",
+        };
 
         const result = await listbox.getLocationGeodata(resultItemKey);
 
@@ -412,15 +433,15 @@ describe("Location listbox tests", () => {
         global.fetch.restore();
         stub(global, "fetch").callsFake(fakeFetch);
       });
-      
+
       it("returns an object with an empty suggestions list if the response is not ok", async () => {
-        fetch.resolves({ok: false});
+        fetch.resolves({ ok: false });
         const listbox = document.getElementById("listbox");
 
         const results = await listbox.getSearchResults("a");
 
         expect(fetch.callCount).to.equal(1);
-        expect(results).to.eql({suggestions: []});
+        expect(results).to.eql({ suggestions: [] });
       });
     });
   });
@@ -434,20 +455,22 @@ describe("Location listbox tests", () => {
     afterEach(() => {
       sandbox.restore();
     });
-    
+
     it("when a nav event is triggered, we fire off a cache request on the item asynchronously", async () => {
       const listbox = document.getElementById("listbox");
       listbox.focus();
       const cacheLocationSpy = sandbox.stub(listbox, "cacheLocationGeodata");
       const secondSearchItemKey = SEARCH_RESULTS.suggestions[1].magicKey;
-      const secondItemElement = listbox.querySelector(`[role="option"][data-value="${secondSearchItemKey}"]`);
+      const secondItemElement = listbox.querySelector(
+        `[role="option"][data-value="${secondSearchItemKey}"]`,
+      );
       listbox.pseudoFocusItem(secondItemElement);
       expect(secondItemElement).to.exist;
       expect(cacheLocationSpy.callCount).to.equal(0);
 
       listbox.moveDown();
 
-      expect(cacheLocationSpy.callCount).to.equal(1);      
+      expect(cacheLocationSpy.callCount).to.equal(1);
     });
   });
 });
