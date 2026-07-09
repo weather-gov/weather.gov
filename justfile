@@ -391,3 +391,34 @@ load-gridpoints path:
 [group("logging")]
 logs:
   docker compose logs -f fluent-bit
+
+# Run any command in the go container. All args passed through
+# Example: just lets go run <something>
+[group("golang")]
+lets *args:
+    docker compose run --rm golang-tasks {{args}}
+
+# Run the GHWO program  without compiling (interpreted)
+[group("golang")]
+go-run-ghwo:
+    docker compose run --rm golang-tasks go run /tasks/cmd/ghwo/main.go
+
+# Run the alerts program without compiling (interpreted)
+[group("golang")]
+go-run-alerts:
+    docker compose run --rm golang-tasks go run /tasks/cmd/alerts/main.go
+
+# Compile the GHWO program
+[group("golang")]
+go-build-ghwo:
+    docker compose run --rm golang-tasks go build -o /tasks/bin/ghwo /tasks/cmd/ghwo/main.go
+
+# Compile the alerts program
+[group("golang")]
+go-build-alerts:
+    docker compose run --rm golang-tasks go build -o /tasks/bin/alerts /tasks/cmd/alerts/main.go
+
+# Run go fmt on the files in the tasks directory
+[group("golang")]
+go-fmt:
+    docker compose run --rm golang-tasks gofmt -e -w -l .
