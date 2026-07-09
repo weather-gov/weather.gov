@@ -9,6 +9,8 @@ x-env-creds: &otel-env
 volumes:
   postgres_data:
   openobserve_data:
+  go_cache:
+  go_mod_cache:
 
 services:
   database:
@@ -296,6 +298,20 @@ services:
       - weather.gov
     depends_on:
       - openobserve
+
+  golang-tasks:
+    platform: linux/amd64
+    image: golang:1.26.5-bookworm
+    working_dir: /tasks
+    volumes:
+      - ./tasks:/tasks
+      - go_cache:/root/.cache/go-build
+      - go_mod_cache:/go/pkg/mod
+    environment:
+      - GOCACHE=/root/.cache/go-build
+      - GOMODCACHE=/go/pkg/mod
+    networks:
+      - weather.gov
 
 networks:
   weather.gov:

@@ -88,3 +88,8 @@ forecast/frontend/public/
 # Node profiling
 *.cpuprofile
 *.heapprofile
+
+# Golang and tasks
+/tasks/**/*.test
+/tasks/bin/*
+/tasks/pkg/mod/cache/
