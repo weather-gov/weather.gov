@@ -237,6 +237,10 @@ gitlab-sast:
   registry.gitlab.com/security-products/semgrep:latest /analyzer run && \
   cat gl-sast-report.json | jq ".vulnerabilities[].name" | sort | uniq -c
 
+[group("code quality")]
+lint-docker:
+    hadolint ./tasks/Dockerfile
+
 ##### Testing #####
 alias a11y := test-a11y
 # Run automated accessibility testing in Playwright
@@ -396,29 +400,29 @@ logs:
 # Example: just lets go run <something>
 [group("golang")]
 lets *args:
-    docker compose run --rm golang-tasks {{args}}
+    docker compose run --rm tasks-dev {{args}}
 
 # Run the GHWO program  without compiling (interpreted)
 [group("golang")]
 go-run-ghwo:
-    docker compose run --rm golang-tasks go run /tasks/cmd/ghwo/main.go
+    docker compose run --rm tasks-dev go run /tasks/cmd/ghwo/main.go
 
 # Run the alerts program without compiling (interpreted)
 [group("golang")]
 go-run-alerts:
-    docker compose run --rm golang-tasks go run /tasks/cmd/alerts/main.go
+    docker compose run --rm tasks-dev go run /tasks/cmd/alerts/main.go
 
 # Compile the GHWO program
 [group("golang")]
 go-build-ghwo:
-    docker compose run --rm golang-tasks go build -o /tasks/bin/ghwo /tasks/cmd/ghwo/main.go
+    docker compose run --rm tasks-dev go build -o /tasks/bin/ghwo /tasks/cmd/ghwo/main.go
 
 # Compile the alerts program
 [group("golang")]
 go-build-alerts:
-    docker compose run --rm golang-tasks go build -o /tasks/bin/alerts /tasks/cmd/alerts/main.go
+    docker compose run --rm tasks-dev go build -o /tasks/bin/alerts /tasks/cmd/alerts/main.go
 
 # Run go fmt on the files in the tasks directory
 [group("golang")]
 go-fmt:
-    docker compose run --rm golang-tasks gofmt -e -w -l .
+    docker compose run --rm tasks-dev gofmt -e -w -l .

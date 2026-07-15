@@ -1,0 +1,8 @@
+# see: https://github.com/aptible/supercronic
+# format: sec min hour dom month dow year command
+
+# alerts: every 30 seconds
+*/30 * * * * * * /usr/local/bin/alerts
+
+# risk overview: every 30 minutes
+0 */30 * * * * * /usr/local/bin/ghwo
