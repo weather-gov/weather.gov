@@ -48,7 +48,8 @@ pipeline:
         local DIM   = "\27[2m"
 
         function pretty_print(tag, ts, record)
-          local message = record["message"] or ""
+          -- golang defaults to 'msg' so adjust accordingly
+          local message = record["message"] or record["msg"] or ""
           -- drop records with blank or whitespace-only messages so they
           -- neither print here nor get shipped to openobserve.
           if message:match("^%s*$") then
@@ -56,8 +57,11 @@ pipeline:
           end
           local secs = math.floor(ts)
           local timestamp = os.date("%Y-%m-%d %H:%M:%S", secs)
-          local service = record["service"] or "docker"
-          local level = record["levelname"] or "-"
+          local service = record["service"]
+                       or (tag and tag:match("^weathergov%.(.+)$"))
+                       or "docker"
+          local level = record["levelname"] or record["level"] or "-"
+          level = level:upper()
           local err_message = record["err"] and record["err"]["stack"] or record["exc_info"]
           local color = LEVEL_COLOR[level] or ""
           io.write(string.format(

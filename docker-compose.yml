@@ -299,7 +299,7 @@ services:
     depends_on:
       - openobserve
 
-  golang-tasks:
+  tasks-dev:
     platform: linux/amd64
     image: golang:1.26.5-bookworm
     working_dir: /tasks
@@ -312,6 +312,22 @@ services:
       - GOMODCACHE=/go/pkg/mod
     networks:
       - weather.gov
+
+  tasks-cron:
+    platform: linux/amd64
+    build:
+      context: ./tasks
+      dockerfile: Dockerfile
+    networks:
+      - weather.gov
+    depends_on:
+      - database
+    logging:
+      driver: fluentd
+      options:
+        fluentd-address: "localhost:24224"
+        fluentd-async: "true"
+        tag: "weathergov.tasks-cron"
 
 networks:
   weather.gov:
