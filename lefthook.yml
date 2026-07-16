@@ -9,7 +9,7 @@ pre-commit:
       glob: "**/*.py"
       root: "forecast/"
       run: just lint-python {staged_files}
-      stage_fixed: false   # Restages files if the linter alters them
+      stage_fixed: true   # Restages files if the linter alters them
     format-style:
       glob: "**/*.scss"
       run: just format-style && just css
