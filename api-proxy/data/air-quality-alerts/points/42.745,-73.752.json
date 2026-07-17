@@ -1,0 +1,74 @@
+{
+  "@context": [
+    "https://geojson.org/geojson-ld/geojson-context.jsonld",
+    {
+      "@version": "1.1",
+      "wx": "https://api.weather.gov/ontology#",
+      "s": "https://schema.org/",
+      "geo": "http://www.opengis.net/ont/geosparql#",
+      "unit": "http://codes.wmo.int/common/unit/",
+      "@vocab": "https://api.weather.gov/ontology#",
+      "geometry": { "@id": "s:GeoCoordinates", "@type": "geo:wktLiteral" },
+      "city": "s:addressLocality",
+      "state": "s:addressRegion",
+      "distance": { "@id": "s:Distance", "@type": "s:QuantitativeValue" },
+      "bearing": { "@type": "s:QuantitativeValue" },
+      "value": { "@id": "s:value" },
+      "unitCode": { "@id": "s:unitCode", "@type": "@id" },
+      "forecastOffice": { "@type": "@id" },
+      "forecastGridData": { "@type": "@id" },
+      "publicZone": { "@type": "@id" },
+      "county": { "@type": "@id" }
+    }
+  ],
+  "id": "https://api.weather.gov/points/42.745,-73.752",
+  "type": "Feature",
+  "geometry": { "type": "Point", "coordinates": [-73.752, 42.745] },
+  "properties": {
+    "@id": "https://api.weather.gov/points/42.745,-73.752",
+    "@type": "wx:Point",
+    "cwa": "ALY",
+    "type": "land",
+    "forecastOffice": "https://api.weather.gov/offices/ALY",
+    "gridId": "ALY",
+    "gridX": 71,
+    "gridY": 67,
+    "forecast": "https://api.weather.gov/gridpoints/ALY/71,67/forecast",
+    "forecastHourly": "https://api.weather.gov/gridpoints/ALY/71,67/forecast/hourly",
+    "forecastGridData": "https://api.weather.gov/gridpoints/ALY/71,67",
+    "observationStations": "https://api.weather.gov/gridpoints/ALY/71,67/stations",
+    "relativeLocation": {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [-73.7503772, 42.742235] },
+      "properties": {
+        "city": "Latham",
+        "state": "NY",
+        "distance": { "unitCode": "wmoUnit:m", "value": 0 },
+        "bearing": { "unitCode": "wmoUnit:degree_(angle)", "value": 0 }
+      }
+    },
+    "forecastZone": "https://api.weather.gov/zones/forecast/NYZ052",
+    "county": "https://api.weather.gov/zones/county/NYC001",
+    "fireWeatherZone": "https://api.weather.gov/zones/fire/NYZ208",
+    "timeZone": "America/New_York",
+    "radarStation": "KENX",
+    "astronomicalData": {
+      "sunrise": "2026-07-15T05:29:00-04:00",
+      "sunset": "2026-07-15T20:33:04-04:00",
+      "transit": "2026-07-15T13:01:02-04:00",
+      "civilTwilightBegin": "2026-07-15T04:56:50-04:00",
+      "civilTwilightEnd": "2026-07-15T21:05:15-04:00",
+      "nauticalTwilightBegin": "2026-07-15T04:13:41-04:00",
+      "nauticalTwilightEnd": "2026-07-15T21:48:24-04:00",
+      "astronomicalTwilightBegin": "2026-07-15T03:22:43-04:00",
+      "astronomicalTwilightEnd": "2026-07-15T22:39:22-04:00"
+    },
+    "nwr": {
+      "transmitter": "WXL34",
+      "sameCode": "036001",
+      "areaBroadcast": "https://api.weather.gov/radio/WXL34/broadcast",
+      "pointBroadcast": "https://api.weather.gov/points/42.745,-73.752/radio"
+    }
+  },
+  "@bundle": { "name": "Latham, NY" }
+}
