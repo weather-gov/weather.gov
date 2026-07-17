@@ -172,3 +172,15 @@ variable "django_interop_timeout" {
   default     = 15
   description = "How long Django should wait for the interop, in seconds"
 }
+
+variable "tasks_memory" {
+  type        = string
+  default     = "256M"
+  description = "The amount of memory to assign to the tasks process"
+}
+
+variable "tasks_disk_quota" {
+  type        = string
+  default     = "5G"
+  description = "The amount of disk memory to allocate per tasks instance"
+}
