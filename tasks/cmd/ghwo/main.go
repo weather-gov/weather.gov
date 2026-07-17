@@ -1,11 +1,11 @@
 package main
 
 import (
-	"tasks/common"
+	"tasks/internal"
 )
 
 func main() {
-	logger := common.GetJSONLogger()
+	logger := internal.GetJSONLogger()
 	logger.Info(
 		"Hello!",
 		"program_name",

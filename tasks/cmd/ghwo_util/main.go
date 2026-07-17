@@ -8,7 +8,7 @@ import (
 	"log"
 	"net/http"
 	"os"
-	"tasks/common/ghwo"
+	"tasks/internal/ghwo"
 )
 
 func main() {

@@ -11,7 +11,7 @@ import (
 var newRelicApp *newrelic.Application
 
 func main() {
-	logger := common.GetDefaultLogger()
+	logger := internal.GetDefaultLogger()
 	logger.Info(
 		"Hello!",
 		"program_name",
