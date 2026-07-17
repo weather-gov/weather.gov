@@ -1,0 +1,1 @@
+web: supercronic -json -passthrough-logs /home/vcap/app/crontab
