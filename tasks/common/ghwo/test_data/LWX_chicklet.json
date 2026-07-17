@@ -1,0 +1,459 @@
+{
+    "generation_time": "2026-07-16T19:06:55Z",
+    "generation_time_LT": "2026-07-16T15:06:55",
+    "ghwo_version": "$Revision: 44842 $",
+    "hazards": [
+        {
+            "description": "Utilizes <a href='https://www.spc.noaa.gov/products/outlook/' target='_blank'>daily forecasts</a> from the Storm Prediction Center (SPC). <a href='https://www.spc.noaa.gov/misc/about.html' target='_blank'>More info</a>",
+            "name": "Severe Thunderstorm Risk",
+            "periods": {
+                "period1": {
+                    "color": "#50c986",
+                    "date": "Thursday, July 16, 2026",
+                    "imagePath": "/images/lwx/ghwo/SevereThunderstormsDay1.jpg",
+                    "validStartTime": "03:00PM"
+                },
+                "period2": {
+                    "color": "#ededed",
+                    "date": "Friday, July 17, 2026",
+                    "imagePath": "/images/lwx/ghwo/SevereThunderstormsDay2.jpg",
+                    "validStartTime": "08:00AM"
+                },
+                "period3": {
+                    "color": "#ffff51",
+                    "date": "Saturday, July 18, 2026",
+                    "imagePath": "/images/lwx/ghwo/SevereThunderstormsDay3.jpg",
+                    "threatFlag": 1,
+                    "validStartTime": "08:00AM"
+                },
+                "period4": {
+                    "color": "#ededed",
+                    "date": "Sunday, July 19, 2026",
+                    "imagePath": "/images/lwx/ghwo/SevereThunderstormsDay4.jpg",
+                    "validStartTime": "08:00AM"
+                },
+                "period5": {
+                    "color": "#ededed",
+                    "date": "Monday, July 20, 2026",
+                    "imagePath": "/images/lwx/ghwo/SevereThunderstormsDay5.jpg",
+                    "validStartTime": "08:00AM"
+                },
+                "period6": {
+                    "color": "#ededed",
+                    "date": "Tuesday, July 21, 2026",
+                    "imagePath": "/images/lwx/ghwo/SevereThunderstormsDay6.jpg",
+                    "validStartTime": "08:00AM"
+                },
+                "period7": {
+                    "color": "#ededed",
+                    "date": "Wednesday, July 22, 2026",
+                    "imagePath": "/images/lwx/ghwo/SevereThunderstormsDay7.jpg",
+                    "validStartTime": "08:00AM"
+                }
+            },
+            "webTab": "public"
+        },
+        {
+            "description": "Utilizes <a href='https://www.spc.noaa.gov/products/outlook/' target='_blank'>daily forecasts</a> from the Storm Prediction Center (SPC). <a href='https://www.spc.noaa.gov/misc/about.html' target='_blank'>More info</a>",
+            "name": "Tornado Risk",
+            "periods": {
+                "period1": {
+                    "color": "#ededed",
+                    "date": "Thursday, July 16, 2026",
+                    "imagePath": "/images/lwx/ghwo/TornadoDay1.jpg",
+                    "validStartTime": "03:00PM"
+                },
+                "period2": {
+                    "color": "#ededed",
+                    "date": "Friday, July 17, 2026",
+                    "imagePath": "/images/lwx/ghwo/TornadoDay2.jpg",
+                    "validStartTime": "08:00AM"
+                }
+            },
+            "webTab": "public"
+        },
+        {
+            "description": "Utilizes <a href='https://www.spc.noaa.gov/products/outlook/' target='_blank'>daily forecasts</a> from the Storm Prediction Center (SPC). <a href='https://www.spc.noaa.gov/misc/about.html' target='_blank'>More info</a>",
+            "name": "Thunderstorm Wind Risk",
+            "periods": {
+                "period1": {
+                    "color": "#50c986",
+                    "date": "Thursday, July 16, 2026",
+                    "imagePath": "/images/lwx/ghwo/ThunderstormWindDay1.jpg",
+                    "validStartTime": "03:00PM"
+                },
+                "period2": {
+                    "color": "#ededed",
+                    "date": "Friday, July 17, 2026",
+                    "imagePath": "/images/lwx/ghwo/ThunderstormWindDay2.jpg",
+                    "validStartTime": "08:00AM"
+                }
+            },
+            "webTab": "public"
+        },
+        {
+            "description": "Utilizes <a href='https://www.spc.noaa.gov/products/outlook/' target='_blank'>daily forecasts</a> from the Storm Prediction Center (SPC). <a href='https://www.spc.noaa.gov/misc/about.html' target='_blank'>More info</a>",
+            "name": "Hail Risk",
+            "periods": {
+                "period1": {
+                    "color": "#ededed",
+                    "date": "Thursday, July 16, 2026",
+                    "imagePath": "/images/lwx/ghwo/HailDay1.jpg",
+                    "validStartTime": "03:00PM"
+                },
+                "period2": {
+                    "color": "#ededed",
+                    "date": "Friday, July 17, 2026",
+                    "imagePath": "/images/lwx/ghwo/HailDay2.jpg",
+                    "validStartTime": "08:00AM"
+                }
+            },
+            "webTab": "public"
+        },
+        {
+            "description": "Derived from local office thunderstorm forecasts.",
+            "name": "Lightning Risk",
+            "periods": {
+                "period1": {
+                    "color": "yellow",
+                    "date": "Thursday, July 16, 2026",
+                    "imagePath": "/images/lwx/ghwo/LightningDay1.jpg",
+                    "validStartTime": "03:00PM"
+                },
+                "period2": {
+                    "color": "yellow",
+                    "date": "Friday, July 17, 2026",
+                    "imagePath": "/images/lwx/ghwo/LightningDay2.jpg",
+                    "validStartTime": "08:00AM"
+                },
+                "period3": {
+                    "color": "orange",
+                    "date": "Saturday, July 18, 2026",
+                    "imagePath": "/images/lwx/ghwo/LightningDay3.jpg",
+                    "validStartTime": "08:00AM"
+                },
+                "period4": {
+                    "color": "yellow",
+                    "date": "Sunday, July 19, 2026",
+                    "imagePath": "/images/lwx/ghwo/LightningDay4.jpg",
+                    "validStartTime": "08:00AM"
+                },
+                "period5": {
+                    "color": "yellow",
+                    "date": "Monday, July 20, 2026",
+                    "imagePath": "/images/lwx/ghwo/LightningDay5.jpg",
+                    "validStartTime": "08:00AM"
+                },
+                "period6": {
+                    "color": "yellow",
+                    "date": "Tuesday, July 21, 2026",
+                    "imagePath": "/images/lwx/ghwo/LightningDay6.jpg",
+                    "validStartTime": "08:00AM"
+                },
+                "period7": {
+                    "color": "yellow",
+                    "date": "Wednesday, July 22, 2026",
+                    "imagePath": "/images/lwx/ghwo/LightningDay7.jpg",
+                    "validStartTime": "08:00AM"
+                }
+            },
+            "webTab": "public"
+        },
+        {
+            "description": "Utilizes the <a href='https://www.wpc.ncep.noaa.gov/qpf/excessive_rainfall_outlook_ero.php' target='_blank'>Excessive Rainfall Outlook</a> from the Weather Prediction Center (WPC). <a href='https://www.wpc.ncep.noaa.gov/html/fam2.shtml#excessrain' target='_blank'>More info</a>",
+            "name": "Excessive Rainfall Risk",
+            "periods": {
+                "period1": {
+                    "color": "#ededed",
+                    "date": "Thursday, July 16, 2026",
+                    "imagePath": "/images/lwx/ghwo/ExcessiveRainfallDay1.jpg",
+                    "validStartTime": "03:00PM"
+                },
+                "period2": {
+                    "color": "#ededed",
+                    "date": "Friday, July 17, 2026",
+                    "imagePath": "/images/lwx/ghwo/ExcessiveRainfallDay2.jpg",
+                    "validStartTime": "08:00AM"
+                },
+                "period3": {
+                    "color": "yellow",
+                    "date": "Saturday, July 18, 2026",
+                    "imagePath": "/images/lwx/ghwo/ExcessiveRainfallDay3.jpg",
+                    "validStartTime": "08:00AM"
+                },
+                "period4": {
+                    "color": "#ededed",
+                    "date": "Sunday, July 19, 2026",
+                    "imagePath": "/images/lwx/ghwo/ExcessiveRainfallDay4.jpg",
+                    "validStartTime": "08:00AM"
+                },
+                "period5": {
+                    "color": "#ededed",
+                    "date": "Monday, July 20, 2026",
+                    "imagePath": "/images/lwx/ghwo/ExcessiveRainfallDay5.jpg",
+                    "validStartTime": "08:00AM"
+                }
+            },
+            "webTab": "public"
+        },
+        {
+            "description": "Derived from local office temperature and/or heat index forecasts.",
+            "name": "Extreme Heat Risk",
+            "periods": {
+                "period1": {
+                    "color": "orange",
+                    "date": "Thursday, July 16, 2026",
+                    "imagePath": "/images/lwx/ghwo/ExtremeHeatDay1.jpg",
+                    "validStartTime": "03:00PM"
+                },
+                "period2": {
+                    "color": "yellow",
+                    "date": "Friday, July 17, 2026",
+                    "imagePath": "/images/lwx/ghwo/ExtremeHeatDay2.jpg",
+                    "validStartTime": "08:00AM"
+                },
+                "period3": {
+                    "color": "orange",
+                    "date": "Saturday, July 18, 2026",
+                    "imagePath": "/images/lwx/ghwo/ExtremeHeatDay3.jpg",
+                    "validStartTime": "08:00AM"
+                },
+                "period4": {
+                    "color": "#ededed",
+                    "date": "Sunday, July 19, 2026",
+                    "imagePath": "/images/lwx/ghwo/ExtremeHeatDay4.jpg",
+                    "validStartTime": "08:00AM"
+                },
+                "period5": {
+                    "color": "#ededed",
+                    "date": "Monday, July 20, 2026",
+                    "imagePath": "/images/lwx/ghwo/ExtremeHeatDay5.jpg",
+                    "validStartTime": "08:00AM"
+                },
+                "period6": {
+                    "color": "yellow",
+                    "date": "Tuesday, July 21, 2026",
+                    "imagePath": "/images/lwx/ghwo/ExtremeHeatDay6.jpg",
+                    "validStartTime": "08:00AM"
+                },
+                "period7": {
+                    "color": "#ededed",
+                    "date": "Wednesday, July 22, 2026",
+                    "imagePath": "/images/lwx/ghwo/ExtremeHeatDay7.jpg",
+                    "validStartTime": "08:00AM"
+                }
+            },
+            "webTab": "public"
+        },
+        {
+            "description": "Derived from local office wind speed/gust forecasts.",
+            "name": "Wind Risk",
+            "periods": {
+                "period1": {
+                    "color": "#ededed",
+                    "date": "Thursday, July 16, 2026",
+                    "imagePath": "/images/lwx/ghwo/WindDay1.jpg",
+                    "validStartTime": "03:00PM"
+                },
+                "period2": {
+                    "color": "#ededed",
+                    "date": "Friday, July 17, 2026",
+                    "imagePath": "/images/lwx/ghwo/WindDay2.jpg",
+                    "validStartTime": "08:00AM"
+                },
+                "period3": {
+                    "color": "#ededed",
+                    "date": "Saturday, July 18, 2026",
+                    "imagePath": "/images/lwx/ghwo/WindDay3.jpg",
+                    "validStartTime": "08:00AM"
+                },
+                "period4": {
+                    "color": "#ededed",
+                    "date": "Sunday, July 19, 2026",
+                    "imagePath": "/images/lwx/ghwo/WindDay4.jpg",
+                    "validStartTime": "08:00AM"
+                },
+                "period5": {
+                    "color": "#ededed",
+                    "date": "Monday, July 20, 2026",
+                    "imagePath": "/images/lwx/ghwo/WindDay5.jpg",
+                    "validStartTime": "08:00AM"
+                },
+                "period6": {
+                    "color": "#ededed",
+                    "date": "Tuesday, July 21, 2026",
+                    "imagePath": "/images/lwx/ghwo/WindDay6.jpg",
+                    "validStartTime": "08:00AM"
+                },
+                "period7": {
+                    "color": "#ededed",
+                    "date": "Wednesday, July 22, 2026",
+                    "imagePath": "/images/lwx/ghwo/WindDay7.jpg",
+                    "validStartTime": "08:00AM"
+                }
+            },
+            "webTab": "public"
+        },
+        {
+            "description": "Derived from local office fog and visibility forecasts.",
+            "name": "Fog Risk",
+            "periods": {
+                "period1": {
+                    "color": "orange",
+                    "date": "Thursday, July 16, 2026",
+                    "imagePath": "/images/lwx/ghwo/FogDay1.jpg",
+                    "validStartTime": "03:00PM"
+                },
+                "period2": {
+                    "color": "#ededed",
+                    "date": "Friday, July 17, 2026",
+                    "imagePath": "/images/lwx/ghwo/FogDay2.jpg",
+                    "validStartTime": "08:00AM"
+                },
+                "period3": {
+                    "color": "#ededed",
+                    "date": "Saturday, July 18, 2026",
+                    "imagePath": "/images/lwx/ghwo/FogDay3.jpg",
+                    "validStartTime": "08:00AM"
+                },
+                "period4": {
+                    "color": "#ededed",
+                    "date": "Sunday, July 19, 2026",
+                    "imagePath": "/images/lwx/ghwo/FogDay4.jpg",
+                    "validStartTime": "08:00AM"
+                }
+            },
+            "webTab": "public"
+        },
+        {
+            "description": "Derived from local office forecasts of combined relative humidity (RH), winds, and wind gusts.",
+            "name": "Fire Weather Risk",
+            "periods": {
+                "period1": {
+                    "color": "#ededed",
+                    "date": "Thursday, July 16, 2026",
+                    "imagePath": "/images/lwx/ghwo/FireWeatherDay1.jpg",
+                    "validStartTime": "03:00PM"
+                },
+                "period2": {
+                    "color": "#ededed",
+                    "date": "Friday, July 17, 2026",
+                    "imagePath": "/images/lwx/ghwo/FireWeatherDay2.jpg",
+                    "validStartTime": "08:00AM"
+                },
+                "period3": {
+                    "color": "#ededed",
+                    "date": "Saturday, July 18, 2026",
+                    "imagePath": "/images/lwx/ghwo/FireWeatherDay3.jpg",
+                    "validStartTime": "08:00AM"
+                },
+                "period4": {
+                    "color": "#ededed",
+                    "date": "Sunday, July 19, 2026",
+                    "imagePath": "/images/lwx/ghwo/FireWeatherDay4.jpg",
+                    "validStartTime": "08:00AM"
+                },
+                "period5": {
+                    "color": "#ededed",
+                    "date": "Monday, July 20, 2026",
+                    "imagePath": "/images/lwx/ghwo/FireWeatherDay5.jpg",
+                    "validStartTime": "08:00AM"
+                },
+                "period6": {
+                    "color": "#ededed",
+                    "date": "Tuesday, July 21, 2026",
+                    "imagePath": "/images/lwx/ghwo/FireWeatherDay6.jpg",
+                    "validStartTime": "08:00AM"
+                },
+                "period7": {
+                    "color": "#ededed",
+                    "date": "Wednesday, July 22, 2026",
+                    "imagePath": "/images/lwx/ghwo/FireWeatherDay7.jpg",
+                    "validStartTime": "08:00AM"
+                }
+            },
+            "webTab": "public"
+        },
+        {
+            "description": "Missing element description",
+            "name": "Coastal Flood Risk",
+            "periods": {
+                "period1": {
+                    "color": "#ededed",
+                    "date": "Thursday, July 16, 2026",
+                    "imagePath": "/images/lwx/ghwo/CoastalFloodDay1.jpg",
+                    "validStartTime": "03:00PM"
+                },
+                "period2": {
+                    "color": "#ededed",
+                    "date": "Friday, July 17, 2026",
+                    "imagePath": "/images/lwx/ghwo/CoastalFloodDay2.jpg",
+                    "validStartTime": "08:00AM"
+                },
+                "period3": {
+                    "color": "#ededed",
+                    "date": "Saturday, July 18, 2026",
+                    "imagePath": "/images/lwx/ghwo/CoastalFloodDay3.jpg",
+                    "validStartTime": "08:00AM"
+                },
+                "period4": {
+                    "color": "#ededed",
+                    "date": "Sunday, July 19, 2026",
+                    "imagePath": "/images/lwx/ghwo/CoastalFloodDay4.jpg",
+                    "validStartTime": "08:00AM"
+                }
+            },
+            "webTab": "marine"
+        },
+        {
+            "description": "Derived from local office wind speed/gust and wave height forecasts.",
+            "name": "Marine Hazard Risk",
+            "periods": {
+                "period1": {
+                    "color": "yellow",
+                    "date": "Thursday, July 16, 2026",
+                    "imagePath": "/images/lwx/ghwo/MarineHazardDay1.jpg",
+                    "validStartTime": "03:00PM"
+                },
+                "period2": {
+                    "color": "#ededed",
+                    "date": "Friday, July 17, 2026",
+                    "imagePath": "/images/lwx/ghwo/MarineHazardDay2.jpg",
+                    "validStartTime": "08:00AM"
+                },
+                "period3": {
+                    "color": "yellow",
+                    "date": "Saturday, July 18, 2026",
+                    "imagePath": "/images/lwx/ghwo/MarineHazardDay3.jpg",
+                    "validStartTime": "08:00AM"
+                },
+                "period4": {
+                    "color": "yellow",
+                    "date": "Sunday, July 19, 2026",
+                    "imagePath": "/images/lwx/ghwo/MarineHazardDay4.jpg",
+                    "validStartTime": "08:00AM"
+                },
+                "period5": {
+                    "color": "yellow",
+                    "date": "Monday, July 20, 2026",
+                    "imagePath": "/images/lwx/ghwo/MarineHazardDay5.jpg",
+                    "validStartTime": "08:00AM"
+                },
+                "period6": {
+                    "color": "yellow",
+                    "date": "Tuesday, July 21, 2026",
+                    "imagePath": "/images/lwx/ghwo/MarineHazardDay6.jpg",
+                    "validStartTime": "08:00AM"
+                },
+                "period7": {
+                    "color": "yellow",
+                    "date": "Wednesday, July 22, 2026",
+                    "imagePath": "/images/lwx/ghwo/MarineHazardDay7.jpg",
+                    "validStartTime": "08:00AM"
+                }
+            },
+            "webTab": "marine"
+        }
+    ],
+    "switchover_hour": "4"
+}

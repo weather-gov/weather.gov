@@ -1,0 +1,4791 @@
+{
+    "generation_time": "2026-07-16T15:07:07-04:00",
+    "counties": {
+        "11001": {
+            "countyName": "DC_District of Columbia",
+            "2026-07-16T15:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Tornado": 0,
+                "ConvectiveWind": 0,
+                "Hail": 0,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 2,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "Marine": 0,
+                "DailyComposite": 2
+            },
+            "2026-07-17T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Tornado": 0,
+                "ConvectiveWind": 0,
+                "Hail": 0,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "Marine": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-18T08:00:00-04:00": {
+                "SevereThunderstorm": 2,
+                "Lightning": 1,
+                "ExcessiveRainfall": 1,
+                "ExtremeHeat": 1,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "Marine": 1,
+                "DailyComposite": 2
+            },
+            "2026-07-19T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "Marine": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-20T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 0,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "Marine": 0,
+                "DailyComposite": 0
+            },
+            "2026-07-21T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "Marine": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-22T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "Marine": 0,
+                "DailyComposite": 1
+            }
+        },
+        "24001": {
+            "countyName": "MD_Allegany",
+            "2026-07-16T15:00:00-04:00": {
+                "SevereThunderstorm": 1,
+                "Tornado": 0,
+                "ConvectiveWind": 1,
+                "Hail": 0,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 2,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 2
+            },
+            "2026-07-17T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Tornado": 0,
+                "ConvectiveWind": 0,
+                "Hail": 0,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-18T08:00:00-04:00": {
+                "SevereThunderstorm": 2,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 1,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 2
+            },
+            "2026-07-19T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 0,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 0
+            },
+            "2026-07-20T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 0,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "DailyComposite": 0
+            },
+            "2026-07-21T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExtremeHeat": 1,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-22T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "DailyComposite": 1
+            }
+        },
+        "24003": {
+            "countyName": "MD_Anne Arundel",
+            "2026-07-16T15:00:00-04:00": {
+                "SevereThunderstorm": 1,
+                "Tornado": 0,
+                "ConvectiveWind": 1,
+                "Hail": 0,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 2,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "Marine": 0,
+                "DailyComposite": 2
+            },
+            "2026-07-17T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Tornado": 0,
+                "ConvectiveWind": 0,
+                "Hail": 0,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "Marine": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-18T08:00:00-04:00": {
+                "SevereThunderstorm": 2,
+                "Lightning": 2,
+                "ExcessiveRainfall": 1,
+                "ExtremeHeat": 2,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "Marine": 0,
+                "DailyComposite": 2
+            },
+            "2026-07-19T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "Marine": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-20T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "Marine": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-21T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExtremeHeat": 1,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "Marine": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-22T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "Marine": 0,
+                "DailyComposite": 1
+            }
+        },
+        "24005": {
+            "countyName": "MD_Baltimore",
+            "2026-07-16T15:00:00-04:00": {
+                "SevereThunderstorm": 1,
+                "Tornado": 0,
+                "ConvectiveWind": 1,
+                "Hail": 0,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 2,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "Marine": 0,
+                "DailyComposite": 2
+            },
+            "2026-07-17T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Tornado": 0,
+                "ConvectiveWind": 0,
+                "Hail": 0,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "Marine": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-18T08:00:00-04:00": {
+                "SevereThunderstorm": 2,
+                "Lightning": 2,
+                "ExcessiveRainfall": 1,
+                "ExtremeHeat": 1,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "Marine": 0,
+                "DailyComposite": 2
+            },
+            "2026-07-19T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 0,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "Marine": 0,
+                "DailyComposite": 0
+            },
+            "2026-07-20T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 0,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "Marine": 0,
+                "DailyComposite": 0
+            },
+            "2026-07-21T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "Marine": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-22T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "Marine": 0,
+                "DailyComposite": 1
+            }
+        },
+        "24009": {
+            "countyName": "MD_Calvert",
+            "2026-07-16T15:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Tornado": 0,
+                "ConvectiveWind": 0,
+                "Hail": 0,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 2,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "Marine": 0,
+                "DailyComposite": 2
+            },
+            "2026-07-17T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Tornado": 0,
+                "ConvectiveWind": 0,
+                "Hail": 0,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "Marine": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-18T08:00:00-04:00": {
+                "SevereThunderstorm": 2,
+                "Lightning": 2,
+                "ExcessiveRainfall": 1,
+                "ExtremeHeat": 2,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "Marine": 0,
+                "DailyComposite": 2
+            },
+            "2026-07-19T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "Marine": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-20T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "Marine": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-21T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExtremeHeat": 1,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "Marine": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-22T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "Marine": 0,
+                "DailyComposite": 1
+            }
+        },
+        "24013": {
+            "countyName": "MD_Carroll",
+            "2026-07-16T15:00:00-04:00": {
+                "SevereThunderstorm": 1,
+                "Tornado": 0,
+                "ConvectiveWind": 1,
+                "Hail": 0,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 2,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 2
+            },
+            "2026-07-17T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Tornado": 0,
+                "ConvectiveWind": 0,
+                "Hail": 0,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-18T08:00:00-04:00": {
+                "SevereThunderstorm": 2,
+                "Lightning": 1,
+                "ExcessiveRainfall": 1,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 2
+            },
+            "2026-07-19T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 0,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 0
+            },
+            "2026-07-20T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 0,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "DailyComposite": 0
+            },
+            "2026-07-21T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-22T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "DailyComposite": 1
+            }
+        },
+        "24015": {
+            "countyName": "MD_Cecil",
+            "2026-07-16T15:00:00-04:00": {
+                "SevereThunderstorm": 1,
+                "Tornado": 0,
+                "ConvectiveWind": 1,
+                "Hail": 0,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 2,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "Marine": 0,
+                "DailyComposite": 2
+            },
+            "2026-07-17T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Tornado": 0,
+                "ConvectiveWind": 0,
+                "Hail": 0,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "Marine": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-18T08:00:00-04:00": {
+                "SevereThunderstorm": 2,
+                "Lightning": 1,
+                "ExcessiveRainfall": 1,
+                "ExtremeHeat": 1,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "Marine": 0,
+                "DailyComposite": 2
+            },
+            "2026-07-19T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 0,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "Marine": 0,
+                "DailyComposite": 0
+            },
+            "2026-07-20T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "Marine": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-21T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "Marine": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-22T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "Marine": 0,
+                "DailyComposite": 1
+            }
+        },
+        "24017": {
+            "countyName": "MD_Charles",
+            "2026-07-16T15:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Tornado": 0,
+                "ConvectiveWind": 0,
+                "Hail": 0,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 2,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "Marine": 0,
+                "DailyComposite": 2
+            },
+            "2026-07-17T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Tornado": 0,
+                "ConvectiveWind": 0,
+                "Hail": 0,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "Marine": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-18T08:00:00-04:00": {
+                "SevereThunderstorm": 2,
+                "Lightning": 2,
+                "ExcessiveRainfall": 1,
+                "ExtremeHeat": 2,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "Marine": 0,
+                "DailyComposite": 2
+            },
+            "2026-07-19T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "Marine": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-20T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "Marine": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-21T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExtremeHeat": 1,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "Marine": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-22T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "Marine": 0,
+                "DailyComposite": 1
+            }
+        },
+        "24021": {
+            "countyName": "MD_Frederick",
+            "2026-07-16T15:00:00-04:00": {
+                "SevereThunderstorm": 1,
+                "Tornado": 0,
+                "ConvectiveWind": 1,
+                "Hail": 0,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 2,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 2
+            },
+            "2026-07-17T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Tornado": 0,
+                "ConvectiveWind": 0,
+                "Hail": 0,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-18T08:00:00-04:00": {
+                "SevereThunderstorm": 2,
+                "Lightning": 1,
+                "ExcessiveRainfall": 1,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 2
+            },
+            "2026-07-19T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 0,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 0
+            },
+            "2026-07-20T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 0,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "DailyComposite": 0
+            },
+            "2026-07-21T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-22T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "DailyComposite": 1
+            }
+        },
+        "24023": {
+            "countyName": "MD_Garrett",
+            "2026-07-16T15:00:00-04:00": {
+                "SevereThunderstorm": 1,
+                "Tornado": 0,
+                "ConvectiveWind": 1,
+                "Hail": 0,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-17T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Tornado": 0,
+                "ConvectiveWind": 0,
+                "Hail": 0,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-18T08:00:00-04:00": {
+                "SevereThunderstorm": 2,
+                "Lightning": 1,
+                "ExcessiveRainfall": 1,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 2
+            },
+            "2026-07-19T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-20T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 0,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "DailyComposite": 0
+            },
+            "2026-07-21T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-22T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "DailyComposite": 1
+            }
+        },
+        "24025": {
+            "countyName": "MD_Harford",
+            "2026-07-16T15:00:00-04:00": {
+                "SevereThunderstorm": 1,
+                "Tornado": 0,
+                "ConvectiveWind": 1,
+                "Hail": 0,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 2,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "Marine": 0,
+                "DailyComposite": 2
+            },
+            "2026-07-17T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Tornado": 0,
+                "ConvectiveWind": 0,
+                "Hail": 0,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "Marine": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-18T08:00:00-04:00": {
+                "SevereThunderstorm": 2,
+                "Lightning": 2,
+                "ExcessiveRainfall": 1,
+                "ExtremeHeat": 1,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "Marine": 0,
+                "DailyComposite": 2
+            },
+            "2026-07-19T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 0,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "Marine": 0,
+                "DailyComposite": 0
+            },
+            "2026-07-20T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "Marine": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-21T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "Marine": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-22T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "Marine": 0,
+                "DailyComposite": 1
+            }
+        },
+        "24027": {
+            "countyName": "MD_Howard",
+            "2026-07-16T15:00:00-04:00": {
+                "SevereThunderstorm": 1,
+                "Tornado": 0,
+                "ConvectiveWind": 1,
+                "Hail": 0,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 2,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 2
+            },
+            "2026-07-17T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Tornado": 0,
+                "ConvectiveWind": 0,
+                "Hail": 0,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-18T08:00:00-04:00": {
+                "SevereThunderstorm": 2,
+                "Lightning": 1,
+                "ExcessiveRainfall": 1,
+                "ExtremeHeat": 1,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 2
+            },
+            "2026-07-19T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 0,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 0
+            },
+            "2026-07-20T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 0,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "DailyComposite": 0
+            },
+            "2026-07-21T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-22T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "DailyComposite": 1
+            }
+        },
+        "24031": {
+            "countyName": "MD_Montgomery",
+            "2026-07-16T15:00:00-04:00": {
+                "SevereThunderstorm": 1,
+                "Tornado": 0,
+                "ConvectiveWind": 1,
+                "Hail": 0,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 2,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 2
+            },
+            "2026-07-17T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Tornado": 0,
+                "ConvectiveWind": 0,
+                "Hail": 0,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-18T08:00:00-04:00": {
+                "SevereThunderstorm": 2,
+                "Lightning": 1,
+                "ExcessiveRainfall": 1,
+                "ExtremeHeat": 1,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 2
+            },
+            "2026-07-19T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-20T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 0,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "DailyComposite": 0
+            },
+            "2026-07-21T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-22T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "DailyComposite": 1
+            }
+        },
+        "24033": {
+            "countyName": "MD_Prince George",
+            "2026-07-16T15:00:00-04:00": {
+                "SevereThunderstorm": 1,
+                "Tornado": 0,
+                "ConvectiveWind": 1,
+                "Hail": 0,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 2,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "Marine": 0,
+                "DailyComposite": 2
+            },
+            "2026-07-17T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Tornado": 0,
+                "ConvectiveWind": 0,
+                "Hail": 0,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "Marine": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-18T08:00:00-04:00": {
+                "SevereThunderstorm": 2,
+                "Lightning": 2,
+                "ExcessiveRainfall": 1,
+                "ExtremeHeat": 2,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "Marine": 0,
+                "DailyComposite": 2
+            },
+            "2026-07-19T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "Marine": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-20T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "Marine": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-21T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "Marine": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-22T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "Marine": 0,
+                "DailyComposite": 1
+            }
+        },
+        "24037": {
+            "countyName": "MD_St. Mary",
+            "2026-07-16T15:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Tornado": 0,
+                "ConvectiveWind": 0,
+                "Hail": 0,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 2,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "Marine": 0,
+                "DailyComposite": 2
+            },
+            "2026-07-17T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Tornado": 0,
+                "ConvectiveWind": 0,
+                "Hail": 0,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "Marine": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-18T08:00:00-04:00": {
+                "SevereThunderstorm": 2,
+                "Lightning": 2,
+                "ExcessiveRainfall": 1,
+                "ExtremeHeat": 2,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "Marine": 0,
+                "DailyComposite": 2
+            },
+            "2026-07-19T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "Marine": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-20T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "Marine": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-21T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExtremeHeat": 1,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "Marine": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-22T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "Marine": 0,
+                "DailyComposite": 1
+            }
+        },
+        "24043": {
+            "countyName": "MD_Washington",
+            "2026-07-16T15:00:00-04:00": {
+                "SevereThunderstorm": 1,
+                "Tornado": 0,
+                "ConvectiveWind": 1,
+                "Hail": 0,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 2,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 2
+            },
+            "2026-07-17T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Tornado": 0,
+                "ConvectiveWind": 0,
+                "Hail": 0,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-18T08:00:00-04:00": {
+                "SevereThunderstorm": 2,
+                "Lightning": 1,
+                "ExcessiveRainfall": 1,
+                "ExtremeHeat": 1,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 2
+            },
+            "2026-07-19T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 0,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 0
+            },
+            "2026-07-20T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 0,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "DailyComposite": 0
+            },
+            "2026-07-21T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExtremeHeat": 1,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-22T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "DailyComposite": 1
+            }
+        },
+        "24510": {
+            "countyName": "MD_Baltimore city",
+            "2026-07-16T15:00:00-04:00": {
+                "SevereThunderstorm": 1,
+                "Tornado": 0,
+                "ConvectiveWind": 1,
+                "Hail": 0,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 2,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "Marine": 0,
+                "DailyComposite": 2
+            },
+            "2026-07-17T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Tornado": 0,
+                "ConvectiveWind": 0,
+                "Hail": 0,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "Marine": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-18T08:00:00-04:00": {
+                "SevereThunderstorm": 2,
+                "Lightning": 2,
+                "ExcessiveRainfall": 1,
+                "ExtremeHeat": 1,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "Marine": 0,
+                "DailyComposite": 2
+            },
+            "2026-07-19T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 0,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "Marine": 0,
+                "DailyComposite": 0
+            },
+            "2026-07-20T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 0,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "Marine": 0,
+                "DailyComposite": 0
+            },
+            "2026-07-21T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "Marine": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-22T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "Marine": 0,
+                "DailyComposite": 1
+            }
+        },
+        "51003": {
+            "countyName": "VA_Albemarle",
+            "2026-07-16T15:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Tornado": 0,
+                "ConvectiveWind": 0,
+                "Hail": 0,
+                "Lightning": 0,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 1,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-17T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Tornado": 0,
+                "ConvectiveWind": 0,
+                "Hail": 0,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 1,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-18T08:00:00-04:00": {
+                "SevereThunderstorm": 2,
+                "Lightning": 2,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 2,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 2
+            },
+            "2026-07-19T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 1,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-20T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-21T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExtremeHeat": 1,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-22T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "DailyComposite": 1
+            }
+        },
+        "51013": {
+            "countyName": "VA_Arlington",
+            "2026-07-16T15:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Tornado": 0,
+                "ConvectiveWind": 0,
+                "Hail": 0,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 2,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 2
+            },
+            "2026-07-17T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Tornado": 0,
+                "ConvectiveWind": 0,
+                "Hail": 0,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-18T08:00:00-04:00": {
+                "SevereThunderstorm": 2,
+                "Lightning": 1,
+                "ExcessiveRainfall": 1,
+                "ExtremeHeat": 1,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 2
+            },
+            "2026-07-19T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-20T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 0,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "DailyComposite": 0
+            },
+            "2026-07-21T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-22T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "DailyComposite": 1
+            }
+        },
+        "51015": {
+            "countyName": "VA_Augusta",
+            "2026-07-16T15:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Tornado": 0,
+                "ConvectiveWind": 0,
+                "Hail": 0,
+                "Lightning": 0,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 1,
+                "NonConvectiveWind": 0,
+                "Fog": 1,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-17T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Tornado": 0,
+                "ConvectiveWind": 0,
+                "Hail": 0,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 1,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-18T08:00:00-04:00": {
+                "SevereThunderstorm": 2,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 1,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 2
+            },
+            "2026-07-19T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-20T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-21T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-22T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "DailyComposite": 1
+            }
+        },
+        "51043": {
+            "countyName": "VA_Clarke",
+            "2026-07-16T15:00:00-04:00": {
+                "SevereThunderstorm": 1,
+                "Tornado": 0,
+                "ConvectiveWind": 1,
+                "Hail": 0,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 2,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 2
+            },
+            "2026-07-17T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Tornado": 0,
+                "ConvectiveWind": 0,
+                "Hail": 0,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-18T08:00:00-04:00": {
+                "SevereThunderstorm": 2,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 1,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 2
+            },
+            "2026-07-19T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-20T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 0,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "DailyComposite": 0
+            },
+            "2026-07-21T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExtremeHeat": 1,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-22T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "DailyComposite": 1
+            }
+        },
+        "51047": {
+            "countyName": "VA_Culpeper",
+            "2026-07-16T15:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Tornado": 0,
+                "ConvectiveWind": 0,
+                "Hail": 0,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 1,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-17T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Tornado": 0,
+                "ConvectiveWind": 0,
+                "Hail": 0,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-18T08:00:00-04:00": {
+                "SevereThunderstorm": 2,
+                "Lightning": 2,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 1,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 2
+            },
+            "2026-07-19T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-20T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 0,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "DailyComposite": 0
+            },
+            "2026-07-21T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExtremeHeat": 1,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-22T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "DailyComposite": 1
+            }
+        },
+        "51059": {
+            "countyName": "VA_Fairfax",
+            "2026-07-16T15:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Tornado": 0,
+                "ConvectiveWind": 0,
+                "Hail": 0,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 2,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "Marine": 0,
+                "DailyComposite": 2
+            },
+            "2026-07-17T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Tornado": 0,
+                "ConvectiveWind": 0,
+                "Hail": 0,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "Marine": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-18T08:00:00-04:00": {
+                "SevereThunderstorm": 2,
+                "Lightning": 1,
+                "ExcessiveRainfall": 1,
+                "ExtremeHeat": 1,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "Marine": 0,
+                "DailyComposite": 2
+            },
+            "2026-07-19T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "Marine": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-20T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 0,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "Marine": 0,
+                "DailyComposite": 0
+            },
+            "2026-07-21T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExtremeHeat": 1,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "Marine": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-22T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "Marine": 0,
+                "DailyComposite": 1
+            }
+        },
+        "51061": {
+            "countyName": "VA_Fauquier",
+            "2026-07-16T15:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Tornado": 0,
+                "ConvectiveWind": 0,
+                "Hail": 0,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 1,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-17T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Tornado": 0,
+                "ConvectiveWind": 0,
+                "Hail": 0,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-18T08:00:00-04:00": {
+                "SevereThunderstorm": 2,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 1,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 2
+            },
+            "2026-07-19T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-20T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 0,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "DailyComposite": 0
+            },
+            "2026-07-21T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExtremeHeat": 1,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-22T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "DailyComposite": 1
+            }
+        },
+        "51069": {
+            "countyName": "VA_Frederick",
+            "2026-07-16T15:00:00-04:00": {
+                "SevereThunderstorm": 1,
+                "Tornado": 0,
+                "ConvectiveWind": 1,
+                "Hail": 0,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 2,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 2
+            },
+            "2026-07-17T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Tornado": 0,
+                "ConvectiveWind": 0,
+                "Hail": 0,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-18T08:00:00-04:00": {
+                "SevereThunderstorm": 2,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 1,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 2
+            },
+            "2026-07-19T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-20T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 0,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "DailyComposite": 0
+            },
+            "2026-07-21T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExtremeHeat": 1,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-22T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "DailyComposite": 1
+            }
+        },
+        "51079": {
+            "countyName": "VA_Greene",
+            "2026-07-16T15:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Tornado": 0,
+                "ConvectiveWind": 0,
+                "Hail": 0,
+                "Lightning": 0,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 1,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-17T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Tornado": 0,
+                "ConvectiveWind": 0,
+                "Hail": 0,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-18T08:00:00-04:00": {
+                "SevereThunderstorm": 2,
+                "Lightning": 2,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 1,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 2
+            },
+            "2026-07-19T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-20T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-21T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-22T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "DailyComposite": 1
+            }
+        },
+        "51091": {
+            "countyName": "VA_Highland",
+            "2026-07-16T15:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Tornado": 0,
+                "ConvectiveWind": 0,
+                "Hail": 0,
+                "Lightning": 0,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 1,
+                "NonConvectiveWind": 0,
+                "Fog": 2,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 2
+            },
+            "2026-07-17T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Tornado": 0,
+                "ConvectiveWind": 0,
+                "Hail": 0,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 1,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-18T08:00:00-04:00": {
+                "SevereThunderstorm": 2,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 1,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 2
+            },
+            "2026-07-19T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-20T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-21T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-22T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "DailyComposite": 1
+            }
+        },
+        "51099": {
+            "countyName": "VA_King George",
+            "2026-07-16T15:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Tornado": 0,
+                "ConvectiveWind": 0,
+                "Hail": 0,
+                "Lightning": 0,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 2,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "Marine": 0,
+                "DailyComposite": 2
+            },
+            "2026-07-17T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Tornado": 0,
+                "ConvectiveWind": 0,
+                "Hail": 0,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "Marine": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-18T08:00:00-04:00": {
+                "SevereThunderstorm": 2,
+                "Lightning": 2,
+                "ExcessiveRainfall": 1,
+                "ExtremeHeat": 2,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "Marine": 0,
+                "DailyComposite": 2
+            },
+            "2026-07-19T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "Marine": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-20T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "Marine": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-21T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExtremeHeat": 1,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "Marine": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-22T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "Marine": 0,
+                "DailyComposite": 1
+            }
+        },
+        "51107": {
+            "countyName": "VA_Loudoun",
+            "2026-07-16T15:00:00-04:00": {
+                "SevereThunderstorm": 1,
+                "Tornado": 0,
+                "ConvectiveWind": 1,
+                "Hail": 0,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 2,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 2
+            },
+            "2026-07-17T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Tornado": 0,
+                "ConvectiveWind": 0,
+                "Hail": 0,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-18T08:00:00-04:00": {
+                "SevereThunderstorm": 2,
+                "Lightning": 1,
+                "ExcessiveRainfall": 1,
+                "ExtremeHeat": 1,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 2
+            },
+            "2026-07-19T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-20T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 0,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "DailyComposite": 0
+            },
+            "2026-07-21T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-22T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "DailyComposite": 1
+            }
+        },
+        "51113": {
+            "countyName": "VA_Madison",
+            "2026-07-16T15:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Tornado": 0,
+                "ConvectiveWind": 0,
+                "Hail": 0,
+                "Lightning": 0,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 1,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-17T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Tornado": 0,
+                "ConvectiveWind": 0,
+                "Hail": 0,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-18T08:00:00-04:00": {
+                "SevereThunderstorm": 2,
+                "Lightning": 2,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 1,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 2
+            },
+            "2026-07-19T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-20T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 0,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "DailyComposite": 0
+            },
+            "2026-07-21T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-22T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "DailyComposite": 1
+            }
+        },
+        "51125": {
+            "countyName": "VA_Nelson",
+            "2026-07-16T15:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Tornado": 0,
+                "ConvectiveWind": 0,
+                "Hail": 0,
+                "Lightning": 0,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 1,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-17T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Tornado": 0,
+                "ConvectiveWind": 0,
+                "Hail": 0,
+                "Lightning": 0,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 1,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-18T08:00:00-04:00": {
+                "SevereThunderstorm": 2,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 2,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 2
+            },
+            "2026-07-19T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 1,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-20T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-21T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExtremeHeat": 1,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-22T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "DailyComposite": 1
+            }
+        },
+        "51137": {
+            "countyName": "VA_Orange",
+            "2026-07-16T15:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Tornado": 0,
+                "ConvectiveWind": 0,
+                "Hail": 0,
+                "Lightning": 0,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 1,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-17T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Tornado": 0,
+                "ConvectiveWind": 0,
+                "Hail": 0,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-18T08:00:00-04:00": {
+                "SevereThunderstorm": 2,
+                "Lightning": 2,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 1,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 2
+            },
+            "2026-07-19T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-20T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-21T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-22T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "DailyComposite": 1
+            }
+        },
+        "51139": {
+            "countyName": "VA_Page",
+            "2026-07-16T15:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Tornado": 0,
+                "ConvectiveWind": 0,
+                "Hail": 0,
+                "Lightning": 0,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 2,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 2
+            },
+            "2026-07-17T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Tornado": 0,
+                "ConvectiveWind": 0,
+                "Hail": 0,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-18T08:00:00-04:00": {
+                "SevereThunderstorm": 2,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 1,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 2
+            },
+            "2026-07-19T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-20T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 0,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "DailyComposite": 0
+            },
+            "2026-07-21T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExtremeHeat": 1,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-22T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "DailyComposite": 1
+            }
+        },
+        "51153": {
+            "countyName": "VA_Prince William",
+            "2026-07-16T15:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Tornado": 0,
+                "ConvectiveWind": 0,
+                "Hail": 0,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 2,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "Marine": 0,
+                "DailyComposite": 2
+            },
+            "2026-07-17T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Tornado": 0,
+                "ConvectiveWind": 0,
+                "Hail": 0,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "Marine": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-18T08:00:00-04:00": {
+                "SevereThunderstorm": 2,
+                "Lightning": 1,
+                "ExcessiveRainfall": 1,
+                "ExtremeHeat": 1,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "Marine": 0,
+                "DailyComposite": 2
+            },
+            "2026-07-19T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "Marine": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-20T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 0,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "Marine": 0,
+                "DailyComposite": 0
+            },
+            "2026-07-21T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExtremeHeat": 1,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "Marine": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-22T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "Marine": 0,
+                "DailyComposite": 1
+            }
+        },
+        "51157": {
+            "countyName": "VA_Rappahannock",
+            "2026-07-16T15:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Tornado": 0,
+                "ConvectiveWind": 0,
+                "Hail": 0,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 1,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-17T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Tornado": 0,
+                "ConvectiveWind": 0,
+                "Hail": 0,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-18T08:00:00-04:00": {
+                "SevereThunderstorm": 2,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 2
+            },
+            "2026-07-19T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-20T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 0,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "DailyComposite": 0
+            },
+            "2026-07-21T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-22T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "DailyComposite": 1
+            }
+        },
+        "51165": {
+            "countyName": "VA_Rockingham",
+            "2026-07-16T15:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Tornado": 0,
+                "ConvectiveWind": 0,
+                "Hail": 0,
+                "Lightning": 0,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 1,
+                "NonConvectiveWind": 0,
+                "Fog": 2,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 2
+            },
+            "2026-07-17T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Tornado": 0,
+                "ConvectiveWind": 0,
+                "Hail": 0,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-18T08:00:00-04:00": {
+                "SevereThunderstorm": 2,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 1,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 2
+            },
+            "2026-07-19T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-20T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 0,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "DailyComposite": 0
+            },
+            "2026-07-21T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExtremeHeat": 1,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-22T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "DailyComposite": 1
+            }
+        },
+        "51171": {
+            "countyName": "VA_Shenandoah",
+            "2026-07-16T15:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Tornado": 0,
+                "ConvectiveWind": 0,
+                "Hail": 0,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 2,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 2
+            },
+            "2026-07-17T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Tornado": 0,
+                "ConvectiveWind": 0,
+                "Hail": 0,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-18T08:00:00-04:00": {
+                "SevereThunderstorm": 2,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 1,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 2
+            },
+            "2026-07-19T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-20T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 0,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "DailyComposite": 0
+            },
+            "2026-07-21T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExtremeHeat": 1,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-22T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "DailyComposite": 1
+            }
+        },
+        "51177": {
+            "countyName": "VA_Spotsylvania",
+            "2026-07-16T15:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Tornado": 0,
+                "ConvectiveWind": 0,
+                "Hail": 0,
+                "Lightning": 0,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 1,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-17T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Tornado": 0,
+                "ConvectiveWind": 0,
+                "Hail": 0,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-18T08:00:00-04:00": {
+                "SevereThunderstorm": 2,
+                "Lightning": 2,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 2,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 2
+            },
+            "2026-07-19T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-20T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-21T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExtremeHeat": 1,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-22T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "DailyComposite": 1
+            }
+        },
+        "51179": {
+            "countyName": "VA_Stafford",
+            "2026-07-16T15:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Tornado": 0,
+                "ConvectiveWind": 0,
+                "Hail": 0,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 2,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "Marine": 0,
+                "DailyComposite": 2
+            },
+            "2026-07-17T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Tornado": 0,
+                "ConvectiveWind": 0,
+                "Hail": 0,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "Marine": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-18T08:00:00-04:00": {
+                "SevereThunderstorm": 2,
+                "Lightning": 2,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 2,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "Marine": 0,
+                "DailyComposite": 2
+            },
+            "2026-07-19T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "Marine": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-20T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 0,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "Marine": 0,
+                "DailyComposite": 0
+            },
+            "2026-07-21T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExtremeHeat": 1,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "Marine": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-22T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "Marine": 0,
+                "DailyComposite": 1
+            }
+        },
+        "51187": {
+            "countyName": "VA_Warren",
+            "2026-07-16T15:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Tornado": 0,
+                "ConvectiveWind": 0,
+                "Hail": 0,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 2,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 2
+            },
+            "2026-07-17T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Tornado": 0,
+                "ConvectiveWind": 0,
+                "Hail": 0,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-18T08:00:00-04:00": {
+                "SevereThunderstorm": 2,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 1,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 2
+            },
+            "2026-07-19T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-20T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 0,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "DailyComposite": 0
+            },
+            "2026-07-21T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExtremeHeat": 1,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-22T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "DailyComposite": 1
+            }
+        },
+        "51510": {
+            "countyName": "VA_Alexandria city",
+            "2026-07-16T15:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Tornado": 0,
+                "ConvectiveWind": 0,
+                "Hail": 0,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 2,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "Marine": 0,
+                "DailyComposite": 2
+            },
+            "2026-07-17T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Tornado": 0,
+                "ConvectiveWind": 0,
+                "Hail": 0,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "Marine": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-18T08:00:00-04:00": {
+                "SevereThunderstorm": 2,
+                "Lightning": 1,
+                "ExcessiveRainfall": 1,
+                "ExtremeHeat": 1,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "Marine": 1,
+                "DailyComposite": 2
+            },
+            "2026-07-19T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "Marine": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-20T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 0,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "Marine": 0,
+                "DailyComposite": 0
+            },
+            "2026-07-21T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExtremeHeat": 1,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "Marine": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-22T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "Marine": 0,
+                "DailyComposite": 1
+            }
+        },
+        "51540": {
+            "countyName": "VA_Charlottesville city",
+            "2026-07-16T15:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Tornado": 0,
+                "ConvectiveWind": 0,
+                "Hail": 0,
+                "Lightning": 0,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 1,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-17T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Tornado": 0,
+                "ConvectiveWind": 0,
+                "Hail": 0,
+                "Lightning": 0,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 0
+            },
+            "2026-07-18T08:00:00-04:00": {
+                "SevereThunderstorm": 2,
+                "Lightning": 2,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 1,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 2
+            },
+            "2026-07-19T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-20T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-21T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExtremeHeat": 1,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-22T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "DailyComposite": 1
+            }
+        },
+        "51600": {
+            "countyName": "VA_Fairfax city",
+            "2026-07-16T15:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Tornado": 0,
+                "ConvectiveWind": 0,
+                "Hail": 0,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 2,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 2
+            },
+            "2026-07-17T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Tornado": 0,
+                "ConvectiveWind": 0,
+                "Hail": 0,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-18T08:00:00-04:00": {
+                "SevereThunderstorm": 2,
+                "Lightning": 1,
+                "ExcessiveRainfall": 1,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 2
+            },
+            "2026-07-19T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-20T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 0,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "DailyComposite": 0
+            },
+            "2026-07-21T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-22T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "DailyComposite": 1
+            }
+        },
+        "51610": {
+            "countyName": "VA_Falls Church city",
+            "2026-07-16T15:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Tornado": 0,
+                "ConvectiveWind": 0,
+                "Hail": 0,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 2,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 2
+            },
+            "2026-07-17T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Tornado": 0,
+                "ConvectiveWind": 0,
+                "Hail": 0,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-18T08:00:00-04:00": {
+                "SevereThunderstorm": 2,
+                "Lightning": 1,
+                "ExcessiveRainfall": 1,
+                "ExtremeHeat": 1,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 2
+            },
+            "2026-07-19T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-20T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 0,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "DailyComposite": 0
+            },
+            "2026-07-21T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-22T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "DailyComposite": 1
+            }
+        },
+        "51630": {
+            "countyName": "VA_Fredericksburg city",
+            "2026-07-16T15:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Tornado": 0,
+                "ConvectiveWind": 0,
+                "Hail": 0,
+                "Lightning": 0,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 1,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-17T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Tornado": 0,
+                "ConvectiveWind": 0,
+                "Hail": 0,
+                "Lightning": 0,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 0
+            },
+            "2026-07-18T08:00:00-04:00": {
+                "SevereThunderstorm": 2,
+                "Lightning": 2,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 2,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 2
+            },
+            "2026-07-19T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-20T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 0,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "DailyComposite": 0
+            },
+            "2026-07-21T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExtremeHeat": 1,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-22T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "DailyComposite": 1
+            }
+        },
+        "51660": {
+            "countyName": "VA_Harrisonburg city",
+            "2026-07-16T15:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Tornado": 0,
+                "ConvectiveWind": 0,
+                "Hail": 0,
+                "Lightning": 0,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 1,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-17T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Tornado": 0,
+                "ConvectiveWind": 0,
+                "Hail": 0,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-18T08:00:00-04:00": {
+                "SevereThunderstorm": 2,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 1,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 2
+            },
+            "2026-07-19T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-20T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 0,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "DailyComposite": 0
+            },
+            "2026-07-21T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-22T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "DailyComposite": 1
+            }
+        },
+        "51683": {
+            "countyName": "VA_Manassas city",
+            "2026-07-16T15:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Tornado": 0,
+                "ConvectiveWind": 0,
+                "Hail": 0,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 2,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 2
+            },
+            "2026-07-17T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Tornado": 0,
+                "ConvectiveWind": 0,
+                "Hail": 0,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-18T08:00:00-04:00": {
+                "SevereThunderstorm": 2,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 1,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 2
+            },
+            "2026-07-19T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-20T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 0,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "DailyComposite": 0
+            },
+            "2026-07-21T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExtremeHeat": 1,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-22T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "DailyComposite": 1
+            }
+        },
+        "51685": {
+            "countyName": "VA_Manassas Park city",
+            "2026-07-16T15:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Tornado": 0,
+                "ConvectiveWind": 0,
+                "Hail": 0,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 2,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 2
+            },
+            "2026-07-17T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Tornado": 0,
+                "ConvectiveWind": 0,
+                "Hail": 0,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-18T08:00:00-04:00": {
+                "SevereThunderstorm": 2,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 1,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 2
+            },
+            "2026-07-19T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-20T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 0,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "DailyComposite": 0
+            },
+            "2026-07-21T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-22T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "DailyComposite": 1
+            }
+        },
+        "51790": {
+            "countyName": "VA_Staunton city",
+            "2026-07-16T15:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Tornado": 0,
+                "ConvectiveWind": 0,
+                "Hail": 0,
+                "Lightning": 0,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 1,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-17T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Tornado": 0,
+                "ConvectiveWind": 0,
+                "Hail": 0,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-18T08:00:00-04:00": {
+                "SevereThunderstorm": 2,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 1,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 2
+            },
+            "2026-07-19T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-20T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-21T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-22T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "DailyComposite": 1
+            }
+        },
+        "51820": {
+            "countyName": "VA_Waynesboro city",
+            "2026-07-16T15:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Tornado": 0,
+                "ConvectiveWind": 0,
+                "Hail": 0,
+                "Lightning": 0,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 1,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-17T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Tornado": 0,
+                "ConvectiveWind": 0,
+                "Hail": 0,
+                "Lightning": 0,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 0
+            },
+            "2026-07-18T08:00:00-04:00": {
+                "SevereThunderstorm": 2,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 1,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 2
+            },
+            "2026-07-19T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-20T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-21T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-22T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "DailyComposite": 1
+            }
+        },
+        "51840": {
+            "countyName": "VA_Winchester city",
+            "2026-07-16T15:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Tornado": 0,
+                "ConvectiveWind": 0,
+                "Hail": 0,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 2,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 2
+            },
+            "2026-07-17T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Tornado": 0,
+                "ConvectiveWind": 0,
+                "Hail": 0,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-18T08:00:00-04:00": {
+                "SevereThunderstorm": 2,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 1,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 2
+            },
+            "2026-07-19T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 0,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 0
+            },
+            "2026-07-20T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 0,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "DailyComposite": 0
+            },
+            "2026-07-21T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExtremeHeat": 1,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-22T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "DailyComposite": 1
+            }
+        },
+        "54003": {
+            "countyName": "WV_Berkeley",
+            "2026-07-16T15:00:00-04:00": {
+                "SevereThunderstorm": 1,
+                "Tornado": 0,
+                "ConvectiveWind": 1,
+                "Hail": 0,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 2,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 2
+            },
+            "2026-07-17T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Tornado": 0,
+                "ConvectiveWind": 0,
+                "Hail": 0,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-18T08:00:00-04:00": {
+                "SevereThunderstorm": 2,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 1,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 2
+            },
+            "2026-07-19T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 0,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 0
+            },
+            "2026-07-20T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 0,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "DailyComposite": 0
+            },
+            "2026-07-21T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExtremeHeat": 1,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-22T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "DailyComposite": 1
+            }
+        },
+        "54023": {
+            "countyName": "WV_Grant",
+            "2026-07-16T15:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Tornado": 0,
+                "ConvectiveWind": 0,
+                "Hail": 0,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 2,
+                "NonConvectiveWind": 0,
+                "Fog": 1,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 2
+            },
+            "2026-07-17T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Tornado": 0,
+                "ConvectiveWind": 0,
+                "Hail": 0,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-18T08:00:00-04:00": {
+                "SevereThunderstorm": 2,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 2
+            },
+            "2026-07-19T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-20T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 0,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "DailyComposite": 0
+            },
+            "2026-07-21T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExtremeHeat": 1,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-22T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "DailyComposite": 1
+            }
+        },
+        "54027": {
+            "countyName": "WV_Hampshire",
+            "2026-07-16T15:00:00-04:00": {
+                "SevereThunderstorm": 1,
+                "Tornado": 0,
+                "ConvectiveWind": 1,
+                "Hail": 0,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 2,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 2
+            },
+            "2026-07-17T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Tornado": 0,
+                "ConvectiveWind": 0,
+                "Hail": 0,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-18T08:00:00-04:00": {
+                "SevereThunderstorm": 2,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 1,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 2
+            },
+            "2026-07-19T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 0,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 0
+            },
+            "2026-07-20T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 0,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "DailyComposite": 0
+            },
+            "2026-07-21T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExtremeHeat": 1,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-22T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "DailyComposite": 1
+            }
+        },
+        "54031": {
+            "countyName": "WV_Hardy",
+            "2026-07-16T15:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Tornado": 0,
+                "ConvectiveWind": 0,
+                "Hail": 0,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 2,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 2
+            },
+            "2026-07-17T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Tornado": 0,
+                "ConvectiveWind": 0,
+                "Hail": 0,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-18T08:00:00-04:00": {
+                "SevereThunderstorm": 2,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 1,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 2
+            },
+            "2026-07-19T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-20T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 0,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "DailyComposite": 0
+            },
+            "2026-07-21T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExtremeHeat": 1,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-22T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "DailyComposite": 1
+            }
+        },
+        "54037": {
+            "countyName": "WV_Jefferson",
+            "2026-07-16T15:00:00-04:00": {
+                "SevereThunderstorm": 1,
+                "Tornado": 0,
+                "ConvectiveWind": 1,
+                "Hail": 0,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 2,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 2
+            },
+            "2026-07-17T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Tornado": 0,
+                "ConvectiveWind": 0,
+                "Hail": 0,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-18T08:00:00-04:00": {
+                "SevereThunderstorm": 2,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 1,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 2
+            },
+            "2026-07-19T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 0,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 0
+            },
+            "2026-07-20T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 0,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "DailyComposite": 0
+            },
+            "2026-07-21T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExtremeHeat": 1,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-22T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "DailyComposite": 1
+            }
+        },
+        "54057": {
+            "countyName": "WV_Mineral",
+            "2026-07-16T15:00:00-04:00": {
+                "SevereThunderstorm": 1,
+                "Tornado": 0,
+                "ConvectiveWind": 1,
+                "Hail": 0,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 2,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 2
+            },
+            "2026-07-17T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Tornado": 0,
+                "ConvectiveWind": 0,
+                "Hail": 0,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-18T08:00:00-04:00": {
+                "SevereThunderstorm": 2,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 1,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 2
+            },
+            "2026-07-19T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-20T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 0,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "DailyComposite": 0
+            },
+            "2026-07-21T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExtremeHeat": 1,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-22T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "DailyComposite": 1
+            }
+        },
+        "54065": {
+            "countyName": "WV_Morgan",
+            "2026-07-16T15:00:00-04:00": {
+                "SevereThunderstorm": 1,
+                "Tornado": 0,
+                "ConvectiveWind": 1,
+                "Hail": 0,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 2,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 2
+            },
+            "2026-07-17T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Tornado": 0,
+                "ConvectiveWind": 0,
+                "Hail": 0,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-18T08:00:00-04:00": {
+                "SevereThunderstorm": 2,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 1,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 2
+            },
+            "2026-07-19T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 0,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 0
+            },
+            "2026-07-20T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 0,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "DailyComposite": 0
+            },
+            "2026-07-21T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExtremeHeat": 1,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-22T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "DailyComposite": 1
+            }
+        },
+        "54071": {
+            "countyName": "WV_Pendleton",
+            "2026-07-16T15:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Tornado": 0,
+                "ConvectiveWind": 0,
+                "Hail": 0,
+                "Lightning": 0,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 1,
+                "NonConvectiveWind": 0,
+                "Fog": 2,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 2
+            },
+            "2026-07-17T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Tornado": 0,
+                "ConvectiveWind": 0,
+                "Hail": 0,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-18T08:00:00-04:00": {
+                "SevereThunderstorm": 2,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 2
+            },
+            "2026-07-19T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "Fog": 0,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-20T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 0,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "DailyComposite": 0
+            },
+            "2026-07-21T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-22T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExtremeHeat": 0,
+                "NonConvectiveWind": 0,
+                "FireWeather": 0,
+                "DailyComposite": 1
+            }
+        }
+    },
+    "states": {
+        "MD": {
+            "2026-07-16T15:00:00-04:00": {
+                "SevereThunderstorm": 1,
+                "Tornado": 0,
+                "ConvectiveWind": 1,
+                "Hail": 0,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 3,
+                "NonConvectiveWind": 0,
+                "Frost/Freeze": 0,
+                "Fog": 0,
+                "HighSurf": 0,
+                "DailyComposite": 3
+            },
+            "2026-07-17T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Tornado": 0,
+                "ConvectiveWind": 0,
+                "Hail": 0,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 1,
+                "NonConvectiveWind": 0,
+                "Frost/Freeze": 0,
+                "Fog": 0,
+                "HighSurf": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-18T08:00:00-04:00": {
+                "SevereThunderstorm": 2,
+                "Lightning": 2,
+                "ExcessiveRainfall": 1,
+                "ExtremeHeat": 3,
+                "NonConvectiveWind": 0,
+                "Frost/Freeze": 0,
+                "Fog": 0,
+                "HighSurf": 0,
+                "DailyComposite": 3
+            },
+            "2026-07-19T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 1,
+                "NonConvectiveWind": 0,
+                "Frost/Freeze": 0,
+                "Fog": 0,
+                "HighSurf": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-20T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExcessiveRainfall": 0,
+                "ExtremeHeat": 1,
+                "NonConvectiveWind": 0,
+                "Frost/Freeze": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-21T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExtremeHeat": 1,
+                "NonConvectiveWind": 0,
+                "Frost/Freeze": 0,
+                "DailyComposite": 1
+            },
+            "2026-07-22T08:00:00-04:00": {
+                "SevereThunderstorm": 0,
+                "Lightning": 1,
+                "ExtremeHeat": 1,
+                "NonConvectiveWind": 0,
+                "Frost/Freeze": 0,
+                "DailyComposite": 1
+            }
+        }
+    }
+}

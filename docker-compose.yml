@@ -40,6 +40,7 @@ services:
     ports:
       - 8080:8080
       - 34235:34235
+      - 3322:3322
     environment:
       ENABLE_DJANGO_DEBUG_TOOLBAR: false
       POSTGRES_DB: weathergov
@@ -301,7 +302,8 @@ services:
 
   tasks-dev:
     platform: linux/amd64
-    image: golang:1.26.5-bookworm
+    build:
+      dockerfile: Dockerfile.golang
     working_dir: /tasks
     volumes:
       - ./tasks:/tasks
@@ -310,6 +312,14 @@ services:
     environment:
       - GOCACHE=/root/.cache/go-build
       - GOMODCACHE=/go/pkg/mod
+    cap_add:
+      - SYS_PTRACE
+    security_opt:
+      - seccomp:unconfined
+      - apparmor:unconfined
+    ports:
+      - 3321:3321
+      - 33221:33221
     networks:
       - weather.gov
 
