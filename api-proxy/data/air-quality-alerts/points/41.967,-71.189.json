@@ -1,0 +1,74 @@
+{
+  "@context": [
+    "https://geojson.org/geojson-ld/geojson-context.jsonld",
+    {
+      "@version": "1.1",
+      "wx": "https://api.weather.gov/ontology#",
+      "s": "https://schema.org/",
+      "geo": "http://www.opengis.net/ont/geosparql#",
+      "unit": "http://codes.wmo.int/common/unit/",
+      "@vocab": "https://api.weather.gov/ontology#",
+      "geometry": { "@id": "s:GeoCoordinates", "@type": "geo:wktLiteral" },
+      "city": "s:addressLocality",
+      "state": "s:addressRegion",
+      "distance": { "@id": "s:Distance", "@type": "s:QuantitativeValue" },
+      "bearing": { "@type": "s:QuantitativeValue" },
+      "value": { "@id": "s:value" },
+      "unitCode": { "@id": "s:unitCode", "@type": "@id" },
+      "forecastOffice": { "@type": "@id" },
+      "forecastGridData": { "@type": "@id" },
+      "publicZone": { "@type": "@id" },
+      "county": { "@type": "@id" }
+    }
+  ],
+  "id": "https://api.weather.gov/points/41.967,-71.189",
+  "type": "Feature",
+  "geometry": { "type": "Point", "coordinates": [-71.189, 41.967] },
+  "properties": {
+    "@id": "https://api.weather.gov/points/41.967,-71.189",
+    "@type": "wx:Point",
+    "cwa": "BOX",
+    "type": "land",
+    "forecastOffice": "https://api.weather.gov/offices/BOX",
+    "gridId": "BOX",
+    "gridX": 70,
+    "gridY": 82,
+    "forecast": "https://api.weather.gov/gridpoints/BOX/70,82/forecast",
+    "forecastHourly": "https://api.weather.gov/gridpoints/BOX/70,82/forecast/hourly",
+    "forecastGridData": "https://api.weather.gov/gridpoints/BOX/70,82",
+    "observationStations": "https://api.weather.gov/gridpoints/BOX/70,82/stations",
+    "relativeLocation": {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [-71.1885478, 41.9744563] },
+      "properties": {
+        "city": "Norton Center",
+        "state": "MA",
+        "distance": { "unitCode": "wmoUnit:m", "value": 0 },
+        "bearing": { "unitCode": "wmoUnit:degree_(angle)", "value": 0 }
+      }
+    },
+    "forecastZone": "https://api.weather.gov/zones/forecast/MAZ017",
+    "county": "https://api.weather.gov/zones/county/MAC005",
+    "fireWeatherZone": "https://api.weather.gov/zones/fire/MAZ017",
+    "timeZone": "America/New_York",
+    "radarStation": "KBOX",
+    "astronomicalData": {
+      "sunrise": "2026-07-15T05:21:16-04:00",
+      "sunset": "2026-07-15T20:20:19-04:00",
+      "transit": "2026-07-15T12:50:47-04:00",
+      "civilTwilightBegin": "2026-07-15T04:49:41-04:00",
+      "civilTwilightEnd": "2026-07-15T20:51:54-04:00",
+      "nauticalTwilightBegin": "2026-07-15T04:07:33-04:00",
+      "nauticalTwilightEnd": "2026-07-15T21:34:02-04:00",
+      "astronomicalTwilightBegin": "2026-07-15T03:18:24-04:00",
+      "astronomicalTwilightEnd": "2026-07-15T22:23:10-04:00"
+    },
+    "nwr": {
+      "transmitter": "KHB35",
+      "sameCode": "025005",
+      "areaBroadcast": "https://api.weather.gov/radio/KHB35/broadcast",
+      "pointBroadcast": "https://api.weather.gov/points/41.967,-71.189/radio"
+    }
+  },
+  "@bundle": { "name": "Norton Center, MA" }
+}

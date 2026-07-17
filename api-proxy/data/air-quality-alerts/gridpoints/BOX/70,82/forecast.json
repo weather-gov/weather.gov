@@ -1,0 +1,301 @@
+{
+  "@context": [
+    "https://geojson.org/geojson-ld/geojson-context.jsonld",
+    {
+      "@version": "1.1",
+      "wx": "https://api.weather.gov/ontology#",
+      "geo": "http://www.opengis.net/ont/geosparql#",
+      "unit": "http://codes.wmo.int/common/unit/",
+      "@vocab": "https://api.weather.gov/ontology#"
+    }
+  ],
+  "type": "Feature",
+  "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+      [
+        [-71.1852, 41.9459],
+        [-71.1801, 41.9674],
+        [-71.209, 41.9712],
+        [-71.2141, 41.9497],
+        [-71.1852, 41.9459]
+      ]
+    ]
+  },
+  "properties": {
+    "units": "us",
+    "forecastGenerator": "BaselineForecastGenerator",
+    "generatedAt": "date:now +0 seconds",
+    "updateTime": "date:now -5478 seconds",
+    "validTimes": "date:now -28837 seconds / P7DT13H",
+    "elevation": { "unitCode": "wmoUnit:m", "value": 34.1376 },
+    "periods": [
+      {
+        "number": 1,
+        "name": "This Afternoon",
+        "startTime": "date:now -37 seconds",
+        "endTime": "date:now +7162 seconds",
+        "isDaytime": true,
+        "temperature": 87,
+        "temperatureUnit": "F",
+        "temperatureTrend": null,
+        "probabilityOfPrecipitation": {
+          "unitCode": "wmoUnit:percent",
+          "value": 14
+        },
+        "windSpeed": "9 mph",
+        "windDirection": "NW",
+        "icon": "https://api.weather.gov/icons/land/day/smoke?size=medium",
+        "shortForecast": "Smoke",
+        "detailedForecast": "Smoke. Partly sunny, with a high near 87. Northwest wind around 9 mph, with gusts as high as 21 mph."
+      },
+      {
+        "number": 2,
+        "name": "Tonight",
+        "startTime": "date:now +7162 seconds",
+        "endTime": "date:now +50362 seconds",
+        "isDaytime": false,
+        "temperature": 66,
+        "temperatureUnit": "F",
+        "temperatureTrend": null,
+        "probabilityOfPrecipitation": {
+          "unitCode": "wmoUnit:percent",
+          "value": 10
+        },
+        "windSpeed": "2 to 8 mph",
+        "windDirection": "NW",
+        "icon": "https://api.weather.gov/icons/land/night/smoke/few?size=medium",
+        "shortForecast": "Patchy Smoke then Mostly Clear",
+        "detailedForecast": "Patchy smoke before 8pm, then haze between 8pm and 10pm. Mostly clear, with a low around 66. Northwest wind 2 to 8 mph."
+      },
+      {
+        "number": 3,
+        "name": "Thursday",
+        "startTime": "date:now +50362 seconds",
+        "endTime": "date:now +93562 seconds",
+        "isDaytime": true,
+        "temperature": 89,
+        "temperatureUnit": "F",
+        "temperatureTrend": null,
+        "probabilityOfPrecipitation": {
+          "unitCode": "wmoUnit:percent",
+          "value": 1
+        },
+        "windSpeed": "2 to 12 mph",
+        "windDirection": "W",
+        "icon": "https://api.weather.gov/icons/land/day/smoke?size=medium",
+        "shortForecast": "Patchy Smoke",
+        "detailedForecast": "Patchy smoke after 11am. Sunny, with a high near 89. West wind 2 to 12 mph, with gusts as high as 23 mph."
+      },
+      {
+        "number": 4,
+        "name": "Thursday Night",
+        "startTime": "date:now +93562 seconds",
+        "endTime": "date:now +136762 seconds",
+        "isDaytime": false,
+        "temperature": 62,
+        "temperatureUnit": "F",
+        "temperatureTrend": null,
+        "probabilityOfPrecipitation": {
+          "unitCode": "wmoUnit:percent",
+          "value": 2
+        },
+        "windSpeed": "2 to 10 mph",
+        "windDirection": "NW",
+        "icon": "https://api.weather.gov/icons/land/night/sct?size=medium",
+        "shortForecast": "Partly Cloudy",
+        "detailedForecast": "Partly cloudy, with a low around 62. Northwest wind 2 to 10 mph, with gusts as high as 21 mph."
+      },
+      {
+        "number": 5,
+        "name": "Friday",
+        "startTime": "date:now +136762 seconds",
+        "endTime": "date:now +179962 seconds",
+        "isDaytime": true,
+        "temperature": 85,
+        "temperatureUnit": "F",
+        "temperatureTrend": null,
+        "probabilityOfPrecipitation": {
+          "unitCode": "wmoUnit:percent",
+          "value": 0
+        },
+        "windSpeed": "2 to 7 mph",
+        "windDirection": "NW",
+        "icon": "https://api.weather.gov/icons/land/day/few?size=medium",
+        "shortForecast": "Sunny",
+        "detailedForecast": "Sunny, with a high near 85. Northwest wind 2 to 7 mph."
+      },
+      {
+        "number": 6,
+        "name": "Friday Night",
+        "startTime": "date:now +179962 seconds",
+        "endTime": "date:now +223162 seconds",
+        "isDaytime": false,
+        "temperature": 63,
+        "temperatureUnit": "F",
+        "temperatureTrend": null,
+        "probabilityOfPrecipitation": {
+          "unitCode": "wmoUnit:percent",
+          "value": 2
+        },
+        "windSpeed": "1 to 5 mph",
+        "windDirection": "W",
+        "icon": "https://api.weather.gov/icons/land/night/sct?size=medium",
+        "shortForecast": "Partly Cloudy",
+        "detailedForecast": "Partly cloudy, with a low around 63. West wind 1 to 5 mph."
+      },
+      {
+        "number": 7,
+        "name": "Saturday",
+        "startTime": "date:now +223162 seconds",
+        "endTime": "date:now +266362 seconds",
+        "isDaytime": true,
+        "temperature": 83,
+        "temperatureUnit": "F",
+        "temperatureTrend": null,
+        "probabilityOfPrecipitation": {
+          "unitCode": "wmoUnit:percent",
+          "value": 44
+        },
+        "windSpeed": "1 to 12 mph",
+        "windDirection": "SW",
+        "icon": "https://api.weather.gov/icons/land/day/bkn/tsra_sct,40?size=medium",
+        "shortForecast": "Mostly Cloudy then Chance Showers And Thunderstorms",
+        "detailedForecast": "A slight chance of rain showers between noon and 2pm, then a chance of showers and thunderstorms. Mostly cloudy, with a high near 83. Southwest wind 1 to 12 mph, with gusts as high as 23 mph. Chance of precipitation is 40%."
+      },
+      {
+        "number": 8,
+        "name": "Saturday Night",
+        "startTime": "date:now +266362 seconds",
+        "endTime": "date:now +309562 seconds",
+        "isDaytime": false,
+        "temperature": 66,
+        "temperatureUnit": "F",
+        "temperatureTrend": null,
+        "probabilityOfPrecipitation": {
+          "unitCode": "wmoUnit:percent",
+          "value": 89
+        },
+        "windSpeed": "8 to 12 mph",
+        "windDirection": "SW",
+        "icon": "https://api.weather.gov/icons/land/night/tsra,90?size=medium",
+        "shortForecast": "Showers And Thunderstorms",
+        "detailedForecast": "Showers and thunderstorms. Mostly cloudy, with a low around 66. Southwest wind 8 to 12 mph, with gusts as high as 23 mph. Chance of precipitation is 90%."
+      },
+      {
+        "number": 9,
+        "name": "Sunday",
+        "startTime": "date:now +309562 seconds",
+        "endTime": "date:now +352762 seconds",
+        "isDaytime": true,
+        "temperature": 84,
+        "temperatureUnit": "F",
+        "temperatureTrend": null,
+        "probabilityOfPrecipitation": {
+          "unitCode": "wmoUnit:percent",
+          "value": 71
+        },
+        "windSpeed": "9 mph",
+        "windDirection": "W",
+        "icon": "https://api.weather.gov/icons/land/day/tsra_sct,70/tsra_sct,30?size=medium",
+        "shortForecast": "Showers And Thunderstorms Likely",
+        "detailedForecast": "Showers and thunderstorms likely before 1pm, then a slight chance of showers and thunderstorms. Partly sunny, with a high near 84. West wind around 9 mph. Chance of precipitation is 70%."
+      },
+      {
+        "number": 10,
+        "name": "Sunday Night",
+        "startTime": "date:now +352762 seconds",
+        "endTime": "date:now +395962 seconds",
+        "isDaytime": false,
+        "temperature": 61,
+        "temperatureUnit": "F",
+        "temperatureTrend": null,
+        "probabilityOfPrecipitation": {
+          "unitCode": "wmoUnit:percent",
+          "value": 13
+        },
+        "windSpeed": "2 to 7 mph",
+        "windDirection": "NW",
+        "icon": "https://api.weather.gov/icons/land/night/sct?size=medium",
+        "shortForecast": "Partly Cloudy",
+        "detailedForecast": "Partly cloudy, with a low around 61. Northwest wind 2 to 7 mph."
+      },
+      {
+        "number": 11,
+        "name": "Monday",
+        "startTime": "date:now +395962 seconds",
+        "endTime": "date:now +439162 seconds",
+        "isDaytime": true,
+        "temperature": 84,
+        "temperatureUnit": "F",
+        "temperatureTrend": null,
+        "probabilityOfPrecipitation": {
+          "unitCode": "wmoUnit:percent",
+          "value": 3
+        },
+        "windSpeed": "2 to 7 mph",
+        "windDirection": "SW",
+        "icon": "https://api.weather.gov/icons/land/day/few?size=medium",
+        "shortForecast": "Sunny",
+        "detailedForecast": "Sunny, with a high near 84. Southwest wind 2 to 7 mph."
+      },
+      {
+        "number": 12,
+        "name": "Monday Night",
+        "startTime": "date:now +439162 seconds",
+        "endTime": "date:now +482362 seconds",
+        "isDaytime": false,
+        "temperature": 64,
+        "temperatureUnit": "F",
+        "temperatureTrend": null,
+        "probabilityOfPrecipitation": {
+          "unitCode": "wmoUnit:percent",
+          "value": 10
+        },
+        "windSpeed": "2 to 7 mph",
+        "windDirection": "S",
+        "icon": "https://api.weather.gov/icons/land/night/sct?size=medium",
+        "shortForecast": "Partly Cloudy",
+        "detailedForecast": "Partly cloudy, with a low around 64. South wind 2 to 7 mph."
+      },
+      {
+        "number": 13,
+        "name": "Tuesday",
+        "startTime": "date:now +482362 seconds",
+        "endTime": "date:now +525562 seconds",
+        "isDaytime": true,
+        "temperature": 85,
+        "temperatureUnit": "F",
+        "temperatureTrend": null,
+        "probabilityOfPrecipitation": {
+          "unitCode": "wmoUnit:percent",
+          "value": 40
+        },
+        "windSpeed": "2 to 9 mph",
+        "windDirection": "S",
+        "icon": "https://api.weather.gov/icons/land/day/rain_showers,30/tsra_hi,40?size=medium",
+        "shortForecast": "Chance Rain Showers",
+        "detailedForecast": "A chance of rain showers between 8am and 2pm, then a chance of showers and thunderstorms. Partly sunny, with a high near 85. South wind 2 to 9 mph. Chance of precipitation is 40%."
+      },
+      {
+        "number": 14,
+        "name": "Tuesday Night",
+        "startTime": "date:now +525562 seconds",
+        "endTime": "date:now +568762 seconds",
+        "isDaytime": false,
+        "temperature": 66,
+        "temperatureUnit": "F",
+        "temperatureTrend": null,
+        "probabilityOfPrecipitation": {
+          "unitCode": "wmoUnit:percent",
+          "value": 57
+        },
+        "windSpeed": "3 to 8 mph",
+        "windDirection": "SW",
+        "icon": "https://api.weather.gov/icons/land/night/tsra_sct,60?size=medium",
+        "shortForecast": "Showers And Thunderstorms Likely",
+        "detailedForecast": "Showers and thunderstorms likely. Mostly cloudy, with a low around 66. Southwest wind 3 to 8 mph."
+      }
+    ]
+  }
+}
