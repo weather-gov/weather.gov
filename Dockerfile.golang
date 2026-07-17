@@ -1,0 +1,4 @@
+FROM golang:1.26.5-bookworm
+
+# Install the Delve debugger for Go
+RUN cd $GOPATH && go install github.com/go-delve/delve/cmd/dlv@latest

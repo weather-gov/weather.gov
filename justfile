@@ -426,3 +426,10 @@ go-build-alerts:
 [group("golang")]
 go-fmt:
     docker compose run --rm tasks-dev gofmt -e -w -l .
+
+# Run all the tests
+[group("golang")]
+go-test:
+    docker compose run --rm tasks-dev go test -v ./...
+
+alias test-go := go-test
