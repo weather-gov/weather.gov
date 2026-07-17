@@ -23,3 +23,13 @@ pre-commit:
       glob: "**/*.html"
       run: just lint-template {staged_files}
       stage_fixed: false
+    go-imports:
+      glob: "tasks/**/*.go"
+      run: just go-imports
+      stage_fixed: true
+    go-vet:
+      glob: "tasks/**/*.go"
+      run: just go-vet
+    go-build:
+      glob: "tasks/**/*.go"
+      run: just go-build-check
