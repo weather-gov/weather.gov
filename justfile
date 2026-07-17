@@ -241,6 +241,16 @@ gitlab-sast:
 lint-docker:
     hadolint ./tasks/Dockerfile
 
+# Run goimports on the files in the tasks directory
+[group("code quality")]
+go-imports:
+    docker compose run --rm tasks-dev go run golang.org/x/tools/cmd/goimports@latest -w .
+
+# Run go vet across all packages
+[group("code quality")]
+go-vet:
+    docker compose run --rm tasks-dev go vet ./...
+
 ##### Testing #####
 alias a11y := test-a11y
 # Run automated accessibility testing in Playwright
@@ -422,10 +432,10 @@ go-build-ghwo:
 go-build-alerts:
     docker compose run --rm tasks-dev go build -o /tasks/bin/alerts /tasks/cmd/alerts/main.go
 
-# Run go fmt on the files in the tasks directory
+# Compile all programs
 [group("golang")]
-go-fmt:
-    docker compose run --rm tasks-dev gofmt -e -w -l .
+go-build-check:
+    docker compose run --rm tasks-dev go build ./...
 
 # Run all the tests
 [group("golang")]

@@ -29,7 +29,7 @@ We have added convenience commands to the root justfile of this repository:
 | `just go-run-alerts` | Run (interpreted) the alerts program |
 | `just go-build-ghwo` | Compile the GHWO program and place the binary at `tasks/bin/ghwo` |
 | `just go-build-alerts` | Compile the alerts program and place the binary at `tasks/bin/alerts` |
-| `just go-fmt` | Format the files in the project according to `gofmt`. Modifies files in place, and will display the names of any changed files |
+| `just go-imports` | Format the files in the project. Modifies files in place, and will display the names of any changed files |
 
 ## Description of Tasks
 ### Alerts
@@ -41,5 +41,3 @@ This program, which runs every 30s, will fetch the latest alerts across the coun
 The Graphical Hazardous Weather Outlook (GHWO, also known as Risks Overview) processing task.
 
 This program, which runs every 30m, will fetch all GHWO data from all the WFOs that we know about, process the information into a structure that we find useful, and save these records into our database.
-  
-
