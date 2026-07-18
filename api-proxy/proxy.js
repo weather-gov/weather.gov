@@ -22,8 +22,7 @@ export default (req, res) => {
   const qs = qp.length === 2 ? qp[1] : "";
 
   const proxyRequestSettings = {
-    // If there's a wx-host header, use that as our hostname
-    host: req.headers["wx-host"] ?? "api.weather.gov",
+    host: "api.weather.gov",
     port: 443,
     path: `${req.path}?${qs}`,
     method: "GET",
