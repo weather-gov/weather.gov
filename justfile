@@ -443,3 +443,12 @@ go-test:
     docker compose run --rm tasks-dev go test -v ./...
 
 alias test-go := go-test
+
+# Run the WPC probabilistic precip program
+[group("golang")]
+go-run-wpcprob:
+    docker build -t wpcprob-tasks -f tasks/Dockerfile tasks/
+    docker run --rm --network "$(docker network ls --filter name=weather.gov -q | head -1)" \
+        -v "{{justfile_directory()}}/tasks:/tasks" \
+        -e DB_HOST=database -e DB_PORT=5432 -e DB_NAME=weathergov -e DB_USERNAME=drupal -e DB_PASSWORD=drupal \
+        -w /tasks/cmd/wpcprob wpcprob-tasks go run .

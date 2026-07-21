@@ -319,3 +319,25 @@ class WeatherGridPoints(models.Model):
             models.Index(fields=["x", "y"]),
             models.Index(fields=["x", "y", "cwa"])
         ]
+
+
+class WPCProbabilisticPrecip(models.Model):
+    """WPC probabilistic precip/snow/freezing-rain, keyed by NDFD gridpoint."""
+
+    wfo = models.CharField(max_length=3)
+    x = models.IntegerField()
+    y = models.IntegerField()
+    cycle = models.DateTimeField()
+    valid_time = models.DateTimeField()
+
+    # Each field: {"accumulation": <inches>, "percentiles": {...inches}, "probabilities": {...percent}}.
+    rain_data = JSONField(null=True)
+    snow_data = JSONField(null=True)
+    freezing_rain_data = JSONField(null=True)
+
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:  # noqa: D106
+        db_table = "weathergov_wpc_prob_precip"
+        unique_together = ("wfo", "x", "y")
+        indexes = [models.Index(fields=["wfo", "x", "y"])]

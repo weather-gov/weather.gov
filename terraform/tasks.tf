@@ -27,7 +27,7 @@ resource "cloudfoundry_app" "tasks" {
   environment = {
     NEW_RELIC_LICENSE_KEY   = local.newrelic_license
     GOVERSION               = "1.26"
-    GO_INSTALL_PACKAGE_SPEC = "./cmd/alerts ./cmd/ghwo"
+    GO_INSTALL_PACKAGE_SPEC = "./cmd/alerts ./cmd/ghwo ./cmd/wpcprob"
     CLOUDGOV_SPACE          = var.cf_space_name
   }
 
