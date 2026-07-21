@@ -16,21 +16,24 @@ SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 # install and pin manually.
 ARG SUPERCRONIC_VERSION=v0.2.29
 ARG SUPERCRONIC_SHA1=cd48d45c4b10f3f0bfdd3a57d054cd05ac96812b
+ARG WGRIB2_VERSION=wgrib-v3.8.0
+ARG WGRIB2_SHA256=7670bad9ed9e5f316a0d2f56a09f917b5909fee551d9618dac92e05aec1121f9
 
 # hadolint ignore=DL3008
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
-      ca-certificates curl \
-      # these libraries are required for wgrib2 \
-      libgfortran5 libgomp1 libquadmath0 && \
+      ca-certificates curl && \
     curl -fsSLo /usr/local/bin/supercronic \
       "https://github.com/aptible/supercronic/releases/download/${SUPERCRONIC_VERSION}/supercronic-linux-amd64" && \
     echo "${SUPERCRONIC_SHA1} /usr/local/bin/supercronic" | sha1sum -c - && \
     chmod +x /usr/local/bin/supercronic && \
+    curl -fsSLo /usr/local/bin/wgrib2 \
+      "https://github.com/weather-gov/weather.gov/releases/download/${WGRIB2_VERSION}/wgrib2" && \
+    echo "${WGRIB2_SHA256} /usr/local/bin/wgrib2" | sha256sum -c - && \
+    chmod +x /usr/local/bin/wgrib2 && \
     apt-get purge -y curl && apt-get autoremove -y && \
     rm -rf /var/lib/apt/lists/*
 
-COPY --from=sondngyn/wgrib2:aws /usr/local/bin/wgrib2 /usr/local/bin/wgrib2
 COPY --from=builder /out/alerts /usr/local/bin/alerts
 COPY --from=builder /out/ghwo /usr/local/bin/ghwo
 COPY crontab /etc/crontab

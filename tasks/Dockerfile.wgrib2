@@ -1,0 +1,67 @@
+# Note: this Dockerfile is for building wgrib2 from source and making a static binary
+
+ARG G2C_VERSION=v2.3.0
+ARG WGRIB2_VERSION=v3.8.0
+
+FROM debian:bookworm-slim AS builder
+
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+
+# hadolint ignore=DL3008
+RUN apt-get update && apt-get install -y --no-install-recommends \
+      ca-certificates git build-essential cmake pkg-config \
+      zlib1g-dev libpng-dev libopenjp2-7-dev && \
+    rm -rf /var/lib/apt/lists/*
+
+# drop unversioned .so symlinks so cmake links the .a instead
+RUN rm -f /usr/lib/x86_64-linux-gnu/libpng.so /usr/lib/x86_64-linux-gnu/libpng16.so \
+      /usr/lib/x86_64-linux-gnu/libz.so /usr/lib/x86_64-linux-gnu/libopenjp2.so
+
+ARG G2C_VERSION
+RUN git clone --branch "${G2C_VERSION}" --depth 1 \
+      https://github.com/NOAA-EMC/NCEPLIBS-g2c /src/g2c
+
+RUN cmake -S /src/g2c -B /src/g2c/build \
+      -DCMAKE_INSTALL_PREFIX=/opt/g2c \
+      -DCMAKE_BUILD_TYPE=Release \
+      -DBUILD_SHARED_LIBS=OFF \
+      -DBUILD_STATIC_LIBS=ON \
+      -DUSE_PNG=ON \
+      -DUSE_Jasper=OFF \
+      -DUSE_OpenJPEG=ON \
+      -DUSE_AEC=OFF \
+      -DUTILS=OFF \
+      -DBUILD_TESTING=OFF && \
+      # CMAKE_INSTALL_PREFIX: where `cmake --install` puts the lib/headers
+      # BUILD_SHARED_LIBS/BUILD_STATIC_LIBS: only build the .a, no .so
+      # USE_PNG/USE_OpenJPEG: codecs wgrib2 needs (PNG, JPEG2000)
+      # USE_Jasper: alternate JPEG2000 backend, skip since OpenJPEG covers it
+      # USE_AEC: CCSDS AEC compression codec, unused here
+      # UTILS: g2c's CLI utilities, not needed for the library build
+      # BUILD_TESTING: skip g2c's own test suite
+    cmake --build /src/g2c/build --parallel "$(nproc)" && \
+    cmake --install /src/g2c/build
+
+ARG WGRIB2_VERSION
+RUN git clone --branch "${WGRIB2_VERSION}" --depth 1 \
+      https://github.com/NOAA-EMC/wgrib2 /src/wgrib2
+
+# g2c v2.3.0 exports g2c::g2c_static, not the g2c::g2c target wgrib2 expects
+RUN sed -i 's/g2c::g2c)/g2c::g2c_static)/g' /src/wgrib2/wgrib2/CMakeLists.txt && \
+    cmake -S /src/wgrib2 -B /src/wgrib2/build \
+      -DCMAKE_INSTALL_PREFIX=/opt/wgrib2 \
+      -DCMAKE_BUILD_TYPE=Release \
+      -DCMAKE_PREFIX_PATH=/opt/g2c \
+      -DUSE_G2CLIB_LOW=ON \
+      -DBUILD_LIB=OFF \
+      -DBUILD_SHARED_LIB=OFF \
+      -DBUILD_WGRIB=OFF \
+      -DBUILD_TESTING=OFF \
+      -DCMAKE_EXE_LINKER_FLAGS="-static" && \
+    cmake --build /src/wgrib2/build --parallel "$(nproc)" && \
+    cmake --install /src/wgrib2/build && \
+    # check for non-zero exit if not statically created
+    ! ldd /opt/wgrib2/bin/wgrib2 >/dev/null 2>&1
+
+FROM scratch AS artifact
+COPY --from=builder /opt/wgrib2/bin/wgrib2 /wgrib2
