@@ -1,0 +1,459 @@
+{
+    "generation_time": "2026-07-21T13:06:41Z",
+    "generation_time_LT": "2026-07-21T09:06:41",
+    "ghwo_version": "$Revision: 44842 $",
+    "hazards": [
+        {
+            "description": "Utilizes <a href='https://www.spc.noaa.gov/products/outlook/' target='_blank'>daily forecasts</a> from the Storm Prediction Center (SPC). <a href='https://www.spc.noaa.gov/misc/about.html' target='_blank'>More info</a>",
+            "name": "Severe Thunderstorm Risk",
+            "periods": {
+                "period1": {
+                    "color": "#ffc06c",
+                    "date": "Tuesday, July 21, 2026",
+                    "imagePath": "/images/lwx/ghwo/MarylandSevereThunderstormsDay1.jpg",
+                    "validStartTime": "09:00AM"
+                },
+                "period2": {
+                    "color": "#ffff51",
+                    "date": "Wednesday, July 22, 2026",
+                    "imagePath": "/images/lwx/ghwo/MarylandSevereThunderstormsDay2.jpg",
+                    "validStartTime": "08:00AM"
+                },
+                "period3": {
+                    "color": "#ededed",
+                    "date": "Thursday, July 23, 2026",
+                    "imagePath": "/images/lwx/ghwo/MarylandSevereThunderstormsDay3.jpg",
+                    "validStartTime": "08:00AM"
+                },
+                "period4": {
+                    "color": "#ededed",
+                    "date": "Friday, July 24, 2026",
+                    "imagePath": "/images/lwx/ghwo/MarylandSevereThunderstormsDay4.jpg",
+                    "validStartTime": "08:00AM"
+                },
+                "period5": {
+                    "color": "#ededed",
+                    "date": "Saturday, July 25, 2026",
+                    "imagePath": "/images/lwx/ghwo/MarylandSevereThunderstormsDay5.jpg",
+                    "validStartTime": "08:00AM"
+                },
+                "period6": {
+                    "color": "#ededed",
+                    "date": "Sunday, July 26, 2026",
+                    "imagePath": "/images/lwx/ghwo/MarylandSevereThunderstormsDay6.jpg",
+                    "validStartTime": "08:00AM"
+                },
+                "period7": {
+                    "color": "#ededed",
+                    "date": "Monday, July 27, 2026",
+                    "imagePath": "/images/lwx/ghwo/MarylandSevereThunderstormsDay7.jpg",
+                    "validStartTime": "08:00AM"
+                }
+            },
+            "webTab": "public"
+        },
+        {
+            "description": "Utilizes <a href='https://www.spc.noaa.gov/products/outlook/' target='_blank'>daily forecasts</a> from the Storm Prediction Center (SPC). <a href='https://www.spc.noaa.gov/misc/about.html' target='_blank'>More info</a>",
+            "name": "Tornado Risk",
+            "periods": {
+                "period1": {
+                    "color": "#ffff51",
+                    "date": "Tuesday, July 21, 2026",
+                    "imagePath": "/images/lwx/ghwo/MarylandTornadoDay1.jpg",
+                    "validStartTime": "09:00AM"
+                },
+                "period2": {
+                    "color": "#50c986",
+                    "date": "Wednesday, July 22, 2026",
+                    "imagePath": "/images/lwx/ghwo/MarylandTornadoDay2.jpg",
+                    "validStartTime": "08:00AM"
+                }
+            },
+            "webTab": "public"
+        },
+        {
+            "description": "Utilizes <a href='https://www.spc.noaa.gov/products/outlook/' target='_blank'>daily forecasts</a> from the Storm Prediction Center (SPC). <a href='https://www.spc.noaa.gov/misc/about.html' target='_blank'>More info</a>",
+            "name": "Thunderstorm Wind Risk",
+            "periods": {
+                "period1": {
+                    "color": "#ffc06c",
+                    "date": "Tuesday, July 21, 2026",
+                    "imagePath": "/images/lwx/ghwo/MarylandThunderstormWindDay1.jpg",
+                    "threatFlag": 1,
+                    "validStartTime": "09:00AM"
+                },
+                "period2": {
+                    "color": "#ffff51",
+                    "date": "Wednesday, July 22, 2026",
+                    "imagePath": "/images/lwx/ghwo/MarylandThunderstormWindDay2.jpg",
+                    "validStartTime": "08:00AM"
+                }
+            },
+            "webTab": "public"
+        },
+        {
+            "description": "Utilizes <a href='https://www.spc.noaa.gov/products/outlook/' target='_blank'>daily forecasts</a> from the Storm Prediction Center (SPC). <a href='https://www.spc.noaa.gov/misc/about.html' target='_blank'>More info</a>",
+            "name": "Hail Risk",
+            "periods": {
+                "period1": {
+                    "color": "#ffff51",
+                    "date": "Tuesday, July 21, 2026",
+                    "imagePath": "/images/lwx/ghwo/MarylandHailDay1.jpg",
+                    "validStartTime": "09:00AM"
+                },
+                "period2": {
+                    "color": "#ededed",
+                    "date": "Wednesday, July 22, 2026",
+                    "imagePath": "/images/lwx/ghwo/MarylandHailDay2.jpg",
+                    "validStartTime": "08:00AM"
+                }
+            },
+            "webTab": "public"
+        },
+        {
+            "description": "Derived from local office thunderstorm forecasts.",
+            "name": "Lightning Risk",
+            "periods": {
+                "period1": {
+                    "color": "red",
+                    "date": "Tuesday, July 21, 2026",
+                    "imagePath": "/images/lwx/ghwo/MarylandLightningDay1.jpg",
+                    "validStartTime": "09:00AM"
+                },
+                "period2": {
+                    "color": "orange",
+                    "date": "Wednesday, July 22, 2026",
+                    "imagePath": "/images/lwx/ghwo/MarylandLightningDay2.jpg",
+                    "validStartTime": "08:00AM"
+                },
+                "period3": {
+                    "color": "#ededed",
+                    "date": "Thursday, July 23, 2026",
+                    "imagePath": "/images/lwx/ghwo/MarylandLightningDay3.jpg",
+                    "validStartTime": "08:00AM"
+                },
+                "period4": {
+                    "color": "yellow",
+                    "date": "Friday, July 24, 2026",
+                    "imagePath": "/images/lwx/ghwo/MarylandLightningDay4.jpg",
+                    "validStartTime": "08:00AM"
+                },
+                "period5": {
+                    "color": "yellow",
+                    "date": "Saturday, July 25, 2026",
+                    "imagePath": "/images/lwx/ghwo/MarylandLightningDay5.jpg",
+                    "validStartTime": "08:00AM"
+                },
+                "period6": {
+                    "color": "yellow",
+                    "date": "Sunday, July 26, 2026",
+                    "imagePath": "/images/lwx/ghwo/MarylandLightningDay6.jpg",
+                    "validStartTime": "08:00AM"
+                },
+                "period7": {
+                    "color": "yellow",
+                    "date": "Monday, July 27, 2026",
+                    "imagePath": "/images/lwx/ghwo/MarylandLightningDay7.jpg",
+                    "validStartTime": "08:00AM"
+                }
+            },
+            "webTab": "public"
+        },
+        {
+            "description": "Utilizes the <a href='https://www.wpc.ncep.noaa.gov/qpf/excessive_rainfall_outlook_ero.php' target='_blank'>Excessive Rainfall Outlook</a> from the Weather Prediction Center (WPC). <a href='https://www.wpc.ncep.noaa.gov/html/fam2.shtml#excessrain' target='_blank'>More info</a>",
+            "name": "Excessive Rainfall Risk",
+            "periods": {
+                "period1": {
+                    "color": "orange",
+                    "date": "Tuesday, July 21, 2026",
+                    "imagePath": "/images/lwx/ghwo/MarylandExcessiveRainfallDay1.jpg",
+                    "validStartTime": "09:00AM"
+                },
+                "period2": {
+                    "color": "orange",
+                    "date": "Wednesday, July 22, 2026",
+                    "imagePath": "/images/lwx/ghwo/MarylandExcessiveRainfallDay2.jpg",
+                    "validStartTime": "08:00AM"
+                },
+                "period3": {
+                    "color": "#ededed",
+                    "date": "Thursday, July 23, 2026",
+                    "imagePath": "/images/lwx/ghwo/MarylandExcessiveRainfallDay3.jpg",
+                    "validStartTime": "08:00AM"
+                },
+                "period4": {
+                    "color": "#ededed",
+                    "date": "Friday, July 24, 2026",
+                    "imagePath": "/images/lwx/ghwo/MarylandExcessiveRainfallDay4.jpg",
+                    "validStartTime": "08:00AM"
+                },
+                "period5": {
+                    "color": "#ededed",
+                    "date": "Saturday, July 25, 2026",
+                    "imagePath": "/images/lwx/ghwo/MarylandExcessiveRainfallDay5.jpg",
+                    "validStartTime": "08:00AM"
+                }
+            },
+            "webTab": "public"
+        },
+        {
+            "description": "Derived from local office temperature and/or heat index forecasts.",
+            "name": "Extreme Heat Risk",
+            "periods": {
+                "period1": {
+                    "color": "orange",
+                    "date": "Tuesday, July 21, 2026",
+                    "imagePath": "/images/lwx/ghwo/MarylandExtremeHeatDay1.jpg",
+                    "validStartTime": "09:00AM"
+                },
+                "period2": {
+                    "color": "yellow",
+                    "date": "Wednesday, July 22, 2026",
+                    "imagePath": "/images/lwx/ghwo/MarylandExtremeHeatDay2.jpg",
+                    "validStartTime": "08:00AM"
+                },
+                "period3": {
+                    "color": "#ededed",
+                    "date": "Thursday, July 23, 2026",
+                    "imagePath": "/images/lwx/ghwo/MarylandExtremeHeatDay3.jpg",
+                    "validStartTime": "08:00AM"
+                },
+                "period4": {
+                    "color": "#ededed",
+                    "date": "Friday, July 24, 2026",
+                    "imagePath": "/images/lwx/ghwo/MarylandExtremeHeatDay4.jpg",
+                    "validStartTime": "08:00AM"
+                },
+                "period5": {
+                    "color": "#ededed",
+                    "date": "Saturday, July 25, 2026",
+                    "imagePath": "/images/lwx/ghwo/MarylandExtremeHeatDay5.jpg",
+                    "validStartTime": "08:00AM"
+                },
+                "period6": {
+                    "color": "yellow",
+                    "date": "Sunday, July 26, 2026",
+                    "imagePath": "/images/lwx/ghwo/MarylandExtremeHeatDay6.jpg",
+                    "validStartTime": "08:00AM"
+                },
+                "period7": {
+                    "color": "yellow",
+                    "date": "Monday, July 27, 2026",
+                    "imagePath": "/images/lwx/ghwo/MarylandExtremeHeatDay7.jpg",
+                    "validStartTime": "08:00AM"
+                }
+            },
+            "webTab": "public"
+        },
+        {
+            "description": "Derived from local office wind speed/gust forecasts.",
+            "name": "Wind Risk",
+            "periods": {
+                "period1": {
+                    "color": "yellow",
+                    "date": "Tuesday, July 21, 2026",
+                    "imagePath": "/images/lwx/ghwo/MarylandWindDay1.jpg",
+                    "validStartTime": "09:00AM"
+                },
+                "period2": {
+                    "color": "yellow",
+                    "date": "Wednesday, July 22, 2026",
+                    "imagePath": "/images/lwx/ghwo/MarylandWindDay2.jpg",
+                    "validStartTime": "08:00AM"
+                },
+                "period3": {
+                    "color": "#ededed",
+                    "date": "Thursday, July 23, 2026",
+                    "imagePath": "/images/lwx/ghwo/MarylandWindDay3.jpg",
+                    "validStartTime": "08:00AM"
+                },
+                "period4": {
+                    "color": "#ededed",
+                    "date": "Friday, July 24, 2026",
+                    "imagePath": "/images/lwx/ghwo/MarylandWindDay4.jpg",
+                    "validStartTime": "08:00AM"
+                },
+                "period5": {
+                    "color": "#ededed",
+                    "date": "Saturday, July 25, 2026",
+                    "imagePath": "/images/lwx/ghwo/MarylandWindDay5.jpg",
+                    "validStartTime": "08:00AM"
+                },
+                "period6": {
+                    "color": "#ededed",
+                    "date": "Sunday, July 26, 2026",
+                    "imagePath": "/images/lwx/ghwo/MarylandWindDay6.jpg",
+                    "validStartTime": "08:00AM"
+                },
+                "period7": {
+                    "color": "#ededed",
+                    "date": "Monday, July 27, 2026",
+                    "imagePath": "/images/lwx/ghwo/MarylandWindDay7.jpg",
+                    "validStartTime": "08:00AM"
+                }
+            },
+            "webTab": "public"
+        },
+        {
+            "description": "Derived from local office fog and visibility forecasts.",
+            "name": "Fog Risk",
+            "periods": {
+                "period1": {
+                    "color": "#ededed",
+                    "date": "Tuesday, July 21, 2026",
+                    "imagePath": "/images/lwx/ghwo/MarylandFogDay1.jpg",
+                    "validStartTime": "09:00AM"
+                },
+                "period2": {
+                    "color": "#ededed",
+                    "date": "Wednesday, July 22, 2026",
+                    "imagePath": "/images/lwx/ghwo/MarylandFogDay2.jpg",
+                    "validStartTime": "08:00AM"
+                },
+                "period3": {
+                    "color": "#ededed",
+                    "date": "Thursday, July 23, 2026",
+                    "imagePath": "/images/lwx/ghwo/MarylandFogDay3.jpg",
+                    "validStartTime": "08:00AM"
+                },
+                "period4": {
+                    "color": "#ededed",
+                    "date": "Friday, July 24, 2026",
+                    "imagePath": "/images/lwx/ghwo/MarylandFogDay4.jpg",
+                    "validStartTime": "08:00AM"
+                }
+            },
+            "webTab": "public"
+        },
+        {
+            "description": "Derived from local office forecasts of combined relative humidity (RH), winds, and wind gusts.",
+            "name": "Fire Weather Risk",
+            "periods": {
+                "period1": {
+                    "color": "#ededed",
+                    "date": "Tuesday, July 21, 2026",
+                    "imagePath": "/images/lwx/ghwo/MarylandFireWeatherDay1.jpg",
+                    "validStartTime": "09:00AM"
+                },
+                "period2": {
+                    "color": "#ededed",
+                    "date": "Wednesday, July 22, 2026",
+                    "imagePath": "/images/lwx/ghwo/MarylandFireWeatherDay2.jpg",
+                    "validStartTime": "08:00AM"
+                },
+                "period3": {
+                    "color": "#ededed",
+                    "date": "Thursday, July 23, 2026",
+                    "imagePath": "/images/lwx/ghwo/MarylandFireWeatherDay3.jpg",
+                    "validStartTime": "08:00AM"
+                },
+                "period4": {
+                    "color": "#ededed",
+                    "date": "Friday, July 24, 2026",
+                    "imagePath": "/images/lwx/ghwo/MarylandFireWeatherDay4.jpg",
+                    "validStartTime": "08:00AM"
+                },
+                "period5": {
+                    "color": "#ededed",
+                    "date": "Saturday, July 25, 2026",
+                    "imagePath": "/images/lwx/ghwo/MarylandFireWeatherDay5.jpg",
+                    "validStartTime": "08:00AM"
+                },
+                "period6": {
+                    "color": "#ededed",
+                    "date": "Sunday, July 26, 2026",
+                    "imagePath": "/images/lwx/ghwo/MarylandFireWeatherDay6.jpg",
+                    "validStartTime": "08:00AM"
+                },
+                "period7": {
+                    "color": "#ededed",
+                    "date": "Monday, July 27, 2026",
+                    "imagePath": "/images/lwx/ghwo/MarylandFireWeatherDay7.jpg",
+                    "validStartTime": "08:00AM"
+                }
+            },
+            "webTab": "public"
+        },
+        {
+            "description": "Missing element description",
+            "name": "Coastal Flood Risk",
+            "periods": {
+                "period1": {
+                    "color": "#ededed",
+                    "date": "Tuesday, July 21, 2026",
+                    "imagePath": "/images/lwx/ghwo/MarylandCoastalFloodDay1.jpg",
+                    "validStartTime": "09:00AM"
+                },
+                "period2": {
+                    "color": "#ededed",
+                    "date": "Wednesday, July 22, 2026",
+                    "imagePath": "/images/lwx/ghwo/MarylandCoastalFloodDay2.jpg",
+                    "validStartTime": "08:00AM"
+                },
+                "period3": {
+                    "color": "#ededed",
+                    "date": "Thursday, July 23, 2026",
+                    "imagePath": "/images/lwx/ghwo/MarylandCoastalFloodDay3.jpg",
+                    "validStartTime": "08:00AM"
+                },
+                "period4": {
+                    "color": "#ededed",
+                    "date": "Friday, July 24, 2026",
+                    "imagePath": "/images/lwx/ghwo/MarylandCoastalFloodDay4.jpg",
+                    "validStartTime": "08:00AM"
+                }
+            },
+            "webTab": "marine"
+        },
+        {
+            "description": "Derived from local office wind speed/gust and wave height forecasts.",
+            "name": "Marine Hazard Risk",
+            "periods": {
+                "period1": {
+                    "color": "yellow",
+                    "date": "Tuesday, July 21, 2026",
+                    "imagePath": "/images/lwx/ghwo/MarylandMarineHazardDay1.jpg",
+                    "validStartTime": "09:00AM"
+                },
+                "period2": {
+                    "color": "#ededed",
+                    "date": "Wednesday, July 22, 2026",
+                    "imagePath": "/images/lwx/ghwo/MarylandMarineHazardDay2.jpg",
+                    "validStartTime": "08:00AM"
+                },
+                "period3": {
+                    "color": "#ededed",
+                    "date": "Thursday, July 23, 2026",
+                    "imagePath": "/images/lwx/ghwo/MarylandMarineHazardDay3.jpg",
+                    "validStartTime": "08:00AM"
+                },
+                "period4": {
+                    "color": "#ededed",
+                    "date": "Friday, July 24, 2026",
+                    "imagePath": "/images/lwx/ghwo/MarylandMarineHazardDay4.jpg",
+                    "validStartTime": "08:00AM"
+                },
+                "period5": {
+                    "color": "#ededed",
+                    "date": "Saturday, July 25, 2026",
+                    "imagePath": "/images/lwx/ghwo/MarylandMarineHazardDay5.jpg",
+                    "validStartTime": "08:00AM"
+                },
+                "period6": {
+                    "color": "#ededed",
+                    "date": "Sunday, July 26, 2026",
+                    "imagePath": "/images/lwx/ghwo/MarylandMarineHazardDay6.jpg",
+                    "validStartTime": "08:00AM"
+                },
+                "period7": {
+                    "color": "#ededed",
+                    "date": "Monday, July 27, 2026",
+                    "imagePath": "/images/lwx/ghwo/MarylandMarineHazardDay7.jpg",
+                    "validStartTime": "08:00AM"
+                }
+            },
+            "webTab": "marine"
+        }
+    ],
+    "switchover_hour": "4"
+}
