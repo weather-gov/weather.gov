@@ -355,6 +355,7 @@ def load_zones(force=False):
                 type=type,
                 shape=GEOSGeometry(feature.geom.json),
                 wfo=feature.get(wfo_column_name),
+                name=feature.get("NAME"),
             ).save()
 
         __load_from_shapefile(

@@ -22,6 +22,7 @@ class WeatherZone(models.Model):
     shape = models.GeometryField()
     type = models.TextField(null=True)
     wfo = models.CharField(max_length=3, null=True)
+    name = models.CharField(max_length=254, null=True)
 
 
     class Meta:  # noqa: D106
