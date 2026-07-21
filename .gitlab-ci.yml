@@ -20,6 +20,10 @@ spec:
       type: boolean
       default: true
       description: "Lint and test JS in the selected branch using config from that branch. Uses dependencies from main, unless `build-images` is true."
+    run-golang-ci:
+      type: boolean
+      default: true
+      description: "Run golang tests in the selected branch using config from that branch. Uses dependencies from main, unless `build-images` is true."
     run-playwright-ci:
       type: boolean
       default: false
@@ -477,6 +481,27 @@ interop-test:
   rules:
     - if: $CI_PIPELINE_SOURCE == "push"
     - if: $CI_PIPELINE_SOURCE == "web" && "$[[ inputs.run-js-ci ]]" == "true"
+
+golang-test:
+  stage: test
+  image: golang:1.26.5-bookworm
+  variables:
+  script:
+    - cd tasks/
+    - go test -v ./... -coverprofile=coverage.txt -covermode=count
+    - go tool cover -func=coverage.txt
+    - go install github.com/boumenot/gocover-cobertura@latest
+    - gocover-cobertura < coverage.txt > coverage.xml
+  coverage: '/total:\s+\(statements\)\s+(\d+\.\d+%)/'
+  artifacts:
+    when: always
+    reports:
+      coverage_report:
+        coverage_format: cobertura
+        path: tasks/coverage.xml
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "push"
+    - if: $CI_PIPELINE_SOURCE == "web" && "$[[ inputs.run-golang-ci ]]" == "true"
 
 sast:
   stage: test
