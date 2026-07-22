@@ -79,13 +79,14 @@ class Command(BaseCommand):
             # geometry
             self.stdout.write("Inserting and formatting from temp tables")
             cursor.execute("""
-            INSERT INTO weathergov_geo_gridpoints (cwa, x, y, point, is_marine)
+            INSERT INTO weathergov_geo_gridpoints (cwa, x, y, point, is_marine, type)
             SELECT
                 UPPER(raw_cwa),
                 raw_x::integer,
                 raw_y::integer,
                 ST_SetSRID(ST_Point(raw_lon::float, raw_lat::float), 4326),
-                false
+                false,
+                'land'
             FROM temp_grid;""")
 
             self.stdout.write("Optimizing table")

@@ -90,7 +90,7 @@ describe("point method", () => {
 
     expect(actual).to.eql({
       point: { latitude: 1, longitude: 2 },
-      grid: { error: true },
+      grid: { error: true, marineType: null },
       isMarine: false,
       place: null,
     });
@@ -108,7 +108,7 @@ describe("point method", () => {
 
     expect(actual).to.eql({
       point: { latitude: 1, longitude: 2 },
-      grid: { error: true, outOfBounds: true, status: 404 },
+      grid: { error: true, outOfBounds: true, status: 404, marineType: null },
       isMarine: false,
       place: null,
     });
@@ -143,14 +143,18 @@ describe("point method", () => {
   it("returns a not-supported grid for points not *supported* by the API", async () => {
     response.body.text.resolves(
       JSON.stringify({
-        properties: { gridId: null, gridX: null, gridY: null },
+        properties: { gridId: null, gridX: null, gridY: null, type: null },
       }),
     );
 
     const actual = await points(1, 2);
 
     expect(actual).to.eql({
-      point: { latitude: 1, longitude: 2, astronomicalData: undefined },
+      point: {
+        latitude: 1,
+        longitude: 2,
+        astronomicalData: undefined,
+      },
       grid: {
         error: true,
         notSupported: true,
@@ -159,6 +163,8 @@ describe("point method", () => {
         y: null,
         geometry: undefined,
         source: "nws-api",
+        type: null,
+        marineType: null,
       },
       isMarine: false,
       place: null,
@@ -172,6 +178,7 @@ describe("point method", () => {
           gridId: "PPU",
           gridX: 30,
           gridY: 40,
+          type: "land",
         },
       }),
     );
@@ -181,13 +188,19 @@ describe("point method", () => {
     const actual = await points(4, 5);
 
     expect(actual).to.eql({
-      point: { latitude: 4, longitude: 5, astronomicalData: undefined },
+      point: {
+        latitude: 4,
+        longitude: 5,
+        astronomicalData: undefined,
+      },
       grid: {
         wfo: "PPU",
         x: 30,
         y: 40,
         geometry: undefined,
         source: "nws-api",
+        type: "land",
+        marineType: null,
       },
       isMarine: false,
       place: null,
@@ -203,6 +216,7 @@ describe("point method", () => {
           gridY: 40,
           geometry: undefined,
           source: "nws-api",
+          type: "land",
           astronomicalData: "stars and stuff",
         },
       }),
@@ -211,26 +225,70 @@ describe("point method", () => {
     const actual = await points(4, 5);
 
     expect(actual).to.eql({
-      point: { latitude: 4, longitude: 5, astronomicalData: "stars and stuff" },
+      point: {
+        latitude: 4,
+        longitude: 5,
+        astronomicalData: "stars and stuff",
+      },
       grid: {
         wfo: "PPU",
         x: 30,
         y: 40,
         geometry: undefined,
         source: "nws-api",
+        type: "land",
+        marineType: null,
       },
       isMarine: false,
       place: null,
     });
   });
 
+  it("includes marine type data and sets isMarine", async () => {
+    response.body.text.resolves(
+      JSON.stringify({
+        properties: {
+          gridId: "PPU",
+          gridX: 4,
+          gridY: 5,
+          geometry: undefined,
+          source: "nws-api",
+          type: "marine",
+          astronomicalData: "stars and stuff",
+        },
+      }),
+    );
+    db.query.withArgs(sinon.match(/FROM weathergov_geo_zones/i)).resolves({
+      rows: [{ type: "marine:coastal" }],
+    });
+
+    const actual = await points(4, 5);
+    expect(actual.grid.marineType).to.equal("coastal");
+    expect(actual.isMarine).to.equal(true);
+  });
+
+  it("includes marine type data as null and sets isMarine to false", async () => {
+    response.body.text.resolves(
+      JSON.stringify({
+        properties: {
+          gridId: "PPU",
+          gridX: 4,
+          gridY: 5,
+          geometry: undefined,
+          source: "nws-api",
+          type: "land",
+          astronomicalData: "stars and stuff",
+        },
+      }),
+    );
+
+    const actual = await points(4, 5);
+    expect(actual.grid.marineType).to.be.null;
+    expect(actual.isMarine).to.equal(false);
+  });
+
   it("includes a location without a full name", async () => {
     connectionPool.request.resolves(errorResponse);
-
-    // Marine zone query. Make this one a marine point to validate that logic.
-    db.query
-      .withArgs(sinon.match(/FROM weathergov_geo_zones/i))
-      .resolves({ rows: [1] });
 
     db.query.withArgs(sinon.match(/FROM weathergov_geo_places/i)).resolves({
       rows: [
@@ -264,8 +322,8 @@ describe("point method", () => {
 
     expect(actual).to.eql({
       point: { latitude: 1, longitude: 2 },
-      grid: { error: true },
-      isMarine: true,
+      grid: { error: true, marineType: null },
+      isMarine: false,
       place: {
         name: "Townsville",
         state: "",
@@ -307,6 +365,10 @@ describe("point method", () => {
       ],
     });
 
+    db.query.withArgs(sinon.match(/FROM weathergov_geo_zones/i)).resolves({
+      rows: [{ type: "forecast" }],
+    });
+
     const actual = await points(1, 2);
     // astronomical data (sunrise/sunset) depends on when you ask for it, so
     // let's just check that we have this property instead.
@@ -315,7 +377,7 @@ describe("point method", () => {
 
     expect(actual).to.eql({
       point: { latitude: 1, longitude: 2 },
-      grid: { error: true },
+      grid: { error: true, marineType: null },
       isMarine: false,
       place: {
         name: "Townsville",

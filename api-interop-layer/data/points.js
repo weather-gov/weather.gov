@@ -150,6 +150,7 @@ export const getPointData = async (lat, lon) => {
         wfo: gridData.properties?.gridId,
         x: gridData.properties?.gridX,
         y: gridData.properties?.gridY,
+        type: gridData.properties?.type,
         geometry: gridData.geometry,
         source: "nws-api",
       };
@@ -162,23 +163,28 @@ export const getPointData = async (lat, lon) => {
     };
   }
 
+  const isMarine = grid?.type === "marine";
   const placePromise = getClosestPlace(latitude, longitude);
 
-  // Check if the requested point is inside a marine zone.
+  // If marine, check if it's coastal. If not marine, return empty promise
   const pointGeom = `ST_SetSRID(ST_Point(${longitude}, ${latitude}), ${SPATIAL_PROJECTION.WGS84})`;
-  const isMarinePromise = openDatabase().then((db) =>
-    db.query(
-      `SELECT id
-    FROM weathergov_geo_zones
-    WHERE
-      (type='marine:coastal' OR type='marine:offshore')
-      AND
-      ST_Intersects(shape,${pointGeom})
-    LIMIT 1`,
-    ),
-  );
+  const marineTypePromise = isMarine
+    ? openDatabase().then((db) =>
+        db.query(
+          `SELECT id, type
+          FROM weathergov_geo_zones
+          WHERE type='marine:coastal'
+          AND
+          ST_Intersects(shape,${pointGeom})
+          LIMIT 1`,
+        ),
+      )
+    : Promise.resolve({});
 
-  const [place, isMarine] = await Promise.all([placePromise, isMarinePromise]);
+  const [place, marineType] = await Promise.all([
+    placePromise,
+    marineTypePromise,
+  ]);
 
   if (USE_INTERNAL_LOOKUP && place) {
     // because we are skipping the points API call, astronomical data is not
@@ -190,6 +196,13 @@ export const getPointData = async (lat, lon) => {
     );
   }
 
+  // If marine, add type of marine to grid data, otherwise null
+  grid.marineType = isMarine
+    ? marineType?.rows?.length > 0
+      ? "coastal"
+      : "offshore"
+    : null;
+
   if (grid.wfo === null) {
     // If we did not get an error but the WFO is empty, then it's within our
     // responsibility but we don't have the data in the API.
@@ -197,7 +210,7 @@ export const getPointData = async (lat, lon) => {
     grid.notSupported = true;
   }
 
-  return { point, place, grid, isMarine: isMarine.rows.length > 0 };
+  return { point, place, grid, isMarine };
 };
 
 const getInternalGridData = async (latitude, longitude) => {
@@ -209,7 +222,7 @@ const getInternalGridData = async (latitude, longitude) => {
     const MAX_DISTANCE_METERS = 3500;
 
     const query = `
-      SELECT UPPER(cwa) as wfo, x, y, ST_AsGeoJSON(point) as geometry
+      SELECT UPPER(cwa) as wfo, x, y, ST_AsGeoJSON(point) as geometry, type
       FROM weathergov_geo_gridpoints
       WHERE ST_DWithin(point::geography, ${pointGeom}::geography, ${MAX_DISTANCE_METERS})
       ORDER BY point::geography <-> ${pointGeom}::geography
@@ -226,6 +239,7 @@ const getInternalGridData = async (latitude, longitude) => {
         y: row.y,
         // We parse here because PostGIS returns a string; NWS API returns an object.
         geometry: JSON.parse(row.geometry),
+        type: row.type,
         source: "internal",
       };
     }
