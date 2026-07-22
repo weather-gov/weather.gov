@@ -336,6 +336,11 @@
         "elevation": {
           "description": "Elevation of this grid point.",
           "$ref": "#/$defs/measures/distance"
+        },
+        "marineType": {
+          "description": "Type of marine zone if applicable",
+          "type": "string",
+          "enum": ["coastal", "offshore"]
         }
       },
       "required": ["wfo", "x", "y", "geometry", "elevation"]
