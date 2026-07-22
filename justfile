@@ -422,6 +422,11 @@ go-run-ghwo:
 go-run-alerts:
     docker compose run --rm tasks-dev go run /tasks/cmd/alerts/main.go
 
+# Run the gridcache heat interval program without compiling (interpreted)
+[group("golang")]
+go-run-gridcache:
+    docker compose run --rm tasks-dev go run /tasks/cmd/gridcache/main.go
+
 # Compile the GHWO program
 [group("golang")]
 go-build-ghwo:
@@ -431,6 +436,11 @@ go-build-ghwo:
 [group("golang")]
 go-build-alerts:
     docker compose run --rm tasks-dev go build -o /tasks/bin/alerts /tasks/cmd/alerts/main.go
+
+# Compile the gridcache heat interval program
+[group("golang")]
+go-build-gridcache:
+    docker compose run --rm tasks-dev go build -o /tasks/bin/gridcache /tasks/cmd/gridcache/main.go
 
 # Compile all programs
 [group("golang")]

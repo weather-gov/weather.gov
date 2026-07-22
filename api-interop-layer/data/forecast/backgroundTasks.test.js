@@ -1,22 +1,17 @@
 import sinon from "sinon";
 import { expect } from "chai";
 
-import {
-  flushForecastGridLogs,
-  processHeatInterval,
-} from "./backgroundTasks.js";
+import { flushForecastGridLogs } from "./backgroundTasks.js";
 
 describe("Forecast Background Tasks Tests", () => {
   let queryStub;
   let mockDb;
-  let mockPort;
   let sandbox;
 
   beforeEach(() => {
     sandbox = sinon.createSandbox();
     queryStub = sandbox.stub().resolves({ rowCount: 0, rows: [] });
     mockDb = { query: queryStub };
-    mockPort = { postMessage: sandbox.spy() };
   });
 
   afterEach(() => {
@@ -57,39 +52,6 @@ describe("Forecast Background Tasks Tests", () => {
 
       await flushForecastGridLogs(mockDb, largeBatch);
       expect(queryStub.calledOnce).to.be.true;
-    });
-  });
-
-  describe("processHeatInterval()", () => {
-    it("should report errors via messenger when analysis fails", async () => {
-      queryStub.rejects(new Error("Query Error"));
-      await processHeatInterval(mockDb, mockPort);
-      expect(queryStub.calledOnce).to.be.true;
-    });
-
-    it("should successfully execute the archive and purge SQL", async () => {
-      queryStub.onFirstCall().resolves({ rowCount: 5 });
-      queryStub.onSecondCall().resolves({ rowCount: 100 });
-
-      // Pass the mockPort directly
-      await processHeatInterval(mockDb, mockPort);
-
-      expect(queryStub.calledTwice).to.be.true;
-      const firstCallSql = queryStub.getCall(0).args[0];
-      const secondCallSql = queryStub.getCall(1).args[0];
-
-      expect(firstCallSql).to.contain("INSERT INTO weathergov_ndfd_grid_index");
-      expect(secondCallSql).to.contain("DELETE FROM weathergov_ndfd_grid_logs");
-    });
-
-    it("should use the same timestamp for both operations", async () => {
-      queryStub.resolves({ rowCount: 0 });
-
-      await processHeatInterval(mockDb, mockPort);
-
-      const ts1 = queryStub.getCall(0).args[1][0];
-      const ts2 = queryStub.getCall(1).args[1][0];
-      expect(ts1).to.equal(ts2);
     });
   });
 });

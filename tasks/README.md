@@ -32,6 +32,8 @@ We have added convenience commands to the root justfile of this repository:
 | `just go-test` (or `just test-go`) | Run all tests in `tasks/` (`go test -v ./...`) inside the go container |
 | `just go-imports` | Format the files in the project. Modifies files in place, and will display the names of any changed files |
 | `just go-run-wpcprob` | Build `wgrib2` and the `wpcprob-tasks` image, then run the WPC probabilistic precip program |
+| `just go-run-gridcache` | Run (interpreted) the gridcache heat interval program |
+| `just go-build-gridcache` | Compile the gridcache heat interval program and place the binary at `tasks/bin/gridcache` |
 
 ## Description of Tasks
 ### Alerts
@@ -50,6 +52,12 @@ Runs hourly. Downloads NOAA WPC's probabilistic precipitation/snow/freezing-rain
 - Code layout: `cmd/wpcprob/main.go` just orchestrates the steps. The actual GRIB decoding, projection math, and DB logic live in `internal/wpcprob`.
 - Database: connects via `internal.NewDBPool`, which reads `DATABASE_URL` if set, otherwise builds one from `DB_HOST` / `DB_PORT` / `DB_NAME` / `DB_USERNAME` / `DB_PASSWORD` — defaulting to the local docker-compose values if none are set.
 - Running it locally: `just go-run-wpcprob` builds the `wgrib2` binary and the standalone `wpcprob-tasks` image, then runs the program. That's the only command you need.
+
+### Gridcache Heat Interval ###
+Runs every 30 minutes. Aggregates NDFD gridpoint hit logs (`weathergov_ndfd_grid_logs`) recorded since the last run into relative-heat scores in `weathergov_ndfd_grid_index`, then purges the raw log rows it just aggregated.
+
+- Code layout: `cmd/gridcache/main.go` orchestrates; the aggregation SQL lives in `internal/gridcache`.
+- This replaces the `processHeatInterval` half of the old `api-interop-layer/data/forecast/backgroundTasks.js` worker. The live grid-hit buffering/flushing half of that file (`flushForecastGridLogs`) still runs in Node, since it's tied to the live API request path rather than a schedule.
 
 #### wgrib2 ####
 `wgrib2` isn't packaged for Debian/Ubuntu, so we build it from source

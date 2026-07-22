@@ -51,35 +51,4 @@ export class ForecastGridCache {
       clearInterval(interval);
     });
   }
-
-  /**
-   * 30-minute Heat Interval trigger
-   * Fires the signal to calculate relative heat and truncate logs.
-   */
-  _startHeatIntervalLoop() {
-    const now = new Date();
-
-    // Calculate minutes until the next :00 or :30 mark
-    const msUntilNextTick =
-      (30 - (now.getMinutes() % 30)) * 60000 - now.getSeconds() * 1000;
-
-    let timer, interval;
-
-    const sendToWorker = () => {
-      this.worker.postMessage({ action: "process_heat_interval" });
-    };
-
-    timer = setTimeout(() => {
-      // Fire the first one exactly at the :30 mark
-      sendToWorker();
-
-      // Establish 30m loop
-      interval = setInterval(sendToWorker, 1_800_000).unref();
-    }, msUntilNextTick).unref();
-
-    process.on("SHUTDOWN", () => {
-      clearTimeout(timer);
-      clearInterval(interval);
-    });
-  }
 }
