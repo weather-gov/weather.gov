@@ -14,8 +14,6 @@ import getWeatherStory from "./weatherstory.js";
 
 const forecastLogger = logger.child({ subsystem: "forecast" });
 
-const disableAnalysis = process.env.DISABLE_GRID_ANALYSIS === "true";
-
 let gridCache = null;
 let backgroundWorker;
 
@@ -43,47 +41,6 @@ if (enableBackgroundProcessing()) {
 
   gridCache = new ForecastGridCache(backgroundWorker);
   backgroundWorker.postMessage({ action: "start" });
-
-  if (!disableAnalysis) {
-    const scheduleHeatInterval = () => {
-      const now = new Date();
-      const minutes = now.getMinutes();
-      const seconds = now.getSeconds();
-      const msUntilNextMark = ((30 - (minutes % 30)) * 60 - seconds) * 1000;
-
-      forecastLogger.info(
-        {
-          action: "schedule_sync",
-          waitingMinutes: Math.round(msUntilNextMark / 60_000),
-        },
-        "scheduling next grid analysis sync",
-      );
-
-      let timer, interval;
-
-      const sendToWorker = () => {
-        backgroundWorker.postMessage({ action: "process_heat_interval" });
-      };
-
-      timer = setTimeout(() => {
-        sendToWorker();
-
-        interval = setInterval(sendToWorker, 1_800_000).unref();
-      }, msUntilNextMark).unref();
-
-      process.on("SHUTDOWN", () => {
-        clearTimeout(timer);
-        clearInterval(interval);
-      });
-    };
-
-    scheduleHeatInterval();
-  } else {
-    forecastLogger.info(
-      { status: "disabled" },
-      "Grid analysis scheduler is DISABLED via environment variable",
-    );
-  }
 }
 
 const getDataForPoint = async (lat, lon) => {

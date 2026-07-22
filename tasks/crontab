@@ -10,3 +10,6 @@
 # wpc probabilistic precip: hourly, 10 minutes past the hour (WaitForCycle
 # still polls/retries internally in case WPC is running late)
 0 10 * * * * * /usr/local/bin/wpcprob
+
+# gridcache heat interval: every 30 minutes
+0 */30 * * * * * /usr/local/bin/gridcache

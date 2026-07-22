@@ -7,7 +7,8 @@ RUN --mount=type=cache,target=/root/.cache/go-build \
     --mount=type=cache,target=/go/pkg/mod \
     CGO_ENABLED=0 GOOS=linux go build -o /out/alerts ./cmd/alerts && \
     CGO_ENABLED=0 GOOS=linux go build -o /out/ghwo ./cmd/ghwo && \
-    CGO_ENABLED=0 GOOS=linux go build -o /out/wpcprob ./cmd/wpcprob
+    CGO_ENABLED=0 GOOS=linux go build -o /out/wpcprob ./cmd/wpcprob && \
+    CGO_ENABLED=0 GOOS=linux go build -o /out/gridcache ./cmd/gridcache
 
 FROM debian:bookworm-slim
 
@@ -38,6 +39,7 @@ RUN apt-get update && \
 COPY --from=builder /out/alerts /usr/local/bin/alerts
 COPY --from=builder /out/ghwo /usr/local/bin/ghwo
 COPY --from=builder /out/wpcprob /usr/local/bin/wpcprob
+COPY --from=builder /out/gridcache /usr/local/bin/gridcache
 COPY crontab /etc/crontab
 
 RUN useradd --system --user-group --shell /usr/sbin/nologin tasks
