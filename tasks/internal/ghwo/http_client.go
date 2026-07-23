@@ -23,3 +23,5 @@ func getTimeout() time.Duration {
 var GHWOClient = &http.Client{
 	Timeout: getTimeout(),
 }
+
+var BaseURL = "https://www.weather.gov"

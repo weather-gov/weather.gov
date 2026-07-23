@@ -1,8 +1,10 @@
 package ghwo
 
 import (
+	"cmp"
 	"encoding/json"
 	"fmt"
+	"slices"
 )
 
 /* General type aliases */
@@ -335,6 +337,14 @@ func (s *SourceGHWOLocality) UnmarshalJSON(bytes []byte) error {
 			countyData.RiskLevels = riskLevels
 			s.DataByTime = append(s.DataByTime, countyData)
 		}
+
+		// We need to sort the DataByTime list, because the timestamps
+		// will determine the order
+		slices.SortFunc(s.DataByTime, func(a, b SourceGHWOLocalityData) int {
+			first := a.Timestamp
+			second := b.Timestamp
+			return cmp.Compare(first, second)
+		})
 	}
 
 	return nil
