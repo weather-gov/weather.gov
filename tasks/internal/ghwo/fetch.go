@@ -92,11 +92,11 @@ type StateFetch struct {
 func (d *GenericFetch) getURL() string {
 	switch resourceType := d.ResourceType; resourceType {
 	case GHWOResource:
-		return fmt.Sprintf("https://www.weather.gov/source/%s/ghwo/hazByCounty.json", strings.ToLower(d.WFO))
+		return fmt.Sprintf("%s/source/%s/ghwo/hazByCounty.json", BaseURL, strings.ToLower(d.WFO))
 	case ChickletResource:
-		return fmt.Sprintf("https://www.weather.gov/source/%s/ghwo/chicklet.json", strings.ToLower(d.WFO))
+		return fmt.Sprintf("%s/source/%s/ghwo/chicklet.json", BaseURL, strings.ToLower(d.WFO))
 	case LegendResource:
-		return fmt.Sprintf("https://www.weather.gov/source/%s/ghwo/legend.json", strings.ToLower(d.WFO))
+		return fmt.Sprintf("%s/source/%s/ghwo/legend.json", BaseURL, strings.ToLower(d.WFO))
 	default:
 		return ""
 	}
@@ -125,13 +125,15 @@ func (d *StateFetch) getURL() string {
 	switch resourceType := d.ResourceType; resourceType {
 	case ChickletResource:
 		return fmt.Sprintf(
-			"https://www.weather.gov/source/%s/ghwo/chicklet%s.json",
+			"%s/source/%s/ghwo/chicklet%s.json",
+			BaseURL,
 			strings.ToLower(d.WFO),
 			viewName,
 		)
 	case LegendResource:
 		return fmt.Sprintf(
-			"https://www.weather.gov/source/%s/ghwo/legend%s.json",
+			"%s/source/%s/ghwo/legend%s.json",
+			BaseURL,
 			strings.ToLower(d.WFO),
 			viewName,
 		)
@@ -292,7 +294,6 @@ func FetchWFO(ctx context.Context, sourceWFO string, ch chan *FetchResult, group
 				ctx.Err(),
 			)
 			ch <- result
-			close(responseChan)
 			return
 		}
 	}
@@ -325,7 +326,6 @@ func FetchWFO(ctx context.Context, sourceWFO string, ch chan *FetchResult, group
 					ctx.Err(),
 				)
 				ch <- result
-				close(stateResponseChan)
 				return
 			}
 		}
@@ -422,7 +422,6 @@ func FetchState(ctx context.Context, stateCode string, wfo string, ch chan *Stat
 				ctx.Err(),
 			)
 			ch <- result
-			close(responseChan)
 			return
 		}
 	}
