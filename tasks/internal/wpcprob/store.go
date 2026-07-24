@@ -23,10 +23,11 @@ func StoreResults(ctx context.Context, pool *pgxpool.Pool, gridpoints []Gridpoin
 
 	columns := append([]string{"wfo", "x", "y", "cycle", "valid_time", "updated_at"}, columnNames(matrix.Variables)...)
 	now := time.Now()
+	varIndex := matrix.VarIndex()
 	source := pgx.CopyFromSlice(len(gridpoints), func(i int) ([]any, error) {
 		row := make([]any, 0, len(columns))
 		row = append(row, gridpoints[i].WFO, gridpoints[i].X, gridpoints[i].Y, cycle, validTime, now)
-		for _, vr := range matrix.Rows[i] {
+		for _, vr := range matrix.Row(i, varIndex) {
 			if vr.IsEmpty() {
 				row = append(row, nil)
 			} else {
