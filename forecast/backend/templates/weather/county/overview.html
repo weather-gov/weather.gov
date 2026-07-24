@@ -43,7 +43,7 @@
     </h2>
     <div class="grid-col-12">
       {% if alerts_error %}
-        {% include "errors/partials/non-critical-component-error.html" with component="alerts" %}
+        {% render_non_critical_error_component component_name="alerts" %}
       {% else %}
         <div class="padding-x-2 tablet:padding-x-0">
           <wx-tabs id="county-alerts">

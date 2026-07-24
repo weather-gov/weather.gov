@@ -1,6 +1,9 @@
 {% comment %}
 -- Template purpose: Display a clickable map of weather alerts for a state.
 {% endcomment %}
+<div id="wx-alert-map-error" class="display-none">
+  {% render_non_critical_error_component component_name="map" %}
+</div>
 <wx-alert-map class="display-block wx-state-alert-map-container wx-isolation-isolate">
 <div id="wx_map_loader" class="wx-map-loader">
   <div class="loader-spinner"></div>

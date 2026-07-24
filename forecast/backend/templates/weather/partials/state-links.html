@@ -19,7 +19,7 @@
            role="img"
            alt="Link"
            class="margin-right-1" />
-      <a href="{% url 'county_index' %}#{{state.state|lower}}" class="usa-link">
+      <a href="{% url 'county_index' %}#{{state_abbrev|lower}}" class="usa-link">
         {% trans_with_args "state.links.county-links.01" state_name=state_name %}
       </a>
     </div>
@@ -30,6 +30,9 @@
     <h2 class="line-height-heading-3 font-sans-xl text-normal text-primary-darker margin-top-2 margin-bottom-2">
       {{"state.heading.offices.01"|t}}
     </h2>
+    {% if not wfo_data|length %}
+      {% render_non_critical_error_component component_name="wfo_info" %}
+    {% else %}
       <ul class="usa-list usa-list--unstyled tablet__wx-col-2 tablet-lg__wx-col-4">
       {% for wfo in wfo_data %}
         <li >
@@ -45,6 +48,6 @@
         </li>
       {% endfor %}
       </ul>
-      
+    {% endif %}
   </div>
 </section>

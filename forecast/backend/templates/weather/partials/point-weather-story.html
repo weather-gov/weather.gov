@@ -22,11 +22,7 @@
                 {{ "weather-story.heading.from-forecaster.01" | t }}
               </span>
             </h3>
-            {% if weather_story.wfo_name %}
-              {% include "errors/partials/wfo-component-error.html" with component="weather stories" wfo=weather_story.wfo_name %}
-            {% else %}
-              {% include "errors/partials/wfo-component-error.html" with component="weather stories" %}
-            {% endif %}
+            {% render_non_critical_error_component component_name="wx_stories" wfo_name=weather_story.wfo_name %}
           </div>
         {% elif not weather_story.is_empty %}
           <div class="margin-bottom-2">

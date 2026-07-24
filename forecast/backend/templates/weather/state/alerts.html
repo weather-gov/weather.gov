@@ -53,7 +53,7 @@
       <div class="wx-focus-offset-205" aria-labelledby="alerts-tab-button" id="alerts" tabindex="0">
         <div class="grid-container">
           <h2 class="text-normal text-primary-dark margin-top-3 font-sans-xl">{{ "county.heading.alerts.01" | t }}</h2>
-          <wx-tabs id="state-alerts">
+          <wx-tabs id="state-alerts" class="display-none">
           <div class="usa-button-group usa-button-group--segmented overflow-x-auto"
                role="tablist">
             <button type="button"
@@ -118,6 +118,6 @@
       </div>
     </div>
     </wx-tabbed-nav>
-    {% include 'weather/partials/state-links.html' with state_name=state_name %}
+    {% include 'weather/partials/state-links.html' with state_name=state_name state_abbrev=state_abbrev %}
   </div>
 {% endblock %}

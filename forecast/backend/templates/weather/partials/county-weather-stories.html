@@ -26,11 +26,7 @@
     {% endif %}
     <div class="margin-top-3 {% if weather_story.error %}margin-y-0{% elif not weather_story.is_empty %}wx-weather-story-wrapper{% endif %}">
       {% if weather_story.error %}
-        {% if weather_story.wfo_name %}
-          {% include "errors/partials/wfo-component-error.html" with component="weather stories" wfo=weather_story.wfo_name %}
-        {% else %}
-          {% include "errors/partials/wfo-component-error.html" with component="weather stories" %}
-        {% endif %}
+        {% render_non_critical_error_component component_name="wx_stories" wfo_name=weather_story.wfo_name %}
       {% elif not weather_story.is_empty %}
         <div class="margin-bottom-3">
           {% comment %}

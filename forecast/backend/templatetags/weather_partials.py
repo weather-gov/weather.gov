@@ -34,6 +34,24 @@ RADAR_INTENSITIES = [
     },
 ]
 
+non_critical_component_error_msg = {
+    "alerts": "error.non-critical.alerts.01",
+    "observations": "error.non-critical.observations.01",
+    "radar": "error.non-critical.radar.01",
+    "risks": "error.non-critical.risks.01",
+    "map": "error.non-critical.map.01",
+    "satellite": "error.non-critical.satellite.01",
+    "wfo_info": "error.non-critical.wfo_information.01",
+    "briefings": "error.non-critical.briefings.generic.01",
+    "wx_stories": "error.non-critical.wx_stories.generic.01",
+}
+
+wfo_critical_component_error_msg = {
+    "wx_stories": "error.non-critical.wx_stories.wfo.01",
+    "briefings": "error.non-critical.briefings.wfo.01",
+    "state_briefings": "error.non-critical-state-briefings.wfo.01",
+}
+
 
 @register.inclusion_tag("weather/partials/daily-high-low.html")
 def daily_high_low(**kwargs):
@@ -256,3 +274,27 @@ def weather_icon(icon_name, size="sm", color_mode="light", **kwargs):
             result["attrs"][result_key] = val
 
     return result
+
+
+@register.inclusion_tag("errors/partials/non-critical-component-error.html")
+def render_non_critical_error_component(
+    component_name=None, *, wfo_name=None, wfo_error_list=None, all_briefings_error=False
+):
+    """Render a non-critical component error message with WFO name."""
+    # Determine what message based on args passed in to fn
+    # Use component list at top to determine message
+    msg_str = ""
+
+    if component_name == "state_briefings":
+        if len(wfo_error_list) > 0 and not all_briefings_error:
+            return {
+                "message": _(wfo_critical_component_error_msg["state_briefings"]).format(
+                    wfo_name=", ".join(wfo_error_list)
+                )
+            }
+        return {"message": _(non_critical_component_error_msg["briefings"])}
+    if wfo_name:
+        msg_str = _(wfo_critical_component_error_msg[component_name]).format(wfo_name=wfo_name)
+    else:
+        msg_str = _(non_critical_component_error_msg[component_name])
+    return {"message": msg_str}
