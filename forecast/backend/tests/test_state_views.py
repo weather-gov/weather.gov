@@ -98,11 +98,20 @@ class TestStateViews(TestCase):
     def test_analysis(self, mock_get_wfo_data, mock_get_analysis_data):
         """Test the analysis page."""
         mock_get_wfo_data.return_value = self.state_fr_wfo_data
-        mock_get_analysis_data.return_value = {"briefings": [{"briefing": None, "officeId": "ARD"}]}
+        mock_get_analysis_data.return_value = {
+            "briefings": [
+                {"briefing": None, "officeId": "ARD"},
+                {"error": True, "officeId": "ZRB"},
+                {"error": True, "officeId": "FLN"},
+                {"briefing": None, "officeId": "FRD"},
+            ]
+        }
         response = self.client.get(reverse("state_analysis", kwargs={"state": "FR"}))
         self.assertTemplateUsed(response, "weather/state/analysis.html")
         self.assertEqual(response.context["state_abbrev"], self.state_fr.state)
         self.assertEqual(response.context["state_name"], self.state_fr.name)
+        self.assertEqual(response.context["error_briefing_wfos"], ["Cat", "Zebra"])
+        self.assertEqual(response.context["all_briefings_error"], False)
         self.assertEqual(response.status_code, 200)
 
     @mock.patch("backend.views.state.get_analysis_data_for_state")

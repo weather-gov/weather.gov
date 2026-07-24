@@ -9,16 +9,12 @@
   </{{ heading_level }}>
   {% include "weather/partials/radar-timestamp.html" %}
   <div id="wx-radar-error-container" class="display-none padding-0">
-    {% include "errors/partials/non-critical-component-error.html" with component="the Radar" %}
+    {% render_non_critical_error_component component_name="radar" %}
   </div>
   <div id="wx-radar-outer-container"
        class="grid-container padding-0 bg-white shadow-1">
     <div class="grid-row wx-radar-container position-relative wx-{% if large_map %}large{% else %}small{% endif %}-map">
-      {% if bounds %}
-        <wx-radar class="grid-col-12" bounds="{{ bounds }}" data-timezone="{{ timezone }}">
-      {% else %}
-        <wx-radar class="grid-col-12" lat="{{ point.latitude }}" lon="{{ point.longitude }}" data-timezone="{{ timezone }}">
-      {% endif %}
+      <wx-radar class="grid-col-12" {% if bounds %} bounds="{{ bounds }}" {% else %} lat="{{ point.latitude }}" lon="{{ point.longitude }}" {% endif %} data-timezone="{{ timezone }}">
       <div id="wx-radar-container"></div>
       </wx-radar>
       <div class="position-absolute top-0 right-0 height-full">

@@ -1,10 +1,10 @@
 {% comment %}
 -- Template purpose:
 --   Display a non-critical component error alert.
--- Used by: many pages
+-- Used by: templatetags/weather_partials.py render_non_critical_error_component
 
-    component:
-        the non-critical-component that had an error for the message
+    message:
+        the translated message to display
         
 {% endcomment %}
 <div class="padding-x-2 tablet:padding-x-0">
@@ -12,6 +12,6 @@
     <svg class="usa-icon height-3 width-3" aria-hidden="true" role="img">
       <use xlink:href="/public/images/uswds/sprite.svg#report"></use>
     </svg>
-    <p class="font-body-sm">{% trans_with_args "error.non-critical.01" component=component %}</p>
+    <p class="font-body-sm">{{ message }}</p>
   </div>
 </div>

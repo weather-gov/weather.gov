@@ -222,6 +222,9 @@ def state_analysis(request, state):
         wfo_instance = wfo_instance_lookup[briefing_data["officeId"]]
         briefing_data["wfo_name"] = wfo_instance["name"]
 
+        if "error" in briefing_data:
+            continue
+
         # Set the actual updateTime in the briefing object to be a datetime
         # with the correct timezone
         if briefing_data["briefing"] and "updateTime" in briefing_data["briefing"]:
@@ -240,10 +243,12 @@ def state_analysis(request, state):
     active_briefings = []
     empty_briefings = []
     for briefing in state_data["briefings"]:
-        if briefing["briefing"] is None:
+        if "briefing" in briefing and briefing["briefing"] is None:
             empty_briefings.append(briefing)
         else:
             active_briefings.append(briefing)
+
+    error_briefing_wfos = [briefing["wfo_name"] for briefing in active_briefings if briefing.get("error", False)]
 
     return render(
         request,
@@ -254,6 +259,8 @@ def state_analysis(request, state):
             "wfo_data": wfo_data,
             "active_briefings": active_briefings,
             "empty_briefings": empty_briefings,
+            "error_briefing_wfos": error_briefing_wfos,
+            "all_briefings_error": len(error_briefing_wfos) == len(state_data["briefings"]),
             "title_trans_args": {
                 "state": state_instance.name,
             },

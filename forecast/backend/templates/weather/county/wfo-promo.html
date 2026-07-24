@@ -16,6 +16,6 @@
       </address>
     {% endif %}
   {% else %}
-    {% include "errors/partials/wfo-component-error.html" with component="WFO information" %}
+    {% render_non_critical_error_component component_name="wfo_info" %}
   {% endif %}
 </div>

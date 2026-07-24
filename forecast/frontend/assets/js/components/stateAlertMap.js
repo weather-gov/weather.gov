@@ -476,7 +476,9 @@ const setupStateMap = async () => {
     const boundaryData = decodeGeobuf(boundaryBuf);
     const alertsData = decodeGeobuf(alertsBuf);
 
-    if (!boundaryData) throw new Error("Could not decode state boundary");
+    if (!boundaryData || !alertsData) {
+      throw new Error("Could not decode state boundary or alerts data");
+    }
 
     if (meta.stateCode === "AK") {
       const wrapPoint = (coord) => {
@@ -633,6 +635,9 @@ const setupStateMap = async () => {
       });
     });
 
+    // un-hide the day tabs now that everything is loaded
+    document.getElementById("state-alerts").classList.remove("display-none");
+
     if (loader) {
       loader.classList.add("hidden");
       setTimeout(() => {
@@ -642,23 +647,12 @@ const setupStateMap = async () => {
   } catch (err) {
     console.error("Error loading or decoding state map data:", err);
 
-    if (loader) {
-      const loaderText = loader.querySelector(".loader-text");
-      const spinner = loader.querySelector(".loader-spinner");
-
-      if (loaderText) {
-        loaderText.textContent = meta.trans.map_failure;
-        loaderText.classList.add("text-error");
-      }
-
-      if (spinner) {
-        spinner.style.display = "none";
-      }
-
-      loader.classList.remove("hidden");
-      loader.style.display = "flex";
-      loader.style.opacity = "1";
-    }
+    // Show error message to user and hide the map container
+    document
+      .getElementById("wx-alert-map-error")
+      .classList.remove("display-none");
+    document.querySelector(".wx-state-alert-map-container").style.display =
+      "none";
   }
 };
 

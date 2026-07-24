@@ -8,7 +8,7 @@
 </h3>
 {% if obs.error %}
   <div id="wx-current-conditions-error-container">
-    {% include "errors/partials/non-critical-component-error.html" with component="current conditions" %}
+    {% render_non_critical_error_component component_name="observations" %}
   </div>
 {% else %}
   <div class="bg-white padding-2 tablet-lg:padding-x-205 shadow-1 grid-col-12 flex-auto">

@@ -37,8 +37,10 @@
             </h2>
             <ul id="state-afds" class="add-list-reset tablet-lg__wx-col-2">
               {% for wfo in wfo_data %}
-                <li class="afd-link-item display-flex flex-align-start padding-bottom-2">
-                  <img src="{% static 'images/weather/wx_document_afd.svg' %}" />
+                <li class="afd-link-item display-flex flex-align-center padding-bottom-2">
+                  <svg class="usa-icon height-3 width-3" role="img" aria-hidden="true">
+                    <use xlink:href="{% static 'images/weather/wx_document_afd.svg' %}"></use>
+                  </svg>
                   <a class="usa-link margin-left-1"
                      href="{% url 'afd_by_office' wfo=wfo.code %}">{% trans_with_args "weather-story.link.area-forecast-discussion.02" office_name=wfo.name %}</a>
                 </li>
@@ -48,6 +50,6 @@
         </div>
       </div>
     </wx-tabbed-nav>
-    {% include 'weather/partials/state-links.html' with state_name=state_name %}
+    {% include 'weather/partials/state-links.html' with state_name=state_name state_abbrev=state_abbrev %}
   </div>
 {% endblock %}

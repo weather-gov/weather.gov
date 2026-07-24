@@ -39,6 +39,6 @@
       </div>
     </div>
     </wx-tabbed-nav>
-    {% include 'weather/partials/state-links.html' with state_name=state.name %}
+    {% include 'weather/partials/state-links.html' with state_name=state.name state_abbrev=state.state %}
   </div>
 {% endblock %}

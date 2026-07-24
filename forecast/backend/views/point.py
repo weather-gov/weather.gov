@@ -182,7 +182,7 @@ def afd_index(request):
         {
             "value": wfo["code"],
             "selected": wfo["code"] == first_wfo["code"].upper(),
-            "text": f"{wfo['name']} ({wfo['code']})"
+            "text": f"{wfo['name']} ({wfo['code']})",
         }
         for wfo in all_wfos
     ]
@@ -192,10 +192,7 @@ def afd_index(request):
         "afd": None,
         "wfo_list": wfo_combo_box_data,
         "version_list": afd_references,
-        "title_trans_args": {
-            "wfo": all_wfos[0]["code"].upper(),
-            "afd_id": afd_references[0]["id"]
-        }
+        "title_trans_args": {"wfo": all_wfos[0]["code"].upper(), "afd_id": afd_references[0]["id"]},
     }
     return render(request, "weather/afd/afd_page.html", to_render)
 

@@ -17,7 +17,7 @@ describe("State page county links", () => {
 
       await expect(response.status()).toBe(200);
 
-      const anchor = await page.locator(`a[href="/county/#ny"]`);
+      const anchor = await page.locator(`a[href="/forecast/county/#ny"]`);
       await expect(anchor).toHaveCount(1);
     });
 
@@ -31,9 +31,9 @@ describe("State page county links", () => {
 
       await expect(response.status()).toBe(200);
 
-      const anchor = await page.locator(`a[href="/county/#ny"]`);
+      const anchor = await page.locator(`a[href="/forecast/county/#ny"]`);
       anchor.click();
-      await page.waitForNavigation("/county/#ny");
+      await page.waitForNavigation("/forecast/county/#ny");
 
       // Find a link to Albany, NY (the first county)
       // and ensure that it is in view

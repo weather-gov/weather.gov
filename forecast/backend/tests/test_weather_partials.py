@@ -566,3 +566,57 @@ class TestWeatherPartials(TestCase):
                 },
             },
         )
+
+    @mock.patch("backend.templatetags.weather_partials._")
+    def test_render_non_critical_error_component_generic(self, mock_gettext_lazy):
+        """Tests non-critical error for a generic component."""
+        mock_gettext_lazy.return_value = "Generic error message"
+        actual = weather_partials.render_non_critical_error_component(component_name="alerts")
+        mock_gettext_lazy.assert_called_with("error.non-critical.alerts.01")
+        self.assertEqual(actual, {"message": "Generic error message"})
+
+    @mock.patch("backend.templatetags.weather_partials._")
+    def test_render_non_critical_error_component_with_wfo(self, mock_gettext_lazy):
+        """Tests non-critical error for a WFO-specific component."""
+        mock_gettext_lazy.return_value = "Error for {wfo_name}"
+        actual = weather_partials.render_non_critical_error_component(
+            component_name="briefings", wfo_name="Test WFO"
+        )
+        mock_gettext_lazy.assert_called_with("error.non-critical.briefings.wfo.01")
+        self.assertEqual(actual, {"message": "Error for Test WFO"})
+
+    @mock.patch("backend.templatetags.weather_partials._")
+    def test_render_non_critical_error_component_state_briefings_partial(self, mock_gettext_lazy):
+        """Tests non-critical error for state briefings with partial WFO errors."""
+        mock_gettext_lazy.return_value = "Some WFOs failed: {wfo_name}"
+        actual = weather_partials.render_non_critical_error_component(
+            component_name="state_briefings",
+            wfo_error_list=["WFO1", "WFO2"],
+            all_briefings_error=False,
+        )
+        mock_gettext_lazy.assert_called_with("error.non-critical-state-briefings.wfo.01")
+        self.assertEqual(actual, {"message": "Some WFOs failed: WFO1, WFO2"})
+
+    @mock.patch("backend.templatetags.weather_partials._")
+    def test_render_non_critical_error_component_state_briefings_all(self, mock_gettext_lazy):
+        """Tests non-critical error for state briefings when all briefings errored."""
+        mock_gettext_lazy.return_value = "All briefings failed"
+        actual = weather_partials.render_non_critical_error_component(
+            component_name="state_briefings",
+            wfo_error_list=["WFO1, WFO2, WFO3"],
+            all_briefings_error=True,
+        )
+        mock_gettext_lazy.assert_called_with("error.non-critical.briefings.generic.01")
+        self.assertEqual(actual, {"message": "All briefings failed"})
+
+    @mock.patch("backend.templatetags.weather_partials._")
+    def test_render_non_critical_error_component_state_briefings_empty_list(self, mock_gettext_lazy):
+        """Tests non-critical error for state briefings with empty error list."""
+        mock_gettext_lazy.return_value = "All briefings failed"
+        actual = weather_partials.render_non_critical_error_component(
+            component_name="state_briefings",
+            wfo_error_list=[],
+            all_briefings_error=False,
+        )
+        mock_gettext_lazy.assert_called_with("error.non-critical.briefings.generic.01")
+        self.assertEqual(actual, {"message": "All briefings failed"})

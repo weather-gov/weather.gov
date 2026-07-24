@@ -24,7 +24,7 @@
 --
 {% endcomment %}
 {% if ghwo.error %}
-  {% include "errors/partials/non-critical-component-error.html" with component="the daily risk summary" %}
+  {% render_non_critical_error_component component_name="risks" %}
 {% else %}
   {% if for_state %}
   <h2 
