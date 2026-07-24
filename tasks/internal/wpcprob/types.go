@@ -2,6 +2,7 @@ package wpcprob
 
 import (
 	"fmt"
+	"math"
 	"strings"
 )
 
@@ -21,7 +22,7 @@ const (
 )
 
 // Convert a raw grib2 value into the unit it's stored in
-func (k BandKind) convert(raw float64) float64 {
+func (k BandKind) convert(raw float32) float32 {
 	switch k {
 	case KindAccumulationInches, KindPercentileInches:
 		return raw / 25.4
@@ -125,11 +126,12 @@ type Gridpoint struct {
 	Col, Row int
 }
 
-// VariableRow holds one variable's decoded values; its json tags double as the jsonb column's keys.
+// VariableRow holds one variable's decoded values, in float32 to match wgrib2's -ieee single-precision output
+// its json tags double as the jsonb column's keys.
 type VariableRow struct {
-	Accumulation  *float64           `json:"accumulation,omitempty"`
-	Percentiles   map[string]float64 `json:"percentiles,omitempty"`
-	Probabilities map[string]float64 `json:"probabilities,omitempty"`
+	Accumulation  *float32           `json:"accumulation,omitempty"`
+	Percentiles   map[string]float32 `json:"percentiles,omitempty"`
+	Probabilities map[string]float32 `json:"probabilities,omitempty"`
 }
 
 // IsEmpty reports whether nothing was decoded for this variable at this gridpoint
@@ -137,19 +139,66 @@ func (r VariableRow) IsEmpty() bool {
 	return r.Accumulation == nil && len(r.Percentiles) == 0 && len(r.Probabilities) == 0
 }
 
+// missingValue marks a (gridpoint, band) never decoded; real values are always finite so NaN can't collide
+var missingValue = float32(math.NaN())
+
+// ValueMatrix holds one decoded value per (gridpoint, band) as a flat float32 array
+// avoiding the per-point map overhead a Go map[string]float64 costs at 1.8M points x 58 bands
 type ValueMatrix struct {
+	Bands     []Band
 	Variables []string
-	Rows      [][]VariableRow // Rows[pointIdx][index into Variables]
+	values    []float32 // values[pointIdx*len(Bands)+bandIdx]
 }
 
-// Allocate an n-row matrix; each row starts as len(variables) zero-value VariableRows
+// Allocate a matrix for n gridpoints across the given bands, pre-filled with missingValue
 func NewValueMatrix(bands []Band, n int) *ValueMatrix {
-	variables := variableNames(bands)
-	rows := make([][]VariableRow, n)
-	for i := range rows {
-		rows[i] = make([]VariableRow, len(variables))
+	values := make([]float32, n*len(bands))
+	for i := range values {
+		values[i] = missingValue
 	}
-	return &ValueMatrix{Variables: variables, Rows: rows}
+	return &ValueMatrix{Bands: bands, Variables: variableNames(bands), values: values}
+}
+
+// Set records a decoded value for the given gridpoint/band
+func (m *ValueMatrix) Set(pointIdx, bandIdx int, v float32) {
+	m.values[pointIdx*len(m.Bands)+bandIdx] = v
+}
+
+// Row reconstructs one gridpoint's VariableRow slice, transiently, from the flat matrix
+func (m *ValueMatrix) Row(pointIdx int, varIndex map[string]int) []VariableRow {
+	rows := make([]VariableRow, len(m.Variables))
+	base := pointIdx * len(m.Bands)
+	for bandIdx, b := range m.Bands {
+		v := m.values[base+bandIdx]
+		if math.IsNaN(float64(v)) {
+			continue
+		}
+		row := &rows[varIndex[b.Variable]]
+		switch b.Kind {
+		case KindAccumulationInches:
+			row.Accumulation = &v
+		case KindPercentileInches:
+			if row.Percentiles == nil {
+				row.Percentiles = make(map[string]float32)
+			}
+			row.Percentiles[b.Key] = v
+		case KindProbabilityPercent:
+			if row.Probabilities == nil {
+				row.Probabilities = make(map[string]float32)
+			}
+			row.Probabilities[b.Key] = v
+		}
+	}
+	return rows
+}
+
+// VarIndex maps each variable name to its position in Variables
+func (m *ValueMatrix) VarIndex() map[string]int {
+	idx := make(map[string]int, len(m.Variables))
+	for i, v := range m.Variables {
+		idx[v] = i
+	}
+	return idx
 }
 
 // Pull out each band's variable name, deduplicated and in first-seen order

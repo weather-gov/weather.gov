@@ -19,7 +19,7 @@ func buildIEEERecord(values []float32) []byte {
 
 // ValueAt should return the value and true for an in-bounds, defined cell
 func TestValueAt_InBounds(t *testing.T) {
-	grid := make([]float64, gridNX*gridNY)
+	grid := make([]float32, gridNX*gridNY)
 	grid[0] = 42.5        // col 1, row 1
 	grid[gridNX+1] = 7.25 // col 2, row 2
 
@@ -33,7 +33,7 @@ func TestValueAt_InBounds(t *testing.T) {
 
 // ValueAt should reject columns/rows outside the grid
 func TestValueAt_OutOfBounds(t *testing.T) {
-	grid := make([]float64, gridNX*gridNY)
+	grid := make([]float32, gridNX*gridNY)
 
 	cases := []struct{ col, row int }{
 		{0, 1}, {1, 0}, {gridNX + 1, 1}, {1, gridNY + 1},
@@ -47,7 +47,7 @@ func TestValueAt_OutOfBounds(t *testing.T) {
 
 // ValueAt should treat grib2's undefined sentinel as missing
 func TestValueAt_Undefined(t *testing.T) {
-	grid := make([]float64, gridNX*gridNY)
+	grid := make([]float32, gridNX*gridNY)
 	grid[0] = gribUndefined
 
 	if _, ok := ValueAt(grid, 1, 1); ok {
