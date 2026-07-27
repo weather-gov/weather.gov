@@ -12,6 +12,7 @@ api_interop_memory        = "2048M"
 api_interop_instances     = 3
 api_db_max_connections    = 395
 api_timings_metadata      = false
+tasks_memory              = "2048M"
 custom_domain_name        = "beta.weather.gov"
 redis_plan_name           = "redis-3node"
 rds_plan_name             = "large-gp-psql-redundant"
