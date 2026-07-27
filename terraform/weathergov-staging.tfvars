@@ -19,6 +19,7 @@ api_interop_instances     = 2
 api_url                   = "https://api.weather.gov"
 api_db_max_connections    = 395
 api_timings_metadata      = true
+tasks_memory              = "2048M"
 redis_plan_name           = "redis-3node"
 rds_plan_name             = "large-gp-psql-redundant"
 internal_gridpoint_lookup = true
