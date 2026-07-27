@@ -10,7 +10,7 @@ import (
 )
 
 func main() {
-	logger := internal.GetJSONLogger()
+	logger := internal.GetJSONLogger("gridcache")
 	ctx := context.Background()
 
 	if err := run(ctx, logger); err != nil {

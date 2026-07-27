@@ -21,7 +21,7 @@ const (
 	ChickletResource
 )
 
-var logger = internal.GetDefaultLogger()
+var logger = internal.GetJSONLogger("ghwo")
 
 // We use a single preconfigured http.Client
 // instance. See `http_client.go`

@@ -13,7 +13,7 @@ import (
 )
 
 func main() {
-	logger := internal.GetJSONLogger()
+	logger := internal.GetJSONLogger("wpcprob")
 	ctx := context.Background()
 
 	if err := run(ctx, logger); err != nil {

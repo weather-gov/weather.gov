@@ -10,12 +10,7 @@ import (
 var newRelicApp *newrelic.Application
 
 func main() {
-	logger := internal.GetDefaultLogger()
-	logger.Info(
-		"Hello!",
-		"program_name",
-		"ALERTS",
-	)
+	logger := internal.GetJSONLogger("alerts")
 
 	creds, err := internal.GetDatabaseCredentials()
 	if err != nil {
