@@ -5,7 +5,7 @@ import (
 )
 
 func main() {
-	logger := internal.GetJSONLogger()
+	logger := internal.GetJSONLogger("ghwo")
 	logger.Info(
 		"Hello!",
 		"program_name",
