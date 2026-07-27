@@ -135,6 +135,7 @@ const setupRadar = () => {
           },
         },
       };
+      bookmark.menudis = false;
     } catch (e) {
       console.error(`Could not parse bounds for radar geometry`);
       return;
@@ -150,6 +151,7 @@ const setupRadar = () => {
       center: point,
       location: point,
     };
+    bookmark.menudis = false;
   }
 
   const options = {
@@ -171,19 +173,6 @@ const setupRadar = () => {
   };
 
   window.app = window.cmiRadar.createApp("#wx-radar-container", options);
-
-  // TODO: Figure out how to detect error
-  if (radarError) {
-    document
-      .querySelector("#wx-radar-outer-container")
-      .classList.add("display-none");
-    document
-      .querySelector("#radar-timestamp-container")
-      .classList.add("display-none");
-    document
-      .querySelector("#wx-radar-error-container")
-      .classList.remove("display-none");
-  }
 
   // update the radar external link.
   const link = document.querySelector("#radar-point-link");
