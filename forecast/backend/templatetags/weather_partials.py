@@ -52,6 +52,12 @@ wfo_critical_component_error_msg = {
     "state_briefings": "error.non-critical-state-briefings.wfo.01",
 }
 
+critical_component_error_headline = {
+    "alerts": "error.500.alerts.headline.01",
+    "analysis": "error.500.analysis.headline.01",
+    "risks": "error.500.risks.headline.01",
+}
+
 
 @register.inclusion_tag("weather/partials/daily-high-low.html")
 def daily_high_low(**kwargs):
@@ -298,3 +304,17 @@ def render_non_critical_error_component(
     else:
         msg_str = _(non_critical_component_error_msg[component_name])
     return {"message": msg_str}
+
+@register.inclusion_tag("errors/partials/500-error-sub-page-component.html")
+def render_critical_component_error(
+    component_name=None, *, error_code=None, for_state=False
+):
+    """Render the critical component sub-page (for tabbed pages)."""
+    headline = "error.500.generic.headline.01"
+
+    # Determine if default headline should be overridden based on args
+    if component_name:
+        headline = f"error.500.{component_name}.headline.01"
+
+    return {"headline": headline, "error_code": error_code, "for_state": for_state}
+

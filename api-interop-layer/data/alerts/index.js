@@ -129,10 +129,8 @@ export const getAlertsForCountyFIPS = async (fips, { timezone }) => {
 
     const alerts = await alertsCache.getAlertsForCountyFIPS(fips);
 
-    // For local error testing uncomment this line and comment the return statement below it.
-    // to simulate an error in the alerts retrieval process.
-
-    // return { items: [], highestLevel: null, metadata: { ...metadata, error: true } };
+    // For local error testing uncomment this line to simulate an error in the alerts retrieval process.
+    // throw new Error("Simulated error for testing");
 
     return postProcessAlerts(alerts, { timezone });
   } catch (e) {
@@ -160,10 +158,8 @@ export const getAlertsForPoint = async ({
       longitude,
     );
 
-    // For local error testing uncomment this line and comment the return statement below it.
-    // to simulate an error in the alerts retrieval process.
-
-    // return { items: [], highestLevel: null, metadata: { ...metadata, error: true } };
+    // For local error testing uncomment this line to simulate an error in the alerts retrieval process.
+    // throw new Error("Simulated error for testing");
 
     return postProcessAlerts(alerts, { timezone });
   } catch (e) {

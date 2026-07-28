@@ -49,8 +49,11 @@
     {% include "weather/state/name.html" with state_name=state_name %}
     <wx-tabbed-nav class="display-block position-relative flex-1" id="state-page-tabbed-nav">
     {% include "weather/state/tabs.html" with url_name=request.resolver_match.url_name %}
-    <div class="bg-white padding-bottom-4">
+    <div class="bg-white {% if alerts_error %} padding-bottom-0 {% else %} padding-bottom-4 {% endif %}">
       <div class="wx-focus-offset-205" aria-labelledby="alerts-tab-button" id="alerts" tabindex="0">
+        {% if alerts_error %}
+          {% render_critical_component_error component_name="alerts" for_state=True %}
+        {% else %}
         <div class="grid-container">
           <h2 class="text-normal text-primary-dark margin-top-3 font-sans-xl">{{ "county.heading.alerts.01" | t }}</h2>
           <wx-tabs id="state-alerts" class="display-none">
@@ -115,6 +118,7 @@
             </div>
           </div>
         </div>
+        {% endif %}
       </div>
     </div>
     </wx-tabbed-nav>

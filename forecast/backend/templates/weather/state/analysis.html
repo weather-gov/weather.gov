@@ -25,6 +25,9 @@
              id="analysis"
              aria-labelledby="analysis-tab-button"
              tabindex="0">
+             {% if analysis_error %}
+               {% render_critical_component_error component_name="analysis" for_state=True %}
+             {% else %}
           <div class="grid-container">
             <h2 class="font-sans-xl text-primary-darker margin-top-0 text-normal">
               {% translate_plural_with_args "county.briefing.header.01" 2 %}
@@ -47,6 +50,7 @@
               {% endfor %}
             </ul>
           </div>
+          {% endif %}
         </div>
       </div>
     </wx-tabbed-nav>

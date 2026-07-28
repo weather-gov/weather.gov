@@ -1244,6 +1244,30 @@ msgstr "There was an error loading weather stories for this location."
 msgid "error.500.generic.message.01"
 msgstr "Something went wrong on our end. Please wait a few moments and reload the page or visit <a href='https://www.weather.gov' class='usa-link'>weather.gov</a> for current forecast information."
 
+msgid "error.500.generic.headline.01"
+msgstr "Page Not Available"
+
+msgid "error.500.alerts.headline.01"
+msgstr "Alerts Data Not Available"
+
+msgid "error.500.risks.headline.01"
+msgstr "Seven-day Weather Risk Overview Not Available"
+
+msgid "error.500.analysis.headline.01"
+msgstr "State Analysis Not Available"
+
+msgid "error.500.generic.message.p1.01"
+msgstr "Please wait a few moments and reload the page."
+
+msgid "error.500.state.message.01"
+msgstr "State-level data may be available on other tabs."
+
+msgid "error.500.generic.message.p2.01"
+msgstr "You can always visit <a href='https://www.weather.gov' class='usa-link'>weather.gov</a> for the latest information."
+
+msgid "error.500.generic.errorcode.01"
+msgstr "Error code: "
+
 msgid "error.404.generic.message.01"
 msgstr "404: The requested page was not found."
 

@@ -49,19 +49,20 @@ def county_overview(request, countyfips=None, county_slug=None):  # noqa: C901
     # Alerts + Risk Overview are required components
     # If BOTH have errors, render the full error page.
     # If only one is in error, we can still render the page with the other components.
-    alerts_error = county_data.get("alerts", {}).get("metadata", {}).get("error", False)
-    county_risks_error = county_data.get("riskOverview", {}).get("error", False)
+    alerts_metadata = county_data.get("alerts", {}).get("metadata", {})
+    county_risks = county_data.get("riskOverview", {})
 
-    if alerts_error and county_risks_error:
+    error_code = alerts_metadata.get("status", None) or county_risks.get("status", None)
+
+    if alerts_metadata.get("error", False) and county_risks.get("error", False):
         context = {
             "title_trans_args": {
                 "county": county.countyname,
                 "state": county.st,
             },
+            "error_code": error_code,
         }
-        # This is a placeholder until the re-designed Error page is implemented.
-        # For now, render the generic 500 error page.
-        return render(request, "errors/500.html", context)
+        return render(request, "errors/500.html", context, status=error_code or 500)
 
     level_priorities = {
         "warning": 1024,
@@ -150,7 +151,7 @@ def county_overview(request, countyfips=None, county_slug=None):  # noqa: C901
         "weather/county/overview.html",
         {
             "countyfips": county.countyfips,
-            "alerts_error": alerts_error,
+            "alerts_error": alerts_metadata.get("error", False),
             "title_trans_args": {
                 "county": county.countyname,
                 "state": county.st,
@@ -166,5 +167,6 @@ def county_overview(request, countyfips=None, county_slug=None):  # noqa: C901
                 "wfo_codes": wfo_codes,
                 "bounds": county_data["county"].get("bounds", None),
             },
+            "error_code": error_code,
         },
     )
