@@ -22,8 +22,10 @@
     <div class="bg-white padding-bottom-4">
       <div class="wx-focus-offset-205" id="risks" aria-labelledby="risks-tab-button" tabindex="0">
         <div class="grid-container">
+          {% if data.public.riskOverview.error %}
+            {% render_critical_component_error component_name="risks" for_state=True %}
+          {% else %}
           {% include "weather/partials/risk-overview-summary.html" with ghwo=data.public.riskOverview for_state=True %}
-          {% if not data.public.riskOverview.error %}
             <div class="margin-top-2">
               {% if data.public.hasDetails %}
               <a href="{% url 'state_risk_overview' state_code=state.state %}"

@@ -118,6 +118,10 @@ def state_alerts(request, state):
             "state_name": state_orm.name,
             "county_count": state_orm.county_count,
             "alerts": alerts_list,
+            # TODO: This will need to be fixed once we refactor alerts handling
+            # right now it will always be false because we don't actually store errors in the alerts table
+            "alerts_error": alerts_queryset.exists()
+            and any(alert.alertjson.get("metadata", {}).get("error") for alert in alerts_queryset),
             "alert_days_timeline": alert_days_timeline,
             "levels": legend_levels,
             "subdivision_name": subdivision_name,
@@ -203,6 +207,22 @@ def state_analysis(request, state):
     # We use the list of codes to bulk request briefings
     # from the interop layer
     wfo_data = get_wfo_data_for_state(state_instance)
+
+    # wfo_data required to pull the briefings so if it errors out just stop processing and render error
+    if not wfo_data or all("error" in wfo for wfo in wfo_data):
+        return render(
+            request,
+            "weather/state/analysis.html",
+            {
+                "state_name": state_instance.name,
+                "state_abbrev": state_instance.state,
+                "analysis_error": True,
+                "title_trans_args": {
+                    "state": state_instance.name,
+                },
+            },
+        )
+
     wfo_codes = [wfo["code"] for wfo in wfo_data]
     state_data = get_analysis_data_for_state({"wfos": wfo_codes})
 
