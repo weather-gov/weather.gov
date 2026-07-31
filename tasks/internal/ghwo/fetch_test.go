@@ -354,27 +354,38 @@ func TestFetchState(t *testing.T) {
 	 */
 	t.Run("makes requests for both the chicklet and legend endpoints for the state", func(t *testing.T) {
 		var endpointsCalled = make([]string, 0)
+		var endpointsChan = make(chan string, 10)
+		var wg = sync.WaitGroup{}
+
 		server := httptest.NewServer(http.HandlerFunc(func(writer http.ResponseWriter, req *http.Request) {
 			// Add the incoming path to the list of endpoints that have been called
-			endpointsCalled = append(
-				endpointsCalled,
-				req.URL.Path,
-			)
+			wg.Add(1)
+			go func() {
+				defer wg.Done()
+				endpointsChan <- req.URL.Path
+			}()
 
 			writer.WriteHeader(201)
 		}))
 
-		// Stash the global BaseURL and restore it at the
-		// end of the test.
-		// Then, set it to be the test server's base url
-		stashedBaseURL := BaseURL
-		defer func() { BaseURL = stashedBaseURL }()
-		BaseURL = server.URL
+		t.Setenv("GHWO_BASE_URL", server.URL)
 		defer server.Close()
 
 		responseChan := make(chan *StateFetchResult)
 		go FetchState(ctx, "MD", "LWX", responseChan)
 		<-responseChan
+
+		go func() {
+			wg.Wait()
+			close(endpointsChan)
+		}()
+
+		for endpoint := range endpointsChan {
+			endpointsCalled = append(
+				endpointsCalled,
+				endpoint,
+			)
+		}
 
 		if len(endpointsCalled) == 0 {
 			t.Errorf("did not call any endpoints")
@@ -401,12 +412,7 @@ func TestFetchState(t *testing.T) {
 			writer.WriteHeader(201)
 		}))
 
-		// Stash the global BaseURL and restore it at the
-		// end of the test.
-		// Then, set it to be the test server's base url
-		stashedBaseURL := BaseURL
-		defer func() { BaseURL = stashedBaseURL }()
-		BaseURL = server.URL
+		t.Setenv("GHWO_BASE_URL", server.URL)
 		defer server.Close()
 
 		// We will be passing in a new context with a cancellation
@@ -448,12 +454,7 @@ func TestFetchState(t *testing.T) {
 			writer.WriteHeader(200)
 		}))
 
-		// Stash the global BaseURL and restore it at the
-		// end of the test.
-		// Then, set it to be the test server's base url
-		stashedBaseURL := BaseURL
-		defer func() { BaseURL = stashedBaseURL }()
-		BaseURL = server.URL
+		t.Setenv("GHWO_BASE_URL", server.URL)
 		defer server.Close()
 
 		expected := &StateFetchResult{
@@ -516,24 +517,21 @@ func TestFetchWFO(t *testing.T) {
 	 */
 	t.Run("makes requests for all resource types (excluding state calls)", func(t *testing.T) {
 		var endpointsCalled = make([]string, 0)
+		var endpointsChan = make(chan string, 10)
+		var wg = sync.WaitGroup{}
 		server := httptest.NewServer(http.HandlerFunc(func(writer http.ResponseWriter, req *http.Request) {
-			endpointsCalled = append(
-				endpointsCalled,
-				req.URL.Path,
-			)
+
+			wg.Add(1)
+			go func() {
+				defer wg.Done()
+				endpointsChan <- req.URL.Path
+			}()
 
 			writer.WriteHeader(200)
 		}))
 
-		// Stash the global BaseURL and restore it at the
-		// end of the test.
-		// Then, set it to be the test server's base url
-		stashedBaseURL := BaseURL
-		defer func() { BaseURL = stashedBaseURL }()
-		BaseURL = server.URL
+		t.Setenv("GHWO_BASE_URL", server.URL)
 		defer server.Close()
-
-		responseChan := make(chan *FetchResult)
 
 		expected := []string{
 			"/source/lwx/ghwo/hazByCounty.json",
@@ -541,11 +539,19 @@ func TestFetchWFO(t *testing.T) {
 			"/source/lwx/ghwo/chicklet.json",
 		}
 
-		wg := sync.WaitGroup{}
+		FetchWFO(ctx, "LWX")
 
-		wg.Add(1)
-		go FetchWFO(ctx, "LWX", responseChan, &wg)
-		<-responseChan
+		go func() {
+			wg.Wait()
+			close(endpointsChan)
+		}()
+
+		for endpoint := range endpointsChan {
+			endpointsCalled = append(
+				endpointsCalled,
+				endpoint,
+			)
+		}
 
 		// Ensure that all the expected endpoints were called
 		for _, path := range expected {
@@ -572,25 +578,14 @@ func TestFetchWFO(t *testing.T) {
 			writer.WriteHeader(201)
 		}))
 
-		// Stash the global BaseURL and restore it at the
-		// end of the test.
-		// Then, set it to be the test server's base url
-		stashedBaseURL := BaseURL
-		defer func() { BaseURL = stashedBaseURL }()
-		BaseURL = server.URL
+		t.Setenv("GHWO_BASE_URL", server.URL)
 		defer server.Close()
 
-		wg := sync.WaitGroup{}
-
 		cancelContext, cancelFun := context.WithCancel(context.TODO())
-
-		responseChan := make(chan *FetchResult)
-
-		wg.Add(1)
-		go FetchWFO(cancelContext, "LWX", responseChan, &wg)
 		// Now immediately cancel while the server is responding to any requests
 		cancelFun()
-		result := <-responseChan
+
+		result, _ := FetchWFO(cancelContext, "LWX")
 
 		if len(result.Errors) != 1 {
 			t.Errorf("Expected FetchResult to have exactly 1 error, but got %d", len(result.Errors))
@@ -618,12 +613,7 @@ func TestFetchWFO(t *testing.T) {
 			}
 		}))
 
-		// Stash the global BaseURL and restore it at the
-		// end of the test.
-		// Then, set it to be the test server's base url
-		stashedBaseURL := BaseURL
-		defer func() { BaseURL = stashedBaseURL }()
-		BaseURL = server.URL
+		t.Setenv("GHWO_BASE_URL", server.URL)
 		defer server.Close()
 
 		expected := &FetchResult{
@@ -640,12 +630,7 @@ func TestFetchWFO(t *testing.T) {
 			},
 		}
 
-		wg := sync.WaitGroup{}
-		responseChan := make(chan *FetchResult)
-
-		wg.Add(1)
-		go FetchWFO(ctx, "LWX", responseChan, &wg)
-		result := <-responseChan
+		result, _ := FetchWFO(ctx, "LWX")
 
 		if !reflect.DeepEqual(result, expected) {
 			resultStr, _ := json.MarshalIndent(result, "", "  ")

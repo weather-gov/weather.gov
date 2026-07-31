@@ -24,4 +24,12 @@ var GHWOClient = &http.Client{
 	Timeout: getTimeout(),
 }
 
-var BaseURL = "https://www.weather.gov"
+var DefaultBaseURL = "https://www.weather.gov"
+
+func GetBaseURL() string {
+	found := os.Getenv("GHWO_BASE_URL")
+	if found == "" {
+		return DefaultBaseURL
+	}
+	return found
+}

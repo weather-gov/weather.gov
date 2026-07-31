@@ -1,0 +1,212 @@
+{
+  "wfo": "lwx",
+  "days": [
+    {
+      "risks": {
+        "ConvectiveWind": {
+          "category": 1
+        },
+        "ExcessiveRainfall": {
+          "category": 0
+        },
+        "ExtremeHeat": {
+          "category": 3
+        },
+        "Lightning": {
+          "category": 1
+        },
+        "SevereThunderstorm": {
+          "category": 1
+        }
+      },
+      "composite": {
+        "max": 3,
+        "scaled": 0.6
+      },
+      "dayNumber": 1,
+      "timestamp": "2026-07-16T15:00:00-04:00"
+    },
+    {
+      "risks": {
+        "ConvectiveWind": {
+          "category": 0
+        },
+        "ExcessiveRainfall": {
+          "category": 0
+        },
+        "ExtremeHeat": {
+          "category": 1
+        },
+        "Lightning": {
+          "category": 1
+        },
+        "SevereThunderstorm": {
+          "category": 0
+        }
+      },
+      "composite": {
+        "max": 1,
+        "scaled": 0.2
+      },
+      "dayNumber": 2,
+      "timestamp": "2026-07-17T08:00:00-04:00"
+    },
+    {
+      "risks": {
+        "ExcessiveRainfall": {
+          "category": 1
+        },
+        "ExtremeHeat": {
+          "category": 3
+        },
+        "Lightning": {
+          "category": 2
+        },
+        "SevereThunderstorm": {
+          "category": 2
+        }
+      },
+      "composite": {
+        "max": 3,
+        "scaled": 0.6
+      },
+      "dayNumber": 3,
+      "timestamp": "2026-07-18T08:00:00-04:00"
+    },
+    {
+      "risks": {
+        "ExcessiveRainfall": {
+          "category": 0
+        },
+        "ExtremeHeat": {
+          "category": 1
+        },
+        "Lightning": {
+          "category": 1
+        },
+        "SevereThunderstorm": {
+          "category": 0
+        }
+      },
+      "composite": {
+        "max": 1,
+        "scaled": 0.2
+      },
+      "dayNumber": 4,
+      "timestamp": "2026-07-19T08:00:00-04:00"
+    },
+    {
+      "risks": {
+        "ExcessiveRainfall": {
+          "category": 0
+        },
+        "ExtremeHeat": {
+          "category": 1
+        },
+        "Lightning": {
+          "category": 1
+        },
+        "SevereThunderstorm": {
+          "category": 0
+        }
+      },
+      "composite": {
+        "max": 1,
+        "scaled": 0.2
+      },
+      "dayNumber": 5,
+      "timestamp": "2026-07-20T08:00:00-04:00"
+    },
+    {
+      "risks": {
+        "ExtremeHeat": {
+          "category": 1
+        },
+        "Lightning": {
+          "category": 1
+        },
+        "SevereThunderstorm": {
+          "category": 0
+        }
+      },
+      "composite": {
+        "max": 1,
+        "scaled": 0.2
+      },
+      "dayNumber": 6,
+      "timestamp": "2026-07-21T08:00:00-04:00"
+    },
+    {
+      "risks": {
+        "ExtremeHeat": {
+          "category": 1
+        },
+        "Lightning": {
+          "category": 1
+        },
+        "SevereThunderstorm": {
+          "category": 0
+        }
+      },
+      "composite": {
+        "max": 1,
+        "scaled": 0.2
+      },
+      "dayNumber": 7,
+      "timestamp": "2026-07-22T08:00:00-04:00"
+    }
+  ],
+  "risks": null,
+  "legend": null,
+  "isState": true,
+  "isCounty": false,
+  "fips": "",
+  "state": "MD",
+  "noRisks": [
+    "Fog Risk",
+    "Frost/Freeze Risk",
+    "Hail Risk",
+    "High Surf Risk",
+    "Tornado Risk",
+    "Wind Risk"
+  ],
+  "composite": {
+    "days": [
+      {
+        "max": 3,
+        "scaled": 0.6,
+        "timestamp": "2026-07-16T15:00:00-04:00"
+      },
+      {
+        "max": 1,
+        "scaled": 0.2,
+        "timestamp": "2026-07-17T08:00:00-04:00"
+      },
+      {
+        "max": 3,
+        "scaled": 0.6,
+        "timestamp": "2026-07-18T08:00:00-04:00"
+      },
+      {
+        "max": 1,
+        "scaled": 0.2,
+        "timestamp": "2026-07-19T08:00:00-04:00"
+      },
+      {
+        "max": 1,
+        "scaled": 0.2,
+        "timestamp": "2026-07-20T08:00:00-04:00"
+      },
+      {
+        "max": 1,
+        "scaled": 0.2,
+        "timestamp": "2026-07-21T08:00:00-04:00"
+      },
+      {
+        "max": 1,
+        "scaled": 0.2,
+        "timestamp": "2026-07-22T08:00:00-04:00"
+      }
+    ]
+  }
+}
