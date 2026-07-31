@@ -36,24 +36,25 @@ resource "cloudfoundry_app" "app" {
   health_check_type = "port"
 
   environment = {
-    NEW_RELIC_LICENSE_KEY  = local.newrelic_license
-    NEW_RELIC_APP_NAME     = "weathergov-${var.env}"
-    API_TIMINGS_METADATA   = var.api_timings_metadata
-    API_INTEROP_TIMEOUT    = var.django_interop_timeout
-    INTEROP_URL            = "https://api-${local.app_name}-${var.env}.apps.internal:61443"
-    PYTHONUNBUFFERED       = "yup"
-    DJANGO_SETTINGS_MODULE = "backend.config.settings.production"
-    DJANGO_BASE_URL        = coalesce(var.custom_domain_name, "app.cloud.gov")
-    DJANGO_LOG_LEVEL       = "INFO"
-    DJANGO_LOG_FORMAT      = "console"
-    DISABLE_COLLECTSTATIC  = 1
-    CLOUDGOV_SPACE         = var.cf_space_name
-    AWS_USE_FIPS_ENDPOINT  = 1 # required for "s3-fips.us-gov-*.amazonaws.com"
-    GIT_SHA_HASH           = var.git_sha_hash
-    REQUESTS_CA_BUNDLE     = "/etc/ssl/certs/ca-certificates.crt" # use cloud.gov ssl certificates for internal routing
-    WEB_INSTANCES          = var.web_instances
-    WEB_DB_MAX_CONNECTIONS = var.web_db_max_connections
-    WEB_GEVENT_WORKERS     = var.web_gevent_workers
+    NEW_RELIC_LICENSE_KEY       = local.newrelic_license
+    NEW_RELIC_APP_NAME          = "weathergov-${var.env}"
+    API_TIMINGS_METADATA        = var.api_timings_metadata
+    API_INTEROP_TIMEOUT         = var.django_interop_timeout
+    INTEROP_URL                 = "https://api-${local.app_name}-${var.env}.apps.internal:61443"
+    PYTHONUNBUFFERED            = "yup"
+    DJANGO_SETTINGS_MODULE      = "backend.config.settings.production"
+    DJANGO_BASE_URL             = coalesce(var.custom_domain_name, "app.cloud.gov")
+    DJANGO_LOG_LEVEL            = "INFO"
+    DJANGO_LOG_FORMAT           = "console"
+    DISABLE_COLLECTSTATIC       = 1
+    CLOUDGOV_SPACE              = var.cf_space_name
+    AWS_USE_FIPS_ENDPOINT       = 1 # required for "s3-fips.us-gov-*.amazonaws.com"
+    GIT_SHA_HASH                = var.git_sha_hash
+    REQUESTS_CA_BUNDLE          = "/etc/ssl/certs/ca-certificates.crt" # use cloud.gov ssl certificates for internal routing
+    WEB_INSTANCES               = var.web_instances
+    WEB_DB_MAX_CONNECTIONS      = var.web_db_max_connections
+    WEB_GEVENT_WORKERS          = var.web_gevent_workers
+    MARINE_COASTAL_EXPERIMENTAL = var.marine_coastal_experimental
   }
 
   service_bindings = [

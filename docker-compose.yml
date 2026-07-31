@@ -62,6 +62,8 @@ services:
       # web and interop, keeping in mind some connections are reserved.
       WEB_DB_MAX_CONNECTIONS: 195
       API_TIMINGS_METADATA: true
+      # Whether to allow for coastal marine data
+      MARINE_COASTAL_EXPERIMENTAL: false
     networks:
       - weather.gov
     depends_on:
@@ -171,6 +173,8 @@ services:
       # Whether or not to use internal geodata
       # queries to resolve lat/lon -> grid lookups
       INTERNAL_GRIDPOINT_LOOKUP: true
+      # Whether to allow for coastal marine data
+      MARINE_COASTAL_EXPERIMENTAL: false
     networks:
       - weather.gov
     links:

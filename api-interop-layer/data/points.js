@@ -210,7 +210,7 @@ export const getPointData = async (lat, lon) => {
     grid.notSupported = true;
   }
 
-  return { point, place, grid, isMarine };
+  return { point, place, grid };
 };
 
 const getInternalGridData = async (latitude, longitude) => {

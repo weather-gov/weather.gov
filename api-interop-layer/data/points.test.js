@@ -91,7 +91,6 @@ describe("point method", () => {
     expect(actual).to.eql({
       point: { latitude: 1, longitude: 2 },
       grid: { error: true, marineType: null },
-      isMarine: false,
       place: null,
     });
   });
@@ -108,8 +107,13 @@ describe("point method", () => {
 
     expect(actual).to.eql({
       point: { latitude: 1, longitude: 2 },
-      grid: { error: true, outOfBounds: true, status: 404, marineType: null },
-      isMarine: false,
+      grid: {
+        error: true,
+        outOfBounds: true,
+        status: 404,
+        marineType: null,
+        type: "land",
+      },
       place: null,
     });
   });
@@ -166,7 +170,6 @@ describe("point method", () => {
         type: null,
         marineType: null,
       },
-      isMarine: false,
       place: null,
     });
   });
@@ -202,7 +205,6 @@ describe("point method", () => {
         type: "land",
         marineType: null,
       },
-      isMarine: false,
       place: null,
     });
   });
@@ -239,12 +241,11 @@ describe("point method", () => {
         type: "land",
         marineType: null,
       },
-      isMarine: false,
       place: null,
     });
   });
 
-  it("includes marine type data and sets isMarine", async () => {
+  it("includes marine type data and sets type=marine and marineType=coastal", async () => {
     response.body.text.resolves(
       JSON.stringify({
         properties: {
@@ -264,10 +265,10 @@ describe("point method", () => {
 
     const actual = await points(4, 5);
     expect(actual.grid.marineType).to.equal("coastal");
-    expect(actual.isMarine).to.equal(true);
+    expect(actual.grid.type).to.equal("marine");
   });
 
-  it("includes marine type data as null and sets isMarine to false", async () => {
+  it("includes marine type data as null and sets type=land", async () => {
     response.body.text.resolves(
       JSON.stringify({
         properties: {
@@ -284,7 +285,7 @@ describe("point method", () => {
 
     const actual = await points(4, 5);
     expect(actual.grid.marineType).to.be.null;
-    expect(actual.isMarine).to.equal(false);
+    expect(actual.grid.type).to.equal("land");
   });
 
   it("includes a location without a full name", async () => {
@@ -323,7 +324,6 @@ describe("point method", () => {
     expect(actual).to.eql({
       point: { latitude: 1, longitude: 2 },
       grid: { error: true, marineType: null },
-      isMarine: false,
       place: {
         name: "Townsville",
         state: "",
@@ -378,7 +378,6 @@ describe("point method", () => {
     expect(actual).to.eql({
       point: { latitude: 1, longitude: 2 },
       grid: { error: true, marineType: null },
-      isMarine: false,
       place: {
         name: "Townsville",
         state: "OT",

@@ -337,6 +337,11 @@
           "description": "Elevation of this grid point.",
           "$ref": "#/$defs/measures/distance"
         },
+        "type": {
+          "description": "Gridpoint type",
+          "type": "string",
+          "enum": ["land", "marine"]
+        },
         "marineType": {
           "description": "Type of marine zone if applicable",
           "type": "string",

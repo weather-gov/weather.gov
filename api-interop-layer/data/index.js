@@ -13,6 +13,8 @@ import getProductById from "./products/index.js";
 import getWeatherStory from "./weatherstory.js";
 
 const forecastLogger = logger.child({ subsystem: "forecast" });
+const ALLOW_COASTAL = process.env.MARINE_COASTAL_EXPERIMENTAL === "true";
+const BLOCKED_MARINE = ALLOW_COASTAL ? ["offshore"] : ["offshore", "coastal"];
 
 let gridCache = null;
 let backgroundWorker;
@@ -45,7 +47,9 @@ if (enableBackgroundProcessing()) {
 
 const getDataForPoint = async (lat, lon) => {
   forecastLogger.trace({ lat, lon }, "fetching forecast");
-  const { point, place, grid, isMarine } = await getPointData(lat, lon);
+  const { point, place, grid } = await getPointData(lat, lon);
+  const blockMarine =
+    grid.type === "marine" && BLOCKED_MARINE.includes(grid?.marineType);
 
   forecastLogger.trace("satellite promise");
   let satellitePromise = Promise.resolve({ error: true });
@@ -61,8 +65,8 @@ const getDataForPoint = async (lat, lon) => {
 
   // If we don't have a grid, we can't fetch satellite metadata, forecast, or
   // observations – all of these are based around WFO and WFO grid.
-  // additionally, if we have a marine location then bail out early.
-  if (!grid.error && !isMarine) {
+  // additionally, if we have an unsupported marine location then bail out early.
+  if (!grid.error && !blockMarine) {
     // Cache grid point information
     // This is a synchronous push to an array. Fire and Forget
     if (gridCache) {
@@ -76,7 +80,7 @@ const getDataForPoint = async (lat, lon) => {
       observed: obs,
       weatherstory: ws,
     } = await Promise.all([
-      getForecast({ grid, place, isMarine }),
+      getForecast({ grid, place }),
       getObservations({ grid, point }, dbConnection),
       getWeatherStory(grid.wfo),
     ]).then(([forecastData, obsData, weatherStoryData]) => {
@@ -159,7 +163,6 @@ const getDataForPoint = async (lat, lon) => {
     point,
     place,
     grid,
-    isMarine,
     forecast: forecast.daily,
     weatherstory,
   };

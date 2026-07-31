@@ -238,9 +238,9 @@ export const updateMaxPop = (day) => {
 /**
  * Fetches and formats the main forecast object
  */
-export default async ({ grid, place, isMarine }) => {
+export default async ({ grid, place }) => {
   const hours = new Map();
-
+  const isMarine = grid?.type === "marine";
   // The hours map is passed into the gridpoint and hourly data processors so
   // we can build a comprehensive – but single – list of all the hours covered
   // by either the gridpoints or /forecast/hourly endpoints. It's kinda clunky,
