@@ -68,21 +68,35 @@ func ValueAt(grid []float32, col, row int) (float32, bool) {
 	return v, true
 }
 
-// Decode each band's grib2 file and fill in the matrix with values at the gridpoints
-func DecodeBands(wgrib2Bin, destDir, cycle, fhour string, bands []Band, gridpoints []Gridpoint, matrix *ValueMatrix) error {
-	for bandIdx, b := range bands {
-		path := destDir + "/" + bandFilename(b, cycle, fhour)
-		grid, err := DecodeGrid(wgrib2Bin, path)
-		if err != nil {
-			return fmt.Errorf("decoding %s: %w", b.FileFragment, err)
+// DecodeAndStoreVariables decodes bands one at a time, grouped by variable (BandList emits each variable's bands contiguously), and hands store one variable's matrix at a time
+func DecodeAndStoreVariables(wgrib2Bin, destDir, cycle, fhour string, bands []Band, gridpoints []Gridpoint, store func(variable string, matrix *VariableMatrix) error) error {
+	for i := 0; i < len(bands); {
+		j := i + 1
+		for j < len(bands) && bands[j].Variable == bands[i].Variable {
+			j++
 		}
-		for pointIdx, gp := range gridpoints {
-			raw, ok := ValueAt(grid, gp.Col, gp.Row)
-			if !ok {
-				continue
+		variableBands := bands[i:j]
+
+		matrix := newVariableMatrix(variableBands, len(gridpoints))
+		for bandIdx, b := range variableBands {
+			path := destDir + "/" + bandFilename(b, cycle, fhour)
+			grid, err := DecodeGrid(wgrib2Bin, path)
+			if err != nil {
+				return fmt.Errorf("decoding %s: %w", b.FileFragment, err)
 			}
-			matrix.Set(pointIdx, bandIdx, b.Kind.convert(raw))
+			// Only this band's grid is live at once; discarded before the next band in this variable is decoded
+			for pointIdx, gp := range gridpoints {
+				raw, ok := ValueAt(grid, gp.Col, gp.Row)
+				if !ok {
+					continue
+				}
+				matrix.set(pointIdx, bandIdx, b.Kind.convert(raw))
+			}
 		}
+		if err := store(bands[i].Variable, matrix); err != nil {
+			return fmt.Errorf("storing %s: %w", bands[i].Variable, err)
+		}
+		i = j
 	}
 	return nil
 }

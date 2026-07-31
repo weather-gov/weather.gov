@@ -85,22 +85,32 @@ func run(ctx context.Context, logger interface{ Info(string, ...any) }) error {
 		wgrib2Bin = v
 	}
 
-	// Decode each band with wgrib2 and extract values at the gridpoints
-	logger.Info("decoding bands", "count", len(bands))
+	// Seed the staging table with one identity row per gridpoint, ahead of any band being decoded
+	logger.Info("staging results")
 	stageStart = time.Now()
-	matrix := wpcprob.NewValueMatrix(bands, len(gridpoints))
-	if err := wpcprob.DecodeBands(wgrib2Bin, destDir, cycle, fhour, bands, gridpoints, matrix); err != nil {
+	if err := wpcprob.CreateStaging(ctx, pool, gridpoints, cycleTime, validTime); err != nil {
+		return fmt.Errorf("creating staging table: %w", err)
+	}
+	logger.Info("staged results", "duration", time.Since(stageStart).String())
+
+	// Decode each variable's bands one at a time, then store the whole variable in a single write pass
+	logger.Info("decoding and storing bands", "count", len(bands))
+	stageStart = time.Now()
+	store := func(variable string, matrix *wpcprob.VariableMatrix) error {
+		return wpcprob.StoreVariable(ctx, pool, variable, matrix, gridpoints)
+	}
+	if err := wpcprob.DecodeAndStoreVariables(wgrib2Bin, destDir, cycle, fhour, bands, gridpoints, store); err != nil {
 		return err
 	}
-	logger.Info("decoded bands", "count", len(bands), "duration", time.Since(stageStart).String())
+	logger.Info("decoded and stored bands", "count", len(bands), "duration", time.Since(stageStart).String())
 
-	// Persist the results
-	logger.Info("storing results")
+	// Swap the staging table into place as the live table
+	logger.Info("finalizing results")
 	stageStart = time.Now()
-	if err := wpcprob.StoreResults(ctx, pool, gridpoints, matrix, cycleTime, validTime); err != nil {
-		return fmt.Errorf("storing results: %w", err)
+	if err := wpcprob.FinalizeStaging(ctx, pool); err != nil {
+		return fmt.Errorf("finalizing results: %w", err)
 	}
-	logger.Info("stored results", "duration", time.Since(stageStart).String())
+	logger.Info("finalized results", "duration", time.Since(stageStart).String())
 
 	logger.Info("done", "cycle", cycle, "fhour", fhour, "gridpoints", len(gridpoints), "total_duration", time.Since(runStart).String())
 	return nil

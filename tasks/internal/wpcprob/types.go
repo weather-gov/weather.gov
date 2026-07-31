@@ -126,8 +126,7 @@ type Gridpoint struct {
 	Col, Row int
 }
 
-// VariableRow holds one variable's decoded values, in float32 to match wgrib2's -ieee single-precision output
-// its json tags double as the jsonb column's keys.
+// VariableRow holds one variable's decoded values at a gridpoint; its json tags double as the jsonb column's keys
 type VariableRow struct {
 	Accumulation  *float32           `json:"accumulation,omitempty"`
 	Percentiles   map[string]float32 `json:"percentiles,omitempty"`
@@ -142,38 +141,34 @@ func (r VariableRow) IsEmpty() bool {
 // missingValue marks a (gridpoint, band) never decoded; real values are always finite so NaN can't collide
 var missingValue = float32(math.NaN())
 
-// ValueMatrix holds one decoded value per (gridpoint, band) as a flat float32 array
-// avoiding the per-point map overhead a Go map[string]float64 costs at 1.8M points x 58 bands
-type ValueMatrix struct {
-	Bands     []Band
-	Variables []string
-	values    []float32 // values[pointIdx*len(Bands)+bandIdx]
+// VariableMatrix holds one decoded value per (gridpoint, band) for a single variable's bands, as a flat float32 array
+type VariableMatrix struct {
+	bands []Band
+	values []float32 // values[pointIdx*len(bands)+bandIdx]; row() below builds the per-point maps only transiently, one at a time
 }
 
-// Allocate a matrix for n gridpoints across the given bands, pre-filled with missingValue
-func NewValueMatrix(bands []Band, n int) *ValueMatrix {
+// newVariableMatrix allocates a matrix for n gridpoints across one variable's bands, pre-filled with missingValue
+func newVariableMatrix(bands []Band, n int) *VariableMatrix {
 	values := make([]float32, n*len(bands))
 	for i := range values {
 		values[i] = missingValue
 	}
-	return &ValueMatrix{Bands: bands, Variables: variableNames(bands), values: values}
+	return &VariableMatrix{bands: bands, values: values}
 }
 
-// Set records a decoded value for the given gridpoint/band
-func (m *ValueMatrix) Set(pointIdx, bandIdx int, v float32) {
-	m.values[pointIdx*len(m.Bands)+bandIdx] = v
+func (m *VariableMatrix) set(pointIdx, bandIdx int, v float32) {
+	m.values[pointIdx*len(m.bands)+bandIdx] = v
 }
 
-// Row reconstructs one gridpoint's VariableRow slice, transiently, from the flat matrix
-func (m *ValueMatrix) Row(pointIdx int, varIndex map[string]int) []VariableRow {
-	rows := make([]VariableRow, len(m.Variables))
-	base := pointIdx * len(m.Bands)
-	for bandIdx, b := range m.Bands {
+// row reconstructs one gridpoint's VariableRow, transiently, from the flat matrix
+func (m *VariableMatrix) row(pointIdx int) VariableRow {
+	var row VariableRow
+	base := pointIdx * len(m.bands)
+	for bandIdx, b := range m.bands {
 		v := m.values[base+bandIdx]
 		if math.IsNaN(float64(v)) {
 			continue
 		}
-		row := &rows[varIndex[b.Variable]]
 		switch b.Kind {
 		case KindAccumulationInches:
 			row.Accumulation = &v
@@ -189,27 +184,5 @@ func (m *ValueMatrix) Row(pointIdx int, varIndex map[string]int) []VariableRow {
 			row.Probabilities[b.Key] = v
 		}
 	}
-	return rows
-}
-
-// VarIndex maps each variable name to its position in Variables
-func (m *ValueMatrix) VarIndex() map[string]int {
-	idx := make(map[string]int, len(m.Variables))
-	for i, v := range m.Variables {
-		idx[v] = i
-	}
-	return idx
-}
-
-// Pull out each band's variable name, deduplicated and in first-seen order
-func variableNames(bands []Band) []string {
-	var names []string
-	seen := map[string]bool{}
-	for _, b := range bands {
-		if !seen[b.Variable] {
-			seen[b.Variable] = true
-			names = append(names, b.Variable)
-		}
-	}
-	return names
+	return row
 }
