@@ -452,4 +452,5 @@ type Output struct {
 	Composite struct {
 		Days []ExtendedRiskDayComposite `json:"days"`
 	} `json:"composite"`
+	HasDetailedGHWO bool `json:"hasDetailedGHWO,omitempty"`
 }

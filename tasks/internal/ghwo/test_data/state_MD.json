@@ -1,1 +1,920 @@
-{"wfo":"lwx","days":[{"risks":{"Lightning":{"color":"yellow","category":1,"levelName":"Limited","definition":"Isolated to scattered thunderstorms with dangerous cloud-to-ground lightning expected."},"ExtremeHeat":{"color":"red","category":3,"levelName":"Significant","definition":"Heat exhaustion or heat stroke likely with prolonged exposure."},"ConvectiveWind":{"color":"#50c986","category":1,"levelName":"Marginal","definition":"Up to 15% chance of severe wind gusts (58 mph or greater) within 25 miles of your location."},"ExcessiveRainfall":{"color":"#ededed","category":0,"levelName":"None","definition":"No Excessive Rainfall risk"},"SevereThunderstorm":{"color":"#50c986","category":1,"levelName":"Marginal","definition":"Isolated severe thunderstorms possible."}},"composite":{"max":3,"scaled":0.75},"dayNumber":1,"timestamp":"2026-07-16T13:00:00-04:00"},{"risks":{"Lightning":{"color":"yellow","category":1,"levelName":"Limited","definition":"Isolated to scattered thunderstorms with dangerous cloud-to-ground lightning expected."},"ExtremeHeat":{"color":"yellow","category":1,"levelName":"Limited","definition":"Heat exhaustion possible with prolonged exposure."},"ConvectiveWind":{"color":"#ededed","category":0,"levelName":"None","definition":"Little to no Severe Thunderstorm Wind Risk"},"ExcessiveRainfall":{"color":"#ededed","category":0,"levelName":"None","definition":"No Excessive Rainfall risk"},"SevereThunderstorm":{"color":"#ededed","category":0,"levelName":"None","definition":"No Severe Thunderstorm Risk"}},"composite":{"max":1,"scaled":0.33},"dayNumber":2,"timestamp":"2026-07-17T08:00:00-04:00"},{"risks":{"Lightning":{"color":"orange","category":2,"levelName":"Elevated","definition":"Numerous thunderstorms with dangerous cloud-to-ground lightning expected."},"ExtremeHeat":{"color":"orange","category":2,"levelName":"Elevated","definition":"Heat exhaustion likely with prolonged exposure. Heat stroke possible."},"ExcessiveRainfall":{"color":"yellow","category":1,"levelName":"Limited","definition":"Isolated flash floods possible. Most flooding will be localized to areas that can experience rapid runoff with heavy rainfall."},"SevereThunderstorm":{"color":"#ffff51","category":2,"levelName":"Slight","definition":"Scattered severe thunderstorms possible."}},"composite":{"max":2,"scaled":0.67},"dayNumber":3,"timestamp":"2026-07-18T08:00:00-04:00"},{"risks":{"Lightning":{"color":"yellow","category":1,"levelName":"Limited","definition":"Isolated to scattered thunderstorms with dangerous cloud-to-ground lightning expected."},"ExtremeHeat":{"color":"yellow","category":1,"levelName":"Limited","definition":"Heat exhaustion possible with prolonged exposure."},"ExcessiveRainfall":{"color":"#ededed","category":0,"levelName":"None","definition":"No Excessive Rainfall risk"},"SevereThunderstorm":{"color":"#ededed","category":0,"levelName":"None","definition":"No Severe Thunderstorm Risk"}},"composite":{"max":1,"scaled":0.33},"dayNumber":4,"timestamp":"2026-07-19T08:00:00-04:00"},{"risks":{"Lightning":{"color":"yellow","category":1,"levelName":"Limited","definition":"Isolated to scattered thunderstorms with dangerous cloud-to-ground lightning expected."},"ExtremeHeat":{"color":"#ededed","category":0,"levelName":"None","definition":"No Extreme Heat Risk."},"ExcessiveRainfall":{"color":"#ededed","category":0,"levelName":"None","definition":"No Excessive Rainfall risk"},"SevereThunderstorm":{"color":"#ededed","category":0,"levelName":"None","definition":"No Severe Thunderstorm Risk"}},"composite":{"max":1,"scaled":0.33},"dayNumber":5,"timestamp":"2026-07-20T08:00:00-04:00"},{"risks":{"Lightning":{"color":"yellow","category":1,"levelName":"Limited","definition":"Isolated to scattered thunderstorms with dangerous cloud-to-ground lightning expected."},"ExtremeHeat":{"color":"yellow","category":1,"levelName":"Limited","definition":"Heat exhaustion possible with prolonged exposure."},"SevereThunderstorm":{"color":"#ededed","category":0,"levelName":"None","definition":"No Severe Thunderstorm Risk"}},"composite":{"max":1,"scaled":0.33},"dayNumber":6,"timestamp":"2026-07-21T08:00:00-04:00"},{"risks":{"Lightning":{"color":"yellow","category":1,"levelName":"Limited","definition":"Isolated to scattered thunderstorms with dangerous cloud-to-ground lightning expected."},"ExtremeHeat":{"color":"yellow","category":1,"levelName":"Limited","definition":"Heat exhaustion possible with prolonged exposure."},"SevereThunderstorm":{"color":"#ededed","category":0,"levelName":"None","definition":"No Severe Thunderstorm Risk"}},"composite":{"max":1,"scaled":0.33},"dayNumber":7,"timestamp":"2026-07-22T08:00:00-04:00"}],"risks":{"Lightning":{"days":[{"color":"yellow","image":"https://www.weather.gov/images/lwx/ghwo/MarylandLightningDay1.jpg","category":1,"levelName":"Limited","timestamp":"2026-07-16T13:00:00-04:00","definition":"Isolated to scattered thunderstorms with dangerous cloud-to-ground lightning expected."},{"color":"yellow","image":"https://www.weather.gov/images/lwx/ghwo/MarylandLightningDay2.jpg","category":1,"levelName":"Limited","timestamp":"2026-07-17T08:00:00-04:00","definition":"Isolated to scattered thunderstorms with dangerous cloud-to-ground lightning expected."},{"color":"orange","image":"https://www.weather.gov/images/lwx/ghwo/MarylandLightningDay3.jpg","category":2,"levelName":"Elevated","timestamp":"2026-07-18T08:00:00-04:00","definition":"Numerous thunderstorms with dangerous cloud-to-ground lightning expected."},{"color":"yellow","image":"https://www.weather.gov/images/lwx/ghwo/MarylandLightningDay4.jpg","category":1,"levelName":"Limited","timestamp":"2026-07-19T08:00:00-04:00","definition":"Isolated to scattered thunderstorms with dangerous cloud-to-ground lightning expected."},{"color":"yellow","image":"https://www.weather.gov/images/lwx/ghwo/MarylandLightningDay5.jpg","category":1,"levelName":"Limited","timestamp":"2026-07-20T08:00:00-04:00","definition":"Isolated to scattered thunderstorms with dangerous cloud-to-ground lightning expected."},{"color":"yellow","image":"https://www.weather.gov/images/lwx/ghwo/MarylandLightningDay6.jpg","category":1,"levelName":"Limited","timestamp":"2026-07-21T08:00:00-04:00","definition":"Isolated to scattered thunderstorms with dangerous cloud-to-ground lightning expected."},{"color":"yellow","image":"https://www.weather.gov/images/lwx/ghwo/MarylandLightningDay7.jpg","category":1,"levelName":"Limited","timestamp":"2026-07-22T08:00:00-04:00","definition":"Isolated to scattered thunderstorms with dangerous cloud-to-ground lightning expected."}],"name":"Lightning Risk","legend":{"name":"Lightning Risk","scale":3,"category":{"0":{"color":"#ededed","category":0,"levelName":"None","definition":"No lightning risk"},"1":{"color":"yellow","category":1,"levelName":"Limited","definition":"Isolated to scattered thunderstorms with dangerous cloud-to-ground lightning expected."},"2":{"color":"orange","category":2,"levelName":"Elevated","definition":"Numerous thunderstorms with dangerous cloud-to-ground lightning expected."},"3":{"color":"red","category":3,"levelName":"Significant","definition":"Widespread thunderstorms with dangerous cloud-to-ground lightning expected."}}}},"ExtremeHeat":{"days":[{"color":"red","image":"https://www.weather.gov/images/lwx/ghwo/MarylandExtremeHeatDay1.jpg","category":3,"levelName":"Significant","timestamp":"2026-07-16T13:00:00-04:00","definition":"Heat exhaustion or heat stroke likely with prolonged exposure."},{"color":"yellow","image":"https://www.weather.gov/images/lwx/ghwo/MarylandExtremeHeatDay2.jpg","category":1,"levelName":"Limited","timestamp":"2026-07-17T08:00:00-04:00","definition":"Heat exhaustion possible with prolonged exposure."},{"color":"orange","image":"https://www.weather.gov/images/lwx/ghwo/MarylandExtremeHeatDay3.jpg","category":2,"levelName":"Elevated","timestamp":"2026-07-18T08:00:00-04:00","definition":"Heat exhaustion likely with prolonged exposure. Heat stroke possible."},{"color":"yellow","image":"https://www.weather.gov/images/lwx/ghwo/MarylandExtremeHeatDay4.jpg","category":1,"levelName":"Limited","timestamp":"2026-07-19T08:00:00-04:00","definition":"Heat exhaustion possible with prolonged exposure."},{"color":"#ededed","image":"https://www.weather.gov/images/lwx/ghwo/MarylandExtremeHeatDay5.jpg","category":0,"levelName":"None","timestamp":"2026-07-20T08:00:00-04:00","definition":"No Extreme Heat Risk."},{"color":"yellow","image":"https://www.weather.gov/images/lwx/ghwo/MarylandExtremeHeatDay6.jpg","category":1,"levelName":"Limited","timestamp":"2026-07-21T08:00:00-04:00","definition":"Heat exhaustion possible with prolonged exposure."},{"color":"yellow","image":"https://www.weather.gov/images/lwx/ghwo/MarylandExtremeHeatDay7.jpg","category":1,"levelName":"Limited","timestamp":"2026-07-22T08:00:00-04:00","definition":"Heat exhaustion possible with prolonged exposure."}],"name":"Extreme Heat Risk","legend":{"name":"Extreme Heat Risk","scale":4,"category":{"0":{"color":"#ededed","category":0,"levelName":"None","definition":"No Extreme Heat Risk."},"1":{"color":"yellow","category":1,"levelName":"Limited","definition":"Heat exhaustion possible with prolonged exposure."},"2":{"color":"orange","category":2,"levelName":"Elevated","definition":"Heat exhaustion likely with prolonged exposure. Heat stroke possible."},"3":{"color":"red","category":3,"levelName":"Significant","definition":"Heat exhaustion or heat stroke likely with prolonged exposure."},"4":{"color":"purple","category":4,"levelName":"Extreme","definition":"Dangerously hot conditions could quickly result in heat exhaustion or heat stroke."}}}},"ConvectiveWind":{"days":[{"color":"#50c986","image":"https://www.weather.gov/images/lwx/ghwo/MarylandThunderstormWindDay1.jpg","category":1,"levelName":"Marginal","timestamp":"2026-07-16T13:00:00-04:00","definition":"Up to 15% chance of severe wind gusts (58 mph or greater) within 25 miles of your location."},{"color":"#ededed","image":"https://www.weather.gov/images/lwx/ghwo/MarylandThunderstormWindDay2.jpg","category":0,"levelName":"None","timestamp":"2026-07-17T08:00:00-04:00","definition":"Little to no Severe Thunderstorm Wind Risk"},{"category":0},{"category":0},{"category":0},{"category":0},{"category":0}],"name":"Thunderstorm Wind Risk","legend":{"name":"Thunderstorm Wind Risk","scale":5,"category":{"0":{"color":"#ededed","category":0,"levelName":"None","definition":"Little to no Severe Thunderstorm Wind Risk"},"1":{"color":"#50c986","category":1,"levelName":"Marginal","definition":"Up to 15% chance of severe wind gusts (58 mph or greater) within 25 miles of your location."},"2":{"color":"#ffff51","category":2,"levelName":"Slight","definition":"15-30% chance of severe wind gusts (58 mph or greater) within 25 miles of your location."},"3":{"color":"#ffc06c","category":3,"levelName":"Enhanced","definition":"30-45% chance of severe wind gusts (58 mph or greater) within 25 miles of your location."},"4":{"color":"#ff5050","category":4,"levelName":"Moderate","definition":"45-60% chance of severe wind gusts (58 mph or greater) with a 10% or greater chance of extreme wind gusts (74 mph or greater) within 25 miles of your location."},"5":{"color":"#ff50ff","category":5,"levelName":"High","definition":"60% or greater chance of severe wind gusts (58 mph or greater) with a 10% or greater chance of extreme wind gusts (74 mph or greater) within 25 miles of your location."}}}},"ExcessiveRainfall":{"days":[{"color":"#ededed","image":"https://www.weather.gov/images/lwx/ghwo/MarylandExcessiveRainfallDay1.jpg","category":0,"levelName":"None","timestamp":"2026-07-16T13:00:00-04:00","definition":"No Excessive Rainfall risk"},{"color":"#ededed","image":"https://www.weather.gov/images/lwx/ghwo/MarylandExcessiveRainfallDay2.jpg","category":0,"levelName":"None","timestamp":"2026-07-17T08:00:00-04:00","definition":"No Excessive Rainfall risk"},{"color":"yellow","image":"https://www.weather.gov/images/lwx/ghwo/MarylandExcessiveRainfallDay3.jpg","category":1,"levelName":"Limited","timestamp":"2026-07-18T08:00:00-04:00","definition":"Isolated flash floods possible. Most flooding will be localized to areas that can experience rapid runoff with heavy rainfall."},{"color":"#ededed","image":"https://www.weather.gov/images/lwx/ghwo/MarylandExcessiveRainfallDay4.jpg","category":0,"levelName":"None","timestamp":"2026-07-19T08:00:00-04:00","definition":"No Excessive Rainfall risk"},{"color":"#ededed","image":"https://www.weather.gov/images/lwx/ghwo/MarylandExcessiveRainfallDay5.jpg","category":0,"levelName":"None","timestamp":"2026-07-20T08:00:00-04:00","definition":"No Excessive Rainfall risk"},{"category":0},{"category":0}],"name":"Excessive Rainfall Risk","legend":{"name":"Excessive Rainfall Risk","scale":4,"category":{"0":{"color":"#ededed","category":0,"levelName":"None","definition":"No Excessive Rainfall risk"},"1":{"color":"yellow","category":1,"levelName":"Limited","definition":"Isolated flash floods possible. Most flooding will be localized to areas that can experience rapid runoff with heavy rainfall."},"2":{"color":"orange","category":2,"levelName":"Elevated","definition":"Scattered flash floods possible, some potentially significant. Most vulnerable are urban areas, roads, small streams, and washes."},"3":{"color":"red","category":3,"levelName":"Significant","definition":"Numerous flash floods including some significant events likely. Many streams may flood, affecting nearby residential and urban areas."},"4":{"color":"purple","category":4,"levelName":"Extreme","definition":"Widespread, severe flash floods expected. Events could occur in areas that don't normally flood. Lives and property in greater danger."}}}},"SevereThunderstorm":{"days":[{"color":"#50c986","image":"https://www.weather.gov/images/lwx/ghwo/MarylandSevereThunderstormsDay1.jpg","category":1,"levelName":"Marginal","timestamp":"2026-07-16T13:00:00-04:00","definition":"Isolated severe thunderstorms possible."},{"color":"#ededed","image":"https://www.weather.gov/images/lwx/ghwo/MarylandSevereThunderstormsDay2.jpg","category":0,"levelName":"None","timestamp":"2026-07-17T08:00:00-04:00","definition":"No Severe Thunderstorm Risk"},{"color":"#ffff51","image":"https://www.weather.gov/images/lwx/ghwo/MarylandSevereThunderstormsDay3.jpg","category":2,"levelName":"Slight","timestamp":"2026-07-18T08:00:00-04:00","definition":"Scattered severe thunderstorms possible."},{"color":"#ededed","image":"https://www.weather.gov/images/lwx/ghwo/MarylandSevereThunderstormsDay4.jpg","category":0,"levelName":"None","timestamp":"2026-07-19T08:00:00-04:00","definition":"No Severe Thunderstorm Risk"},{"color":"#ededed","image":"https://www.weather.gov/images/lwx/ghwo/MarylandSevereThunderstormsDay5.jpg","category":0,"levelName":"None","timestamp":"2026-07-20T08:00:00-04:00","definition":"No Severe Thunderstorm Risk"},{"color":"#ededed","image":"https://www.weather.gov/images/lwx/ghwo/MarylandSevereThunderstormsDay6.jpg","category":0,"levelName":"None","timestamp":"2026-07-21T08:00:00-04:00","definition":"No Severe Thunderstorm Risk"},{"color":"#ededed","image":"https://www.weather.gov/images/lwx/ghwo/MarylandSevereThunderstormsDay7.jpg","category":0,"levelName":"None","timestamp":"2026-07-22T08:00:00-04:00","definition":"No Severe Thunderstorm Risk"}],"name":"Severe Thunderstorm Risk","legend":{"name":"Severe Thunderstorm Risk","scale":5,"category":{"0":{"color":"#ededed","category":0,"levelName":"None","definition":"No Severe Thunderstorm Risk"},"1":{"color":"#50c986","category":1,"levelName":"Marginal","definition":"Isolated severe thunderstorms possible."},"2":{"color":"#ffff51","category":2,"levelName":"Slight","definition":"Scattered severe thunderstorms possible."},"3":{"color":"#ffc06c","category":3,"levelName":"Enhanced","definition":"Numerous severe thunderstorms possible."},"4":{"color":"#ff5050","category":4,"levelName":"Moderate","definition":"Widespread severe thunderstorms likely."},"5":{"color":"#ff50ff","category":5,"levelName":"High","definition":"Widespread severe thunderstorms expected."}}}}},"state":"Maryland","legend":{"Lightning":{"name":"Lightning Risk","scale":3,"category":{"0":{"color":"#ededed","category":0,"levelName":"None","definition":"No lightning risk"},"1":{"color":"yellow","category":1,"levelName":"Limited","definition":"Isolated to scattered thunderstorms with dangerous cloud-to-ground lightning expected."},"2":{"color":"orange","category":2,"levelName":"Elevated","definition":"Numerous thunderstorms with dangerous cloud-to-ground lightning expected."},"3":{"color":"red","category":3,"levelName":"Significant","definition":"Widespread thunderstorms with dangerous cloud-to-ground lightning expected."}}},"ExtremeHeat":{"name":"Extreme Heat Risk","scale":4,"category":{"0":{"color":"#ededed","category":0,"levelName":"None","definition":"No Extreme Heat Risk."},"1":{"color":"yellow","category":1,"levelName":"Limited","definition":"Heat exhaustion possible with prolonged exposure."},"2":{"color":"orange","category":2,"levelName":"Elevated","definition":"Heat exhaustion likely with prolonged exposure. Heat stroke possible."},"3":{"color":"red","category":3,"levelName":"Significant","definition":"Heat exhaustion or heat stroke likely with prolonged exposure."},"4":{"color":"purple","category":4,"levelName":"Extreme","definition":"Dangerously hot conditions could quickly result in heat exhaustion or heat stroke."}}},"ConvectiveWind":{"name":"Thunderstorm Wind Risk","scale":5,"category":{"0":{"color":"#ededed","category":0,"levelName":"None","definition":"Little to no Severe Thunderstorm Wind Risk"},"1":{"color":"#50c986","category":1,"levelName":"Marginal","definition":"Up to 15% chance of severe wind gusts (58 mph or greater) within 25 miles of your location."},"2":{"color":"#ffff51","category":2,"levelName":"Slight","definition":"15-30% chance of severe wind gusts (58 mph or greater) within 25 miles of your location."},"3":{"color":"#ffc06c","category":3,"levelName":"Enhanced","definition":"30-45% chance of severe wind gusts (58 mph or greater) within 25 miles of your location."},"4":{"color":"#ff5050","category":4,"levelName":"Moderate","definition":"45-60% chance of severe wind gusts (58 mph or greater) with a 10% or greater chance of extreme wind gusts (74 mph or greater) within 25 miles of your location."},"5":{"color":"#ff50ff","category":5,"levelName":"High","definition":"60% or greater chance of severe wind gusts (58 mph or greater) with a 10% or greater chance of extreme wind gusts (74 mph or greater) within 25 miles of your location."}}},"ExcessiveRainfall":{"name":"Excessive Rainfall Risk","scale":4,"category":{"0":{"color":"#ededed","category":0,"levelName":"None","definition":"No Excessive Rainfall risk"},"1":{"color":"yellow","category":1,"levelName":"Limited","definition":"Isolated flash floods possible. Most flooding will be localized to areas that can experience rapid runoff with heavy rainfall."},"2":{"color":"orange","category":2,"levelName":"Elevated","definition":"Scattered flash floods possible, some potentially significant. Most vulnerable are urban areas, roads, small streams, and washes."},"3":{"color":"red","category":3,"levelName":"Significant","definition":"Numerous flash floods including some significant events likely. Many streams may flood, affecting nearby residential and urban areas."},"4":{"color":"purple","category":4,"levelName":"Extreme","definition":"Widespread, severe flash floods expected. Events could occur in areas that don't normally flood. Lives and property in greater danger."}}},"SevereThunderstorm":{"name":"Severe Thunderstorm Risk","scale":5,"category":{"0":{"color":"#ededed","category":0,"levelName":"None","definition":"No Severe Thunderstorm Risk"},"1":{"color":"#50c986","category":1,"levelName":"Marginal","definition":"Isolated severe thunderstorms possible."},"2":{"color":"#ffff51","category":2,"levelName":"Slight","definition":"Scattered severe thunderstorms possible."},"3":{"color":"#ffc06c","category":3,"levelName":"Enhanced","definition":"Numerous severe thunderstorms possible."},"4":{"color":"#ff5050","category":4,"levelName":"Moderate","definition":"Widespread severe thunderstorms likely."},"5":{"color":"#ff50ff","category":5,"levelName":"High","definition":"Widespread severe thunderstorms expected."}}}},"isState":true,"noRisks":["Tornado Risk","Hail Risk","Wind Risk","Frost/Freeze","Fog Risk","HighSurf"],"isCounty":false,"composite":{"days":[{"max":3,"scaled":0.75,"timestamp":"2026-07-16T13:00:00-04:00"},{"max":1,"scaled":0.33,"timestamp":"2026-07-17T08:00:00-04:00"},{"max":2,"scaled":0.67,"timestamp":"2026-07-18T08:00:00-04:00"},{"max":1,"scaled":0.33,"timestamp":"2026-07-19T08:00:00-04:00"},{"max":1,"scaled":0.33,"timestamp":"2026-07-20T08:00:00-04:00"},{"max":1,"scaled":0.33,"timestamp":"2026-07-21T08:00:00-04:00"},{"max":1,"scaled":0.33,"timestamp":"2026-07-22T08:00:00-04:00"}]},"hasDetailedGHWO":true,"@metadata":{"url":"/risk-overview/:placeId","timings":[],"interopResponseTime":2.7860410027205944}}
+{
+  "composite": {
+    "days": [
+      {
+        "max": 3,
+        "scaled": 0.75,
+        "timestamp": "2026-07-16T15:00:00-04:00"
+      },
+      {
+        "max": 1,
+        "scaled": 0.33,
+        "timestamp": "2026-07-17T08:00:00-04:00"
+      },
+      {
+        "max": 3,
+        "scaled": 0.75,
+        "timestamp": "2026-07-18T08:00:00-04:00"
+      },
+      {
+        "max": 1,
+        "scaled": 0.33,
+        "timestamp": "2026-07-19T08:00:00-04:00"
+      },
+      {
+        "max": 1,
+        "scaled": 0.33,
+        "timestamp": "2026-07-20T08:00:00-04:00"
+      },
+      {
+        "max": 1,
+        "scaled": 0.33,
+        "timestamp": "2026-07-21T08:00:00-04:00"
+      },
+      {
+        "max": 1,
+        "scaled": 0.33,
+        "timestamp": "2026-07-22T08:00:00-04:00"
+      }
+    ]
+  },
+  "days": [
+    {
+      "composite": {
+        "max": 3,
+        "scaled": 0.75
+      },
+      "dayNumber": 1,
+      "risks": {
+        "ConvectiveWind": {
+          "category": 1,
+          "color": "#50c986",
+          "definition": "Up to 15% chance of severe wind gusts (58 mph or greater) within 25 miles of your location.",
+          "levelName": "Marginal"
+        },
+        "ExcessiveRainfall": {
+          "category": 0,
+          "color": "#ededed",
+          "definition": "No Excessive Rainfall risk",
+          "levelName": "None"
+        },
+        "ExtremeHeat": {
+          "category": 3,
+          "color": "red",
+          "definition": "Heat exhaustion or heat stroke likely with prolonged exposure.",
+          "levelName": "Significant"
+        },
+        "Lightning": {
+          "category": 1,
+          "color": "yellow",
+          "definition": "Isolated to scattered thunderstorms with dangerous cloud-to-ground lightning expected.",
+          "levelName": "Limited"
+        },
+        "SevereThunderstorm": {
+          "category": 1,
+          "color": "#50c986",
+          "definition": "Isolated severe thunderstorms possible.",
+          "levelName": "Marginal"
+        }
+      },
+      "timestamp": "2026-07-16T15:00:00-04:00"
+    },
+    {
+      "composite": {
+        "max": 1,
+        "scaled": 0.33
+      },
+      "dayNumber": 2,
+      "risks": {
+        "ConvectiveWind": {
+          "category": 0,
+          "color": "#ededed",
+          "definition": "Little to no Severe Thunderstorm Wind Risk",
+          "levelName": "None"
+        },
+        "ExcessiveRainfall": {
+          "category": 0,
+          "color": "#ededed",
+          "definition": "No Excessive Rainfall risk",
+          "levelName": "None"
+        },
+        "ExtremeHeat": {
+          "category": 1,
+          "color": "yellow",
+          "definition": "Heat exhaustion possible with prolonged exposure.",
+          "levelName": "Limited"
+        },
+        "Lightning": {
+          "category": 1,
+          "color": "yellow",
+          "definition": "Isolated to scattered thunderstorms with dangerous cloud-to-ground lightning expected.",
+          "levelName": "Limited"
+        },
+        "SevereThunderstorm": {
+          "category": 0,
+          "color": "#ededed",
+          "definition": "No Severe Thunderstorm Risk",
+          "levelName": "None"
+        }
+      },
+      "timestamp": "2026-07-17T08:00:00-04:00"
+    },
+    {
+      "composite": {
+        "max": 3,
+        "scaled": 0.75
+      },
+      "dayNumber": 3,
+      "risks": {
+        "ExcessiveRainfall": {
+          "category": 1,
+          "color": "yellow",
+          "definition": "Isolated flash floods possible. Most flooding will be localized to areas that can experience rapid runoff with heavy rainfall.",
+          "levelName": "Limited"
+        },
+        "ExtremeHeat": {
+          "category": 3,
+          "color": "red",
+          "definition": "Heat exhaustion or heat stroke likely with prolonged exposure.",
+          "levelName": "Significant"
+        },
+        "Lightning": {
+          "category": 2,
+          "color": "orange",
+          "definition": "Numerous thunderstorms with dangerous cloud-to-ground lightning expected.",
+          "levelName": "Elevated"
+        },
+        "SevereThunderstorm": {
+          "category": 2,
+          "color": "#ffff51",
+          "definition": "Scattered severe thunderstorms possible.",
+          "levelName": "Slight"
+        }
+      },
+      "timestamp": "2026-07-18T08:00:00-04:00"
+    },
+    {
+      "composite": {
+        "max": 1,
+        "scaled": 0.33
+      },
+      "dayNumber": 4,
+      "risks": {
+        "ExcessiveRainfall": {
+          "category": 0,
+          "color": "#ededed",
+          "definition": "No Excessive Rainfall risk",
+          "levelName": "None"
+        },
+        "ExtremeHeat": {
+          "category": 1,
+          "color": "yellow",
+          "definition": "Heat exhaustion possible with prolonged exposure.",
+          "levelName": "Limited"
+        },
+        "Lightning": {
+          "category": 1,
+          "color": "yellow",
+          "definition": "Isolated to scattered thunderstorms with dangerous cloud-to-ground lightning expected.",
+          "levelName": "Limited"
+        },
+        "SevereThunderstorm": {
+          "category": 0,
+          "color": "#ededed",
+          "definition": "No Severe Thunderstorm Risk",
+          "levelName": "None"
+        }
+      },
+      "timestamp": "2026-07-19T08:00:00-04:00"
+    },
+    {
+      "composite": {
+        "max": 1,
+        "scaled": 0.33
+      },
+      "dayNumber": 5,
+      "risks": {
+        "ExcessiveRainfall": {
+          "category": 0,
+          "color": "#ededed",
+          "definition": "No Excessive Rainfall risk",
+          "levelName": "None"
+        },
+        "ExtremeHeat": {
+          "category": 1,
+          "color": "yellow",
+          "definition": "Heat exhaustion possible with prolonged exposure.",
+          "levelName": "Limited"
+        },
+        "Lightning": {
+          "category": 1,
+          "color": "yellow",
+          "definition": "Isolated to scattered thunderstorms with dangerous cloud-to-ground lightning expected.",
+          "levelName": "Limited"
+        },
+        "SevereThunderstorm": {
+          "category": 0,
+          "color": "#ededed",
+          "definition": "No Severe Thunderstorm Risk",
+          "levelName": "None"
+        }
+      },
+      "timestamp": "2026-07-20T08:00:00-04:00"
+    },
+    {
+      "composite": {
+        "max": 1,
+        "scaled": 0.33
+      },
+      "dayNumber": 6,
+      "risks": {
+        "ExtremeHeat": {
+          "category": 1,
+          "color": "yellow",
+          "definition": "Heat exhaustion possible with prolonged exposure.",
+          "levelName": "Limited"
+        },
+        "Lightning": {
+          "category": 1,
+          "color": "yellow",
+          "definition": "Isolated to scattered thunderstorms with dangerous cloud-to-ground lightning expected.",
+          "levelName": "Limited"
+        },
+        "SevereThunderstorm": {
+          "category": 0,
+          "color": "#ededed",
+          "definition": "No Severe Thunderstorm Risk",
+          "levelName": "None"
+        }
+      },
+      "timestamp": "2026-07-21T08:00:00-04:00"
+    },
+    {
+      "composite": {
+        "max": 1,
+        "scaled": 0.33
+      },
+      "dayNumber": 7,
+      "risks": {
+        "ExtremeHeat": {
+          "category": 1,
+          "color": "yellow",
+          "definition": "Heat exhaustion possible with prolonged exposure.",
+          "levelName": "Limited"
+        },
+        "Lightning": {
+          "category": 1,
+          "color": "yellow",
+          "definition": "Isolated to scattered thunderstorms with dangerous cloud-to-ground lightning expected.",
+          "levelName": "Limited"
+        },
+        "SevereThunderstorm": {
+          "category": 0,
+          "color": "#ededed",
+          "definition": "No Severe Thunderstorm Risk",
+          "levelName": "None"
+        }
+      },
+      "timestamp": "2026-07-22T08:00:00-04:00"
+    }
+  ],
+  "fips": "",
+  "hasDetailedGHWO": true,
+  "isCounty": false,
+  "isState": true,
+  "legend": {
+    "ConvectiveWind": {
+      "category": {
+        "0": {
+          "category": 0,
+          "color": "#ededed",
+          "definition": "Little to no Severe Thunderstorm Wind Risk",
+          "levelName": "None"
+        },
+        "1": {
+          "category": 1,
+          "color": "#50c986",
+          "definition": "Up to 15% chance of severe wind gusts (58 mph or greater) within 25 miles of your location.",
+          "levelName": "Marginal"
+        },
+        "2": {
+          "category": 2,
+          "color": "#ffff51",
+          "definition": "15-30% chance of severe wind gusts (58 mph or greater) within 25 miles of your location.",
+          "levelName": "Slight"
+        },
+        "3": {
+          "category": 3,
+          "color": "#ffc06c",
+          "definition": "30-45% chance of severe wind gusts (58 mph or greater) within 25 miles of your location.",
+          "levelName": "Enhanced"
+        },
+        "4": {
+          "category": 4,
+          "color": "#ff5050",
+          "definition": "45-60% chance of severe wind gusts (58 mph or greater) with a 10% or greater chance of extreme wind gusts (74 mph or greater) within 25 miles of your location.",
+          "levelName": "Moderate"
+        },
+        "5": {
+          "category": 5,
+          "color": "#ff50ff",
+          "definition": "60% or greater chance of severe wind gusts (58 mph or greater) with a 10% or greater chance of extreme wind gusts (74 mph or greater) within 25 miles of your location.",
+          "levelName": "High"
+        }
+      },
+      "name": "Thunderstorm Wind Risk",
+      "scale": 5
+    },
+    "ExcessiveRainfall": {
+      "category": {
+        "0": {
+          "category": 0,
+          "color": "#ededed",
+          "definition": "No Excessive Rainfall risk",
+          "levelName": "None"
+        },
+        "1": {
+          "category": 1,
+          "color": "yellow",
+          "definition": "Isolated flash floods possible. Most flooding will be localized to areas that can experience rapid runoff with heavy rainfall.",
+          "levelName": "Limited"
+        },
+        "2": {
+          "category": 2,
+          "color": "orange",
+          "definition": "Scattered flash floods possible, some potentially significant. Most vulnerable are urban areas, roads, small streams, and washes.",
+          "levelName": "Elevated"
+        },
+        "3": {
+          "category": 3,
+          "color": "red",
+          "definition": "Numerous flash floods including some significant events likely. Many streams may flood, affecting nearby residential and urban areas.",
+          "levelName": "Significant"
+        },
+        "4": {
+          "category": 4,
+          "color": "purple",
+          "definition": "Widespread, severe flash floods expected. Events could occur in areas that don't normally flood. Lives and property in greater danger.",
+          "levelName": "Extreme"
+        }
+      },
+      "name": "Excessive Rainfall Risk",
+      "scale": 4
+    },
+    "ExtremeHeat": {
+      "category": {
+        "0": {
+          "category": 0,
+          "color": "#ededed",
+          "definition": "No Extreme Heat Risk.",
+          "levelName": "None"
+        },
+        "1": {
+          "category": 1,
+          "color": "yellow",
+          "definition": "Heat exhaustion possible with prolonged exposure.",
+          "levelName": "Limited"
+        },
+        "2": {
+          "category": 2,
+          "color": "orange",
+          "definition": "Heat exhaustion likely with prolonged exposure. Heat stroke possible.",
+          "levelName": "Elevated"
+        },
+        "3": {
+          "category": 3,
+          "color": "red",
+          "definition": "Heat exhaustion or heat stroke likely with prolonged exposure.",
+          "levelName": "Significant"
+        },
+        "4": {
+          "category": 4,
+          "color": "purple",
+          "definition": "Dangerously hot conditions could quickly result in heat exhaustion or heat stroke.",
+          "levelName": "Extreme"
+        }
+      },
+      "name": "Extreme Heat Risk",
+      "scale": 4
+    },
+    "Lightning": {
+      "category": {
+        "0": {
+          "category": 0,
+          "color": "#ededed",
+          "definition": "No lightning risk",
+          "levelName": "None"
+        },
+        "1": {
+          "category": 1,
+          "color": "yellow",
+          "definition": "Isolated to scattered thunderstorms with dangerous cloud-to-ground lightning expected.",
+          "levelName": "Limited"
+        },
+        "2": {
+          "category": 2,
+          "color": "orange",
+          "definition": "Numerous thunderstorms with dangerous cloud-to-ground lightning expected.",
+          "levelName": "Elevated"
+        },
+        "3": {
+          "category": 3,
+          "color": "red",
+          "definition": "Widespread thunderstorms with dangerous cloud-to-ground lightning expected.",
+          "levelName": "Significant"
+        }
+      },
+      "name": "Lightning Risk",
+      "scale": 3
+    },
+    "SevereThunderstorm": {
+      "category": {
+        "0": {
+          "category": 0,
+          "color": "#ededed",
+          "definition": "No Severe Thunderstorm Risk",
+          "levelName": "None"
+        },
+        "1": {
+          "category": 1,
+          "color": "#50c986",
+          "definition": "Isolated severe thunderstorms possible.",
+          "levelName": "Marginal"
+        },
+        "2": {
+          "category": 2,
+          "color": "#ffff51",
+          "definition": "Scattered severe thunderstorms possible.",
+          "levelName": "Slight"
+        },
+        "3": {
+          "category": 3,
+          "color": "#ffc06c",
+          "definition": "Numerous severe thunderstorms possible.",
+          "levelName": "Enhanced"
+        },
+        "4": {
+          "category": 4,
+          "color": "#ff5050",
+          "definition": "Widespread severe thunderstorms likely.",
+          "levelName": "Moderate"
+        },
+        "5": {
+          "category": 5,
+          "color": "#ff50ff",
+          "definition": "Widespread severe thunderstorms expected.",
+          "levelName": "High"
+        }
+      },
+      "name": "Severe Thunderstorm Risk",
+      "scale": 5
+    }
+  },
+  "noRisks": [
+    "Fog Risk",
+    "Frost/Freeze Risk",
+    "Hail Risk",
+    "High Surf Risk",
+    "Tornado Risk",
+    "Wind Risk"
+  ],
+  "risks": {
+    "ConvectiveWind": {
+      "days": [
+        {
+          "category": 1,
+          "color": "#50c986",
+          "definition": "Up to 15% chance of severe wind gusts (58 mph or greater) within 25 miles of your location.",
+          "image": "https://www.weather.gov/images/lwx/ghwo/MarylandThunderstormWindDay1.jpg",
+          "levelName": "Marginal",
+          "timestamp": "2026-07-16T15:00:00-04:00"
+        },
+        {
+          "category": 0,
+          "color": "#ededed",
+          "definition": "Little to no Severe Thunderstorm Wind Risk",
+          "image": "https://www.weather.gov/images/lwx/ghwo/MarylandThunderstormWindDay2.jpg",
+          "levelName": "None",
+          "timestamp": "2026-07-17T08:00:00-04:00"
+        }
+      ],
+      "legend": {
+        "category": {
+          "0": {
+            "category": 0,
+            "color": "#ededed",
+            "definition": "Little to no Severe Thunderstorm Wind Risk",
+            "levelName": "None"
+          },
+          "1": {
+            "category": 1,
+            "color": "#50c986",
+            "definition": "Up to 15% chance of severe wind gusts (58 mph or greater) within 25 miles of your location.",
+            "levelName": "Marginal"
+          },
+          "2": {
+            "category": 2,
+            "color": "#ffff51",
+            "definition": "15-30% chance of severe wind gusts (58 mph or greater) within 25 miles of your location.",
+            "levelName": "Slight"
+          },
+          "3": {
+            "category": 3,
+            "color": "#ffc06c",
+            "definition": "30-45% chance of severe wind gusts (58 mph or greater) within 25 miles of your location.",
+            "levelName": "Enhanced"
+          },
+          "4": {
+            "category": 4,
+            "color": "#ff5050",
+            "definition": "45-60% chance of severe wind gusts (58 mph or greater) with a 10% or greater chance of extreme wind gusts (74 mph or greater) within 25 miles of your location.",
+            "levelName": "Moderate"
+          },
+          "5": {
+            "category": 5,
+            "color": "#ff50ff",
+            "definition": "60% or greater chance of severe wind gusts (58 mph or greater) with a 10% or greater chance of extreme wind gusts (74 mph or greater) within 25 miles of your location.",
+            "levelName": "High"
+          }
+        },
+        "name": "Thunderstorm Wind Risk",
+        "scale": 5
+      },
+      "name": "Thunderstorm Wind Risk"
+    },
+    "ExcessiveRainfall": {
+      "days": [
+        {
+          "category": 0,
+          "color": "#ededed",
+          "definition": "No Excessive Rainfall risk",
+          "image": "https://www.weather.gov/images/lwx/ghwo/MarylandExcessiveRainfallDay1.jpg",
+          "levelName": "None",
+          "timestamp": "2026-07-16T15:00:00-04:00"
+        },
+        {
+          "category": 0,
+          "color": "#ededed",
+          "definition": "No Excessive Rainfall risk",
+          "image": "https://www.weather.gov/images/lwx/ghwo/MarylandExcessiveRainfallDay2.jpg",
+          "levelName": "None",
+          "timestamp": "2026-07-17T08:00:00-04:00"
+        },
+        {
+          "category": 1,
+          "color": "yellow",
+          "definition": "Isolated flash floods possible. Most flooding will be localized to areas that can experience rapid runoff with heavy rainfall.",
+          "image": "https://www.weather.gov/images/lwx/ghwo/MarylandExcessiveRainfallDay3.jpg",
+          "levelName": "Limited",
+          "timestamp": "2026-07-18T08:00:00-04:00"
+        },
+        {
+          "category": 0,
+          "color": "#ededed",
+          "definition": "No Excessive Rainfall risk",
+          "image": "https://www.weather.gov/images/lwx/ghwo/MarylandExcessiveRainfallDay4.jpg",
+          "levelName": "None",
+          "timestamp": "2026-07-19T08:00:00-04:00"
+        },
+        {
+          "category": 0,
+          "color": "#ededed",
+          "definition": "No Excessive Rainfall risk",
+          "image": "https://www.weather.gov/images/lwx/ghwo/MarylandExcessiveRainfallDay5.jpg",
+          "levelName": "None",
+          "timestamp": "2026-07-20T08:00:00-04:00"
+        }
+      ],
+      "legend": {
+        "category": {
+          "0": {
+            "category": 0,
+            "color": "#ededed",
+            "definition": "No Excessive Rainfall risk",
+            "levelName": "None"
+          },
+          "1": {
+            "category": 1,
+            "color": "yellow",
+            "definition": "Isolated flash floods possible. Most flooding will be localized to areas that can experience rapid runoff with heavy rainfall.",
+            "levelName": "Limited"
+          },
+          "2": {
+            "category": 2,
+            "color": "orange",
+            "definition": "Scattered flash floods possible, some potentially significant. Most vulnerable are urban areas, roads, small streams, and washes.",
+            "levelName": "Elevated"
+          },
+          "3": {
+            "category": 3,
+            "color": "red",
+            "definition": "Numerous flash floods including some significant events likely. Many streams may flood, affecting nearby residential and urban areas.",
+            "levelName": "Significant"
+          },
+          "4": {
+            "category": 4,
+            "color": "purple",
+            "definition": "Widespread, severe flash floods expected. Events could occur in areas that don't normally flood. Lives and property in greater danger.",
+            "levelName": "Extreme"
+          }
+        },
+        "name": "Excessive Rainfall Risk",
+        "scale": 4
+      },
+      "name": "Excessive Rainfall Risk"
+    },
+    "ExtremeHeat": {
+      "days": [
+        {
+          "category": 3,
+          "color": "red",
+          "definition": "Heat exhaustion or heat stroke likely with prolonged exposure.",
+          "image": "https://www.weather.gov/images/lwx/ghwo/MarylandExtremeHeatDay1.jpg",
+          "levelName": "Significant",
+          "timestamp": "2026-07-16T15:00:00-04:00"
+        },
+        {
+          "category": 1,
+          "color": "yellow",
+          "definition": "Heat exhaustion possible with prolonged exposure.",
+          "image": "https://www.weather.gov/images/lwx/ghwo/MarylandExtremeHeatDay2.jpg",
+          "levelName": "Limited",
+          "timestamp": "2026-07-17T08:00:00-04:00"
+        },
+        {
+          "category": 3,
+          "color": "red",
+          "definition": "Heat exhaustion or heat stroke likely with prolonged exposure.",
+          "image": "https://www.weather.gov/images/lwx/ghwo/MarylandExtremeHeatDay3.jpg",
+          "levelName": "Significant",
+          "timestamp": "2026-07-18T08:00:00-04:00"
+        },
+        {
+          "category": 1,
+          "color": "yellow",
+          "definition": "Heat exhaustion possible with prolonged exposure.",
+          "image": "https://www.weather.gov/images/lwx/ghwo/MarylandExtremeHeatDay4.jpg",
+          "levelName": "Limited",
+          "timestamp": "2026-07-19T08:00:00-04:00"
+        },
+        {
+          "category": 1,
+          "color": "yellow",
+          "definition": "Heat exhaustion possible with prolonged exposure.",
+          "image": "https://www.weather.gov/images/lwx/ghwo/MarylandExtremeHeatDay5.jpg",
+          "levelName": "Limited",
+          "timestamp": "2026-07-20T08:00:00-04:00"
+        },
+        {
+          "category": 1,
+          "color": "yellow",
+          "definition": "Heat exhaustion possible with prolonged exposure.",
+          "image": "https://www.weather.gov/images/lwx/ghwo/MarylandExtremeHeatDay6.jpg",
+          "levelName": "Limited",
+          "timestamp": "2026-07-21T08:00:00-04:00"
+        },
+        {
+          "category": 1,
+          "color": "yellow",
+          "definition": "Heat exhaustion possible with prolonged exposure.",
+          "image": "https://www.weather.gov/images/lwx/ghwo/MarylandExtremeHeatDay7.jpg",
+          "levelName": "Limited",
+          "timestamp": "2026-07-22T08:00:00-04:00"
+        }
+      ],
+      "legend": {
+        "category": {
+          "0": {
+            "category": 0,
+            "color": "#ededed",
+            "definition": "No Extreme Heat Risk.",
+            "levelName": "None"
+          },
+          "1": {
+            "category": 1,
+            "color": "yellow",
+            "definition": "Heat exhaustion possible with prolonged exposure.",
+            "levelName": "Limited"
+          },
+          "2": {
+            "category": 2,
+            "color": "orange",
+            "definition": "Heat exhaustion likely with prolonged exposure. Heat stroke possible.",
+            "levelName": "Elevated"
+          },
+          "3": {
+            "category": 3,
+            "color": "red",
+            "definition": "Heat exhaustion or heat stroke likely with prolonged exposure.",
+            "levelName": "Significant"
+          },
+          "4": {
+            "category": 4,
+            "color": "purple",
+            "definition": "Dangerously hot conditions could quickly result in heat exhaustion or heat stroke.",
+            "levelName": "Extreme"
+          }
+        },
+        "name": "Extreme Heat Risk",
+        "scale": 4
+      },
+      "name": "Extreme Heat Risk"
+    },
+    "Lightning": {
+      "days": [
+        {
+          "category": 1,
+          "color": "yellow",
+          "definition": "Isolated to scattered thunderstorms with dangerous cloud-to-ground lightning expected.",
+          "image": "https://www.weather.gov/images/lwx/ghwo/MarylandLightningDay1.jpg",
+          "levelName": "Limited",
+          "timestamp": "2026-07-16T15:00:00-04:00"
+        },
+        {
+          "category": 1,
+          "color": "yellow",
+          "definition": "Isolated to scattered thunderstorms with dangerous cloud-to-ground lightning expected.",
+          "image": "https://www.weather.gov/images/lwx/ghwo/MarylandLightningDay2.jpg",
+          "levelName": "Limited",
+          "timestamp": "2026-07-17T08:00:00-04:00"
+        },
+        {
+          "category": 2,
+          "color": "orange",
+          "definition": "Numerous thunderstorms with dangerous cloud-to-ground lightning expected.",
+          "image": "https://www.weather.gov/images/lwx/ghwo/MarylandLightningDay3.jpg",
+          "levelName": "Elevated",
+          "timestamp": "2026-07-18T08:00:00-04:00"
+        },
+        {
+          "category": 1,
+          "color": "yellow",
+          "definition": "Isolated to scattered thunderstorms with dangerous cloud-to-ground lightning expected.",
+          "image": "https://www.weather.gov/images/lwx/ghwo/MarylandLightningDay4.jpg",
+          "levelName": "Limited",
+          "timestamp": "2026-07-19T08:00:00-04:00"
+        },
+        {
+          "category": 1,
+          "color": "yellow",
+          "definition": "Isolated to scattered thunderstorms with dangerous cloud-to-ground lightning expected.",
+          "image": "https://www.weather.gov/images/lwx/ghwo/MarylandLightningDay5.jpg",
+          "levelName": "Limited",
+          "timestamp": "2026-07-20T08:00:00-04:00"
+        },
+        {
+          "category": 1,
+          "color": "yellow",
+          "definition": "Isolated to scattered thunderstorms with dangerous cloud-to-ground lightning expected.",
+          "image": "https://www.weather.gov/images/lwx/ghwo/MarylandLightningDay6.jpg",
+          "levelName": "Limited",
+          "timestamp": "2026-07-21T08:00:00-04:00"
+        },
+        {
+          "category": 1,
+          "color": "yellow",
+          "definition": "Isolated to scattered thunderstorms with dangerous cloud-to-ground lightning expected.",
+          "image": "https://www.weather.gov/images/lwx/ghwo/MarylandLightningDay7.jpg",
+          "levelName": "Limited",
+          "timestamp": "2026-07-22T08:00:00-04:00"
+        }
+      ],
+      "legend": {
+        "category": {
+          "0": {
+            "category": 0,
+            "color": "#ededed",
+            "definition": "No lightning risk",
+            "levelName": "None"
+          },
+          "1": {
+            "category": 1,
+            "color": "yellow",
+            "definition": "Isolated to scattered thunderstorms with dangerous cloud-to-ground lightning expected.",
+            "levelName": "Limited"
+          },
+          "2": {
+            "category": 2,
+            "color": "orange",
+            "definition": "Numerous thunderstorms with dangerous cloud-to-ground lightning expected.",
+            "levelName": "Elevated"
+          },
+          "3": {
+            "category": 3,
+            "color": "red",
+            "definition": "Widespread thunderstorms with dangerous cloud-to-ground lightning expected.",
+            "levelName": "Significant"
+          }
+        },
+        "name": "Lightning Risk",
+        "scale": 3
+      },
+      "name": "Lightning Risk"
+    },
+    "SevereThunderstorm": {
+      "days": [
+        {
+          "category": 1,
+          "color": "#50c986",
+          "definition": "Isolated severe thunderstorms possible.",
+          "image": "https://www.weather.gov/images/lwx/ghwo/MarylandSevereThunderstormsDay1.jpg",
+          "levelName": "Marginal",
+          "timestamp": "2026-07-16T15:00:00-04:00"
+        },
+        {
+          "category": 0,
+          "color": "#ededed",
+          "definition": "No Severe Thunderstorm Risk",
+          "image": "https://www.weather.gov/images/lwx/ghwo/MarylandSevereThunderstormsDay2.jpg",
+          "levelName": "None",
+          "timestamp": "2026-07-17T08:00:00-04:00"
+        },
+        {
+          "category": 2,
+          "color": "#ffff51",
+          "definition": "Scattered severe thunderstorms possible.",
+          "image": "https://www.weather.gov/images/lwx/ghwo/MarylandSevereThunderstormsDay3.jpg",
+          "levelName": "Slight",
+          "timestamp": "2026-07-18T08:00:00-04:00"
+        },
+        {
+          "category": 0,
+          "color": "#ededed",
+          "definition": "No Severe Thunderstorm Risk",
+          "image": "https://www.weather.gov/images/lwx/ghwo/MarylandSevereThunderstormsDay4.jpg",
+          "levelName": "None",
+          "timestamp": "2026-07-19T08:00:00-04:00"
+        },
+        {
+          "category": 0,
+          "color": "#ededed",
+          "definition": "No Severe Thunderstorm Risk",
+          "image": "https://www.weather.gov/images/lwx/ghwo/MarylandSevereThunderstormsDay5.jpg",
+          "levelName": "None",
+          "timestamp": "2026-07-20T08:00:00-04:00"
+        },
+        {
+          "category": 0,
+          "color": "#ededed",
+          "definition": "No Severe Thunderstorm Risk",
+          "image": "https://www.weather.gov/images/lwx/ghwo/MarylandSevereThunderstormsDay6.jpg",
+          "levelName": "None",
+          "timestamp": "2026-07-21T08:00:00-04:00"
+        },
+        {
+          "category": 0,
+          "color": "#ededed",
+          "definition": "No Severe Thunderstorm Risk",
+          "image": "https://www.weather.gov/images/lwx/ghwo/MarylandSevereThunderstormsDay7.jpg",
+          "levelName": "None",
+          "timestamp": "2026-07-22T08:00:00-04:00"
+        }
+      ],
+      "legend": {
+        "category": {
+          "0": {
+            "category": 0,
+            "color": "#ededed",
+            "definition": "No Severe Thunderstorm Risk",
+            "levelName": "None"
+          },
+          "1": {
+            "category": 1,
+            "color": "#50c986",
+            "definition": "Isolated severe thunderstorms possible.",
+            "levelName": "Marginal"
+          },
+          "2": {
+            "category": 2,
+            "color": "#ffff51",
+            "definition": "Scattered severe thunderstorms possible.",
+            "levelName": "Slight"
+          },
+          "3": {
+            "category": 3,
+            "color": "#ffc06c",
+            "definition": "Numerous severe thunderstorms possible.",
+            "levelName": "Enhanced"
+          },
+          "4": {
+            "category": 4,
+            "color": "#ff5050",
+            "definition": "Widespread severe thunderstorms likely.",
+            "levelName": "Moderate"
+          },
+          "5": {
+            "category": 5,
+            "color": "#ff50ff",
+            "definition": "Widespread severe thunderstorms expected.",
+            "levelName": "High"
+          }
+        },
+        "name": "Severe Thunderstorm Risk",
+        "scale": 5
+      },
+      "name": "Severe Thunderstorm Risk"
+    }
+  },
+  "state": "MD",
+  "wfo": "lwx"
+}

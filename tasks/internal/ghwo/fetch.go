@@ -7,7 +7,6 @@ import (
 	"io"
 	"net/http"
 	"strings"
-	"sync"
 	"tasks/internal"
 )
 
@@ -92,11 +91,11 @@ type StateFetch struct {
 func (d *GenericFetch) getURL() string {
 	switch resourceType := d.ResourceType; resourceType {
 	case GHWOResource:
-		return fmt.Sprintf("%s/source/%s/ghwo/hazByCounty.json", BaseURL, strings.ToLower(d.WFO))
+		return fmt.Sprintf("%s/source/%s/ghwo/hazByCounty.json", GetBaseURL(), strings.ToLower(d.WFO))
 	case ChickletResource:
-		return fmt.Sprintf("%s/source/%s/ghwo/chicklet.json", BaseURL, strings.ToLower(d.WFO))
+		return fmt.Sprintf("%s/source/%s/ghwo/chicklet.json", GetBaseURL(), strings.ToLower(d.WFO))
 	case LegendResource:
-		return fmt.Sprintf("%s/source/%s/ghwo/legend.json", BaseURL, strings.ToLower(d.WFO))
+		return fmt.Sprintf("%s/source/%s/ghwo/legend.json", GetBaseURL(), strings.ToLower(d.WFO))
 	default:
 		return ""
 	}
@@ -126,14 +125,14 @@ func (d *StateFetch) getURL() string {
 	case ChickletResource:
 		return fmt.Sprintf(
 			"%s/source/%s/ghwo/chicklet%s.json",
-			BaseURL,
+			GetBaseURL(),
 			strings.ToLower(d.WFO),
 			viewName,
 		)
 	case LegendResource:
 		return fmt.Sprintf(
 			"%s/source/%s/ghwo/legend%s.json",
-			BaseURL,
+			GetBaseURL(),
 			strings.ToLower(d.WFO),
 			viewName,
 		)
@@ -254,8 +253,7 @@ func (d *StateFetch) fetch(ctx context.Context, ch chan *StateFetch) {
 * When complete, a FetchResult will be send on the channel that was passed in as
 * an argument.
  */
-func FetchWFO(ctx context.Context, sourceWFO string, ch chan *FetchResult, group *sync.WaitGroup) {
-	defer group.Done()
+func FetchWFO(ctx context.Context, sourceWFO string) (*FetchResult, []error) {
 	var wfo = strings.ToLower(sourceWFO)
 	var result = &FetchResult{
 		WFO: wfo,
@@ -293,17 +291,14 @@ func FetchWFO(ctx context.Context, sourceWFO string, ch chan *FetchResult, group
 				result.Errors,
 				ctx.Err(),
 			)
-			ch <- result
-			return
+			return result, result.Errors
 		}
 	}
-	close(responseChan)
 
 	// If there are any errors, add them to the result
 	// object and send it on the channel, then bail
 	if len(result.Errors) > 0 {
-		ch <- result
-		return
+		return result, result.Errors
 	}
 
 	// If there are states, spin up a worker to get
@@ -325,14 +320,13 @@ func FetchWFO(ctx context.Context, sourceWFO string, ch chan *FetchResult, group
 					result.Errors,
 					ctx.Err(),
 				)
-				ch <- result
-				return
+				return result, result.Errors
 			}
 		}
 		close(stateResponseChan)
 	}
 
-	ch <- result
+	return result, result.Errors
 }
 
 /**

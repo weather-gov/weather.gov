@@ -1265,9 +1265,7 @@ func TestProcessCounty(t *testing.T) {
 	var legend SourceLegend
 	var chicklet SourceChicklet
 
-	// We unmarshal the expected json into a generic interface,
-	// for later comparison
-	var expectedCountyOutput Output
+	var expectedCountyOutput *Output
 	err = json.Unmarshal(expectedCountyBytes, &expectedCountyOutput)
 	if err != nil {
 		t.Errorf("Could not unmarshal the expected county json: %s", err)
@@ -1289,12 +1287,25 @@ func TestProcessCounty(t *testing.T) {
 	t.Run("Processes test data into the expected county result", func(t *testing.T) {
 		// Remember to set the WFO on the source data
 		hazByCounty.WFO = "lwx"
-		actual := *GetProcessedCounty(
+
+		// Grab the actual locality data from the source
+		countyData, ok := hazByCounty.Counties["51013"]
+		if !ok {
+			t.Errorf("No county data found for 51013")
+			return
+		}
+		actual := ProcessCounty(
+			"lwx",
 			"51013",
-			&hazByCounty,
+			&countyData,
 			legend.ProcessOutputLegend(),
 			chicklet.GetRiskToHazardLookup(),
 		)
+
+		// We need to sort the NoRisks slice, otherwise
+		// the comparison will fail
+		slices.Sort(actual.NoRisks)
+		slices.Sort(expectedCountyOutput.NoRisks)
 
 		actualAsJson, err := json.MarshalIndent(actual, "", "  ")
 		if err != nil {
@@ -1311,12 +1322,158 @@ func TestProcessCounty(t *testing.T) {
 			t.Errorf("Could not unmarshal actual into generic interface: %s", err)
 		}
 
+		if !reflect.DeepEqual(actual, expectedCountyOutput) {
+			t.Errorf("Expected %s \n to equal %s", string(actualAsJson), string(expectedAsJson))
+		}
+	})
+}
+
+func TestProcessState(t *testing.T) {
+	/**
+	* With these test, we are ensuring that the overall processing
+	* of _state_ data based on the static example input files
+	* can produce structs with the output JSON equal to that in
+	* the saved example output file.
+	* Additionally, we test the case where a given state does _not_
+	* have a corresponding legend and/or chicklet.
+	* For those cases, we compute only the composite.
+	 */
+	var sourceHazByCountyPath = "test_data/LWX_hazByCounty.json"
+	var sourceLegendPath = "test_data/LWX_legendMaryland.json"
+	var sourceChickletPath = "test_data/LWX_chickletMaryland.json"
+	var sourceExpectedStatePath = "test_data/state_MD.json"
+	var sourceExpectedStateNoDetailsPath = "test_data/state_MD_no_details.json"
+
+	hazByCountyBytes, err := os.ReadFile(sourceHazByCountyPath)
+	if err != nil {
+		t.Error(err)
+	}
+	legendBytes, err := os.ReadFile(sourceLegendPath)
+	if err != nil {
+		t.Error(err)
+	}
+	chickletBytes, err := os.ReadFile(sourceChickletPath)
+	if err != nil {
+		t.Error(err)
+	}
+	expectedStateBytes, err := os.ReadFile(sourceExpectedStatePath)
+	if err != nil {
+		t.Error(err)
+	}
+	expectedStateNoDetailsBytes, err := os.ReadFile(sourceExpectedStateNoDetailsPath)
+	if err != nil {
+		t.Error(err)
+	}
+
+	var hazByCounty SourceGHWOData
+	var legend SourceLegend
+	var chicklet SourceChicklet
+
+	var expectedStateOutput *Output
+	err = json.Unmarshal(expectedStateBytes, &expectedStateOutput)
+	if err != nil {
+		t.Error(err)
+	}
+	var expectedStateNoDetailsOutput *Output
+	err = json.Unmarshal(expectedStateNoDetailsBytes, &expectedStateNoDetailsOutput)
+	if err != nil {
+		t.Error(err)
+	}
+
+	err = json.Unmarshal(hazByCountyBytes, &hazByCounty)
+	if err != nil {
+		t.Error(err)
+	}
+	err = json.Unmarshal(legendBytes, &legend)
+	if err != nil {
+		t.Error(err)
+	}
+	err = json.Unmarshal(chickletBytes, &chicklet)
+	if err != nil {
+		t.Error(err)
+	}
+
+	t.Run("Processes test data into the expected state result (in the case where there's legend and chicklet data)", func(t *testing.T) {
+		// Set the WFO on the source data
+		hazByCounty.WFO = "lwx"
+
+		// Grab the actual state locality from the source map
+		stateData, ok := hazByCounty.States["MD"]
+		if !ok {
+			t.Error("No state data found for MD")
+			return
+		}
+		actual := ProcessStateWithDetails(
+			"lwx",
+			"MD",
+			&stateData,
+			legend.ProcessOutputLegend(),
+			chicklet.GetRiskToHazardLookup(),
+		)
+
 		// We need to sort the NoRisks slice, otherwise
 		// the comparison will fail
 		slices.Sort(actual.NoRisks)
-		slices.Sort(expectedCountyOutput.NoRisks)
+		slices.Sort(expectedStateOutput.NoRisks)
 
-		if !reflect.DeepEqual(actual, expectedCountyOutput) {
+		actualAsJson, err := json.MarshalIndent(actual, "", "  ")
+		if err != nil {
+			t.Errorf("Could not marshal the actual result into json: %s", err)
+		}
+		expectedAsJson, err := json.MarshalIndent(expectedStateOutput, "", "  ")
+		if err != nil {
+			t.Errorf("Could not marshal the expected struct into json: %s", err)
+		}
+		// Now, we unmarshal the actual result json back into a generic
+		// interface, for comparison with our expected value
+		err = json.Unmarshal(actualAsJson, &actual)
+		if err != nil {
+			t.Errorf("Could not unmarshal actual into generic interface: %s", err)
+		}
+
+		if !reflect.DeepEqual(actual, expectedStateOutput) {
+			t.Errorf("Expected %s \n to equal %s", string(actualAsJson), string(expectedAsJson))
+		}
+
+	})
+
+	t.Run("Processes test data into the expected state result (in the case where there's NO legend/chicklet for the state)", func(t *testing.T) {
+		// Set the WFO on the source gata
+		hazByCounty.WFO = "lwx"
+
+		// Grab the actual state locality from the source map
+		stateData, ok := hazByCounty.States["MD"]
+		if !ok {
+			t.Errorf("No state data found for MD")
+			return
+		}
+		actual := ProcessStateWithoutDetails(
+			"lwx",
+			"MD",
+			&stateData,
+		)
+
+		// We need to sort the NoRisks slice, otherwise
+		// the comparison will fail
+		slices.Sort(actual.NoRisks)
+		slices.Sort(expectedStateNoDetailsOutput.NoRisks)
+
+		actualAsJson, err := json.MarshalIndent(actual, "", "  ")
+		if err != nil {
+			t.Errorf("Could not marshal the actual result into json: %s", err)
+		}
+		expectedAsJson, err := json.MarshalIndent(expectedStateNoDetailsOutput, "", "  ")
+		if err != nil {
+			t.Errorf("Could not marshal the expected struct into json: %s", err)
+		}
+		// Now, we unmarshal the actual result json back into a generic
+		// interface, for comparison with our expected value
+		err = json.Unmarshal(actualAsJson, &actual)
+		if err != nil {
+			t.Errorf("Could not unmarshal actual into generic interface: %s", err)
+		}
+
+		if !reflect.DeepEqual(actual, expectedStateNoDetailsOutput) {
 			t.Errorf("Expected %s \n to equal %s", string(actualAsJson), string(expectedAsJson))
 		}
 	})

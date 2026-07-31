@@ -1,36 +1,76 @@
 package ghwo
 
-import "fmt"
+func ProcessCounty(wfoCode string, fipsCode LocalityCode, county *SourceGHWOLocality, legend OutputSummaryLegend, chicklet ChickletLookup) *Output {
+	days, noRisks := county.GetRiskDays(legend)
 
-func GetProcessedCounty(countyFips string, ghwoData *SourceGHWOData, legend OutputSummaryLegend, chicklet ChickletLookup) *Output {
-	countyData, ok := ghwoData.Counties[countyFips]
-	if !ok {
-		// TODO
-		// This is where we need to throw/log a specific error
-		// For now we will panic
-		panic(fmt.Sprintf("Could not find county with fips %s in the source data.", countyFips))
-	}
-
-	days, noRisks := countyData.GetRiskDays(legend)
-
-	// Initialize the resulting output struct
-	var output = Output{
+	// Initialize the resullting struct
+	var output = &Output{
 		IsState:  false,
 		IsCounty: true,
-		Fips:     countyFips,
+		Fips:     fipsCode,
 		Days:     days,
 		NoRisks:  noRisks,
-		WFO:      ghwoData.WFO,
+		WFO:      wfoCode,
 	}
 
-	// Adds the risks to the output
+	// Add the risks to the output
 	output.AddTopLevelRisksAndLegend(
-		ghwoData.WFO,
+		wfoCode,
 		output.Days,
 		legend,
 		chicklet,
 	)
 	output.ProcessComposite()
+	return output
+}
 
-	return &output
+func ProcessStateWithDetails(wfoCode string, stateCode LocalityCode, state *SourceGHWOLocality, legend OutputSummaryLegend, chicklet ChickletLookup) *Output {
+	// Note: we assume the state specific legend
+	// and chicklet are already processed and handed off to this function
+
+	days, noRisks := state.GetRiskDays(legend)
+
+	result := &Output{
+		WFO:             wfoCode,
+		IsState:         true,
+		IsCounty:        false,
+		State:           stateCode,
+		Days:            days,
+		NoRisks:         noRisks,
+		HasDetailedGHWO: true,
+	}
+
+	result.AddTopLevelRisksAndLegend(
+		wfoCode,
+		result.Days,
+		legend,
+		chicklet,
+	)
+
+	result.ProcessComposite()
+
+	return result
+}
+
+func ProcessStateWithoutDetails(wfoCode string, stateCode LocalityCode, state *SourceGHWOLocality) *Output {
+	// If we call this function, i tmeans that there was no state-specific
+	// chicklet or legend data available, and therefore we cannot
+	// process detailed GHWO data for the state.
+	// However, we can still create the daily composite data.
+	emptyLegend := OutputSummaryLegend{}
+	days, noRisks := state.GetRiskDays(emptyLegend)
+
+	result := &Output{
+		WFO:             wfoCode,
+		IsState:         true,
+		IsCounty:        false,
+		State:           stateCode,
+		Days:            days,
+		NoRisks:         noRisks,
+		HasDetailedGHWO: false,
+	}
+
+	result.ProcessComposite()
+
+	return result
 }

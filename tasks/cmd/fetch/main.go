@@ -15,24 +15,52 @@ func main() {
 	var wfos = validateArgs(args)
 
 	wg := sync.WaitGroup{}
-	resultChan := make(chan *ghwo.FetchResult, len(wfos))
-	wg.Add(len(wfos))
 
 	ctx := context.TODO()
 
-	fmt.Printf("Fetching from %d WFOS:\n", len(wfos))
-
-	for _, wfo := range wfos {
-		fmt.Printf("\t%s\n", strings.ToUpper(wfo))
-		go ghwo.FetchWFO(ctx, wfo, resultChan, &wg)
+	extractionManager := &ghwo.ExtractionManager{
+		Input:      make(chan string),
+		Output:     make(chan *ghwo.FetchResult),
+		NumWorkers: 60,
 	}
+
+	// Create and start the consumer goroutine
+	wg.Add(1)
+	go func() {
+		defer wg.Done()
+		for {
+			select {
+			case <-ctx.Done():
+				return
+			case result, isOpen := <-extractionManager.Output:
+				if !isOpen {
+					// Channel closed, return
+					return
+				}
+				showResult(result)
+			}
+		}
+	}()
+
+	// Create the workers and start them
+	wg.Add(1)
+	go func() {
+		defer wg.Done()
+		extractionManager.RunWorkers(ctx)
+	}()
+
+	// Iterate through each WFO and send on the channel
+	wg.Add(1)
+	go func() {
+		defer wg.Done()
+		fmt.Printf("Fetching from %d WFOS:\n", len(wfos))
+		for _, wfo := range wfos {
+			extractionManager.Input <- wfo
+		}
+		close(extractionManager.Input)
+	}()
 
 	wg.Wait()
-	close(resultChan)
-
-	for _ = range len(resultChan) {
-		showResult(<-resultChan)
-	}
 }
 
 func validateArgs(args []string) []string {
