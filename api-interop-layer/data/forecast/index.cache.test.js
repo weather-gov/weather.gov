@@ -68,9 +68,10 @@ describe("Forecast index cache tests", () => {
         wfo: "TST",
         x: 34,
         y: 35,
+        type: "land",
+        marineType: null,
       },
       place,
-      isMarine: false,
     };
 
     beforeEach(() => {
@@ -90,7 +91,6 @@ describe("Forecast index cache tests", () => {
       getFromRedis.resolves({ cached: true });
       processGridpoint.returns({ message: "hello" });
       const actual = await forecast(args);
-
       expect(
         processGridpoint.calledWith(
           { cached: true, days: [] },
@@ -130,9 +130,10 @@ describe("Forecast index cache tests", () => {
         wfo: "TST",
         x: 34,
         y: 35,
+        type: "land",
+        marineType: null,
       },
       place,
-      isMarine: false,
     };
 
     beforeEach(() => {
@@ -191,9 +192,10 @@ describe("Forecast index cache tests", () => {
         wfo: "TST",
         x: 34,
         y: 35,
+        type: "land",
+        marineType: null,
       },
       place,
-      isMarine: false,
     };
 
     beforeEach(() => {

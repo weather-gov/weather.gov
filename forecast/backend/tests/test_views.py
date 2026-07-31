@@ -95,8 +95,7 @@ class TestViews(TestCase):
     def test_point_location(self, mock_get_point_forecast):
         """Test the point location view."""
         mock_get_point_forecast.return_value = {
-            "grid": {"wfo": "TST"},
-            "isMarine": False,
+            "grid": {"wfo": "TST", "type": "land", "marineType": None },
             "place": {"timezone": "America/New_York"},
             "weatherstory": [self.weather_story],
         }
@@ -107,7 +106,9 @@ class TestViews(TestCase):
         self.assertTemplateUsed(response, "weather/point/overview.html")
         self.assertEqual(
             response.context["point"],
-            {"grid": {"wfo": "TST"}, "wfo": self.wfo, "isMarine": False, "place": {"timezone": "America/New_York"}},
+            {"grid": {"wfo": "TST", "type": "land", "marineType": None},
+             "wfo": self.wfo,
+             "place": {"timezone": "America/New_York"}},
         )
 
         self.assertEqual(response.context["weather_story"], self.weather_story)
@@ -122,8 +123,7 @@ class TestViews(TestCase):
     def test_point_location_update(self, mock_get_point_forecast):
         """Test the point location view."""
         mock_get_point_forecast.return_value = {
-            "grid": {"wfo": "TST"},
-            "isMarine": False,
+            "grid": {"wfo": "TST", "type": "land", "marineType": None },
             "place": {"timezone": "America/New_York"},
             "weatherstory": [self.weather_story],
         }
@@ -134,15 +134,16 @@ class TestViews(TestCase):
         self.assertTemplateUsed(response, "weather/point/point.update.html")
         self.assertEqual(
             response.context["point"],
-            {"grid": {"wfo": "TST"}, "wfo": self.wfo, "isMarine": False, "place": {"timezone": "America/New_York"}},
+            {"grid": {"wfo": "TST", "type": "land", "marineType": None },
+             "wfo": self.wfo,
+             "place": {"timezone": "America/New_York"}},
         )
 
     @mock.patch("backend.views.point.interop.get_point_forecast")
     def test_point_location_no_weather_story(self, mock_get_point_forecast):
         """Test the point location view where there's no weather story available."""
         mock_get_point_forecast.return_value = {
-            "grid": {"wfo": "TST"},
-            "isMarine": False,
+            "grid": {"wfo": "TST", "type": "land", "marineType": None },
             "place": {"timezone": "America/New_York"},
             "weatherstory": [],
         }
@@ -153,7 +154,9 @@ class TestViews(TestCase):
 
         self.assertEqual(
             response.context["point"],
-            {"grid": {"wfo": "TST"}, "wfo": self.wfo, "isMarine": False, "place": {"timezone": "America/New_York"}},
+            {"grid": {"wfo": "TST", "type": "land", "marineType": None},
+             "wfo": self.wfo,
+             "place": {"timezone": "America/New_York"}},
         )
         expected = {"is_empty": True, "officeId": "TST", "wfo_name": "Test WFO", "wfo_url": "/about/offices/TST/"}
         self.assertEqual(response.context["weather_story"], expected)
@@ -176,8 +179,7 @@ class TestViews(TestCase):
             "image": "/public/images/wfos/TST.png",
         }
         mock_get_point_forecast.return_value = {
-            "grid": {"wfo": "TST"},
-            "isMarine": False,
+            "grid": {"wfo": "TST", "type": "land", "marineType": None},
             "place": {"timezone": "America/New_York"},
             "weatherstory": [weather_story],
         }
@@ -188,7 +190,9 @@ class TestViews(TestCase):
 
         self.assertEqual(
             response.context["point"],
-            {"grid": {"wfo": "TST"}, "wfo": self.wfo, "isMarine": False, "place": {"timezone": "America/New_York"}},
+            {"grid": {"wfo": "TST", "type": "land", "marineType": None},
+             "wfo": self.wfo,
+             "place": {"timezone": "America/New_York"}},
         )
         self.assertEqual(response.context["weather_story"], weather_story)
         self.assertTemplateUsed("weather/partials/point-weather-story.html")
@@ -313,16 +317,43 @@ class TestViews(TestCase):
 
     @disable_logging_for_quieter_tests
     @mock.patch("backend.views.point.interop.get_point_forecast")
-    def test_marine_point(self, mock_get_point_forecast):
-        """Test that a marine point renders the right template."""
-        mock_get_point_forecast.return_value = {
-            "grid": {"wfo": "TST"},
-            "isMarine": True,
-        }
+    def test_marine_offshore_point_with_coastal_flag(self, mock_get_point_forecast):
+        """Test that an offshore marine point renders the right template with coastal is blocked and allowed."""
+        with self.settings(MARINE_COASTAL_EXPERIMENTAL=False):
+            mock_get_point_forecast.return_value = {
+                "grid": {"wfo": "TST", "type": "marine", "marineType": "offshore"},
+            }
 
-        response = self.client.get("/forecast/point/11.1/22.2", follow=True)
+            response = self.client.get("/forecast/point/11.1/22.2", follow=True)
+            self.assertTemplateUsed(response, "errors/404/marine-point.html")
 
-        self.assertTemplateUsed(response, "errors/404/marine-point.html")
+        with self.settings(MARINE_COASTAL_EXPERIMENTAL=True):
+            mock_get_point_forecast.return_value = {
+                "grid": {"wfo": "TST", "type": "marine", "marineType": "offshore"},
+            }
+
+            response = self.client.get("/forecast/point/11.1/22.2", follow=True)
+            self.assertTemplateUsed(response, "errors/404/marine-point.html")
+
+    @disable_logging_for_quieter_tests
+    @mock.patch("backend.views.point.interop.get_point_forecast")
+    def test_marine_coastal_point_with_coastal_flag(self, mock_get_point_forecast):
+        """Test that a coastal marine point renders the right template with coastal is blocked and allowed."""
+        with self.settings(MARINE_COASTAL_EXPERIMENTAL=False):
+            mock_get_point_forecast.return_value = {
+                "grid": {"wfo": "TST", "type": "marine", "marineType": "coastal"},
+            }
+
+            response = self.client.get("/forecast/point/11.1/22.2", follow=True)
+            self.assertTemplateUsed(response, "errors/404/marine-point.html")
+
+        with self.settings(MARINE_COASTAL_EXPERIMENTAL=True):
+            mock_get_point_forecast.return_value = {
+                "grid": {"wfo": "TST", "type": "marine", "marineType": "coastal"},
+            }
+
+            response = self.client.get("/forecast/point/11.1/22.2", follow=True)
+            self.assertTemplateNotUsed(response, "errors/404/marine-point.html")
 
     @disable_logging_for_quieter_tests
     def test_place_unknown(self):
@@ -334,8 +365,7 @@ class TestViews(TestCase):
     def test_place_redirect_state(self, mock_get_point_forecast):
         """Test the place location view where the state needs redirection."""
         mock_get_point_forecast.return_value = {
-            "grid": {"wfo": "TST"},
-            "isMarine": False,
+            "grid": {"wfo": "TST", "type": "land", "marineType": None},
             "place": {"timezone": "America/New_York"},
             "weatherstory": [],
         }
@@ -346,8 +376,7 @@ class TestViews(TestCase):
     def test_place_redirect_place(self, mock_get_point_forecast):
         """Test the place location view where the place name needs redirection."""
         mock_get_point_forecast.return_value = {
-            "grid": {"wfo": "TST"},
-            "isMarine": False,
+            "grid": {"wfo": "TST", "type": "land", "marineType": None},
             "place": {"timezone": "America/New_York"},
             "weatherstory": [],
         }
@@ -358,8 +387,7 @@ class TestViews(TestCase):
     def test_place(self, mock_get_point_forecast):
         """Test the place location view where the place name needs redirection."""
         mock_get_point_forecast.return_value = {
-            "grid": {"wfo": "TST"},
-            "isMarine": False,
+            "grid": {"wfo": "TST", "type": "land", "marineType": None},
             "place": {"timezone": "America/New_York"},
             "weatherstory": [self.weather_story],
         }
@@ -372,7 +400,9 @@ class TestViews(TestCase):
         self.assertTemplateUsed(response, "weather/point/overview.html")
         self.assertEqual(
             response.context["point"],
-            {"grid": {"wfo": "TST"}, "wfo": self.wfo, "isMarine": False, "place": {"timezone": "America/New_York"}},
+            {"grid": {"wfo": "TST", "type": "land", "marineType": None},
+             "wfo": self.wfo,
+             "place": {"timezone": "America/New_York"}},
         )
 
         self.assertEqual(response.context["weather_story"], self.weather_story)

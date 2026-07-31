@@ -172,7 +172,7 @@ def _process_interop_point_forecast(data):
     Returns:
         The dictionary is modified IN PLACE, but is also returned.
     """
-    is_marine = data["isMarine"]
+    is_marine = data.get("grid", {}).get("type") == "marine"
 
     tz = ZoneInfo(data["place"]["timezone"])
 

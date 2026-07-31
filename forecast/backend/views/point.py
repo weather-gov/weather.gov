@@ -1,6 +1,7 @@
 from http import HTTPStatus
 from zoneinfo import ZoneInfo
 
+from django.conf import settings
 from django.http import Http404
 from django.shortcuts import redirect, render
 from django.urls import reverse
@@ -15,10 +16,10 @@ from ._helpers import get_redirect_for_afd_queries
 
 MAX_DEGREE_DECIMALS = 3
 
-
 @cache_control(max_age=120, smax_age=120, public=True)
 def point_location(request, lat, lon):  # noqa: C901
     """Render the forecast for a given latitude & longitude."""
+    allow_coastal = settings.MARINE_COASTAL_EXPERIMENTAL
     # If there are more than 3 decimal places in the latitude, we redirect.
     # We determine whether to redirect based on the number of decimal points
     # given to us, rather than rounding and then comparing, to avoid any
@@ -63,9 +64,10 @@ def point_location(request, lat, lon):  # noqa: C901
     if "status" in point and point["status"] == HTTPStatus.NOT_FOUND:
         raise Http404(point)
 
-    # we do not currently support marine.
-    if "isMarine" in point and point["isMarine"]:
-        return render(request, "errors/404/marine-point.html", context, status=404)
+    # If a marine point, check if coastal is allowed, else block all marine
+    if "grid" in point and "type" in point["grid"] and point["grid"]["type"] == "marine":
+        if not (allow_coastal and point["grid"].get("marineType") == "coastal"):
+            return render(request, "errors/404/marine-point.html", context, status=404)
 
     # Get the local timezone for the current point place
     # If there was an error retrieving the place API endpoint,

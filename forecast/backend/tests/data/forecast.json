@@ -1,6 +1,5 @@
 {
   "some_missing_temperatures": {
-    "isMarine": false,
     "place": {
       "timezone": "America/Chicago"
     },
@@ -161,7 +160,6 @@
     }
   },
   "missing_last_low": {
-    "isMarine": false,
     "place": {
       "timezone": "America/Chicago"
     },
@@ -300,7 +298,6 @@
     }
   },
   "missing_day_high": {
-    "isMarine": false,
     "place": {
       "timezone": "America/Chicago"
     },
@@ -428,7 +425,6 @@
     }
   },
   "nosnow_noice_noalerts": {
-    "isMarine": false,
     "place": {
       "timezone": "America/Chicago"
     },
@@ -589,7 +585,6 @@
     }
   },
   "snow_noice_alert_noalertlevel": {
-    "isMarine": false,
     "place": {
       "timezone": "America/Chicago"
     },
@@ -645,7 +640,6 @@
     }
   },
   "nosnow_ice_alert": {
-    "isMarine": false,
     "place": {
       "timezone": "America/Chicago"
     },
@@ -706,7 +700,6 @@
     }
   },
   "astronomical_data_missing": {
-    "isMarine": false,
     "place": {
       "timezone": "America/Chicago"
     },
@@ -719,7 +712,6 @@
     "point": {}
   },
   "astronomical_data_empty": {
-    "isMarine": false,
     "place": {
       "timezone": "America/Chicago"
     },
@@ -732,7 +724,6 @@
     "point": { "astronomicalData": {} }
   },
   "astronomical_data_valid": {
-    "isMarine": false,
     "place": {
       "timezone": "America/Chicago"
     },
@@ -756,7 +747,6 @@
     }
   },
     "astronomical_data_null": {
-    "isMarine": false,
     "place": {
       "timezone": "America/Chicago"
     },

@@ -248,9 +248,8 @@ describe("Forecast index", () => {
       let threwError = false;
       try {
         await forecast({
-          grid: { wfo: "TST", x: 1, y: 1 },
+          grid: { wfo: "TST", x: 1, y: 1, type: "land", marineType: null },
           place,
-          isMarine: false,
         });
       } catch (e) {
         if (e.cause?.statusCode === 403) {
@@ -276,9 +275,8 @@ describe("Forecast index", () => {
       let threwError = false;
       try {
         await forecast({
-          grid: { wfo: "TST", x: 1, y: 1 },
+          grid: { wfo: "TST", x: 1, y: 1, type: "land", marineType: null },
           place,
-          isMarine: false,
         });
       } catch (e) {
         if (e.cause?.statusCode === 403) {
@@ -304,9 +302,8 @@ describe("Forecast index", () => {
       let threwError = false;
       try {
         await forecast({
-          grid: { wfo: "TST", x: 1, y: 1 },
+          grid: { wfo: "TST", x: 1, y: 1, type: "land", marineType: null },
           place,
-          isMarine: false,
         });
       } catch (e) {
         if (e.cause?.statusCode === 403) {
@@ -320,9 +317,8 @@ describe("Forecast index", () => {
     it("calls the expected endpoints", async () => {
       basicResponse.body.text.resolves([{}, {}]);
       await forecast({
-        grid: { wfo: "TST", x: 49488, y: 34 },
+        grid: { wfo: "TST", x: 49488, y: 34, type: "land", marineType: null },
         place,
-        isMarine: false,
       });
 
       expect(
@@ -347,9 +343,14 @@ describe("Forecast index", () => {
     it("calls the expected API endpoints", async () => {
       basicResponse.body.text.resolves([{}, {}]);
       await forecast({
-        grid: { wfo: "TST", x: 49488, y: 34 },
+        grid: {
+          wfo: "TST",
+          x: 49488,
+          y: 34,
+          type: "marine",
+          marineType: "offshore",
+        },
         place,
-        isMarine: true,
       });
 
       expect(
@@ -413,7 +414,7 @@ describe("Forecast index", () => {
       describe("gets the right set of days", () => {
         it("when the start is after 6am local", async () => {
           marineResponse.body.text.resolves(JSON.stringify(gridpoint));
-          const actual = await forecast({ grid: {}, place, isMarine: true });
+          const actual = await forecast({ grid: { type: "marine" }, place });
 
           // Convert embedded day.js objects into ISO strings
           actual.daily.days.forEach((day) => {
@@ -479,7 +480,7 @@ describe("Forecast index", () => {
           gridpoint.properties.temperature.values[0].validTime =
             "1984-07-07T10:00:00Z/PT12H";
           marineResponse.body.text.resolves(JSON.stringify(gridpoint));
-          const actual = await forecast({ grid: {}, place, isMarine: true });
+          const actual = await forecast({ grid: { type: "marine" }, place });
 
           // Convert embedded day.js objects into ISO strings
           actual.daily.days.forEach((day) => {
@@ -504,7 +505,7 @@ describe("Forecast index", () => {
           gridpoint.properties.temperature.values[0].validTime =
             "2000-01-03T22:00:00Z/PT2H";
           marineResponse.body.text.resolves(JSON.stringify(gridpoint));
-          const actual = await forecast({ grid: {}, place, isMarine: true });
+          const actual = await forecast({ grid: { type: "marine" }, place });
 
           // Convert embedded day.js objects into ISO strings
           actual.daily.days.forEach((day) => {
@@ -530,7 +531,7 @@ describe("Forecast index", () => {
           gridpoint.properties.temperature.values[0].validTime =
             "2000-01-03T22:00:00Z/PT18H";
           marineResponse.body.text.resolves(JSON.stringify(gridpoint));
-          const actual = await forecast({ grid: {}, place, isMarine: true });
+          const actual = await forecast({ grid: { type: "marine" }, place });
 
           // Convert embedded day.js objects into ISO strings
           actual.daily.days.forEach((day) => {

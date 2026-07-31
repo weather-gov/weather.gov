@@ -167,6 +167,12 @@ variable "internal_gridpoint_lookup" {
   description = "Whether or not to attempt internal geodata lookup for resolving lat/lon into grid cells"
 }
 
+variable "marine_coastal_experimental" {
+  type        = bool
+  default     = false
+  description = "Whether or not to allow for coastal marine data to be displayed"
+}
+
 variable "django_interop_timeout" {
   type        = number
   default     = 15
