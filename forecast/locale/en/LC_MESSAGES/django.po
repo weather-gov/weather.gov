@@ -870,19 +870,19 @@ msgid "site.meta.description.deprecated_county_pages"
 msgstr "Visit beta.weather.gov for the latest NWS forecast for your area."
 
 msgid "ghwo.selector.label.state.01"
-msgstr "Select state"
+msgstr "Select State"
 
 msgid "ghwo.selector.label.county.01"
-msgstr "Select county"
+msgstr "Select County"
 
 msgid "ghwo.selector.label.all-counties.01"
-msgstr "All counties"
+msgstr "All Counties"
 
 msgid "ghwo.selector.label.county-link.01"
-msgstr "View county page"
+msgstr "Go to County"
 
 msgid "ghwo.selector.label.state-link.01"
-msgstr "View state page"
+msgstr "Go to State"
 
 msgid "ghwo.heading.error.01"
 msgstr "There was an error loading the data"
@@ -1164,13 +1164,13 @@ msgid "state.heading.counties.01"
 msgstr "Counties"
 
 msgid "state.links.county-links.01"
-msgstr "View counties in {state_name}"
+msgstr "View {state_name} Counties"
 
 msgid "state.description.index.01"
 msgstr "Select your state or territory from the list below to see alerts, risk levels, and more for the state."
 
 msgid "state.labels.state-filter.01"
-msgstr "Filter by state name"
+msgstr "Filter by State Name"
 
 msgid "state.alerts.loading-map.01"
 msgstr "Loading the map..."
