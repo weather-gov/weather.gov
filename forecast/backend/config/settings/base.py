@@ -263,6 +263,9 @@ WAGTAIL_SITE_NAME = "beta.weather.gov"
 WAGTAILADMIN_BASE_URL = "http://localhost:8080"  # Change to env variable for config
 WAGTAILDOCS_EXTENSIONS = ["jpg", "jpeg", "pdf", "png", "gif"]
 WAGTAILDOCS_SERVE_METHOD = "redirect"
+WAGTAILIMAGES_EXTENSIONS = ["jpg", "jpeg", "png", "gif", "webp"]
+WAGTAILIMAGES_MAX_UPLOAD_SIZE = 2 * 1024 * 1024  # 2MB (10 MB is the default)
+WAGTAILIMAGES_MAX_IMAGE_PIXELS = 128000000  # 128 megapixels (this is the default)
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
