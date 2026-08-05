@@ -287,10 +287,6 @@ func FetchWFO(ctx context.Context, sourceWFO string) (*FetchResult, []error) {
 		case response := <-responseChan:
 			responseBytesToStructs(response, result)
 		case <-ctx.Done():
-			result.Errors = append(
-				result.Errors,
-				ctx.Err(),
-			)
 			return result, result.Errors
 		}
 	}
@@ -352,6 +348,7 @@ func responseBytesToStructs(fetchData *GenericFetch, result *FetchResult) {
 			return
 		}
 		result.GHWOData = &dataStruct
+		result.GHWOData.WFO = fetchData.WFO
 	case LegendResource:
 		dataStruct := SourceLegend{}
 		err := json.Unmarshal(fetchData.ResponseBytes, &dataStruct)
@@ -411,11 +408,6 @@ func FetchState(ctx context.Context, stateCode string, wfo string, ch chan *Stat
 		case response := <-responseChan:
 			responseBytesToStateStructs(response, result)
 		case <-ctx.Done():
-			result.Errors = append(
-				result.Errors,
-				ctx.Err(),
-			)
-			ch <- result
 			return
 		}
 	}

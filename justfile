@@ -100,6 +100,11 @@ clear-alert-cache:
   docker compose exec database bash -c "psql \"postgresql://\$POSTGRES_USER:\$POSTGRES_PASSWORD@database/\$POSTGRES_DB\" -c \"UPDATE weathergov_geo_alerts_cache SET hash=id,alertjson=jsonb_set(alertjson::jsonb,'{hash}',quote_ident(id::text)::jsonb);\""
   docker compose restart api-interop-layer
 
+# Drop all ghwo records from the temp table
+[group("cache management")]
+clear-risk-data:
+    docker compose exec database bash -c "psql \"postgresql://\$POSTGRES_USER:\$POSTGRES_PASSWORD@database/\$POSTGRES_DB\" -c \"TRUNCATE TABLE weathergov_temp_ghwo;\""
+
 ##### Code quality #####
 # Format Javascript
 [group("code quality")]
@@ -415,7 +420,14 @@ lets *args:
 # Run the GHWO program  without compiling (interpreted)
 [group("golang")]
 go-run-ghwo:
-    docker compose run --rm tasks-dev go run /tasks/cmd/ghwo/main.go
+    docker compose run --rm  \
+    -e DB_HOST=database \
+    -e DB_PORT=5432 \
+    -e DB_NAME=weathergov \
+    -e DB_USERNAME=drupal \
+    -e DB_PASSWORD=drupal \
+    -e LOG_LEVEL=WARN \
+    tasks-dev go run /tasks/cmd/ghwo/main.go
 
 # Run the alerts program without compiling (interpreted)
 [group("golang")]

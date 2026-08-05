@@ -3,7 +3,20 @@ package ghwo
 import (
 	"context"
 	"fmt"
+	"os"
+	"strconv"
 	"sync"
+
+	"github.com/jackc/pgx/v5/pgxpool"
+)
+
+/**
+* Constants and environment variables
+ */
+const (
+	DefaultExtractionWorkers        int = 100
+	DefaultTransformWorkers         int = 60
+	DefaultTransformLocalityWorkers int = 60
 )
 
 /**
@@ -45,8 +58,8 @@ type TransformLocalityManager struct {
 /* Not yet fully implemented */
 type StoreManager struct {
 	Input  chan *Output
-	Output chan bool
 	Errors []error
+	Pool   *pgxpool.Pool
 }
 
 // An interim struct for state or county locality data
@@ -61,6 +74,19 @@ type LocalityResult struct {
 	GHWOData *SourceGHWOData
 }
 
+type WorkerRunner interface {
+	RunWorkers(ctx context.Context)
+}
+
+/**
+* A Pipeline is a struct that has an ordered list of
+* managers, which, when initialized, will each link their
+* outputs to the previous manager's input.
+ */
+type Pipeline struct {
+	Managers []WorkerRunner
+}
+
 // Convenience function for sending an error to a channel
 // via a goroutine. Takes a sync WaitGroup as an argument
 func sendError(err error, errChan chan error, wg *sync.WaitGroup) {
@@ -69,6 +95,53 @@ func sendError(err error, errChan chan error, wg *sync.WaitGroup) {
 		defer wg.Done()
 		errChan <- err
 	}()
+}
+
+/**
+* The number of workers for each manager/stage type
+* will be set by environment variables. If the corresponding variable
+* is not available, we use the default constant specified in this file
+ */
+func (manager *ExtractionManager) setNumWorkers() {
+	found := os.Getenv("E_WORKER_NUM")
+	if found == "" {
+		manager.NumWorkers = DefaultExtractionWorkers
+		return
+	}
+	foundNum, err := strconv.Atoi(found)
+	if err != nil {
+		manager.NumWorkers = DefaultExtractionWorkers
+		return
+	}
+	manager.NumWorkers = foundNum
+}
+
+func (manager *TransformManager) setNumWorkers() {
+	found := os.Getenv("T_WORKER_NUM")
+	if found == "" {
+		manager.NumWorkers = DefaultTransformWorkers
+		return
+	}
+	foundNum, err := strconv.Atoi(found)
+	if err != nil {
+		manager.NumWorkers = DefaultTransformWorkers
+		return
+	}
+	manager.NumWorkers = foundNum
+}
+
+func (manager *TransformLocalityManager) setNumWorkers() {
+	found := os.Getenv("TL_WORKER_NUM")
+	if found == "" {
+		manager.NumWorkers = DefaultTransformLocalityWorkers
+		return
+	}
+	foundNum, err := strconv.Atoi(found)
+	if err != nil {
+		manager.NumWorkers = DefaultTransformLocalityWorkers
+		return
+	}
+	manager.NumWorkers = foundNum
 }
 
 /**
@@ -94,7 +167,6 @@ func (extractionManager *ExtractionManager) RunWorkers(ctx context.Context) {
 			for {
 				select {
 				case <-ctx.Done():
-					sendError(ctx.Err(), errorChan, &errorWg)
 					return
 				case wfoCode, inputIsOpen := <-extractionManager.Input:
 					if !inputIsOpen {
@@ -103,25 +175,19 @@ func (extractionManager *ExtractionManager) RunWorkers(ctx context.Context) {
 					}
 					fetchResult, errors := FetchWFO(ctx, wfoCode)
 					if len(errors) > 0 {
-						for i := 0; i < len(errors); i++ {
-							sendError(errors[i], errorChan, &errorWg)
-						}
-						logger.Warn(
-							fmt.Sprintf(
-								"Error(s) fetching %s:\n%s",
-								wfoCode,
-								errors,
-							),
-						)
-
 						// Do not pass any FetchResults that have errors.
 						// Instead, continue the listening loop
+						logger.Warn("Could not fetch data for WFO", "wfo", wfoCode, "numErrors", len(errors))
 						continue
 					}
 
 					// Otherwise, we have a good FetchResult that we can send
 					// on the output channel
-					extractionManager.Output <- fetchResult
+					select {
+					case <-ctx.Done():
+						return
+					case extractionManager.Output <- fetchResult:
+					}
 				}
 			}
 		}(i)
@@ -142,6 +208,7 @@ func (extractionManager *ExtractionManager) RunWorkers(ctx context.Context) {
 	}
 
 	close(extractionManager.Output)
+	logger.Warn("ExtractionManager exited")
 }
 
 /**
@@ -166,7 +233,9 @@ func (transformManager *TransformManager) RunWorkers(ctx context.Context) {
 			for {
 				select {
 				case <-ctx.Done():
-					sendError(ctx.Err(), errorChan, &errorWg)
+					select {
+					case errorChan <- ctx.Err():
+					}
 					return
 
 				case fetchResult, inputIsOpen := <-transformManager.Input:
@@ -242,6 +311,7 @@ func (transformManager *TransformManager) RunWorkers(ctx context.Context) {
 	}
 
 	close(transformManager.Output)
+	logger.Warn("TransformManager exited")
 }
 
 /**
@@ -269,7 +339,6 @@ func (manager *TransformLocalityManager) RunWorkers(ctx context.Context) {
 			for {
 				select {
 				case <-ctx.Done():
-					sendError(ctx.Err(), errorChan, &errorWg)
 					return
 
 				case locality, isOpen := <-manager.Input:
@@ -297,7 +366,11 @@ func (manager *TransformLocalityManager) RunWorkers(ctx context.Context) {
 							locality.Legend,
 							locality.Chicklet,
 						)
-						manager.Output <- output
+						select {
+						case <-ctx.Done():
+							return
+						case manager.Output <- output:
+						}
 					} else if locality.Type == "state" {
 						stateData, ok := locality.GHWOData.States[locality.Code]
 						if !ok {
@@ -318,7 +391,11 @@ func (manager *TransformLocalityManager) RunWorkers(ctx context.Context) {
 								locality.Code,
 								&stateData,
 							)
-							manager.Output <- output
+							select {
+							case <-ctx.Done():
+								return
+							case manager.Output <- output:
+							}
 						} else {
 							output = ProcessStateWithDetails(
 								locality.GHWOData.WFO,
@@ -327,7 +404,11 @@ func (manager *TransformLocalityManager) RunWorkers(ctx context.Context) {
 								locality.Legend,
 								locality.Chicklet,
 							)
-							manager.Output <- output
+							select {
+							case <-ctx.Done():
+								return
+							case manager.Output <- output:
+							}
 						}
 					} else {
 						sendError(
@@ -355,4 +436,129 @@ func (manager *TransformLocalityManager) RunWorkers(ctx context.Context) {
 	}
 
 	close(manager.Output)
+	logger.Warn("TransformLocalityManager exited")
+}
+
+func (manager *StoreManager) RunWorkers(ctx context.Context) {
+	// Initialize a StoreBatch to track our batches,
+	// whose methods allow us to check and flush
+	// as we add
+	storeBatch := NewBatch(40)
+
+	wg := sync.WaitGroup{}
+
+	// The storage manager will run on a synchronous for-select
+	// (ie, there are no workers) until the input channel is closed
+	// or the context is cancelled
+	wg.Add(1)
+	go func() {
+		defer wg.Done()
+		for {
+			select {
+			case <-ctx.Done():
+				manager.Errors = append(
+					manager.Errors,
+					ctx.Err(),
+				)
+				return
+			case processedOutput, isOpen := <-manager.Input:
+				if !isOpen {
+					return
+				}
+
+				shouldFlush := storeBatch.add(processedOutput)
+				if shouldFlush {
+					err := storeBatch.flush(ctx, manager.Pool)
+					if err != nil {
+						manager.Errors = append(
+							manager.Errors,
+							err,
+						)
+					}
+				}
+			}
+		}
+	}()
+
+	wg.Wait()
+
+	// Flush the remaining output data in the batch, if present
+	select {
+	case <-ctx.Done():
+		return
+	default:
+		if len(storeBatch.Outputs) > 0 {
+			err := storeBatch.flush(ctx, manager.Pool)
+			if err != nil {
+				manager.Errors = append(
+					manager.Errors,
+					err,
+				)
+			}
+		}
+	}
+
+	if len(manager.Errors) > 0 {
+		for _, err := range manager.Errors {
+			logger.Error("StoreManager error", "error", err)
+		}
+	}
+
+	logger.Warn("StoreManager exited")
+}
+
+/**
+* Creates a new GHWO pipeline configured with all the
+* correct managers linked together.
+* We pass in the db pool instance, which will then be set on
+* the StoreManager.
+ */
+func NewPipeline(pool *pgxpool.Pool) *Pipeline {
+	extractionManager := &ExtractionManager{
+		Input:  make(chan string),
+		Output: make(chan *FetchResult),
+	}
+	extractionManager.setNumWorkers()
+	transformManager := &TransformManager{
+		Input:  extractionManager.Output,
+		Output: make(chan *LocalityResult),
+	}
+	transformManager.setNumWorkers()
+	transformLocalityManager := &TransformLocalityManager{
+		Input:  transformManager.Output,
+		Output: make(chan *Output),
+	}
+	transformLocalityManager.setNumWorkers()
+	storeManager := &StoreManager{
+		Input: transformLocalityManager.Output,
+		Pool:  pool,
+	}
+
+	return &Pipeline{
+		Managers: []WorkerRunner{
+			extractionManager,
+			transformManager,
+			transformLocalityManager,
+			storeManager,
+		},
+	}
+}
+
+/**
+* Top level function to run the given pipeline.
+* Iterates through each Manager and runs its own workers
+* as a separate goroutine, waiting for them all to finish.
+ */
+func (pipeline *Pipeline) Run(ctx context.Context) {
+	var wg = sync.WaitGroup{}
+
+	for i := 0; i < len(pipeline.Managers); i++ {
+		wg.Add(1)
+		go func() {
+			defer wg.Done()
+			pipeline.Managers[i].RunWorkers(ctx)
+		}()
+	}
+
+	wg.Wait()
 }

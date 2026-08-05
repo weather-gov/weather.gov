@@ -376,7 +376,7 @@ type ChickletLookup map[RiskTypeKey]SourceChickletHazard
 * https://www.weather.gov/source/lwx/ghwo/hazByCounty.json
  */
 type SourceGHWOData struct {
-	WFO            string               `json:"wfo"`
+	WFO            string               
 	Counties       SourceGHWOLocalities `json:"counties"`
 	GenerationTime string               `json:"generation_time,omitempty"`
 	States         SourceGHWOLocalities `json:"states"`
