@@ -144,6 +144,9 @@ func TestExtractManager(t *testing.T) {
 			return
 		}
 
+		// Set the WFO on the data
+		exampleGHWOData.WFO = "lwx"
+
 		expectedFetchResult := &FetchResult{
 			WFO:      "lwx",
 			Legend:   exampleLegend,
@@ -163,7 +166,7 @@ func TestExtractManager(t *testing.T) {
 		}
 	})
 
-	t.Run("xtractWorkers are able to fetch WFO level resources, even when the state errors", func(t *testing.T) {
+	t.Run("ExtractWorkers are able to fetch WFO level resources, even when the state errors", func(t *testing.T) {
 		server := httptest.NewServer(http.HandlerFunc(func(writer http.ResponseWriter, req *http.Request) {
 			if strings.HasSuffix(req.URL.Path, "chicklet.json") {
 				writer.Write(exampleChickletBytes)
@@ -248,6 +251,9 @@ func TestExtractManager(t *testing.T) {
 		if err != nil {
 			t.Errorf("Could not unmarshal chicklet")
 		}
+
+		// Set the WFO on the expected data
+		exampleGHWOData.WFO = "lwx"
 
 		expectedFetchResult := &FetchResult{
 			WFO:      "lwx",

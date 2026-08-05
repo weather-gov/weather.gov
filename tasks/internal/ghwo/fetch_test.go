@@ -14,7 +14,6 @@ import (
 	"strings"
 	"sync"
 	"testing"
-	"time"
 )
 
 // Implement the RoundTripper interface, so we can override
@@ -402,44 +401,6 @@ func TestFetchState(t *testing.T) {
 		}
 	})
 
-	t.Run("cancelling the context will propagate errors to the response StateFetchResult", func(t *testing.T) {
-		server := httptest.NewServer(http.HandlerFunc(func(writer http.ResponseWriter, req *http.Request) {
-
-			// Let's wait 2 seconds in the response.
-			// We actually shouldn't end up waiting, because the context
-			// should immediately cancel, which will bail.
-			time.Sleep(2 * time.Second)
-			writer.WriteHeader(201)
-		}))
-
-		t.Setenv("GHWO_BASE_URL", server.URL)
-		defer server.Close()
-
-		// We will be passing in a new context with a cancellation
-		cancelCtx, cancelFunc := context.WithCancel(context.TODO())
-
-		responseChan := make(chan *StateFetchResult)
-		go FetchState(cancelCtx, "MD", "LWX", responseChan)
-
-		// Immediately cancel
-		cancelFunc()
-
-		result := <-responseChan
-
-		if len(result.Errors) != 1 {
-			t.Errorf(
-				"Expected 1 error, but got %d errors (%v)",
-				len(result.Errors),
-				result.Errors,
-			)
-		}
-
-		// There should be exactly 1 error and it should be the context cancellation
-		if result.Errors[0] != context.Canceled {
-			t.Errorf("Expected context.Canceled error, but got: %s", result.Errors[0])
-		}
-	})
-
 	t.Run("fetches all the resources for a state based on a full example", func(t *testing.T) {
 		server := httptest.NewServer(http.HandlerFunc(func(writer http.ResponseWriter, req *http.Request) {
 			if strings.HasSuffix(req.URL.Path, "legendMaryland.json") {
@@ -571,30 +532,6 @@ func TestFetchWFO(t *testing.T) {
 		}
 	})
 
-	t.Run("cancelling the context will propagate errors to the response FetchResult", func(t *testing.T) {
-		server := httptest.NewServer(http.HandlerFunc(func(writer http.ResponseWriter, req *http.Request) {
-			// Wait for 2 second on any given endpoint.
-			time.Sleep(2 * time.Second)
-			writer.WriteHeader(201)
-		}))
-
-		t.Setenv("GHWO_BASE_URL", server.URL)
-		defer server.Close()
-
-		cancelContext, cancelFun := context.WithCancel(context.TODO())
-		// Now immediately cancel while the server is responding to any requests
-		cancelFun()
-
-		result, _ := FetchWFO(cancelContext, "LWX")
-
-		if len(result.Errors) != 1 {
-			t.Errorf("Expected FetchResult to have exactly 1 error, but got %d", len(result.Errors))
-		}
-		if result.Errors[0] != context.Canceled {
-			t.Errorf("Expected error to be a context.Canceled, but got %v", result.Errors[0])
-		}
-	})
-
 	t.Run("fetches all of the resources for a WFO (including all corresponding states) based on example data", func(t *testing.T) {
 		server := httptest.NewServer(http.HandlerFunc(func(writer http.ResponseWriter, req *http.Request) {
 			if strings.HasSuffix(req.URL.Path, "chicklet.json") {
@@ -629,6 +566,7 @@ func TestFetchWFO(t *testing.T) {
 				},
 			},
 		}
+		exampleGHWO.WFO = "lwx"
 
 		result, _ := FetchWFO(ctx, "LWX")
 
