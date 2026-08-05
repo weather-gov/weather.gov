@@ -1,5 +1,6 @@
 from django.contrib.gis.db import models
-from django.db.models import JSONField
+from django.contrib.postgres.indexes import GistIndex
+from django.db.models import Func, JSONField
 from django.utils.text import format_lazy
 from django.utils.translation import gettext_lazy as _
 
@@ -23,7 +24,6 @@ class WeatherZone(models.Model):
     type = models.TextField(null=True)
     wfo = models.CharField(max_length=3, null=True)
     name = models.CharField(max_length=254, null=True)
-
 
     class Meta:  # noqa: D106
         db_table = "weathergov_geo_zones"
@@ -103,7 +103,9 @@ class WeatherStates(models.Model):
             "VI": "spatial.county-like.name.island",
         }
 
-        base_key = subdivision_mapping.get(self.state, "spatial.county-like.name.county")
+        base_key = subdivision_mapping.get(
+            self.state, "spatial.county-like.name.county"
+        )
         full_key = f"{base_key}.{suffix}"
 
         return _(full_key)
@@ -142,7 +144,9 @@ class WeatherCounties(models.Model):
     """Represents a county, borough, parish, or US Census Area."""
 
     st = models.CharField(max_length=2, null=True)
-    state = models.ForeignKey(WeatherStates, related_name="counties", null=True, on_delete=models.SET_NULL)
+    state = models.ForeignKey(
+        WeatherStates, related_name="counties", null=True, on_delete=models.SET_NULL
+    )
     countyname = models.TextField(null=True)
     countyfips = models.CharField(max_length=5, unique=True, db_index=True)
     timezone = models.TextField(null=True)
@@ -150,7 +154,11 @@ class WeatherCounties(models.Model):
     slug = models.TextField(null=True)
     shape = models.GeometryField()
     cwas = models.ManyToManyField(WeatherCountyWarningAreas)
-    primarywfo = models.ForeignKey(WeatherCountyWarningAreas, related_name="primary_counties", on_delete=models.CASCADE)
+    primarywfo = models.ForeignKey(
+        WeatherCountyWarningAreas,
+        related_name="primary_counties",
+        on_delete=models.CASCADE,
+    )
 
     @property
     def subdivision_name(self):
@@ -253,6 +261,12 @@ class WeatherAlertsCache(models.Model):
 
     class Meta:  # noqa: D106
         db_table = "weathergov_geo_alerts_cache"
+        indexes = [
+            GistIndex(
+                Func("shape_simplified", template="%(expressions)s::geography"),
+                name="weathergov_alerts_geog_idx",
+            ),
+        ]
 
 
 class ForecastGridPoints(models.Model):
@@ -317,7 +331,11 @@ class WeatherGridPoints(models.Model):
         db_table = "weathergov_geo_gridpoints"
         indexes = [
             models.Index(fields=["x", "y"]),
-            models.Index(fields=["x", "y", "cwa"])
+            models.Index(fields=["x", "y", "cwa"]),
+            GistIndex(
+                Func("point", template="%(expressions)s::geography"),
+                name="weathergov_geo_grid_geog_idx",
+            ),
         ]
 
 
