@@ -96,7 +96,12 @@ export const startRiskOverviewProcessing = async () => {
     });
   }
 };
-startRiskOverviewProcessing();
+
+// Only start processing risks if the environment
+// variable / feature flag is set
+if (process.env.TASKS_GHWO_INTEROP === "true") {
+  startRiskOverviewProcessing();
+}
 
 /**
  *

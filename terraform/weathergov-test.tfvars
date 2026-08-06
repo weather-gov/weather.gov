@@ -20,3 +20,4 @@ api_url                     = "https://api-proxy-weathergov-test.app.cloud.gov"
 ghwo_url                    = "https://api-proxy-weathergov-test.app.cloud.gov"
 rds_plan_name               = "medium-psql-redundant"
 marine_coastal_experimental = false
+tasks_ghwo_interop          = false

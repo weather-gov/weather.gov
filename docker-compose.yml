@@ -175,6 +175,9 @@ services:
       INTERNAL_GRIDPOINT_LOOKUP: true
       # Whether to allow for coastal marine data
       MARINE_COASTAL_EXPERIMENTAL: false
+      # Whether or not the GHWO/risk processing background
+      # task should run from the interop.
+      TASKS_GHWO_INTEROP: true
     networks:
       - weather.gov
     links:
@@ -315,6 +318,7 @@ services:
     environment:
       - GOCACHE=/root/.cache/go-build
       - GOMODCACHE=/go/pkg/mod
+      - TASKS_GHWO_INTEROP=true
     cap_add:
       - SYS_PTRACE
     security_opt:
