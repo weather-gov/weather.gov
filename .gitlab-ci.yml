@@ -27,13 +27,10 @@ spec:
     run-playwright-ci:
       type: boolean
       default: false
-      description: "Run playwright end-to-end and accessibility tests in the selected branch using config from that branch. Uses dependencies from main, unless `build-images` is true."
+      description: "Run playwright end-to-end and accessibility tests in the selected branch using config from that branch."
 ---
 # NB: this file is less confusing to read once you realize that it does
 #     different things, depending on which branch is in the pipeline
-
-include:
-  - template: Security/SAST.gitlab-ci.yml
 
 stages:
   - gather   # gather the 3rd party dependencies and push images of them to the registry
@@ -52,7 +49,7 @@ variables:
   POSTGRES_PASSWORD: drupal
   POSTGRES_DB: weathergov
   DJANGO_SETTINGS_MODULE: backend.config.settings.ci
-  USE_TAG: main  # in a typical pipeline run, use dependency images built on main
+  USE_LATEST_TAG: main
 
 # control when pipelines run and override some parameters
 workflow:
@@ -60,44 +57,62 @@ workflow:
     # when building from the GitLab UI, use dependency images built on the current branch
     - if: $CI_PIPELINE_SOURCE == "web" && "$[[ inputs.build-images ]]" == "true"
       variables:
-        USE_TAG: $CI_COMMIT_REF_SLUG
+        USE_LATEST_TAG: $CI_COMMIT_REF_SLUG
     # always allow CI pipelines on pushes and from UI -- nb: a merge will cause a push to the target branch
     - if: $CI_PIPELINE_SOURCE == "web"
     - if: $CI_PIPELINE_SOURCE == "push"
+      variables:
+        USE_LATEST_TAG: $CI_COMMIT_REF_SLUG
     - if: $CI_PIPELINE_SOURCE == "schedule"
 
-# common config for using Docker in later jobs
-.docker-in-docker:
-  image: docker:27
-  services:
-    - name: docker:27-dind
-      command: [ "--tls=false" ]
-      variables:
-        HEALTHCHECK_TCP_PORT: "2375"
-  variables:
-    DOCKER_HOST: tcp://docker:2375
-    DOCKER_TLS_CERTDIR: ""
+# below, we use NEC shared catalogs to build our node and django dependencies as
+# docker images. `container/build` is a factory to generate gitlab jobs; these
+# jobs build and push an image based on what we pass via `inputs`.
+# documentation: https://vlab.noaa.gov/gitlab-licensed/NWS/Systems/NCO/NEC/shared-catalogs/container/-/blob/main/docs/build.md
+include:
+  - component: ${CI_SERVER_FQDN}/NWS/Systems/NCO/NEC/shared-catalogs/utility/anchors@main
+  - component: ${CI_SERVER_FQDN}/NWS/Systems/NCO/NEC/shared-catalogs/container/build@main
+    inputs:
+      stage: gather
+      job_name: gather-node-dependencies
+      dockerfile: Dockerfile.node.ci
+      context: ./
+      image: $CI_REGISTRY_IMAGE/node-with-deps
+      tag: $CI_COMMIT_REF_SLUG
+      opts: "--cache=true --cache-copy-layers=true --cache-repo=$CI_REGISTRY_IMAGE/cache --cache-ttl=168h"
+  - component: ${CI_SERVER_FQDN}/NWS/Systems/NCO/NEC/shared-catalogs/container/build@main
+    inputs:
+      stage: gather
+      job_name: gather-django-dependencies
+      dockerfile: Dockerfile.ci
+      context: forecast/
+      image: $CI_REGISTRY_IMAGE/python-with-deps
+      tag: $CI_COMMIT_REF_SLUG
+      opts: "--cache=true --cache-copy-layers=true --cache-repo=$CI_REGISTRY_IMAGE/cache --cache-ttl=168h"
+  - component: ${CI_SERVER_FQDN}/NWS/Systems/NCO/NEC/shared-catalogs/container/build@main
+    inputs:
+      stage: gather
+      job_name: gather-playwright-dependencies
+      dockerfile: Dockerfile.playwright.ci
+      context: ./
+      image: $CI_REGISTRY_IMAGE/playwright
+      tag: $CI_COMMIT_REF_SLUG
+      opts: "--cache=true --cache-copy-layers=true --cache-repo=$CI_REGISTRY_IMAGE/cache --cache-ttl=168h"
+  - template: Security/SAST.gitlab-ci.yml
 
-# common config for building images using a specified Dockerfile in the repo
-.build-dependencies-image:
-  extends: .docker-in-docker
-  script:
-  - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-  - docker build -f ${BUILD_CONTEXT}${DOCKERFILE} -t $CI_REGISTRY_IMAGE/$IMAGE_NAME:$CI_COMMIT_REF_SLUG $BUILD_CONTEXT
-  - docker push $CI_REGISTRY_IMAGE/$IMAGE_NAME:$CI_COMMIT_REF_SLUG
-
-# common config for building images using a Dockerfile passed inline as a variable
-.build-image:
-  extends: .docker-in-docker
-  script:
-    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-    - |
-      cat > Dockerfile.tmp << EOF
-      $DOCKERFILE
-      EOF
-    - cat Dockerfile.tmp
-    - docker build -f Dockerfile.tmp -t $CI_REGISTRY_IMAGE/$IMAGE_NAME:$CI_COMMIT_REF_SLUG $BUILD_CONTEXT
-    - docker push $CI_REGISTRY_IMAGE/$IMAGE_NAME:$CI_COMMIT_REF_SLUG
+# override rules so we build a new image on each push
+gather-node-dependencies:
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "push"
+    - if: $CI_PIPELINE_SOURCE == "web" && "$[[ inputs.build-images ]]" == "true"
+gather-django-dependencies:
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "push"
+    - if: $CI_PIPELINE_SOURCE == "web" && "$[[ inputs.build-images ]]" == "true"
+# for playwright, build a new image every time we run through the Gitlab UI
+gather-playwright-dependencies:
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "web" && "$[[ inputs.run-playwright-ci ]]" == "true"
 
 # gather up commits which have a `Changelog: ...` trailer and push them to CHANGELOG.md (via GitLab's API)
 write-release-notes:
@@ -246,7 +261,7 @@ deploy-to-test:
 
 .playwright:
   stage: test
-  image: $CI_REGISTRY_IMAGE/playwright:$USE_TAG
+  image: $CI_REGISTRY_IMAGE/playwright:$CI_COMMIT_REF_SLUG
   variables:
     DEPLOYED_URL: https://weathergov-test.app.cloud.gov
     API_URL: https://api-proxy-weathergov-test.app.cloud.gov/
@@ -272,64 +287,12 @@ playwright-a11y:
     - echo Attempting to run a11y tests against $DEPLOYED_URL
     - CI=true npx playwright test a11y
 
-# build a base image with all the current node_modules and other JavaScript dependencies
-gather-forecast-node-dependencies:
-  extends: .build-dependencies-image
-  stage: gather
-  variables:
-    BUILD_CONTEXT: ./
-    DOCKERFILE: Dockerfile.node.ci
-    IMAGE_NAME: node-with-deps
-  rules:
-    - if: $CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_REF_SLUG == "main"
-      changes:
-        - Dockerfile.node.ci
-        - package.json
-        - package-lock.json
-        - api-interop-layer/package.json
-        - api-interop-layer/package-lock.json
-        - api-proxy/package.json
-        - api-proxy/package-lock.json
-        - spatial-data/package.json
-        - spatial-data/package-lock.json
-    - if: $CI_PIPELINE_SOURCE == "web" && "$[[ inputs.build-images ]]" == "true"
-
-# build a base image with all the current Python dependencies
-gather-forecast-django-dependencies:
-  extends: .build-dependencies-image
-  stage: gather
-  variables:
-    BUILD_CONTEXT: forecast/
-    DOCKERFILE: Dockerfile.ci
-    IMAGE_NAME: python-with-deps
-  rules:
-    - if: $CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_REF_SLUG == "main"
-      changes:
-        - forecast/Dockerfile.ci
-        - forecast/requirements.txt
-    - if: $CI_PIPELINE_SOURCE == "web" && "$[[ inputs.build-images ]]" == "true"
-
-gather-playwright-dependencies:
-  extends: .build-dependencies-image
-  stage: gather
-  variables:
-    BUILD_CONTEXT: ./
-    DOCKERFILE: Dockerfile.playwright.ci
-    IMAGE_NAME: playwright
-  rules:
-    - if: $CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_REF_SLUG == "main"
-      changes:
-        - Dockerfile.playwright.ci
-        - package.json
-        - package-lock.json
-    - if: $CI_PIPELINE_SOURCE == "web" && "$[[ inputs.build-images ]]" == "true"
-
 bundle-js:
   stage: build
   needs:
-    - job: gather-forecast-node-dependencies
+    - job: gather-node-dependencies
       optional: true
-  image: $CI_REGISTRY_IMAGE/node-with-deps:$USE_TAG
+  image: $CI_REGISTRY_IMAGE/node-with-deps:$USE_LATEST_TAG
   script:
     # NB: GitLab clones into CI_BUILDS_DIR which defaults to
     # /builds/gitlab-licensed/NWS/Systems/DIS/Weather.gov-2.0/ whereas in our Docker
@@ -352,9 +315,9 @@ bundle-js:
 js-lint:
   stage: lint
   needs:
-    - job: gather-forecast-node-dependencies
+    - job: gather-node-dependencies
       optional: true
-  image: $CI_REGISTRY_IMAGE/node-with-deps:$USE_TAG
+  image: $CI_REGISTRY_IMAGE/node-with-deps:$USE_LATEST_TAG
   script:
     # NB: GitLab clones into CI_BUILDS_DIR which defaults to
     # /builds/gitlab-licensed/NWS/Systems/DIS/Weather.gov-2.0/ whereas in our Docker
@@ -379,9 +342,9 @@ js-lint:
 django-lint:
   stage: lint
   needs:
-    - job: gather-forecast-django-dependencies
+    - job: gather-django-dependencies
       optional: true
-  image: $CI_REGISTRY_IMAGE/python-with-deps:$USE_TAG
+  image: $CI_REGISTRY_IMAGE/python-with-deps:$USE_LATEST_TAG
   script:
     - cd forecast/
     - python -m ruff check .
@@ -393,9 +356,9 @@ django-lint:
 django-test:
   stage: test
   needs:
-    - job: gather-forecast-django-dependencies
+    - job: gather-django-dependencies
       optional: true
-  image: $CI_REGISTRY_IMAGE/python-with-deps:$USE_TAG
+  image: $CI_REGISTRY_IMAGE/python-with-deps:$USE_LATEST_TAG
   services:
   - name: postgis/postgis:17-3.5
     alias: database
@@ -425,9 +388,9 @@ django-test:
 web-component-test:
   stage: test
   needs:
-    - job: gather-forecast-node-dependencies
+    - job: gather-node-dependencies
       optional: true
-  image: $CI_REGISTRY_IMAGE/node-with-deps:$USE_TAG
+  image: $CI_REGISTRY_IMAGE/node-with-deps:$USE_LATEST_TAG
   variables:
     DISABLE_REDIS: true
   script:
@@ -453,9 +416,9 @@ web-component-test:
 interop-test:
   stage: test
   needs:
-    - job: gather-forecast-node-dependencies
+    - job: gather-node-dependencies
       optional: true
-  image: $CI_REGISTRY_IMAGE/node-with-deps:$USE_TAG
+  image: $CI_REGISTRY_IMAGE/node-with-deps:$USE_LATEST_TAG
   variables:
     DISABLE_REDIS: true
   script:
