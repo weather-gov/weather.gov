@@ -6,13 +6,16 @@ import (
 	"strings"
 )
 
+// One grib2 file to download, plus how to read the numbers inside it
 type Band struct {
 	FileFragment string
 	Variable     string
 	Kind         BandKind
 	Key          string // dict key within Percentiles/Probabilities; unused for KindAccumulationInches
+	ToInches     float32
 }
 
+// What a band's numbers mean, which decides both the unit conversion and where they're stored
 type BandKind int
 
 const (
@@ -21,11 +24,17 @@ const (
 	KindProbabilityPercent
 )
 
+const (
+	inchesPerMM    = 1.0 / 25.4
+	inchesPerMetre = 39.370079
+)
+
 // Convert a raw grib2 value into the unit it's stored in
-func (k BandKind) convert(raw float32) float32 {
-	switch k {
+func (b Band) convert(raw float32) float32 {
+	switch b.Kind {
 	case KindAccumulationInches, KindPercentileInches:
-		return raw / 25.4
+		// Each variable's grib2 field carries its own unit, so the factor rides on the band
+		return raw * b.ToInches
 	case KindProbabilityPercent:
 		return raw * 100
 	default:
@@ -47,9 +56,11 @@ const (
 	gridDyM         = 2539.703    // cell spacing along a row, in meters
 )
 
+// One precipitation type, and the amounts WPC publishes exceedance probabilities for
 type wpcVariable struct {
 	Name       string
 	Ptype      string
+	ToInches   float32
 	Thresholds []string
 }
 
@@ -57,16 +68,19 @@ var wpcVariables = []wpcVariable{
 	{
 		Name:       "rain",
 		Ptype:      "p",
+		ToInches:   inchesPerMM, // APCP, kg/m^2
 		Thresholds: []string{"0p01", "0p10", "0p25", "0p50", "1p00", "2p00", "3p00", "4p00", "6p00", "8p00", "12p0"},
 	},
 	{
 		Name:       "snow",
 		Ptype:      "w",
+		ToInches:   inchesPerMetre, // ASNOW, metres
 		Thresholds: []string{"0p10", "1p00", "2p00", "4p00", "6p00", "8p00", "12p0", "18p0"},
 	},
 	{
 		Name:       "freezing_rain",
 		Ptype:      "z",
+		ToInches:   inchesPerMM, // FRZR, kg/m^2
 		Thresholds: []string{"0p01", "0p10", "0p25", "0p50", "0p75", "1p00", "1p25", "1p50", "2p00"},
 	},
 }
@@ -81,6 +95,7 @@ func BandList() []Band {
 			FileFragment: v.Ptype + "24i",
 			Variable:     v.Name,
 			Kind:         KindAccumulationInches,
+			ToInches:     v.ToInches,
 		})
 		for _, pct := range percentiles {
 			bands = append(bands, Band{
@@ -88,6 +103,7 @@ func BandList() []Band {
 				Variable:     v.Name,
 				Kind:         KindPercentileInches,
 				Key:          trimLeadingZero(pct),
+				ToInches:     v.ToInches,
 			})
 		}
 		for _, th := range v.Thresholds {
@@ -120,6 +136,7 @@ func bandFilename(b Band, cycle, fhour string) string {
 	return fmt.Sprintf("ndfd_co_%s_%sf%s.grib2", b.FileFragment, cycle, fhour)
 }
 
+// An NDFD gridpoint (WFO, X, Y) paired with the WPC grid cell (Col, Row) it falls in
 type Gridpoint struct {
 	WFO      string
 	X, Y     int
@@ -128,6 +145,7 @@ type Gridpoint struct {
 
 // VariableRow holds one variable's decoded values at a gridpoint; its json tags double as the jsonb column's keys
 type VariableRow struct {
+	// float32 rather than float64 to match wgrib2's -ieee single-precision output
 	Accumulation  *float32           `json:"accumulation,omitempty"`
 	Percentiles   map[string]float32 `json:"percentiles,omitempty"`
 	Probabilities map[string]float32 `json:"probabilities,omitempty"`
@@ -143,7 +161,7 @@ var missingValue = float32(math.NaN())
 
 // VariableMatrix holds one decoded value per (gridpoint, band) for a single variable's bands, as a flat float32 array
 type VariableMatrix struct {
-	bands []Band
+	bands  []Band
 	values []float32 // values[pointIdx*len(bands)+bandIdx]; row() below builds the per-point maps only transiently, one at a time
 }
 

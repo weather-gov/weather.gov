@@ -9,7 +9,7 @@ import (
 	"github.com/wroge/wgs84/v2"
 )
 
-// A sphere per NDFD's grid definition (GRIB2 GDS template 3.30, earth-shape 6) — wgs84.WGS84 is an ellipsoid and would shift points by several km.
+// A sphere, per NDFD's grid definition; the built-in wgs84.WGS84 ellipsoid shifts points by several km
 var wpcSpheroid = wgs84.Spheroid{A: wpcEarthRadiusM, Fi: math.Inf(1)}
 
 var wpcDatum = wgs84.Datum{Spheroid: wpcSpheroid}
@@ -26,6 +26,7 @@ var wpcLCC = wgs84.CoordinateReferenceSystem{
 	},
 }
 
+// Converts lat/lon into WPC grid coordinates, measured from the grid's origin
 type wpcProjector struct {
 	transform wgs84.Func
 	x0, y0    float64
@@ -33,7 +34,7 @@ type wpcProjector struct {
 
 // Build a projector anchored on the grid's origin point (row 1, col 1)
 func newWPCProjector() *wpcProjector {
-	// Same Datum on both sides, so this can never error.
+	// Both sides share a Datum, so this can never error
 	transform, _ := wgs84.Transform(wpcGeographic, wpcLCC)
 	x0, y0, _, _ := transform(gridLon1Deg, gridLat1Deg, 0)
 	return &wpcProjector{transform: transform, x0: x0, y0: y0}
