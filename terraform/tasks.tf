@@ -29,6 +29,7 @@ resource "cloudfoundry_app" "tasks" {
     GOVERSION               = "1.26"
     GO_INSTALL_PACKAGE_SPEC = "./cmd/alerts ./cmd/ghwo ./cmd/wpcprob ./cmd/gridcache"
     CLOUDGOV_SPACE          = var.cf_space_name
+    TASKS_GHWO_INTEROP      = var.tasks_ghwo_interop
   }
 
   service_bindings = [
