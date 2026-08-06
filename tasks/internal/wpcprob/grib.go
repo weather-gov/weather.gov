@@ -62,7 +62,8 @@ func ValueAt(grid []float32, col, row int) (float32, bool) {
 		return 0, false
 	}
 	v := grid[(row-1)*gridNX+(col-1)]
-	if v == gribUndefined {
+	// The percentile grids fill their easternmost column with -9999 instead of flagging it undefined
+	if v == gribUndefined || v < 0 {
 		return 0, false
 	}
 	return v, true
@@ -90,7 +91,7 @@ func DecodeAndStoreVariables(wgrib2Bin, destDir, cycle, fhour string, bands []Ba
 				if !ok {
 					continue
 				}
-				matrix.set(pointIdx, bandIdx, b.Kind.convert(raw))
+				matrix.set(pointIdx, bandIdx, b.convert(raw))
 			}
 		}
 		if err := store(bands[i].Variable, matrix); err != nil {

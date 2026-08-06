@@ -9,11 +9,15 @@ import (
 	"path/filepath"
 	"regexp"
 	"sort"
+	"strconv"
 	"strings"
 	"time"
 )
 
 const wpcBaseURL = "https://ftp-wpc.ncep.noaa.gov/prob_precip_portal/co"
+
+// Length of the window each file accumulates over, ending at the file's forecast hour
+const accumulationHours = 24
 
 var fhourRe = regexp.MustCompile(`f(\d{3})\.grib2`)
 
@@ -30,27 +34,53 @@ func fetchLatestCycle(ctx context.Context, client *http.Client) (string, error) 
 	return fields[0], nil
 }
 
-// List the cycle's directory and return its earliest available forecast hour
-func smallestFHour(ctx context.Context, client *http.Client, cycle string) (string, error) {
+// List the cycle's directory and return the forecast hour to download
+func currentWindowFHour(ctx context.Context, client *http.Client, cycle string) (string, error) {
 	dirURL := fmt.Sprintf("%s/ppp_co_24hr_%s/", wpcBaseURL, cycle)
 	body, err := httpGet(ctx, client, dirURL)
 	if err != nil {
 		return "", err
 	}
-	matches := fhourRe.FindAllStringSubmatch(string(body), -1)
-	if len(matches) == 0 {
-		return "", fmt.Errorf("no forecast-hour files found in %s", dirURL)
-	}
-	seen := map[string]bool{}
+
+	// The directory holds one file per band per forecast hour, so the same hour shows up many times over
 	var fhours []string
-	for _, m := range matches {
-		if !seen[m[1]] {
-			seen[m[1]] = true
-			fhours = append(fhours, m[1])
-		}
+	for _, m := range fhourRe.FindAllStringSubmatch(string(body), -1) {
+		fhours = append(fhours, m[1])
 	}
+
+	fhour, err := selectFHour(fhours)
+	if err != nil {
+		return "", fmt.Errorf("%w in %s", err, dirURL)
+	}
+	return fhour, nil
+}
+
+// Pick the forecast hour whose 24-hour window covers the most of the day after the cycle
+func selectFHour(fhours []string) (string, error) {
+	// Forecast hours are zero-padded to three digits, so sorting them as text also sorts them by number
 	sort.Strings(fhours)
-	return fhours[0], nil
+
+	// Each window ends on a 6-hourly boundary, so the last hour up to 24 is the window already underway
+	underway := ""
+	for _, fhour := range fhours {
+		hours, err := strconv.Atoi(fhour)
+		if err != nil {
+			return "", fmt.Errorf("parsing forecast hour %q", fhour)
+		}
+		if hours > accumulationHours {
+			break
+		}
+		underway = fhour
+	}
+	if underway != "" {
+		return underway, nil
+	}
+
+	// Every window still starts after the cycle, so the soonest one is the closest available
+	if len(fhours) > 0 {
+		return fhours[0], nil
+	}
+	return "", fmt.Errorf("no forecast-hour files")
 }
 
 // Poll WPC with backoff until expectedCycle is published
@@ -74,7 +104,7 @@ func WaitForCycle(ctx context.Context, client *http.Client, expectedCycle string
 			lastErr = fmt.Errorf("latest cycle %s not yet >= expected %s", latest, expectedCycle)
 			continue
 		}
-		fh, err := smallestFHour(ctx, client, latest)
+		fh, err := currentWindowFHour(ctx, client, latest)
 		if err != nil {
 			lastErr = err
 			continue
