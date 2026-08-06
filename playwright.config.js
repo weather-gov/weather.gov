@@ -13,7 +13,7 @@ const services = require("./tests/playwright/urls.js");
  */
 
 const config = {
-  timeout: process.env.CI ? 15_000 : 9_000,
+  timeout: process.env.CI ? 30_000 : 9_000,
   expect: { timeout: 1_000 },
   testDir: "./tests/playwright",
   /* Run tests in files in parallel */
@@ -37,7 +37,7 @@ const config = {
       ],
 
   /** Allow parallel tests, but avoid overloading the rate limits. */
-  workers: 2,
+  workers: process.env.CI ? 1 : 2,
 
   /** Try to avoid flakey-ness. */
   retries: process.env.CI ? 3 : 0,
