@@ -61,6 +61,7 @@ OUR_APPS = [
     "backend",
     "spatial",
     "noaa_saml",
+    "risk_data",
 ]
 
 INSTALLED_APPS = [
