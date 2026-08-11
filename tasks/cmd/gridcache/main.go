@@ -4,14 +4,30 @@ import (
 	"context"
 	"fmt"
 	"os"
+	"time"
 
 	"tasks/internal"
 	"tasks/internal/gridcache"
+
+	"github.com/newrelic/go-agent/v3/newrelic"
 )
+
+var newRelicApp *newrelic.Application
 
 func main() {
 	logger := internal.GetJSONLogger("gridcache")
 	ctx := context.Background()
+
+	// connect to new relic
+	if internal.IsRunningOnCF() {
+		app, nrErr := internal.EnableNewRelic()
+		if nrErr != nil {
+			logger.Error("could not enable new relic", "err", nrErr)
+		} else {
+			newRelicApp = app
+			defer newRelicApp.Shutdown(10 * time.Second)
+		}
+	}
 
 	if err := run(ctx, logger); err != nil {
 		logger.Error("gridcache failed", "error", err)

@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"fmt"
+	"log/slog"
 	"net/http"
 	"os"
 	"strconv"
@@ -10,11 +11,26 @@ import (
 
 	"tasks/internal"
 	"tasks/internal/wpcprob"
+
+	"github.com/newrelic/go-agent/v3/newrelic"
 )
+
+var newRelicApp *newrelic.Application
 
 func main() {
 	logger := internal.GetJSONLogger("wpcprob")
 	ctx := context.Background()
+
+	// connect to new relic
+	if internal.IsRunningOnCF() {
+		app, nrErr := internal.EnableNewRelic()
+		if nrErr != nil {
+			logger.Error("could not enable new relic", "err", nrErr)
+		} else {
+			newRelicApp = app
+			defer newRelicApp.Shutdown(10 * time.Second)
+		}
+	}
 
 	if err := run(ctx, logger); err != nil {
 		logger.Error("wpcprob failed", "error", err)
@@ -22,7 +38,7 @@ func main() {
 	}
 }
 
-func run(ctx context.Context, logger interface{ Info(string, ...any) }) error {
+func run(ctx context.Context, logger *slog.Logger) error {
 	runStart := time.Now()
 
 	// Connect to the db

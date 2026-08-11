@@ -7,9 +7,14 @@ import (
 	"tasks/internal"
 	"tasks/internal/ghwo"
 	"time"
+
+	"github.com/newrelic/go-agent/v3/newrelic"
 )
 
-var defaultTimeout = 60 * time.Second // 1 minute max
+var (
+	defaultTimeout = 60 * time.Second // 1 minute max
+	newRelicApp    *newrelic.Application
+)
 
 func getTimeout() time.Duration {
 	timeoutStr := os.Getenv("TIMEOUT")
@@ -28,6 +33,17 @@ func main() {
 	logger := internal.GetJSONLogger("ghwo")
 	ctx, cancel := context.WithTimeout(context.Background(), getTimeout())
 	defer cancel()
+
+	// connect to new relic
+	if internal.IsRunningOnCF() {
+		app, nrErr := internal.EnableNewRelic()
+		if nrErr != nil {
+			logger.Error("could not enable new relic", "err", nrErr)
+		} else {
+			newRelicApp = app
+			defer newRelicApp.Shutdown(10 * time.Second)
+		}
+	}
 
 	// Open a new db pool connection.
 	// If this fails, we bail immediately because we can't
