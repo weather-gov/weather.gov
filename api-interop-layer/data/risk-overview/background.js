@@ -29,7 +29,7 @@ const wfoStatus = Object.freeze({
 const upsert = async (id, data) =>
   openDatabase().then((db) =>
     db.query(
-      `INSERT INTO weathergov_temp_ghwo
+      `INSERT INTO weathergov_risk_data
       (id,data)
       VALUES($1::text,$2::json)
     ON CONFLICT (id)
@@ -164,32 +164,6 @@ const processWFO = async (wfo, statuses) => {
   const legendEndpoint = `/source/${wfo}/ghwo/legend.json`;
   const chickletEndpoint = `/source/${wfo}/ghwo/chicklet.json`;
 
-  const shouldUpdate = await db
-    .query("SELECT updated FROM weathergov_temp_ghwo_meta WHERE url=$1::text", [
-      risksEndpoint,
-    ])
-    .then((result) => {
-      // If we've fetched this URL before, let's check when it was last fetched.
-      // This is specifically a dev optimization, where the interop layer could
-      // restart quite frequently.
-      if (result.rows.length > 0) {
-        const updated = result.rows.pop().updated.getTime();
-        // For local development, if you're having trouble getting the interop layer to update,
-        // you can change this value to a smaller number (like 10) to force it to update more frequently.
-        const thirtyMinutesAgo = new Date(Date.now() - 1_800_000).getTime();
-
-        // If the last update was less than 30 minutes ago, don't bother doing
-        // it again yet.
-        return thirtyMinutesAgo - updated > 0;
-      }
-      return true;
-    });
-
-  // If we've updated from this URL recently, we can bail out now.
-  if (!shouldUpdate) {
-    return statuses;
-  }
-
   riskOverviewLogger.trace(
     { BASE_GHWO_URL, risksEndpoint, legendEndpoint },
     "making risk overview requests",
@@ -201,15 +175,6 @@ const processWFO = async (wfo, statuses) => {
       requestJSON(client, legendEndpoint, { "wx-host": "www.weather.gov" }),
       requestJSON(client, chickletEndpoint, { "wx-host": "www.weather.gov" }),
     ]);
-
-    // After we fetch, update the database so we know the last time we fetched
-    // from this URL.
-    await db.query(
-      `INSERT INTO weathergov_temp_ghwo_meta (url, updated)
-       VALUES($1::text, NOW())
-       ON CONFLICT(url) DO UPDATE SET updated=NOW()`,
-      [risksEndpoint],
-    );
 
     // We get legend data, and now we need to manipulate it into a shape that
     // is more useful for us later on.

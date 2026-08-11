@@ -46,6 +46,7 @@ exclude = [".venv", "manage.py"]
 exclude = [
     "backend/migrations/*",
     "spatial/migrations/*",
+    "risk_data/migrations/*",
 ]
 select = [
     # PyFlakes
@@ -130,7 +131,7 @@ indent = 2
 ignore_missing_imports = true
 
 [tool.coverage.run]
-omit = ["manage.py", "backend/migrations/*.py"]
+omit = ["manage.py", "backend/migrations/*.py", "risk_data/migrations/*.py"]
 
 [dependency-groups]
 dev = [
