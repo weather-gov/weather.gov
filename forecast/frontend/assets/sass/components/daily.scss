@@ -80,7 +80,7 @@ wx-daily-forecast {
 /* Styles for the daily forecast list item
 --------------------------------------------------- */
 .wx-daily-forecast-item-summary-area--other {
-  margin-bottom: units(1);
+  margin-bottom: units(0);
 
   > span {
     @extend .wx-marker-before--indigo;
@@ -99,7 +99,7 @@ wx-daily-forecast {
   margin-bottom: units(3);
 
   @include at-media(tablet) {
-    margin-bottom: units(1);
+    margin-bottom: units(0);
   }
 
   > span {
@@ -109,7 +109,7 @@ wx-daily-forecast {
 
 @include at-media("tablet") {
   .wx-daily-forecast-item-summary-area--other {
-    margin-bottom: units(1);
+    margin-bottom: units(0);
 
     @include grid-col(6);
   }
@@ -121,7 +121,7 @@ wx-daily-forecast {
   }
 
   .wx-daily-forecast-item-summary-area--daytime {
-    margin-bottom: units(1);
+    margin-bottom: units(0);
 
     @include grid-col(6);
   }

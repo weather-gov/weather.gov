@@ -1,3 +1,4 @@
+import copy
 import json
 import os
 from unittest import TestCase, mock
@@ -325,6 +326,65 @@ class TestInteropInterface(TestCase):
         # And finally, validate that the translation lookup was called with
         # the expected key.
         mock_gettext_lazy.assert_called_with("precip-table.table-header+legend.water.01")
+
+    @responses.activate
+    @mock.patch("backend.interop._")
+    def test_point_forecast_wpc_prob(self, mock_gettext_lazy):
+        """Tests that WPC probabilistic precip is localized and attached to the days it overlaps."""
+        mock_gettext_lazy.side_effect = lambda key: key
+        os.environ["INTEROP_URL"] = "https://interop"
+        point = copy.deepcopy(self.forecast["nosnow_noice_noalerts"])
+        # The fixture's first day runs from 2009-01-02T13:00Z, so this window covers it and the next
+        point["wpcProb"] = {
+            "period": {"start": "2009-01-02T18:00:00Z", "end": "2009-01-03T18:00:00Z", "hours": 24},
+            "rain": {"range": None, "probabilities": []},
+            "snow": None,
+            "freezingRain": None,
+        }
+        responses.add(responses.GET, "https://interop/point/7/8", json=point, status=200)
+
+        actual = interop.get_point_forecast(7, 8)
+        wpc_prob = actual["wpcProb"]
+        days = actual["forecast"]["days"]
+
+        self.assertEqual(wpc_prob["period"]["start"].isoformat(), "2009-01-02T12:00:00-06:00")
+        self.assertEqual(wpc_prob["period"]["end"].isoformat(), "2009-01-03T12:00:00-06:00")
+        self.assertEqual(wpc_prob["liquidTitle"], "precip-table.table-header+legend.rain.01")
+        self.assertIs(days[0]["qpf"]["wpcProb"], wpc_prob)
+        self.assertIs(days[1]["qpf"]["wpcProb"], wpc_prob)
+        self.assertIsNone(days[2]["qpf"]["wpcProb"])
+
+    @responses.activate
+    @mock.patch("backend.interop._")
+    def test_point_forecast_wpc_prob_with_snow(self, mock_gettext_lazy):
+        """Tests that the liquid panel is titled "water" once frozen precip is in play."""
+        mock_gettext_lazy.side_effect = lambda key: key
+        os.environ["INTEROP_URL"] = "https://interop"
+        point = copy.deepcopy(self.forecast["nosnow_noice_noalerts"])
+        point["wpcProb"] = {
+            "period": {"start": "2025-12-15T18:00:00Z", "end": "2025-12-16T18:00:00Z", "hours": 24},
+            "rain": {"range": None, "probabilities": []},
+            "snow": {"range": None, "probabilities": []},
+            "freezingRain": None,
+        }
+        responses.add(responses.GET, "https://interop/point/8/9", json=point, status=200)
+
+        actual = interop.get_point_forecast(8, 9)
+
+        self.assertEqual(actual["wpcProb"]["liquidTitle"], "precip-table.table-header+legend.water.01")
+
+    @responses.activate
+    def test_point_forecast_wpc_prob_unusable(self):
+        """Tests that an errored or rainless WPC response is dropped rather than half-rendered."""
+        os.environ["INTEROP_URL"] = "https://interop"
+        point = copy.deepcopy(self.forecast["nosnow_noice_noalerts"])
+        point["wpcProb"] = {"error": True}
+        responses.add(responses.GET, "https://interop/point/9/10", json=point, status=200)
+
+        actual = interop.get_point_forecast(9, 10)
+
+        self.assertIsNone(actual["wpcProb"])
+        self.assertIsNone(actual["forecast"]["days"][0]["qpf"]["wpcProb"])
 
     @responses.activate
     def test_point_forecast_alert_nolevel(self):

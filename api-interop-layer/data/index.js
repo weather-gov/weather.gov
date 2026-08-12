@@ -11,6 +11,7 @@ import getObservations from "./obs/index.js";
 import { getPointData } from "./points.js";
 import getProductById from "./products/index.js";
 import getWeatherStory from "./weatherstory.js";
+import { getWpcProbPrecip } from "./wpcProbPrecip.js";
 
 const forecastLogger = logger.child({ subsystem: "forecast" });
 const ALLOW_COASTAL = process.env.MARINE_COASTAL_EXPERIMENTAL === "true";
@@ -62,6 +63,7 @@ const getDataForPoint = async (lat, lon) => {
   let forecast = { daily: { error: true, message } };
   let observed = { error: true, message };
   let weatherstory = { error: true, message };
+  let wpcProb = { error: true, message };
 
   // If we don't have a grid, we can't fetch satellite metadata, forecast, or
   // observations – all of these are based around WFO and WFO grid.
@@ -79,11 +81,13 @@ const getDataForPoint = async (lat, lon) => {
       forecast: fct,
       observed: obs,
       weatherstory: ws,
+      wpcProb: wpc,
     } = await Promise.all([
       getForecast({ grid, place }),
       getObservations({ grid, point }, dbConnection),
       getWeatherStory(grid.wfo),
-    ]).then(([forecastData, obsData, weatherStoryData]) => {
+      getWpcProbPrecip(grid),
+    ]).then(([forecastData, obsData, weatherStoryData, wpcProbData]) => {
       // The forecast endpoint returns extra information about the grid. Why? I
       // dunno. But anyway, let's put it with the other grid info and remove it
       // from the forecast data.
@@ -101,12 +105,14 @@ const getDataForPoint = async (lat, lon) => {
         forecast: forecastData,
         observed: obsData,
         weatherstory: weatherStoryData,
+        wpcProb: wpcProbData,
       };
     });
 
     forecast = fct;
     observed = obs;
     weatherstory = ws;
+    wpcProb = wpc;
   }
 
   // Get alerts regardless. If there's no grid, we can fallback to using the
@@ -165,6 +171,7 @@ const getDataForPoint = async (lat, lon) => {
     grid,
     forecast: forecast.daily,
     weatherstory,
+    wpcProb,
   };
 };
 

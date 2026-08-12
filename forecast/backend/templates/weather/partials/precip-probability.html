@@ -1,0 +1,100 @@
+{% comment %}
+-- Template purpose:
+--   Display WPC's 24-hour probabilistic precipitation: a low/expected/high
+--   bracket, what those terms mean, and the chance of at least each amount.
+-- Used by: backend.templatetags.weather_partials.precip_probability
+{% endcomment %}
+{% if panels %}
+  <div class="wx-precip-probability">
+    <h5 class="font-heading-sm text-bold text-primary-darker margin-top-2 margin-bottom-05">
+      {% trans "precip-probability.heading.totals.01" %}
+    </h5>
+    <p class="font-body-xs text-base-dark margin-y-0">
+      {% trans_with_args "precip-probability.text.period.01" start=period.start|date:"l g a T" end=period.end|date:"l g a T" %}
+    </p>
+    {% if showSelector %}
+      <wx-tabs id="precip-probability-tabs_{{ itemId }}" class="display-block margin-top-2">
+      <div class="usa-button-group usa-button-group--segmented" role="tablist">
+        {% for panel in panels %}
+          <button id="precip-probability-tab-{{ panel.name }}_{{ itemId }}"
+                  type="button"
+                  class="usa-button padding-x-105"
+                  role="tab"
+                  aria-controls="precip-probability-panel-{{ panel.name }}_{{ itemId }}"
+                  aria-selected="{% if forloop.first %}true{% else %}false{% endif %}">{{ panel.label }}</button>
+        {% endfor %}
+      </div>
+      </wx-tabs>
+    {% endif %}
+    {% for panel in panels %}
+      <div id="precip-probability-panel-{{ panel.name }}_{{ itemId }}"
+           {% if showSelector %}role="tabpanel" aria-labelledby="precip-probability-tab-{{ panel.name }}_{{ itemId }}" data-tabpanel-selected="{{ forloop.first|yesno:'true,false' }}"{% endif %}>
+        {% if panel.bins %}
+          <div class="wx-precip-probability-bracket grid-row bg-primary-lightest tablet:padding-x-2 margin-top-2">
+            {% for bin in panel.bins %}
+              <div class="grid-col display-flex flex-column flex-align-center tablet:flex-row tablet:flex-justify-center">
+                <span class="display-block margin-bottom-05 tablet:margin-bottom-0 tablet:margin-right-1 font-family-mono font-mono-xs text-uppercase text-ls-1 text-primary-dark">
+                  {{ bin.label }}
+                </span>
+                <span class="font-body-sm text-bold text-primary-darker">
+                  {% trans_with_args "units.inches.01" inches=bin.amount|floatformat:2 %}
+                </span>
+              </div>
+            {% endfor %}
+          </div>
+        {% endif %}
+        {% if panel.bins or panel.probabilities %}
+          <wx-accordion class="display-block margin-top-2">
+          <button type="button"
+                  class="wx-accordion-chevron usa-button usa-button--unstyled text-no-underline font-body-xs text-primary"
+                  aria-expanded="true"
+                  aria-controls="precip-probability-details-{{ panel.name }}_{{ itemId }}">
+            {% trans "precip-probability.button.hide-details.01" %}
+          </button>
+          <template>
+            {% trans "precip-probability.button.show-details.01" %}
+          </template>
+          <div id="precip-probability-details-{{ panel.name }}_{{ itemId }}"
+               class="border-top-1px border-base-lighter margin-top-1 padding-top-1">
+            <div class="grid-row tablet-lg:grid-gap-4">
+              {% if panel.bins %}
+                <div class="grid-col-12 tablet-lg:grid-col-6 desktop:grid-col-12">
+                  <table class="usa-table usa-table--borderless wx-precip-probability-terms margin-y-0 width-full">
+                    <caption class="usa-sr-only">{% trans "precip-probability.aria.definitions.01" %}</caption>
+                    <tbody>
+                      {% for slot in slots %}
+                        <tr>
+                          <th scope="row">{{ slot.term }}</th>
+                          <td>{{ slot.definition }}</td>
+                        </tr>
+                      {% endfor %}
+                    </tbody>
+                  </table>
+                </div>
+              {% endif %}
+              {% if panel.probabilities %}
+                <div class="grid-col-12 tablet-lg:grid-col-6 desktop:grid-col-12">
+                  <p class="wx-precip-probability-chances font-body-sm text-base-dark margin-bottom-05">
+                    {% trans_with_args "precip-probability.heading.chances.02" precipitation_type=panel.label|lower %}
+                  </p>
+                  <table class="usa-table usa-table--borderless wx-precip-probability-table margin-y-0 width-full">
+                    <caption class="usa-sr-only">{% trans "precip-probability.aria.chances.01" %}</caption>
+                    <tbody>
+                      {% for row in panel.probabilities %}
+                        <tr>
+                          <th scope="row">{% trans_with_args "units.inches.01" inches=row.atLeast|floatformat:2 %}</th>
+                          <td>{% trans_with_args "units.percent.01" percent=row.percent %}</td>
+                        </tr>
+                      {% endfor %}
+                    </tbody>
+                  </table>
+                </div>
+              {% endif %}
+            </div>
+          </div>
+          </wx-accordion>
+        {% endif %}
+      </div>
+    {% endfor %}
+  </div>
+{% endif %}

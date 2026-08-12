@@ -15,6 +15,7 @@ from backend.util.alert import set_timing
 from spatial.models import WeatherAlertsCache
 
 _ID_REGEX = re.compile("[^A-Z0-9]", re.IGNORECASE)
+_NO_PRECIP_CHANCE_PERCENT = 5
 _requests_session = None
 
 
@@ -35,6 +36,13 @@ def _get_requests_session():
 def _get_hour(dt):
     """Get the hour from datetime."""
     return dt.strftime("%-I%p").lower()
+
+
+def _get_liquid_title(has_frozen_precip):
+    """Get the title for the liquid amounts, which is the water equivalent once anything is frozen."""
+    if has_frozen_precip:
+        return _("precip-table.table-header+legend.water.01")
+    return _("precip-table.table-header+legend.rain.01")
 
 
 def _fetch(url, query_params=None):
@@ -80,9 +88,9 @@ def _set_high_low_pops(day, is_marine):
         valid_temps = [temp for temp in day["temps"] if temp is not None]
         # If there's only one period, set correctly if daytime
         # If only one period and is non-daytime hour, set the low. Otherwise there is not a low supplied
-        if (len(periods) > 1 or not periods[0]["isDaytime"]):
+        if len(periods) > 1 or not periods[0]["isDaytime"]:
             day["low"] = min(valid_temps)
-        if(len(periods) > 1 or periods[0]["isDaytime"]):
+        if len(periods) > 1 or periods[0]["isDaytime"]:
             day["high"] = max(valid_temps)
         day["pop"] = day.get("maxPop", 0)
 
@@ -188,6 +196,16 @@ def _process_interop_point_forecast(data):
         # time between when the interop sent us this and when we queried.
         data["alerts"]["items"] = [alerts[hash] for hash in data["alerts"]["items"] if hash in alerts]
 
+    # Process the WPC probabilistic precipitation (wpcProb)
+    wpc_prob = data.get("wpcProb")
+    if not wpc_prob or wpc_prob.get("error") or not wpc_prob["rain"]:
+        wpc_prob = None
+    else:
+        wpc_prob["period"]["start"] = datetime.fromisoformat(wpc_prob["period"]["start"]).astimezone(tz=tz)
+        wpc_prob["period"]["end"] = datetime.fromisoformat(wpc_prob["period"]["end"]).astimezone(tz=tz)
+        wpc_prob["liquidTitle"] = _get_liquid_title(wpc_prob["snow"] or wpc_prob["freezingRain"])
+    data["wpcProb"] = wpc_prob
+
     if "days" in data["forecast"]:
         for day in data["forecast"]["days"]:
             day["start"] = datetime.fromisoformat(day["start"]).astimezone(tz=tz)
@@ -209,26 +227,7 @@ def _process_interop_point_forecast(data):
             if day["alerts"]["metadata"]["count"] > 0:
                 day["hasAlertIcon"] = day["alerts"]["metadata"]["highest"] != ""
 
-            # Process the Quantitative Precipitation Forecast (qpf)
-            qpf = day["qpf"]
-
-            qpf["times"] = []
-            for period in qpf["periods"]:
-                period["start"] = datetime.fromisoformat(period["start"]).astimezone(tz=tz)
-                period["end"] = datetime.fromisoformat(period["end"]).astimezone(tz=tz)
-                qpf["times"].append(f"{_get_hour(period['start'])}-{_get_hour(period['end'])}")
-
-            qpf["liquid"] = [period["liquid"]["in"] for period in qpf["periods"]]
-            qpf["snow"] = []
-            qpf["ice"] = []
-            # If other kinds of liquids are available, we process them
-            qpf["liquidTitle"] = _("precip-table.table-header+legend.rain.01")
-            if qpf["hasSnow"]:
-                qpf["snow"] = [period["snow"]["in"] for period in qpf["periods"]]
-                qpf["liquidTitle"] = _("precip-table.table-header+legend.water.01")
-            if qpf["hasIce"]:
-                qpf["ice"] = [period["ice"]["in"] for period in qpf["periods"]]
-                qpf["liquidTitle"] = _("precip-table.table-header+legend.water.01")
+            _process_qpf(day, wpc_prob, tz)
 
     if "timestamp" in data["observed"]:
         data["observed"]["timestamp"] = datetime.fromisoformat(data["observed"]["timestamp"]).astimezone(tz=tz)
@@ -236,6 +235,47 @@ def _process_interop_point_forecast(data):
     _process_astronomical_data(data, tz)
 
     return data
+
+
+def _process_qpf(day, wpc_prob, tz):
+    """Build the QPF lists and flags used by the precipitation section."""
+    qpf = day["qpf"]
+
+    qpf["times"] = []
+    for period in qpf["periods"]:
+        period["start"] = datetime.fromisoformat(period["start"]).astimezone(tz=tz)
+        period["end"] = datetime.fromisoformat(period["end"]).astimezone(tz=tz)
+        qpf["times"].append(f"{_get_hour(period['start'])}-{_get_hour(period['end'])}")
+
+    qpf["liquid"] = [period["liquid"]["in"] for period in qpf["periods"]]
+    qpf["snow"] = []
+    qpf["ice"] = []
+    if qpf["hasSnow"]:
+        qpf["snow"] = [period["snow"]["in"] for period in qpf["periods"]]
+    if qpf["hasIce"]:
+        qpf["ice"] = [period["ice"]["in"] for period in qpf["periods"]]
+    qpf["liquidTitle"] = _get_liquid_title(qpf["hasSnow"] or qpf["hasIce"])
+
+    # precip.html only ever sees the qpf dict, so the block rides along there
+    qpf["wpcProb"] = None
+    if wpc_prob:
+        period = wpc_prob["period"]
+        if period["start"] < day["end"] and period["end"] > day["start"]:
+            qpf["wpcProb"] = wpc_prob
+
+    # day["pop"] is rounded to the nearest 5, so a true 2.5% chance reads as 5%
+    hourly_precip_chances = [chance for chance in day["hourly"]["pops"] if chance is not None]
+
+    rain = (qpf["wpcProb"] or {}).get("rain") or {}
+    expected = (rain.get("range") or {}).get("expected") or {}
+    wpc_chances = rain.get("probabilities") or [{"chance": 0}]
+
+    qpf["noPrecipExpected"] = (
+        max(hourly_precip_chances, default=0) < _NO_PRECIP_CHANCE_PERCENT
+        and not any(qpf["liquid"] + qpf["snow"] + qpf["ice"])
+        and not expected.get("amount")
+        and wpc_chances[0]["chance"] * 100 < _NO_PRECIP_CHANCE_PERCENT
+    )
 
 
 def _process_hourly_interop_data(day_data, tz):  # noqa: C901
