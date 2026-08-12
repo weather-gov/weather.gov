@@ -20,7 +20,7 @@
          id="daily-content-{{ day.itemId }}"
          class="wx-daily-forecast-item-content bg-white padding-y-205 padding-x-205 grid-col-12 border-right-1px border-left-1px desktop:border-top-1px border-base-lighter desktop:border-base-lighter">
       {# outer grid-row stores everything that's visible visible without expansion #}
-      <div class="grid-row border-0 tablet-lg:border-bottom-1px tablet-lg:border-base-lighter tablet-lg:padding-bottom-2">
+      <div class="grid-row border-0">
         {# start of date, temps, and alert #}
         <div class="grid-row grid-col-12 tablet-lg:grid-col-4 border-bottom-1px border-base-lighter padding-bottom-2 margin-bottom-2 tablet-lg:border-0 tablet-lg:margin-bottom-05 tablet-lg:margin-right-2 tablet-lg:padding-bottom-0 display-none desktop:display-block">
           <div class="daily-date-and-temp display-flex flex-row flex-justify tablet:grid-col-6 tablet__wx-flex-justify-start">
@@ -78,10 +78,12 @@
       </div>
       {% if day.hours|length > 0 %}
         <div>
+          <div class="border-top-2px border-primary-dark margin-top-3">
+            <h4 class="font-heading-md text-normal text-primary-darker margin-top-105 margin-bottom-0">
+              {% trans "daily-forecast.heading.hourly-forecast.01" %}
+            </h4>
+          </div>
           {% include 'weather/partials/forecast-details-toggle.html' %}
-          <h4 class="font-heading-md text-normal text-primary-darker margin-top-0 margin-bottom-205">
-            {% trans "daily-forecast.heading.hourly-forecast.01" %}
-          </h4>
           {% hourly_table day=day qpf=day.qpf hours=day.hours itemId=day.itemId %}
           {% hourly_charts hours=day.hours qpf=day.qpf itemId=day.itemId day=day %}
         </div>

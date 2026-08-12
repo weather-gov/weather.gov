@@ -518,6 +518,60 @@ msgstr "Wind"
 msgid "offline-banner.text.you-are-offline.01"
 msgstr "Your internet connection is unstable. Please try again in a few moments."
 
+msgid "precip-probability.aria.chances.01"
+msgstr "chances of at least each precipitation amount over the next 24 hours"
+
+msgid "precip-probability.aria.definitions.01"
+msgstr "what the low end, expected, and high end amounts mean"
+
+msgid "precip-probability.heading.totals.01"
+msgstr "24-Hour Precipitation Totals"
+
+msgid "precip-probability.text.period.01"
+msgstr "Total amount from {start} to {end}."
+
+msgid "precip-probability.label.low-end.01"
+msgstr "LOW END"
+
+msgid "precip-probability.label.expected.01"
+msgstr "EXPECTED"
+
+msgid "precip-probability.label.high-end.01"
+msgstr "HIGH END"
+
+msgid "precip-probability.term.low-end.01"
+msgstr "Low End"
+
+msgid "precip-probability.term.expected.01"
+msgstr "Expected"
+
+msgid "precip-probability.term.high-end.01"
+msgstr "High End"
+
+msgid "precip-probability.definition.low-end.01"
+msgstr "A 90% chance that the total will be more than this amount."
+
+msgid "precip-probability.definition.expected.01"
+msgstr "This is the amount we expect, on average."
+
+msgid "precip-probability.definition.high-end.01"
+msgstr "Only a 10% chance that the total will be more than this amount."
+
+msgid "precip-probability.heading.chances.02"
+msgstr "Chances that the total <span class='text-bold text-primary'>{precipitation_type}</span> will be <strong>at least</strong> this much:"
+
+msgid "precip-probability.button.hide-details.01"
+msgstr "Hide Details"
+
+msgid "precip-probability.button.show-details.01"
+msgstr "Show Details"
+
+msgid "precipitation.heading.section.01"
+msgstr "Precipitation"
+
+msgid "precipitation.text.none.01"
+msgstr "No precipitation expected on this day (Less than 5% chance)."
+
 msgid "precip-table.aria.amounts.01"
 msgstr "precipitation amounts for the coming hours"
 
@@ -592,6 +646,9 @@ msgstr "dBz"
 
 msgid "units.inches.01"
 msgstr "{inches}\""
+
+msgid "units.percent.01"
+msgstr "{percent}%"
 
 msgid "units.mercury-inches.01"
 msgstr "{mercury_inches} in ({mbar}&nbsp;mb)"

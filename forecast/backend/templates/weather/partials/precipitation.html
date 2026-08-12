@@ -1,0 +1,33 @@
+{% comment %}
+-- Template purpose:
+--   Group the probabilistic precipitation block and the QPF amounts table into
+--   one Precipitation section, side by side from desktop up.
+-- Used by: partials/hourly-table.html
+{% endcomment %}
+{% with wpc=qpf.wpcProb %}
+  {% if qpf.noPrecipExpected or wpc or qpf.hasQPF %}
+    <div class="wx-precipitation border-top-2px border-primary-dark margin-top-3">
+      <div class="grid-row desktop__wx-grid-gap-lg">
+        <div class="grid-col-12">
+          <h4 class="font-heading-md text-normal text-primary-darker margin-top-105 margin-bottom-0">
+            {% trans "precipitation.heading.section.01" %}
+          </h4>
+        </div>
+        {% if qpf.noPrecipExpected %}
+          <div class="grid-col-12">
+            <p class="font-body-sm text-base-dark margin-top-2 margin-bottom-0">{% trans "precipitation.text.none.01" %}</p>
+          </div>
+        {% else %}
+          {% if wpc %}
+            <div class="grid-col-12 {% if qpf.hasQPF %}desktop:grid-col-6{% endif %}">
+              {% precip_probability wpc=wpc itemId=itemId %}
+            </div>
+          {% endif %}
+          {% if qpf.hasQPF %}
+            <div class="grid-col-12 {% if wpc %}desktop:grid-col-6{% endif %}">{% precip_table qpf=qpf as_table=True %}</div>
+          {% endif %}
+        {% endif %}
+      </div>
+    </div>
+  {% endif %}
+{% endwith %}

@@ -12,6 +12,27 @@ from backend.models import (
 from backend.templatetags import weather_partials
 
 
+def wpc_prob_fixture():
+    """Build a wpcProb dict shaped the way interop.py leaves it, rain only."""
+    return {
+        "period": {"start": "then", "end": "later"},
+        "liquidTitle": "the liquid one",
+        "snow": None,
+        "freezingRain": None,
+        "rain": {
+            "range": {
+                "low": {"amount": 0.1, "chance": 0.9},
+                "expected": {"amount": 0.5, "chance": 0.5},
+                "high": {"amount": 1.25, "chance": 0.1},
+            },
+            "probabilities": [
+                {"atLeast": 0.01, "chance": 0.9},
+                {"atLeast": 1, "chance": 0.45},
+            ],
+        },
+    }
+
+
 class TestWeatherPartials(TestCase):
     """Tests the weather partials."""
 
@@ -504,6 +525,68 @@ class TestWeatherPartials(TestCase):
         actual = weather_partials.precip_table(qpf={"key": "kept"}, as_table=False)
         self.assertEqual(actual, {"key": "kept", "as_table": False})
 
+    def test_precip_probability_without_data(self):
+        """Tests the precip probability partial when the interop sent us nothing usable."""
+        actual = weather_partials.precip_probability(wpc=None)
+        self.assertEqual(actual, {"panels": []})
+
+    @mock.patch("backend.templatetags.weather_partials._")
+    def test_precip_probability_rain_only(self, mock_gettext_lazy):
+        """Tests the precip probability partial with only rain, which gets no view selector."""
+        mock_gettext_lazy.side_effect = lambda key: key
+        actual = weather_partials.precip_probability(wpc=wpc_prob_fixture(), itemId="Caturday")
+
+        self.assertEqual(actual["itemId"], "Caturday")
+        self.assertEqual(actual["period"], {"start": "then", "end": "later"})
+        self.assertFalse(actual["showSelector"])
+        self.assertEqual(
+            actual["panels"],
+            [
+                {
+                    "name": "rain",
+                    "label": "the liquid one",
+                    "bins": [
+                        {"label": slot["label"], "amount": amount}
+                        for slot, amount in zip(weather_partials.PRECIP_BRACKET_SLOTS, [0.1, 0.5, 1.25], strict=True)
+                    ],
+                    "probabilities": [
+                        {"atLeast": 0.01, "percent": 90},
+                        {"atLeast": 1, "percent": 45},
+                    ],
+                }
+            ],
+        )
+
+    @mock.patch("backend.templatetags.weather_partials._")
+    def test_precip_probability_with_frozen_precip(self, mock_gettext_lazy):
+        """Tests that frozen precipitation adds panels, in the order the designer asked for."""
+        mock_gettext_lazy.side_effect = lambda key: key
+        wpc = wpc_prob_fixture()
+        wpc["freezingRain"] = {"range": None, "probabilities": [{"atLeast": 0.25, "chance": 0.05}]}
+        wpc["snow"] = {"range": None, "probabilities": []}
+        actual = weather_partials.precip_probability(wpc=wpc)
+
+        self.assertTrue(actual["showSelector"])
+        self.assertEqual([panel["name"] for panel in actual["panels"]], ["snow", "freezingRain", "rain"])
+        self.assertEqual(
+            [panel["label"] for panel in actual["panels"]],
+            [
+                "precip-table.table-header+legend.snow.01",
+                "precip-table.table-header+legend.ice.01",
+                "the liquid one",
+            ],
+        )
+
+    @mock.patch("backend.templatetags.weather_partials._")
+    def test_precip_probability_without_a_range(self, mock_gettext_lazy):
+        """Tests the precip probability partial when WPC published no percentiles to bracket."""
+        mock_gettext_lazy.side_effect = lambda key: key
+        wpc = wpc_prob_fixture()
+        wpc["rain"]["range"] = None
+        actual = weather_partials.precip_probability(wpc=wpc)
+
+        self.assertEqual(actual["panels"][0]["bins"], [])
+
     def test_dynamic_safety_info_no_match(self):
         """Tests getting dynamic safety info if we don't have any."""
         actual = weather_partials.dynamic_safety_information("big bad wolf")
@@ -579,9 +662,7 @@ class TestWeatherPartials(TestCase):
     def test_render_non_critical_error_component_with_wfo(self, mock_gettext_lazy):
         """Tests non-critical error for a WFO-specific component."""
         mock_gettext_lazy.return_value = "Error for {wfo_name}"
-        actual = weather_partials.render_non_critical_error_component(
-            component_name="briefings", wfo_name="Test WFO"
-        )
+        actual = weather_partials.render_non_critical_error_component(component_name="briefings", wfo_name="Test WFO")
         mock_gettext_lazy.assert_called_with("error.non-critical.briefings.wfo.01")
         self.assertEqual(actual, {"message": "Error for Test WFO"})
 

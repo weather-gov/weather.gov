@@ -34,6 +34,28 @@ RADAR_INTENSITIES = [
     },
 ]
 
+# Constant for the probabilistic precipitation bracket, low to high. This is used for the bins and their definitions.
+PRECIP_BRACKET_SLOTS = [
+    {
+        "key": "low",
+        "label": _("precip-probability.label.low-end.01"),
+        "term": _("precip-probability.term.low-end.01"),
+        "definition": _("precip-probability.definition.low-end.01"),
+    },
+    {
+        "key": "expected",
+        "label": _("precip-probability.label.expected.01"),
+        "term": _("precip-probability.term.expected.01"),
+        "definition": _("precip-probability.definition.expected.01"),
+    },
+    {
+        "key": "high",
+        "label": _("precip-probability.label.high-end.01"),
+        "term": _("precip-probability.term.high-end.01"),
+        "definition": _("precip-probability.definition.high-end.01"),
+    },
+]
+
 non_critical_component_error_msg = {
     "alerts": "error.non-critical.alerts.01",
     "observations": "error.non-critical.observations.01",
@@ -240,6 +262,56 @@ def precip_table(**kwargs):
     return {**qpf, "as_table": as_table}
 
 
+@register.inclusion_tag("weather/partials/precip-probability.html")
+def precip_probability(**kwargs):
+    """Render the 24-hour probabilistic precipitation block."""
+    wpc = kwargs.get("wpc")
+    if not wpc:
+        return {"panels": []}
+
+    # Designer order, and only the variables WPC actually published anything for
+    panels = []
+    for name, label in (
+        ("snow", _("precip-table.table-header+legend.snow.01")),
+        ("freezingRain", _("precip-table.table-header+legend.ice.01")),
+        ("rain", wpc["liquidTitle"]),
+    ):
+        variable = wpc[name]
+        if not variable:
+            continue
+
+        amounts = variable["range"] or {}
+
+        # The template formats a percent, but every chance on the wire is a fraction
+        probabilities = []
+        for row in variable["probabilities"]:
+            percent = round(row["chance"] * 100)
+            probabilities.append({"atLeast": row["atLeast"], "percent": percent})
+            if percent == 0:
+                break
+
+        panels.append(
+            {
+                "name": name,
+                "label": label,
+                "bins": [
+                    {"label": slot["label"], "amount": amounts[slot["key"]]["amount"]}
+                    for slot in PRECIP_BRACKET_SLOTS
+                    if slot["key"] in amounts
+                ],
+                "probabilities": probabilities,
+            }
+        )
+
+    return {
+        "panels": panels,
+        "period": wpc["period"],
+        "itemId": kwargs.get("itemId", ""),
+        "showSelector": len(panels) > 1,
+        "slots": PRECIP_BRACKET_SLOTS,
+    }
+
+
 @register.inclusion_tag("weather/partials/dynamic-safety-info.html")
 def dynamic_safety_information(weather_event_type):
     """Return HTML markup of safety information for a given alert type, if any exists."""
@@ -305,10 +377,9 @@ def render_non_critical_error_component(
         msg_str = _(non_critical_component_error_msg[component_name])
     return {"message": msg_str}
 
+
 @register.inclusion_tag("errors/partials/500-error-sub-page-component.html")
-def render_critical_component_error(
-    component_name=None, *, error_code=None, for_state=False
-):
+def render_critical_component_error(component_name=None, *, error_code=None, for_state=False):
     """Render the critical component sub-page (for tabbed pages)."""
     headline = "error.500.generic.headline.01"
 
@@ -317,4 +388,3 @@ def render_critical_component_error(
         headline = f"error.500.{component_name}.headline.01"
 
     return {"headline": headline, "error_code": error_code, "for_state": for_state}
-

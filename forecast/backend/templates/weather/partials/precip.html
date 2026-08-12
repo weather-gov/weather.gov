@@ -6,13 +6,13 @@
 {% if as_table == True %}
   <div class="grid-row wx-qpf-periods">
     <div class="grid-col-12">
-      <h5 class="wx-mono-lg text-normal text-primary-dark margin-top-2 margin-bottom-05">
+      <h5 class="font-heading-sm text-bold text-primary-darker margin-top-2 margin-bottom-05">
         {% trans "precip-table.heading.amounts.01" %}
       </h5>
     </div>
   </div>
   <div class="grid-row grid-col-12">
-    <div class="grid-col-12 tablet:grid-col-6 tablet:padding-right-1">
+    <div class="grid-col-12">
       <table class="usa-table usa-table--borderless wx-precip-table margin-y-0 width-full">
         <caption class="usa-sr-only">{% trans "precip-table.aria.amounts.01" %}</caption>
         <thead>
@@ -32,7 +32,7 @@
           {% for hour in periods %}
             <tr>
               <td class="font-family-mono font-mono-xs text-base text-ls-neg-3">
-                {{ hour.start|date:"g A" }}&emsp13;–&emsp13;{{ hour.end|date:"g A" }}
+                {{ hour.start|date:"D g A" }} - {{ hour.end|date:"D g A" }}
               </td>
               {% if hasSnow %}
                 <td class="text-align-left">{% trans_with_args "units.inches.01" inches=hour.snow.in %}</td>

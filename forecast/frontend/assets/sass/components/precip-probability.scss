@@ -1,0 +1,88 @@
+@use "uswds-core" as *;
+
+/* Probabilistic precipitation tables
+------------------------------------- */
+.wx-precip-probability-terms {
+  th,
+  td {
+    border: 0;
+  }
+
+  th {
+    @include u-font("body", "xs");
+    @include u-text("bold");
+    @include u-color("base");
+
+    vertical-align: text-top;
+    white-space: nowrap;
+  }
+
+  td {
+    @include u-font("body", "xs");
+    @include u-color("base-dark");
+  }
+}
+
+.wx-precip-probability-table {
+  th {
+    @include u-font("mono", "xs");
+    @include u-text("normal");
+    @include u-color("base-darker");
+
+    text-transform: uppercase;
+  }
+
+  td {
+    @include u-font("body", "sm");
+    @include u-color("base-darker");
+  }
+
+  th:first-child {
+    @include u-padding-right(2);
+
+    white-space: nowrap;
+    width: 1%;
+  }
+}
+
+.wx-precip-probability-chances {
+  @include u-margin-top(2);
+
+  @include at-media("tablet-lg") {
+    @include u-margin-top(1);
+  }
+
+  @include at-media("desktop") {
+    @include u-margin-top(2);
+  }
+}
+
+.wx-precip-probability-bracket {
+  // visually even out top and bottom padding, accounting for font bounding box
+  padding-top: calc(#{units(2)} + 2px);
+  padding-bottom: calc(#{units(2)} - 2px);
+
+  @include at-media("tablet") {
+    column-gap: units(3);
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    max-width: max-content;
+
+    > .grid-col {
+      flex: 0 1 auto;
+    }
+  }
+}
+
+.wx-precip-probability {
+  th,
+  td {
+    &:first-of-type {
+      @include u-padding-left(0);
+    }
+
+    &:last-child {
+      @include u-padding-right(0);
+    }
+  }
+}

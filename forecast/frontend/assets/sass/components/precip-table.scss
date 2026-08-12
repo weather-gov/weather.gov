@@ -1,5 +1,13 @@
 @use "uswds-core" as *;
 
+/* Precipitation section
+------------------------------------- */
+@include at-media-max("desktop") {
+  .wx-forecast-list > li:nth-child(n + 4) .wx-precipitation {
+    display: none;
+  }
+}
+
 /* Hourly precipitation table overrides
 ------------------------------------- */
 .wx-precip-table {
@@ -20,6 +28,14 @@
         }
       }
     }
+  }
+
+  thead th:first-of-type,
+  td:first-of-type {
+    @include u-padding-right(2);
+
+    white-space: nowrap;
+    width: 1%;
   }
 
   th[aria-hidden],
