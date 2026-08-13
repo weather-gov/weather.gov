@@ -8,6 +8,7 @@ export const schema = {
     properties: {
       wfo: {
         type: "string",
+        pattern: "^[A-Za-z]{3}$",
       },
     },
   },
