@@ -8,6 +8,8 @@ export const schema = {
     properties: {
       id: {
         type: "string",
+        pattern:
+          "^[0-9a-z]{8}-[0-9a-z]{4}-[0-9a-z]{4}-[0-9a-z]{4}-[0-9a-z]{12}$",
       },
     },
   },
