@@ -8,6 +8,9 @@ spec:
     confirm-beta-deploy:
       description: "To deploy to beta, type YES in this box."
       default: ''
+    confirm-nec-deploy:
+      description: "To deploy to NEC, type NEC in this box."
+      default: ''
     build-images:
       type: boolean
       default: true
@@ -70,6 +73,9 @@ workflow:
 # jobs build and push an image based on what we pass via `inputs`.
 # documentation: https://vlab.noaa.gov/gitlab-licensed/NWS/Systems/NCO/NEC/shared-catalogs/container/-/blob/main/docs/build.md
 include:
+  - local: ".gitlab/nec/bootstrap.yml"
+    inputs:
+      confirm-nec-deploy: "$[[ inputs.confirm-nec-deploy ]]"
   - component: ${CI_SERVER_FQDN}/NWS/Systems/NCO/NEC/shared-catalogs/utility/anchors@main
   - component: ${CI_SERVER_FQDN}/NWS/Systems/NCO/NEC/shared-catalogs/container/build@main
     inputs:
