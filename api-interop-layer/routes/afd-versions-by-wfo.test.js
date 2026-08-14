@@ -44,6 +44,7 @@ describe("route: afd versions by wfo", () => {
           properties: {
             wfo: {
               type: "string",
+              pattern: "^[A-Za-z]{3}$",
             },
           },
         },
