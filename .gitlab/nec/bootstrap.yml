@@ -1,0 +1,44 @@
+spec:
+  inputs:
+    confirm-nec-deploy:
+      default: ""
+---
+variables:
+  CONFIRM_NEC_DEPLOY: "$[[ inputs.confirm-nec-deploy ]]"
+
+include:
+  - component: ${CI_SERVER_FQDN}/NWS/Systems/NCO/NEC/shared-catalogs/iac/plan@main
+    inputs:
+      stage: deploy
+      job_name: terraform-plan-nec-dev
+      root_dir: ./terraform-aws/bootstrap
+      environment: dev
+      rules:
+        - if: $CI_PIPELINE_SOURCE == "web" && $CONFIRM_NEC_DEPLOY == "NEC"
+  - component: ${CI_SERVER_FQDN}/NWS/Systems/NCO/NEC/shared-catalogs/iac/apply@main
+    inputs:
+      stage: deploy
+      job_name: terraform-apply-nec-dev
+      root_dir: ./terraform-aws/bootstrap
+      environment: dev
+      rules:
+        - if: $CI_PIPELINE_SOURCE == "web" && $CONFIRM_NEC_DEPLOY == "NEC"
+
+# override rules to pass in the proper variables and tags
+terraform-plan-nec-dev:
+  environment: dev
+  variables:
+    ROLE_NAME: $NEC_ROLE_NAME
+    ACCOUNT_ID: $NEC_ACCOUNT_ID
+  tags:
+    - nec-cloud
+terraform-apply-nec-dev:
+  environment: dev
+  variables:
+    ROLE_NAME: $NEC_ROLE_NAME
+    ACCOUNT_ID: $NEC_ACCOUNT_ID
+  needs:
+    - job: terraform-plan-nec-dev
+      artifacts: true
+  tags:
+    - nec-cloud
