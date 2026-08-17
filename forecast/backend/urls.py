@@ -5,6 +5,7 @@ from wagtail.admin import urls as wagtailadmin_urls
 from wagtail.documents import urls as wagtaildocs_urls
 
 from backend.views import county, errors, index, location_search, offices, partials, point, risk, state
+from backend.views.cms_logout import cms_logout
 
 from .url_converters import FloatConverter
 
@@ -50,7 +51,7 @@ urlpatterns = [
     path("wx/state/<state>/", partials.wx_state_boundaries_pbf, name="wx_state_boundary"),
     path("wx/state/<state>/alerts", partials.wx_state_alerts_pbf, name="wx_state_boundary"),
     # Wagtail
-    path("cms/logout/", RedirectView.as_view(url="/saml/logout/")),  # override wagtail logout
+    path("cms/logout/", cms_logout),
     path("cms/", include(wagtailadmin_urls)),
     path("documents/", include(wagtaildocs_urls)),
     # Point forecast related, etc

@@ -46,6 +46,10 @@ SECURE_CROSS_ORIGIN_OPENER_POLICY = "localhost"
 SAML_SETTINGS = saml_config.DEV
 SAML_LOCAL_DEV = True
 
+CONTENT_SECURITY_POLICY["DIRECTIVES"]["form-action"] += [  # noqa: F405 (imported from base.py)
+     "http://fake-idp.beta.weather.gov/",
+]
+
 # Use development secret key
 env = environs.Env()
 SECRET_KEY = env("django_secret_key")
