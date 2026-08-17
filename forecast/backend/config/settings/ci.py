@@ -36,3 +36,7 @@ SECRET_KEY = env("django_secret_key")
 # For CI, we need to use the development SAML
 # settings, since prod settings check for VCAP
 SAML_SETTINGS = saml_config.DEV
+
+CONTENT_SECURITY_POLICY["DIRECTIVES"]["form-action"] += [  # noqa: F405 (imported from base.py)
+     "http://fake-idp.beta.weather.gov/",
+]
