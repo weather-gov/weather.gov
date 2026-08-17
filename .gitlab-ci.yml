@@ -68,57 +68,16 @@ workflow:
         USE_LATEST_TAG: $CI_COMMIT_REF_SLUG
     - if: $CI_PIPELINE_SOURCE == "schedule"
 
-# below, we use NEC shared catalogs to build our node and django dependencies as
-# docker images. `container/build` is a factory to generate gitlab jobs; these
-# jobs build and push an image based on what we pass via `inputs`.
-# documentation: https://vlab.noaa.gov/gitlab-licensed/NWS/Systems/NCO/NEC/shared-catalogs/container/-/blob/main/docs/build.md
+# set up NEC-specific CI/CD jobs
 include:
   - local: ".gitlab/nec/bootstrap.yml"
     inputs:
       confirm-nec-deploy: "$[[ inputs.confirm-nec-deploy ]]"
-  - component: ${CI_SERVER_FQDN}/NWS/Systems/NCO/NEC/shared-catalogs/utility/anchors@main
-  - component: ${CI_SERVER_FQDN}/NWS/Systems/NCO/NEC/shared-catalogs/container/build@main
+  - local: ".gitlab/nec/containers.yml"
     inputs:
-      stage: gather
-      job_name: gather-node-dependencies
-      dockerfile: Dockerfile.node.ci
-      context: ./
-      image: $CI_REGISTRY_IMAGE/node-with-deps
-      tag: $CI_COMMIT_REF_SLUG
-      opts: "--cache=true --cache-copy-layers=true --cache-repo=$CI_REGISTRY_IMAGE/cache --cache-ttl=168h"
-  - component: ${CI_SERVER_FQDN}/NWS/Systems/NCO/NEC/shared-catalogs/container/build@main
-    inputs:
-      stage: gather
-      job_name: gather-django-dependencies
-      dockerfile: Dockerfile.ci
-      context: forecast/
-      image: $CI_REGISTRY_IMAGE/python-with-deps
-      tag: $CI_COMMIT_REF_SLUG
-      opts: "--cache=true --cache-copy-layers=true --cache-repo=$CI_REGISTRY_IMAGE/cache --cache-ttl=168h"
-  - component: ${CI_SERVER_FQDN}/NWS/Systems/NCO/NEC/shared-catalogs/container/build@main
-    inputs:
-      stage: gather
-      job_name: gather-playwright-dependencies
-      dockerfile: Dockerfile.playwright.ci
-      context: ./
-      image: $CI_REGISTRY_IMAGE/playwright
-      tag: $CI_COMMIT_REF_SLUG
-      opts: "--cache=true --cache-copy-layers=true --cache-repo=$CI_REGISTRY_IMAGE/cache --cache-ttl=168h"
+      build-images: "$[[ inputs.build-images ]]"
+      run-playwright-ci: "$[[ inputs.run-playwright-ci ]]"
   - template: Security/SAST.gitlab-ci.yml
-
-# override rules so we build a new image on each push
-gather-node-dependencies:
-  rules:
-    - if: $CI_PIPELINE_SOURCE == "push"
-    - if: $CI_PIPELINE_SOURCE == "web" && "$[[ inputs.build-images ]]" == "true"
-gather-django-dependencies:
-  rules:
-    - if: $CI_PIPELINE_SOURCE == "push"
-    - if: $CI_PIPELINE_SOURCE == "web" && "$[[ inputs.build-images ]]" == "true"
-# for playwright, build a new image every time we run through the Gitlab UI
-gather-playwright-dependencies:
-  rules:
-    - if: $CI_PIPELINE_SOURCE == "web" && "$[[ inputs.run-playwright-ci ]]" == "true"
 
 # gather up commits which have a `Changelog: ...` trailer and push them to CHANGELOG.md (via GitLab's API)
 write-release-notes:

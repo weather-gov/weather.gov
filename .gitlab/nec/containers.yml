@@ -1,0 +1,54 @@
+spec:
+  inputs:
+    build-images:
+      default: ""
+    run-playwright-ci:
+      default: ""
+---
+variables:
+  BUILD_IMAGES: "$[[ inputs.build-images ]]"
+  RUN_PLAYWRIGHT_CI: "$[[ inputs.run-playwright-ci ]]"
+
+include:
+  - component: ${CI_SERVER_FQDN}/NWS/Systems/NCO/NEC/shared-catalogs/utility/anchors@main
+  - component: ${CI_SERVER_FQDN}/NWS/Systems/NCO/NEC/shared-catalogs/container/build@main
+    inputs:
+      stage: gather
+      job_name: gather-node-dependencies
+      dockerfile: Dockerfile.node.ci
+      context: ./
+      image: $CI_REGISTRY_IMAGE/node-with-deps
+      tag: $CI_COMMIT_REF_SLUG
+      opts: "--cache=true --cache-copy-layers=true --cache-repo=$CI_REGISTRY_IMAGE/cache --cache-ttl=168h"
+  - component: ${CI_SERVER_FQDN}/NWS/Systems/NCO/NEC/shared-catalogs/container/build@main
+    inputs:
+      stage: gather
+      job_name: gather-django-dependencies
+      dockerfile: Dockerfile.ci
+      context: forecast/
+      image: $CI_REGISTRY_IMAGE/python-with-deps
+      tag: $CI_COMMIT_REF_SLUG
+      opts: "--cache=true --cache-copy-layers=true --cache-repo=$CI_REGISTRY_IMAGE/cache --cache-ttl=168h"
+  - component: ${CI_SERVER_FQDN}/NWS/Systems/NCO/NEC/shared-catalogs/container/build@main
+    inputs:
+      stage: gather
+      job_name: gather-playwright-dependencies
+      dockerfile: Dockerfile.playwright.ci
+      context: ./
+      image: $CI_REGISTRY_IMAGE/playwright
+      tag: $CI_COMMIT_REF_SLUG
+      opts: "--cache=true --cache-copy-layers=true --cache-repo=$CI_REGISTRY_IMAGE/cache --cache-ttl=168h"
+
+# override rules so we build a new image on each push
+gather-node-dependencies:
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "push"
+    - if: $CI_PIPELINE_SOURCE == "web" && $BUILD_IMAGES == "true"
+gather-django-dependencies:
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "push"
+    - if: $CI_PIPELINE_SOURCE == "web" && $BUILD_IMAGES == "true"
+# for playwright, build a new image every time we run through the Gitlab UI
+gather-playwright-dependencies:
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "web" && $RUN_PLAYWRIGHT_CI == "true"
