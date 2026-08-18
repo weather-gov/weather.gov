@@ -17,6 +17,7 @@ const (
 	DefaultExtractionWorkers        int = 100
 	DefaultTransformWorkers         int = 60
 	DefaultTransformLocalityWorkers int = 60
+	DefaultErrorWorkers                 = 100
 )
 
 /**
@@ -27,6 +28,7 @@ type ExtractionManager struct {
 	Output     chan *FetchResult
 	NumWorkers int
 	Errors     []error
+	ErrorChan  chan *GHWOError
 }
 
 /**
@@ -41,6 +43,7 @@ type TransformManager struct {
 	Output     chan *LocalityResult
 	NumWorkers int
 	Errors     []error
+	ErrorChan  chan *GHWOError
 }
 
 /**
@@ -53,13 +56,16 @@ type TransformLocalityManager struct {
 	Output     chan *Output
 	NumWorkers int
 	Errors     []error
+	ErrorChan  chan *GHWOError
 }
 
 /* Not yet fully implemented */
 type StoreManager struct {
-	Input  chan *Output
-	Errors []error
-	Pool   *pgxpool.Pool
+	Input      chan *Output
+	Errors     []error
+	Pool       *pgxpool.Pool
+	ErrorChan  chan *Output
+	StoreBatch *StoreBatch
 }
 
 // An interim struct for state or county locality data
@@ -74,6 +80,17 @@ type LocalityResult struct {
 	GHWOData *SourceGHWOData
 }
 
+/**
+* Represents a generic manager for handling errors.
+* This stage/manager will "branch" from the others, listening
+* for input on the overall Pipeline's error channel.
+ */
+type ErrorManager struct {
+	Input      chan *GHWOError
+	Output     chan *Output
+	NumWorkers int
+}
+
 type WorkerRunner interface {
 	RunWorkers(ctx context.Context)
 }
@@ -84,17 +101,8 @@ type WorkerRunner interface {
 * outputs to the previous manager's input.
  */
 type Pipeline struct {
-	Managers []WorkerRunner
-}
-
-// Convenience function for sending an error to a channel
-// via a goroutine. Takes a sync WaitGroup as an argument
-func sendError(err error, errChan chan error, wg *sync.WaitGroup) {
-	wg.Add(1)
-	go func() {
-		defer wg.Done()
-		errChan <- err
-	}()
+	Managers  []WorkerRunner
+	ErrorChan chan *GHWOError
 }
 
 /**
@@ -144,6 +152,20 @@ func (manager *TransformLocalityManager) setNumWorkers() {
 	manager.NumWorkers = foundNum
 }
 
+func (manager *ErrorManager) setNumWorkers() {
+	found := os.Getenv("ERR_WORKER_NUM")
+	if found == "" {
+		manager.NumWorkers = DefaultErrorWorkers
+		return
+	}
+	foundNum, err := strconv.Atoi(found)
+	if err != nil {
+		manager.NumWorkers = DefaultErrorWorkers
+		return
+	}
+	manager.NumWorkers = foundNum
+}
+
 /**
 * Workers here handle fetching all GHWO data for each of the WFOs that come in
 * via the manager's input channel. They transform the JSON results into our source
@@ -151,10 +173,6 @@ func (manager *TransformLocalityManager) setNumWorkers() {
  */
 func (extractionManager *ExtractionManager) RunWorkers(ctx context.Context) {
 	var wg = sync.WaitGroup{}
-
-	// Collect the errors as they come in
-	errorChan := make(chan error, 100)
-	errorWg := sync.WaitGroup{}
 
 	// Spawn a new goroutine each for numWorkers.
 	// Each of these goroutines will run a for select loop
@@ -175,6 +193,15 @@ func (extractionManager *ExtractionManager) RunWorkers(ctx context.Context) {
 					}
 					fetchResult, errors := FetchWFO(ctx, wfoCode)
 					if len(errors) > 0 {
+						// Loop through any errors and send those on the
+						// error channel
+						for _, ghwoError := range GHWOErrorsFromFetchResult(fetchResult) {
+							select {
+							case <-ctx.Done():
+								return
+							case extractionManager.ErrorChan <- ghwoError:
+							}
+						}
 						// Do not pass any FetchResults that have errors.
 						// Instead, continue the listening loop
 						logger.Warn("Could not fetch data for WFO", "wfo", wfoCode, "numErrors", len(errors))
@@ -196,16 +223,6 @@ func (extractionManager *ExtractionManager) RunWorkers(ctx context.Context) {
 	// Wait for all workers to finish, then close the
 	// output channel
 	wg.Wait()
-	errorWg.Wait()
-	close(errorChan)
-
-	// Collect the errors from the error channel
-	for err := range errorChan {
-		extractionManager.Errors = append(
-			extractionManager.Errors,
-			err,
-		)
-	}
 
 	close(extractionManager.Output)
 	logger.Warn("ExtractionManager exited")
@@ -219,10 +236,6 @@ func (extractionManager *ExtractionManager) RunWorkers(ctx context.Context) {
 func (transformManager *TransformManager) RunWorkers(ctx context.Context) {
 	var wg = sync.WaitGroup{}
 
-	// Collect the errors as they come in
-	errorChan := make(chan error, 100)
-	errorWg := sync.WaitGroup{}
-
 	// Spawn a new goroutine each for numWorkers.
 	// Each of these goroutines will run a for select loop
 	// on the channels, exiting only when the right conditions are met.
@@ -233,9 +246,6 @@ func (transformManager *TransformManager) RunWorkers(ctx context.Context) {
 			for {
 				select {
 				case <-ctx.Done():
-					select {
-					case errorChan <- ctx.Err():
-					}
 					return
 
 				case fetchResult, inputIsOpen := <-transformManager.Input:
@@ -299,16 +309,6 @@ func (transformManager *TransformManager) RunWorkers(ctx context.Context) {
 	}
 
 	wg.Wait()
-	errorWg.Wait()
-	close(errorChan)
-
-	// Collect the errors
-	for err := range errorChan {
-		transformManager.Errors = append(
-			transformManager.Errors,
-			err,
-		)
-	}
 
 	close(transformManager.Output)
 	logger.Warn("TransformManager exited")
@@ -323,10 +323,6 @@ func (transformManager *TransformManager) RunWorkers(ctx context.Context) {
  */
 func (manager *TransformLocalityManager) RunWorkers(ctx context.Context) {
 	var wg = sync.WaitGroup{}
-
-	// Collect the errors as they come in
-	errorChan := make(chan error, 100)
-	errorWg := sync.WaitGroup{}
 
 	// Spawn a new goroutine for each numWorker.
 	// Each of these goroutines will run a for-select loop
@@ -351,11 +347,19 @@ func (manager *TransformLocalityManager) RunWorkers(ctx context.Context) {
 					if locality.Type == "county" {
 						countyData, ok := locality.GHWOData.Counties[locality.Code]
 						if !ok {
-							sendError(
-								fmt.Errorf("Could not find county data for locality code %s (in worker %d)", locality.Code, workerID),
-								errorChan,
-								&errorWg,
+							err := NewGHWOErrorForCounty(
+								locality.Code,
+								locality.GHWOData.WFO,
+								[]error{
+									fmt.Errorf("Could not find county data for locality code %s (in worker %d)", locality.Code, workerID),
+								},
 							)
+							// Send the error to the ErrorChan
+							select {
+							case <-ctx.Done():
+								return
+							case manager.ErrorChan <- err:
+							}
 							continue
 						}
 
@@ -374,11 +378,20 @@ func (manager *TransformLocalityManager) RunWorkers(ctx context.Context) {
 					} else if locality.Type == "state" {
 						stateData, ok := locality.GHWOData.States[locality.Code]
 						if !ok {
-							sendError(
-								fmt.Errorf("Could not ind state data for state code %s (in worker %d)", locality.Code, workerID),
-								errorChan,
-								&errorWg,
+							err := NewGHWOErrorForState(
+								locality.Code,
+								locality.GHWOData.WFO,
+								[]error{
+									fmt.Errorf("Could not find state data for state code %s (in worker %d)", locality.Code, workerID),
+								},
 							)
+
+							// Send on the error channel
+							select {
+							case <-ctx.Done():
+								return
+							case manager.ErrorChan <- err:
+							}
 							continue
 						}
 						// If either the legend or the chicklet for the stateData is
@@ -411,11 +424,18 @@ func (manager *TransformLocalityManager) RunWorkers(ctx context.Context) {
 							}
 						}
 					} else {
-						sendError(
+						// Otherwise, compose and send a generic error
+						// on the manager's ErrorChan.
+						err := NewGenericGHWOError(
 							fmt.Errorf("Cannot process locality of type %s (in worker %d)", locality.Type, workerID),
-							errorChan,
-							&errorWg,
 						)
+						err.Locality = locality.Code
+						err.WFO = locality.GHWOData.WFO
+						select {
+						case <-ctx.Done():
+							return
+						case manager.ErrorChan <- err:
+						}
 						continue
 					}
 				}
@@ -424,18 +444,9 @@ func (manager *TransformLocalityManager) RunWorkers(ctx context.Context) {
 	}
 
 	wg.Wait()
-	errorWg.Wait()
-	close(errorChan)
-
-	// Collect the errors
-	for err := range errorChan {
-		manager.Errors = append(
-			manager.Errors,
-			err,
-		)
-	}
 
 	close(manager.Output)
+	close(manager.ErrorChan)
 	logger.Warn("TransformLocalityManager exited")
 }
 
@@ -445,15 +456,21 @@ func (manager *StoreManager) RunWorkers(ctx context.Context) {
 	// as we add
 	storeBatch := NewBatch(40)
 
-	wg := sync.WaitGroup{}
+	// We need to keep track of discovering when
+	// either of the input channels is closed.
+	// When the are both closed, that's the only time we
+	// can return from the anonymous function
+	inputClosed := false
+	errorClosed := false
 
 	// The storage manager will run on a synchronous for-select
 	// (ie, there are no workers) until the input channel is closed
 	// or the context is cancelled
-	wg.Add(1)
-	go func() {
-		defer wg.Done()
+	func() {
 		for {
+			if inputClosed && errorClosed {
+				return
+			}
 			select {
 			case <-ctx.Done():
 				manager.Errors = append(
@@ -463,10 +480,34 @@ func (manager *StoreManager) RunWorkers(ctx context.Context) {
 				return
 			case processedOutput, isOpen := <-manager.Input:
 				if !isOpen {
-					return
+					// We continue here because the TransformLocalityManager
+					// will need to signal completion on the StoreManager.ShouldClose
+					// channel.
+					// This is because we need to check two channels at the
+					// same time (input and error) and only return when we are sure
+					// that both of them are closed
+					inputClosed = true
+					continue
 				}
 
 				shouldFlush := storeBatch.add(processedOutput)
+				if shouldFlush {
+					err := storeBatch.flush(ctx, manager.Pool)
+					if err != nil {
+						manager.Errors = append(
+							manager.Errors,
+							err,
+						)
+					}
+				}
+
+			case incomingError, isOpen := <-manager.ErrorChan:
+				if !isOpen {
+					errorClosed = true
+					continue
+				}
+
+				shouldFlush := storeBatch.add(incomingError)
 				if shouldFlush {
 					err := storeBatch.flush(ctx, manager.Pool)
 					if err != nil {
@@ -480,21 +521,14 @@ func (manager *StoreManager) RunWorkers(ctx context.Context) {
 		}
 	}()
 
-	wg.Wait()
-
 	// Flush the remaining output data in the batch, if present
-	select {
-	case <-ctx.Done():
-		return
-	default:
-		if len(storeBatch.Outputs) > 0 {
-			err := storeBatch.flush(ctx, manager.Pool)
-			if err != nil {
-				manager.Errors = append(
-					manager.Errors,
-					err,
-				)
-			}
+	if len(storeBatch.Outputs) > 0 {
+		err := storeBatch.flush(ctx, manager.Pool)
+		if err != nil {
+			manager.Errors = append(
+				manager.Errors,
+				err,
+			)
 		}
 	}
 
@@ -507,6 +541,50 @@ func (manager *StoreManager) RunWorkers(ctx context.Context) {
 	logger.Warn("StoreManager exited")
 }
 
+func (manager *ErrorManager) RunWorkers(ctx context.Context) {
+	var wg = sync.WaitGroup{}
+
+	// Span a new goroutine for each worker.
+	// Each of these goroutines will run a for-select
+	// loop on the channels, exiting only when the right
+	// conditions have been met.
+	for i := 0; i < manager.NumWorkers; i++ {
+		wg.Add(1)
+		go func(workerID int) {
+			defer wg.Done()
+			for {
+				select {
+				case <-ctx.Done():
+					return
+				case incomingError, isOpen := <-manager.Input:
+					if !isOpen {
+						// The input channel has closed, so we
+						// can exit
+						return
+					}
+
+					// Now we process the incoming error
+					// by creating an Output struct with the error object attached
+					output := &Output{
+						WFO:       incomingError.WFO,
+						HasErrors: true,
+						Errors:    incomingError,
+					}
+					select {
+					case <-ctx.Done():
+						return
+					case manager.Output <- output:
+					}
+				}
+			}
+		}(i)
+	}
+
+	wg.Wait()
+	close(manager.Output)
+	logger.Warn("ErrorManager exited")
+}
+
 /**
 * Creates a new GHWO pipeline configured with all the
 * correct managers linked together.
@@ -514,25 +592,37 @@ func (manager *StoreManager) RunWorkers(ctx context.Context) {
 * the StoreManager.
  */
 func NewPipeline(pool *pgxpool.Pool) *Pipeline {
+	errorChan := make(chan *GHWOError)
 	extractionManager := &ExtractionManager{
-		Input:  make(chan string),
-		Output: make(chan *FetchResult),
+		Input:     make(chan string),
+		Output:    make(chan *FetchResult),
+		ErrorChan: errorChan,
 	}
 	extractionManager.setNumWorkers()
 	transformManager := &TransformManager{
-		Input:  extractionManager.Output,
-		Output: make(chan *LocalityResult),
+		Input:     extractionManager.Output,
+		Output:    make(chan *LocalityResult),
+		ErrorChan: errorChan,
 	}
 	transformManager.setNumWorkers()
 	transformLocalityManager := &TransformLocalityManager{
-		Input:  transformManager.Output,
-		Output: make(chan *Output),
+		Input:     transformManager.Output,
+		Output:    make(chan *Output),
+		ErrorChan: errorChan,
 	}
 	transformLocalityManager.setNumWorkers()
 	storeManager := &StoreManager{
-		Input: transformLocalityManager.Output,
-		Pool:  pool,
+		Input:      transformLocalityManager.Output,
+		Pool:       pool,
+		ErrorChan:  make(chan *Output),
+		StoreBatch: NewBatch(40),
 	}
+
+	errorManager := &ErrorManager{
+		Input:  errorChan,
+		Output: storeManager.ErrorChan,
+	}
+	errorManager.setNumWorkers()
 
 	return &Pipeline{
 		Managers: []WorkerRunner{
@@ -540,8 +630,25 @@ func NewPipeline(pool *pgxpool.Pool) *Pipeline {
 			transformManager,
 			transformLocalityManager,
 			storeManager,
+			errorManager,
 		},
+		ErrorChan: errorChan,
 	}
+}
+
+/**
+* Top level function for handling all pre-run Pipeline
+* setup.
+ */
+func (pipeline *Pipeline) Initialize(ctx context.Context) error {
+	// We want to grab the StoreManager and initialize the swap tables
+	storeManager := pipeline.Managers[3].(*StoreManager)
+	err := storeManager.StoreBatch.createStagingTables(ctx, storeManager.Pool)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
 
 /**
@@ -561,4 +668,36 @@ func (pipeline *Pipeline) Run(ctx context.Context) {
 	}
 
 	wg.Wait()
+}
+
+/**
+* Top level function that handles finalization of a pipeline
+ */
+func (pipeline *Pipeline) Finalize(ctx context.Context) error {
+	// Finalize the StoreManager by swapping the tables.
+	// The StoreManager will have been writing to a staging table
+	// (see the SwapTables interface definition and components),
+	// and will need to "swap in" the staging for the live tables, for
+	// each of the risk data and risk wfo error tables
+	storeManager := pipeline.Managers[3].(*StoreManager)
+
+	// Swap the risk data staging table in as live data
+	err := storeManager.StoreBatch.riskSwapData.Swap(
+		ctx,
+		storeManager.Pool,
+	)
+	if err != nil {
+		return err
+	}
+
+	// Swap the risk wfo errors staging table in as live data
+	err = storeManager.StoreBatch.errorSwapData.Swap(
+		ctx,
+		storeManager.Pool,
+	)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }

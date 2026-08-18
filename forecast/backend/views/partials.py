@@ -13,6 +13,7 @@ from shapely import MultiPolygon, Polygon
 from backend import interop
 from backend.util import get_counties_combo_box_list, get_states_combo_box_list, process_state_alerts
 from backend.views.risk import process_ghwo_data
+from risk_data.util import get_risk_data_for_county, get_risk_data_for_state
 from spatial.models import WeatherAlertsCache, WeatherCounties, WeatherStates
 
 
@@ -186,8 +187,8 @@ def wx_ghwo_counties(request, county_fips):
     if county.timezone:
         localtz = ZoneInfo(county.timezone)
 
-    # Fetch the GHWO data for the county
-    ghwo_data = interop.get_ghwo_data_for_county(county_fips)
+    # Attempt to retrieve county risk data from the db
+    ghwo_data = get_risk_data_for_county(county_fips, county.primarywfo.wfo)
 
     # Process ghwo data, adding timezone info
     # as needed
@@ -217,8 +218,8 @@ def wx_ghwo_all_counties_for_state(request, state_code):
     if state.timezone:
         localtz = ZoneInfo(state.timezone)
 
-    # Fetch GHWO data for the state
-    ghwo_data = interop.get_ghwo_data_for_state(state.state)
+    # Retrieve state ghwo data from the database
+    ghwo_data = get_risk_data_for_state(state.state)
 
     # Process ghwo data, adding timezone information
     # as needed

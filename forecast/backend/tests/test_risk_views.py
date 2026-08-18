@@ -110,11 +110,11 @@ class TestRiskViews(TestCase):
         self.ghwo = {"days": [], "fips": "12345"}
 
 
-    @mock.patch("backend.views.risk.get_ghwo_data_for_county")
+    @mock.patch("backend.views.risk.get_risk_data_for_county")
     @mock.patch("backend.views.risk.get_ghwo_daily_images")
-    def test_county_ghwo_severity_sorting(self, mock_get_images, mock_get_ghwo_data):
+    def test_county_ghwo_severity_sorting(self, mock_get_images, mock_get_risk_data):
         """Test that risks are sorted descending by their total severity across days."""
-        mock_get_ghwo_data.return_value = {
+        mock_get_risk_data.return_value = {
             "wfo": "YND",
             "legend": {},
             "composite": {
@@ -188,11 +188,11 @@ class TestRiskViews(TestCase):
         self.assertEqual(sorted_risks, ["high_risk", "med_risk", "low_risk"])
 
 
-    @mock.patch("backend.views.risk.get_ghwo_data_for_state")
+    @mock.patch("backend.views.risk.get_risk_data_for_state")
     @mock.patch("backend.views.risk.get_ghwo_daily_images")
-    def test_state_ghwo_severity_sorting(self, mock_get_images, mock_get_ghwo_data):
+    def test_state_ghwo_severity_sorting(self, mock_get_images, mock_get_risk_data):
         """Test that risks are sorted descending by their total severity across days."""
-        mock_get_ghwo_data.return_value = {
+        mock_get_risk_data.return_value = {
             "wfo": "YND",
             "legend": {},
             "composite": {
@@ -267,21 +267,21 @@ class TestRiskViews(TestCase):
 
 
     @disable_logging_for_quieter_tests
-    @mock.patch("backend.views.risk.get_ghwo_data_for_county")
+    @mock.patch("backend.views.risk.get_risk_data_for_county")
     @mock.patch("backend.views.risk.get_counties_combo_box_list")
     @mock.patch("backend.views.county.get_object_or_404", autospec=True)
     def test_county_ghwo_with_failed_interop_request(
         self,
         mock_get_object_or_404,
         mock_get_county_list,
-        mock_get_ghwo_data_for_county,
+        mock_get_risk_data_for_county,
     ):
         """Requesting a GHWO county details page returns 500 when GHWO interop request fails.
 
         This should cover when the interop crashes.
         """
         mock_get_county_list.return_value = []
-        mock_get_ghwo_data_for_county.side_effect = Exception
+        mock_get_risk_data_for_county.side_effect = Exception
         mock_county = mock.Mock()
         mock_county.state.fips.return_value = "1"
         mock_county.county.countyfips.return_value = "1"
@@ -291,21 +291,21 @@ class TestRiskViews(TestCase):
             response = self.client.get(reverse("county_risk_overview", kwargs={"county_fips": "1"}))
             self.assertEqual(response.status_code, 500)
 
-    @mock.patch("backend.views.risk.get_ghwo_data_for_county")
+    @mock.patch("backend.views.risk.get_risk_data_for_county")
     @mock.patch("backend.views.risk.get_counties_combo_box_list")
     @mock.patch("backend.views.risk.get_object_or_404", autospec=True)
-    def test_county_ghwo_with_error_interop_request(
+    def test_county_ghwo_with_error(
         self,
         mock_get_object_or_404,
         mock_get_county_list,
-        mock_get_ghwo_data_for_county,
+        mock_get_risk_data_for_county,
     ):
         """Requesting a GHWO county details page returns an error.
 
         Make sure the user is aware that an error occured and that they should try again later.
         """
         mock_get_county_list.return_value = []
-        mock_get_ghwo_data_for_county.return_value = {"error": "Error fetching GHWO for 1"}
+        mock_get_risk_data_for_county.return_value = {"error": "Error fetching GHWO for 1"}
         mock_county = mock.Mock()
         mock_county.state.fips.return_value = "1"
         mock_county.county.countyfips.return_value = "1"
@@ -317,21 +317,22 @@ class TestRiskViews(TestCase):
         self.assertTemplateUsed(response, "weather/partials/ghwo-details.html")
         self.assertContains(response, "images/weather/wx_error-cloud_error")
 
-    @mock.patch("backend.views.risk.get_ghwo_data_for_county")
+
+    @mock.patch("backend.views.risk.get_risk_data_for_county")
     @mock.patch("backend.views.risk.get_counties_combo_box_list")
     @mock.patch("backend.views.risk.get_object_or_404", autospec=True)
-    def test_county_ghwo_with_no_data_interop_request(
-        self,
-        mock_get_object_or_404,
-        mock_get_county_list,
-        mock_get_ghwo_data_for_county,
+    def test_county_risk_with_no_data(
+            self,
+            mock_get_object_or_404,
+            mock_get_county_list,
+            mock_get_risk_data,
     ):
-        """Requesting a GHWO county details page returns no data.
+        """Requesting a GHWO county details page when it returns no data.
 
         Make sure the user is aware that no data is present for their chosen location.
         """
         mock_get_county_list.return_value = []
-        mock_get_ghwo_data_for_county.return_value = {"error": "No GHWO found for 1"}
+        mock_get_risk_data.return_value = {"error": True}
         mock_county = mock.Mock()
         mock_county.state.fips.return_value = "1"
         mock_county.county.countyfips.return_value = "1"
@@ -343,18 +344,18 @@ class TestRiskViews(TestCase):
         self.assertTemplateUsed(response, "weather/partials/ghwo-details.html")
         self.assertContains(response, "images/weather/wx_error-cloud_missing")
 
-    @mock.patch("backend.views.risk.get_ghwo_data_for_county")
+    @mock.patch("backend.views.risk.get_risk_data_for_county")
     @mock.patch("backend.views.risk.get_counties_combo_box_list")
     @mock.patch("backend.views.risk.get_object_or_404")
     def test_county_ghwo_success(
         self,
         mock_get_object_or_404,
         mock_get_county_list,
-        mock_get_ghwo_data_for_county,
+        mock_get_risk_data_for_county,
     ):
         """Test the success case for requesting a GHWO county details page."""
         mock_get_county_list.return_value = []
-        mock_get_ghwo_data_for_county.return_value = self.county_ghwo_data
+        mock_get_risk_data_for_county.return_value = self.county_ghwo_data
         mock_county = mock.Mock()
         mock_county.state.fips.return_value = "1"
         mock_county.county.countyfips.return_value = "1"
@@ -593,13 +594,20 @@ class TestRiskViews(TestCase):
         self.assertEqual(response.status_code, 404)
 
     @mock.patch("backend.views.partials.get_object_or_404")
-    @mock.patch("backend.views.partials.interop.get_ghwo_data_for_county")
-    def test_wx_ghwo_counties_with_no_data_interop_request(self, mock_get_ghwo_data_for_county, mock_get_object_or_404):
-        """Request to wx ghwo counties endpoint with 404 interop ghwo data request 200s."""
-        mock_get_ghwo_data_for_county.return_value = {"statusCode": 404, "error": "No GHWO found for 51013"}
+    @mock.patch("backend.views.risk.get_risk_data_for_county")
+    @mock.patch("risk_data.util.RiskErrors.objects.filter")
+    def test_wx_ghwo_counties_with_no_data(
+            self,
+            mock_risk_errors_qs,
+            mock_get_risk_data_for_county,
+            mock_get_object_or_404
+    ):
+        """Properly deals with empty risk data when requesting risk details partial."""
+        mock_get_risk_data_for_county.return_value = None
         county = mock.Mock()
         county.timezone = "America/Los_Angeles"
         mock_get_object_or_404.return_value = county
+        mock_risk_errors_qs.return_value = []
 
         response = self.client.get(
             reverse("wx_ghwo_counties", kwargs={"county_fips": "51013"}),
@@ -610,10 +618,27 @@ class TestRiskViews(TestCase):
         self.assertContains(response, "images/weather/wx_error-cloud_missing")
 
     @mock.patch("backend.views.partials.get_object_or_404")
-    @mock.patch("backend.views.partials.interop.get_ghwo_data_for_county")
-    def test_wx_ghwo_counties_with_error_interop_request(self, mock_get_ghwo_data_for_county, mock_get_object_or_404):
+    # @mock.patch("backend.views.partials.get_risk_data_for_county")
+    @mock.patch("risk_data.util.RiskData.objects.filter")
+    def test_wx_ghwo_counties_with_error(self, mock_get_risk_data_filter, mock_get_object_or_404):
         """Request to wx ghwo counties endpoint with 500 interop ghwo data request 200s."""
-        mock_get_ghwo_data_for_county.return_value = {"statusCode": 500, "error": "Error fetching GHWO for 51013"}
+        fake_query_result = {
+            "id": "51013",
+            "data": {
+                "errors": {
+                    "wfo": "lwx",
+                    "localityCode": "51013",
+                    "kind": "county",
+                    "errors": [
+                        "error 1",
+                        "error 2"
+                    ]
+                }
+            }
+        }
+        mock_value_getter = mock.Mock()
+        mock_value_getter.values.return_value = [fake_query_result]
+        mock_get_risk_data_filter.return_value = mock_value_getter
         mock_county_or_state = mock.Mock()
         mock_county_or_state.timezone = "America/New_York"
         mock_get_object_or_404.return_value = mock_county_or_state
@@ -627,18 +652,6 @@ class TestRiskViews(TestCase):
         self.assertContains(response, "images/weather/wx_error-cloud_error")
 
     @disable_logging_for_quieter_tests
-    @mock.patch("backend.views.county.interop.get_ghwo_data_for_county")
-    def test_wx_ghwo_counties_failed_interop_request(self, mock_get_ghwo):
-        """Request to wx ghwo counties endpoint with failing interop ghwo data request 404s."""
-        mock_get_ghwo.side_effect = Exception
-
-        response = self.client.get(
-            reverse("wx_ghwo_counties", kwargs={"county_fips": "51013"}),
-        )
-
-        self.assertEqual(response.status_code, 404)
-
-    @disable_logging_for_quieter_tests
     def test_wx_ghwo_counties_cannot_post(self):
         """Ensure we cannot POST on the wx ghwo counties partial endpoint."""
         response = self.client.post(
@@ -650,13 +663,13 @@ class TestRiskViews(TestCase):
         self.assertEqual(response.status_code, 405)
 
     @mock.patch("backend.views.partials.get_object_or_404")
-    @mock.patch("backend.views.county.interop.get_ghwo_data_for_county")
-    def test_wx_ghwo_counties_success(self, mock_get_ghwo, mock_get_object_or_404):
+    @mock.patch("backend.views.partials.get_risk_data_for_county")
+    def test_wx_ghwo_counties_success(self, mock_get_risk_data, mock_get_object_or_404):
         """Test successful request for wx ghwo counties partial."""
         mock_county_or_state = mock.Mock()
         mock_county_or_state.timezone = "America/New_York"
         mock_get_object_or_404.return_value = mock_county_or_state
-        mock_get_ghwo.return_value = self.county_ghwo_data
+        mock_get_risk_data.return_value = self.county_ghwo_data
 
         response = self.client.get(
             reverse("wx_ghwo_counties", kwargs={"county_fips": "valid"}),
@@ -667,18 +680,18 @@ class TestRiskViews(TestCase):
 
 
     @disable_logging_for_quieter_tests
-    @mock.patch("backend.views.risk.get_ghwo_data_for_county")
+    @mock.patch("backend.views.risk.get_risk_data_for_county")
     @mock.patch("backend.views.risk.get_counties_combo_box_list")
     @mock.patch("spatial.models.WeatherCounties.objects.get", autospec=True)
     def test_county_ghwo_with_invalid_county_fips(
         self,
         mock_get_county,
         mock_get_county_list,
-        mock_get_ghwo_data_for_county,
+        mock_get_risk_data_for_county,
     ):
         """Requesting a GHWO county details page for invalid county returns 404."""
         mock_get_county_list.return_value = []
-        mock_get_ghwo_data_for_county.return_value = self.county_ghwo_data
+        mock_get_risk_data_for_county.return_value = self.county_ghwo_data
         mock_get_county.side_effect = spatial.WeatherCounties.DoesNotExist
 
         response = self.client.get(reverse("county_risk_overview", kwargs={"county_fips": "1"}))

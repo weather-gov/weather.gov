@@ -8,9 +8,6 @@ const riskOverviewLogger = logger.child({ subsystem: "risk overview" });
 
 export const startRiskOverviewProcessing = async () => {
   if (enableBackgroundProcessing()) {
-    // Make sure the database is initialized.
-    // await ensureDatabaseExists;
-
     const worker = new Worker(path.join(import.meta.dirname, "background.js"));
 
     worker.on("message", ({ action, level, message }) => {
@@ -68,9 +65,6 @@ if (process.env.TASKS_GHWO_INTEROP === "true") {
  */
 export const getRiskOverview = async (placeId) => {
   try {
-    // Make sure the database is initialized.
-    // await ensureDatabaseExists;
-
     const db = await openDatabase();
     const data = await db.query(
       "SELECT data FROM weathergov_risk_data WHERE id=$1::text",

@@ -70,7 +70,15 @@ func main() {
 		"extractionWorkers", pipeline.Managers[0].(*ghwo.ExtractionManager).NumWorkers,
 		"transformWorkers", pipeline.Managers[1].(*ghwo.TransformManager).NumWorkers,
 		"transformLocalityWorkers", pipeline.Managers[2].(*ghwo.TransformLocalityManager).NumWorkers,
+		"errorWorkers", pipeline.Managers[4].(*ghwo.ErrorManager).NumWorkers,
 	)
+
+	// Initialize the pipeline
+	err = pipeline.Initialize(ctx)
+	if err != nil {
+		logger.Error("Could not initialize pipeline", "error", err)
+		os.Exit(-1)
+	}
 
 	// Get the input and send on the pipeline's
 	// first manger input channel
@@ -90,5 +98,13 @@ func main() {
 	}()
 
 	pipeline.Run(ctx)
+
+	// Finalize the pipeline results
+	err = pipeline.Finalize(ctx)
+	if err != nil {
+		logger.Error("Could not finalize pipeline", "error", err)
+		os.Exit(-1)
+	}
+
 	logger.Warn("GHWO update completed")
 }

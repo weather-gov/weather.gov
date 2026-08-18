@@ -30,6 +30,10 @@ resource "cloudfoundry_app" "tasks" {
     GO_INSTALL_PACKAGE_SPEC = "./cmd/alerts ./cmd/ghwo ./cmd/wpcprob ./cmd/gridcache"
     CLOUDGOV_SPACE          = var.cf_space_name
     TASKS_GHWO_INTEROP      = var.tasks_ghwo_interop
+    GHWO_E_WORKER_NUM       = var.ghwo_e_worker_num
+    GHWO_T_WORKER_NUM       = var.ghwo_t_worker_num
+    GHWO_TL_WORKER_NUM      = var.ghwo_tl_worker_num
+    GHWO_ERR_WORKER_NUM     = var.ghwo_err_worker_num
   }
 
   service_bindings = [

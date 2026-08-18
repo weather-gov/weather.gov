@@ -6,7 +6,6 @@ from django.urls import reverse
 from django.views.decorators.cache import never_cache
 from django.views.decorators.http import require_POST
 
-from backend.interop import get_ghwo_data_for_county, get_ghwo_data_for_state
 from backend.util import (
     get_basis_for_ghwo_risk,
     get_counties_combo_box_list,
@@ -14,6 +13,7 @@ from backend.util import (
     get_states_combo_box_list,
 )
 from backend.util.county import risk_overview_timestamps_to_dates
+from risk_data.util import get_risk_data_for_county, get_risk_data_for_state
 from spatial.models import WeatherCounties, WeatherStates
 
 
@@ -21,54 +21,53 @@ def compute_severity(risk_entry):
     """Compute severity for a GHWO risk entry."""
     return sum(day["category"] for day in risk_entry["days"])
 
-def process_ghwo_data(ghwo_data, localtz): # noqa: C901
+
+def process_ghwo_data(ghwo_data, localtz):  # noqa: C901
     """Add timestamps and additional processing for GHWO data."""
     if "error" not in ghwo_data:
         risk_overview_timestamps_to_dates(ghwo_data, localtz)
 
         # Get basis description for each risk, if we have it.
-        for risk_id, risk in ghwo_data["legend"].items():
-            risk["basis"] = get_basis_for_ghwo_risk(ghwo_data["wfo"], risk_id)
+        if ghwo_data.get("legend", None):
+            for risk_id, risk in ghwo_data["legend"].items():
+                risk["basis"] = get_basis_for_ghwo_risk(ghwo_data["wfo"], risk_id)
 
         # Now map those from the global legend into the risk-specific legends
-        for risk_id, risk in ghwo_data["risks"].items():
-            # GHWO legends don't always contain entries for every risk type.
-            # Guard against that.
-            if risk_id in ghwo_data["legend"]:
-                if "basis" in ghwo_data["legend"][risk_id]:
-                    risk["legend"]["basis"] = ghwo_data["legend"][risk_id]["basis"]
+        if ghwo_data.get("risks", None):
+            for risk_id, risk in ghwo_data["risks"].items():
+                # GHWO legends don't always contain entries for every risk type.
+                # Guard against that.
+                if risk_id in ghwo_data["legend"]:
+                    if "basis" in ghwo_data["legend"][risk_id]:
+                        risk["legend"]["basis"] = ghwo_data["legend"][risk_id]["basis"]
 
-        ghwo_data["risks"] = dict(
-            sorted(ghwo_data["risks"].items(), key=lambda i: compute_severity(i[1]), reverse=True)
-        )
+            ghwo_data["risks"] = dict(
+                sorted(ghwo_data["risks"].items(), key=lambda i: compute_severity(i[1]), reverse=True)
+            )
 
-        # Pick the first non-zero value and mark it as first. This one
-        # will be highlighted on page load.
-        for risk in ghwo_data["risks"].values():
-            for day in risk["days"]:
-                if day["category"] > 0:
-                    day["is_first"] = True
+            # Pick the first non-zero value and mark it as first. This one
+            # will be highlighted on page load.
+            for risk in ghwo_data["risks"].values():
+                for day in risk["days"]:
+                    if day["category"] > 0:
+                        day["is_first"] = True
+                        break
+                    continue
                     break
-            else:
-                continue
-            break
+            # Add any image urls to the list of images to prefetch
+            ghwo_data["prefetch_images"] = get_ghwo_daily_images(ghwo_data)
 
         # Update the scaled value for screenreader text
         for day in ghwo_data["composite"]["days"]:
             if day["scaled"] is not None:
                 day["scaled_10"] = day["scaled"] * 10
 
-        # Add any image urls to the list of images to prefetch
-        ghwo_data["prefetch_images"] = get_ghwo_daily_images(ghwo_data)
-
     return ghwo_data
+
 
 def risk_details_by_state(request, state_code):
     """Render the risk overview for a given state."""
-    state = get_object_or_404(
-        WeatherStates,
-        state=state_code
-    )
+    state = get_object_or_404(WeatherStates, state=state_code)
 
     localtz = ZoneInfo("UTC")
     if state.timezone:
@@ -80,8 +79,8 @@ def risk_details_by_state(request, state_code):
     # Now get a list of all counties in state
     counties = get_counties_combo_box_list(state.state)
 
-    # Fetch the GHWO data for the state from the interop layer
-    ghwo_data = get_ghwo_data_for_state(state_code)
+    # Attempt to retrieve the state risk data from the database
+    ghwo_data = get_risk_data_for_state(state.state)
 
     # Process and format the GHWO data,
     # adding timezone information as needed
@@ -90,20 +89,17 @@ def risk_details_by_state(request, state_code):
     return render(
         request,
         "weather/state/ghwo.html",
-        {
-            "counties": counties,
-            "states": states,
-            "county": None,
-            "state": state,
-            "ghwo": ghwo_data
-        }
+        {"counties": counties, "states": states, "county": None, "state": state, "ghwo": ghwo_data},
     )
+
 
 @never_cache
 def risk_details_by_county(request, county_fips):
     """Render the risk overview for a specific county."""
     county = get_object_or_404(
-        WeatherCounties.objects.select_related("state").only("countyname", "st", "countyfips", "state__state"),
+        WeatherCounties.objects.select_related("state", "primarywfo").only(
+            "countyname", "st", "countyfips", "state__state", "primarywfo__wfo"
+        ),
         countyfips=county_fips,
     )
 
@@ -117,8 +113,8 @@ def risk_details_by_county(request, county_fips):
     # Now get a list of all counties in the same state as the found county.
     counties = get_counties_combo_box_list(county.state.state, county_fips)
 
-    # Fetch the GHWO data for the county from the interop layer
-    ghwo_data = get_ghwo_data_for_county(county.countyfips)
+    # Retrieve risk data from the models, if present
+    ghwo_data = get_risk_data_for_county(county.countyfips, county.primarywfo.wfo)
 
     # Process GHWO data, adding timezone information
     # as needed

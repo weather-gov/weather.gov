@@ -63,7 +63,7 @@ class TestStateViews(TestCase):
         self.assertEqual(response.context["state_name"], self.state_fr.name)
         self.assertEqual(response.status_code, 200)
 
-    @mock.patch("backend.interop.get_ghwo_data_for_state")
+    @mock.patch("backend.views.state.get_risk_data_for_state")
     def test_risks(self, mock_get_ghwo_data_for_state):
         """Test the risks page."""
         mock_get_ghwo_data_for_state.return_value = {
