@@ -4,9 +4,9 @@ from zoneinfo import ZoneInfo
 from django.shortcuts import get_object_or_404, render
 from django.views.decorators.cache import cache_control
 
-from backend import interop
 from backend.util import sort_alert_key
 from backend.util.state import get_analysis_data_for_state, get_wfo_data_for_state
+from risk_data.util import get_risk_data_for_state
 from spatial.models import WeatherAlertsCache, WeatherCounties, WeatherStates
 
 
@@ -138,7 +138,8 @@ def state_alerts(request, state):
 def state_risks(request, state):
     """Render the risks tab for a given state."""
     state = get_object_or_404(WeatherStates, state=state.upper())
-    risk_overview = interop.get_ghwo_data_for_state(state.state)
+    # risk_overview = interop.get_ghwo_data_for_state(state.state)
+    risk_overview = get_risk_data_for_state(state.state)
     tz = ZoneInfo(state.timezone or "UTC")
 
     if risk_overview.get("composite", False):

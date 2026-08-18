@@ -438,12 +438,6 @@ func TestTransformManagers(t *testing.T) {
 		if outputOpen {
 			t.Errorf("Cancelling did not close the output channel!")
 		}
-
-		if len(manager.Errors) != 1 {
-			t.Errorf("Expected one error on the manager, but got %d", len(manager.Errors))
-			t.Errorf("%v", manager.Errors)
-		}
-
 	})
 
 	t.Run("TransformLocalityManager: output channel can receive processed output after input is closed", func(t *testing.T) {
@@ -460,6 +454,7 @@ func TestTransformManagers(t *testing.T) {
 		manager := TransformLocalityManager{
 			Input:      make(chan *LocalityResult),
 			Output:     make(chan *Output),
+			ErrorChan:  make(chan *GHWOError),
 			NumWorkers: 1,
 		}
 
@@ -587,11 +582,13 @@ func TestManagerIntegration(t *testing.T) {
 			Input:      make(chan *FetchResult),
 			Output:     make(chan *LocalityResult),
 			NumWorkers: 1,
+			ErrorChan:  make(chan *GHWOError),
 		}
 		transformLocalityManager := TransformLocalityManager{
 			Input:      transformManager.Output,
 			Output:     make(chan *Output),
 			NumWorkers: 1,
+			ErrorChan:  make(chan *GHWOError),
 		}
 
 		ctx := context.TODO()

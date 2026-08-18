@@ -196,3 +196,27 @@ variable "tasks_ghwo_interop" {
   default     = true
   description = "Whether or not to turn on GHWO background processing in the interop"
 }
+
+variable "ghwo_t_worker_num" {
+  type        = number
+  default     = 60
+  description = "The number of TransformManager workers to run during the GHWO task"
+}
+
+variable "ghwo_tl_worker_num" {
+  type        = number
+  default     = 60
+  description = "The number of TransformLocalityManager workers to run during the GHWO task"
+}
+
+variable "ghwo_e_worker_num" {
+  type        = number
+  default     = 100
+  description = "The number of ExtractionManager workers to run during the GHWO task"
+}
+
+variable "ghwo_err_worker_num" {
+  type        = number
+  default     = 100
+  description = "The number of ErrorManager workers to run during the GHWO task"
+}
