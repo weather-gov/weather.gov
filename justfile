@@ -121,7 +121,7 @@ format-js *files:
       -v "{{justfile_directory()}}/spatial-data":"/app/spatial-data" \
       -v "{{justfile_directory()}}/forecast/frontend":"/app/forecast/frontend" \
       node \
-      npx --no-install prettier -w --list-different 'forecast/frontend/**/assets/**/*.js' 'tests/**/*.js' '*.js' 'api-interop-layer/**/*.js'
+      npx --no-install prettier -w --list-different 'forecast/frontend/**/assets/**/*.js' 'tests/**/*.js' '*.js' 'api-interop-layer/**/*.js' '.gitlab-ci.yml' '.gitlab/**/*.yml'
   else
     docker compose --profile utility \
       run --rm \
