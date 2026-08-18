@@ -2,15 +2,15 @@ spec:
   # these inputs permit flexible pipeline runs from the GitLab UI
   inputs:
     deploy-to-environment:
-      options: ['no deploy', 'test', 'staging', 'prod']
-      default: 'no deploy'
+      options: ["no deploy", "test", "staging", "prod"]
+      default: "no deploy"
       description: "Deploy the selected branch or tag to this environment using Terraform. You do not need to build the images or run the tests, although you can if you like. At the time of writing (9/25), 'prod' means beta.weather.gov."
     confirm-beta-deploy:
       description: "To deploy to beta, type YES in this box."
-      default: ''
+      default: ""
     confirm-nec-deploy:
       description: "To deploy to NEC, type NEC in this box."
-      default: ''
+      default: ""
     confirm-nec-bootstrap:
       description: "To bootstrap a Terraform state bucket for NEC, type in BOOTSTRAP in this box."
       default: ""
@@ -39,13 +39,13 @@ spec:
 #     different things, depending on which branch is in the pipeline
 
 stages:
-  - gather   # gather the 3rd party dependencies and push images of them to the registry
-  - lint     # pull the code images and lint
-  - build    # perform any necesary build steps
-  - test     # pull the code images and test
-  - notes    # write the release notes and any other pre-release activities
-  - release  # create a release, which is stored in GitLab (the software, not the code repository)
-  - deploy   # toss the selected branch/tag into the desired live environment
+  - gather # gather the 3rd party dependencies and push images of them to the registry
+  - lint # pull the code images and lint
+  - build # perform any necesary build steps
+  - test # pull the code images and test
+  - notes # write the release notes and any other pre-release activities
+  - release # create a release, which is stored in GitLab (the software, not the code repository)
+  - deploy # toss the selected branch/tag into the desired live environment
 
 # these are available in all the running containers (images and services)
 variables:
@@ -109,10 +109,10 @@ make-tagged-release:
   script:
     - echo "Making release $CI_COMMIT_TAG from tag $CI_COMMIT_TAG at commit $CI_COMMIT_SHA."
   release:
-    name: '$CI_COMMIT_TAG'
+    name: "$CI_COMMIT_TAG"
     description: release_notes.md
-    tag_name: '$CI_COMMIT_TAG'
-    ref: '$CI_COMMIT_SHA'
+    tag_name: "$CI_COMMIT_TAG"
+    ref: "$CI_COMMIT_SHA"
   rules:
     - if: '$CI_COMMIT_TAG =~ /^v\d+\.\d+\.\d+-beta$/'
 
@@ -305,7 +305,9 @@ js-lint:
       'forecast/frontend/**/assets/**/*.scss' \
       'tests/**/*.js' \
       '*.js' \
-      'api-interop-layer/**/*.js'
+      'api-interop-layer/**/*.js' \
+      '.gitlab-ci.yml' \
+      '.gitlab/**/*.yml'
   rules:
     - if: $CI_PIPELINE_SOURCE == "push"
     - if: $CI_PIPELINE_SOURCE == "web" && "$[[ inputs.run-js-ci ]]" == "true"
@@ -331,12 +333,12 @@ django-test:
       optional: true
   image: $CI_REGISTRY_IMAGE/python-with-deps:$USE_LATEST_TAG
   services:
-  - name: postgis/postgis:17-3.5
-    alias: database
-    variables:
-      POSTGRES_USER: drupal
-      POSTGRES_PASSWORD: drupal
-      POSTGRES_DB: weathergov
+    - name: postgis/postgis:17-3.5
+      alias: database
+      variables:
+        POSTGRES_USER: drupal
+        POSTGRES_PASSWORD: drupal
+        POSTGRES_DB: weathergov
   script:
     - cd forecast/
     - ldconfig -p | grep gdal
@@ -373,8 +375,7 @@ web-component-test:
     - ln -s /app/api-interop-layer/node_modules api-interop-layer/
     - ln -s /app/api-proxy/node_modules api-proxy/
     - npx --no-install c8 --reporter cobertura -o coverage/wc/ --reporter text-summary  mocha --forbid-only --require forecast/frontend/tests/components/preload.js forecast/frontend/tests/components/*-tests.js
-  coverage:
-    /^Statements\s*:\s*([^%]+)/
+  coverage: /^Statements\s*:\s*([^%]+)/
   artifacts:
     reports:
       coverage_report:
@@ -404,8 +405,7 @@ interop-test:
     # Due to a bug, if you want to set the log level,
     # do `LOG_LEVEL=silent npx...`
     - npx --no-install c8 --reporter cobertura -o ../coverage/interop/ --reporter text-summary mocha --exit '**/*.test.js' --forbid-only --exclude 'node_modules/**' --require mocha.js
-  coverage:
-    /^Statements\s*:\s*([^%]+)/
+  coverage: /^Statements\s*:\s*([^%]+)/
   artifacts:
     reports:
       coverage_report:
