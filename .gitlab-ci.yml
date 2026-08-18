@@ -11,6 +11,9 @@ spec:
     confirm-nec-deploy:
       description: "To deploy to NEC, type NEC in this box."
       default: ''
+    confirm-nec-bootstrap:
+      description: "To bootstrap a Terraform state bucket for NEC, type in BOOTSTRAP in this box."
+      default: ""
     build-images:
       type: boolean
       default: true
@@ -71,6 +74,9 @@ workflow:
 # set up NEC-specific CI/CD jobs
 include:
   - local: ".gitlab/nec/bootstrap.yml"
+    inputs:
+      confirm-nec-bootstrap: "$[[ inputs.confirm-nec-bootstrap ]]"
+  - local: ".gitlab/nec/infra.yml"
     inputs:
       confirm-nec-deploy: "$[[ inputs.confirm-nec-deploy ]]"
   - local: ".gitlab/nec/containers.yml"
