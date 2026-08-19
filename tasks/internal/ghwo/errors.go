@@ -68,39 +68,3 @@ func NewGHWOErrorForState(stateCode LocalityCode, wfo string, errors []error) *G
 		Errors:   errorsToStrings(errors),
 	}
 }
-
-func GHWOErrorsFromFetchResult(fetchResult *FetchResult) []*GHWOError {
-	result := make([]*GHWOError, 0)
-
-	// If the FetchResult itself has errors, this indicates that
-	// there was an error retrieving critical data at the WFO level,
-	// meaning the whole WFO has errored out.
-	if len(fetchResult.Errors) > 0 {
-		result = append(
-			result,
-			NewGHWOErrorForWFO(
-				fetchResult.WFO,
-				fetchResult.Errors,
-			),
-		)
-	}
-
-	// Loop through each of the possible StateFetchResult structs.
-	// If any of these has errors, it indicates that there was an
-	// error fetching critical data at the State level,
-	// meaning we have an error for that state overall
-	for stateCode, stateFetchResult := range fetchResult.States {
-		if len(stateFetchResult.Errors) > 0 {
-			result = append(
-				result,
-				NewGHWOErrorForState(
-					stateCode,
-					fetchResult.WFO,
-					stateFetchResult.Errors,
-				),
-			)
-		}
-	}
-
-	return result
-}

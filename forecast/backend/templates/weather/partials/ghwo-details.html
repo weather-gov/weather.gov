@@ -8,19 +8,14 @@
 -- Used by: county/ghwo.html
 {% endcomment %}
 {% if ghwo.error %}
-  {% if "Error" in ghwo.error %}
-    <h3 class="text-accent-warm-darker">{{ "ghwo.heading.error.01" | t }}</h3>
-    <p>{{ "ghwo.heading.error-description.01" | t}}</p>
+    {# We reach this branch if one of the following is true: #}
+    {#  - There was an overall error fetching GHWO data for the related WFO (to this county or state) #}
+    <h3 class="text-accent-warm-darker font-sans-2xl text-normal">{{ "ghwo.heading.no-risk-data.01" | t}}</h3>
+    <p class="font-body-md">{{ "ghwo.message.no-risk-data.01" | t }}</p>
+    <p class="font-body-md">{{ "ghwo.message-addendum.no-risk-data.01" | t }}</p>
     <div class="display-flex flex-justify-center margin-y-6 desktop:margin-y-8">
       <img src={% static "images/weather/wx_error-cloud_error.svg" %} alt="" />
     </div>
-  {% else %}
-    <h3 class="text-base-darker">{{ "ghwo.heading.no-data.01" | t }}</h3>
-    <p>{{ "ghwo.heading.no-data-description.01" | t }}</p>
-    <div class="display-flex flex-justify-center margin-y-6 desktop:margin-y-8">
-      <img src={% static "images/weather/wx_error-cloud_missing.svg" %} alt="" />
-    </div>
-  {% endif %}
 {% else %}
   {% include "weather/partials/risk-overview-summary.html" with ghwo=ghwo %}
   <div class="grid-row">

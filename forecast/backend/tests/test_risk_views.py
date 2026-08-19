@@ -342,7 +342,7 @@ class TestRiskViews(TestCase):
         response = self.client.get(reverse("county_risk_overview", kwargs={"county_fips": "1"}))
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "weather/partials/ghwo-details.html")
-        self.assertContains(response, "images/weather/wx_error-cloud_missing")
+        self.assertContains(response, "images/weather/wx_error-cloud_error")
 
     @mock.patch("backend.views.risk.get_risk_data_for_county")
     @mock.patch("backend.views.risk.get_counties_combo_box_list")
@@ -615,7 +615,7 @@ class TestRiskViews(TestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "weather/partials/ghwo-details.html")
-        self.assertContains(response, "images/weather/wx_error-cloud_missing")
+        self.assertContains(response, "images/weather/wx_error-cloud_error")
 
     @mock.patch("backend.views.partials.get_object_or_404")
     # @mock.patch("backend.views.partials.get_risk_data_for_county")

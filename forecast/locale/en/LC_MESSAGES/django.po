@@ -950,6 +950,15 @@ msgstr "We couldn't load the data for this county. Please try again later."
 msgid "ghwo.heading.no-data.01"
 msgstr "We don't have data for this county"
 
+msgid "ghwo.heading.no-risk-data.01"
+msgstr "Risk Data Not Available"
+
+msgid "ghwo.message.no-risk-data.01"
+msgstr "Please wait a few moments and reload the page."
+
+msgid "ghwo.message-addendum.no-risk-data.01"
+msgstr "You can always visit <a href='https://www.weather.gov' class='usa-link'>weather.gov</a> for the latest information."
+
 msgid "ghwo.details.message.no-details.01"
 msgstr "State-level risk details aren't available for {state_name}. Please select a county to see its risk details."
 

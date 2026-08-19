@@ -189,10 +189,22 @@ func TestExtractManager(t *testing.T) {
 		// Create an example context
 		ctx := context.TODO()
 
+		// Create and start an error manager and workers
+		errorManager := &ErrorManager{
+			Input:      make(chan *GHWOError, 5),
+			Output:     make(chan *Output, 5),
+			NumWorkers: 4,
+		}
+
+		go func() {
+			errorManager.RunWorkers(ctx)
+		}()
+
 		// Create and start the extraction workers
 		extractor := &ExtractionManager{
 			Input:      make(chan string),
 			Output:     make(chan *FetchResult),
+			ErrorChan:  errorManager.Input,
 			NumWorkers: 2,
 		}
 
@@ -218,6 +230,7 @@ func TestExtractManager(t *testing.T) {
 					return
 				case result, isOpen := <-extractor.Output:
 					if !isOpen {
+						close(errorManager.Input)
 						return
 					}
 					results = append(
@@ -263,15 +276,23 @@ func TestExtractManager(t *testing.T) {
 			// Exclude state results for now
 		}
 
-		// We expect a single state fetch result with 2 errors,
-		// one for each of state chicklet and legend fetch failures
-		stateResult, ok := results[0].States["MD"]
-		if !ok {
-			t.Errorf("Expected a state result for MD, but not found!")
-			return
+		var outputErrors []*Output
+
+		// Loop through the error manager output channel
+		// to get all the errors
+		for output := range errorManager.Output {
+			outputErrors = append(
+				outputErrors,
+				output,
+			)
 		}
-		if len(stateResult.Errors) != 2 {
-			t.Errorf("Expected 2 state result errors for MD, but got %d", len(stateResult.Errors))
+
+		// We expect a single state error for Maryland
+		if len(outputErrors) != 1 {
+			t.Errorf("Expected a single state output error, but got %d", len(outputErrors))
+		}
+		if outputErrors[0].Errors.Locality != "MD" {
+			t.Errorf("Expected a single state output error for MD, but got one for %s", outputErrors[0].Errors.Locality)
 		}
 
 		// But we want the rest of the data, excluding state information, to match

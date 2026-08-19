@@ -193,19 +193,46 @@ func (extractionManager *ExtractionManager) RunWorkers(ctx context.Context) {
 					}
 					fetchResult, errors := FetchWFO(ctx, wfoCode)
 					if len(errors) > 0 {
+						// Indicates that there were errors extracting
+						// the whole WFO.
 						// Loop through any errors and send those on the
 						// error channel
-						for _, ghwoError := range GHWOErrorsFromFetchResult(fetchResult) {
+						ghwoError := NewGHWOErrorForWFO(
+							fetchResult.WFO,
+							errors,
+						)
+						select {
+						case <-ctx.Done():
+							return
+						case extractionManager.ErrorChan <- ghwoError:
+						}
+						// Do not pass any FetchResults that have errors.
+						// Instead, continue the listening loop
+						logger.Warn("Could not fetch data for WFO", "wfo", wfoCode, "numErrors", len(errors), "errors", fmt.Sprintf("%v", errors))
+						continue
+					}
+
+					// Loop through the states on the fetch result to see if there
+					// were any errors in extracting any of them.
+					// If we encounter an error, we remove the state
+					// from the otherwise good fetchresult dictionary
+					// for the WFO
+					for stateCode, stateResult := range fetchResult.States {
+						if len(stateResult.Errors) > 0 {
+							ghwoError := NewGHWOErrorForState(
+								stateCode,
+								fetchResult.WFO,
+								stateResult.Errors,
+							)
 							select {
 							case <-ctx.Done():
 								return
 							case extractionManager.ErrorChan <- ghwoError:
 							}
+
+							// Remove
+							delete(fetchResult.States, stateCode)
 						}
-						// Do not pass any FetchResults that have errors.
-						// Instead, continue the listening loop
-						logger.Warn("Could not fetch data for WFO", "wfo", wfoCode, "numErrors", len(errors))
-						continue
 					}
 
 					// Otherwise, we have a good FetchResult that we can send
@@ -569,6 +596,8 @@ func (manager *ErrorManager) RunWorkers(ctx context.Context) {
 						WFO:       incomingError.WFO,
 						HasErrors: true,
 						Errors:    incomingError,
+						IsState:   incomingError.Kind == "state",
+						IsCounty:  incomingError.Kind == "county",
 					}
 					select {
 					case <-ctx.Done():
