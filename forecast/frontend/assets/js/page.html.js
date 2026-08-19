@@ -10,6 +10,10 @@ import "./components/timer.js";
 import "./components/site-nav.js";
 import "./components/scroll-to-top.js";
 
+// For secondary "On this page..." nav
+import "./components/secondary-nav.js";
+import "./components/combobox/listbox.js";
+
 // For location search
 import "./components/wx-loader.js";
 import "./locationSearch.js";

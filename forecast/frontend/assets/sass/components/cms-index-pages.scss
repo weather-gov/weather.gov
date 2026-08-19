@@ -1,0 +1,44 @@
+@use "uswds-core" as *;
+@forward "uswds-theme";
+@forward "uswds";
+
+.index-page-header {
+  width: 100vw;
+  position: relative;
+  left: 50%;
+  margin-left: -50vw;
+  padding-left: calc((100vw - 100%) / 2);
+  padding-right: calc((100vw - 100%) / 2);
+}
+
+.page-list {
+  list-style-type: none;
+
+  li {
+    margin-bottom: units(2);
+  }
+}
+
+@include at-media("tablet") {
+  .use-columns {
+    .page-list {
+      columns: 3;
+
+      li {
+        margin-right: units(2);
+      }
+    }
+  }
+}
+
+@include at-media("desktop") {
+  .use-columns {
+    .page-list {
+      columns: 4;
+
+      li {
+        margin-right: units(2);
+      }
+    }
+  }
+}

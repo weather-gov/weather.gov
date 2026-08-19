@@ -1,0 +1,90 @@
+{% extends "weather/page.html" %}
+{% comment %}
+-- Template purpose:
+--   Displays the beta.weather.gov hazard safety guides.
+-- Url: https://beta.weather.gov/prepare/hazard-guides/[hazard_name]
+{% endcomment %}
+{% load i18n %}
+{% load static %}
+{% load weather_i18n %}
+{% load wagtailcore_tags %}
+{% load wagtailimages_tags %}
+{% block head_js %}
+  <script src="{% static 'js/hazard_guide_page.html.js' %}" type="module" defer></script>
+{% endblock %}
+{% block page_content %}
+  {% image page.hero_image max-1920x1080 as img %}
+  <div class="grid-container">
+    <div class="padding-x-0">
+      <div class="bg-primary-dark flex-no-wrap hazard-guide-header">
+        <h1 class="text-normal text-white padding-y-1 margin-y-0">{{ page.title }}</h1>
+      </div>
+      <div class="clipped-wrapper">
+        {% if img %}
+          <img src="{{ img.url }}"
+               width="{{ img.width }}"
+               height="{{ img.height }}"
+               alt="{{ img.title }}"
+               style="--x: {{ focal_point_x }}%;
+                      --y: {{ focal_point_y }}%">
+        {% endif %}
+      </div>
+    </div>
+    <div class="grid-container padding-x-0 margin-top-0 tablet-lg:margin-top-2 margin-bottom-4">
+      <div class="grid-row margin-bottom-4 page-layout-container">
+        {% include "weather/partials/secondary-navigation.html" with nav_list=section_headings %}
+        <div id="main-content-area"
+             class="grid-col-12 tablet-lg:grid-col-8 section-content main-content-area">
+          {% for section in sections %}
+            {% if section.section_type == "before" %}
+              <div class="grid-col-12 subheader-image-container">
+                <img src="{% static 'images/hazards/wx_NatSafe_1Before.svg' %}"
+                     height="100%"
+                     alt="" />
+              </div>
+            {% elif section.section_type == "during" %}
+              <div class="grid-col-12 subheader-image-container">
+                <img src="{% static 'images/hazards/wx_NatSafe_2During.svg' %}"
+                     height="100%"
+                     alt="" />
+              </div>
+            {% elif section.section_type == "after" %}
+              <div class="grid-col-12 subheader-image-container">
+                <img src="{% static 'images/hazards/wx_NatSafe_3After.svg' %}"
+                     height="100%"
+                     alt="" />
+              </div>
+            {% endif %}
+            <h2 class="text-primary-darker text-weight-normal margin-y-0"
+                id="{{ section.header|slugify }}">{{ section.header }}</h2>
+            {% if section.content %}<div class="margin-top-0 margin-bottom-4">{{ section.content | richtext }}</div>{% endif %}
+            {% if section.section_type == "alerts" %}
+              <div class="margin-top-0">
+                {% for entry in section.hazard_level_entries.all %}
+                  <div class="margin-top-1 alert-levels-section">
+                    <div class="usa-alert usa-alert--warning usa-alert--slim wx-alert margin-top-0 margin-bottom-0 padding-y-05"
+                         role="alert"
+                         data-alert-level="{{ entry.get_alert_level_display | lower }}">
+                      <div class="usa-alert__body wx-alert-li">
+                        <p class="margin-y-0">{{ entry.alert_text }}</p>
+                      </div>
+                    </div>
+                    {{ entry.description | richtext }}
+                  </div>
+                {% endfor %}
+              </div>
+            {% elif section.section_type == "resources" %}
+              <div class="margin-top-0">
+                {% for link in section.resource_links.all %}
+                  <div class="margin-top-1">
+                    <a href="{{ link.link }}">{{ link.text }}</a>
+                  </div>
+                {% endfor %}
+              </div>
+            {% endif %}
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
