@@ -1,0 +1,88 @@
+@use "uswds-core" as *;
+@forward "usa-sidenav";
+
+/* 
+Built on top of USWDS sidenav styles.
+*/
+
+/* Container wrapping the grid layout */
+.page-layout-container {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+}
+
+/* Ensure your main content takes up the remaining flexible space */
+#main-content-area {
+  flex: 1;
+}
+
+#sidenav-container {
+  display: none; /* Hide by default */
+  flex-direction: column;
+  align-self: flex-start; /* Prevent stretching to full parent height */
+  position: sticky;
+  top: 1rem;
+  padding-right: units(4);
+}
+
+.usa-sidenav {
+  padding: 0;
+  margin: 0;
+
+  ul {
+    list-style: none !important;
+    list-style-type: none !important;
+  }
+}
+
+.usa-sidenav__list,
+.usa-sidenav__sublist {
+  padding: 0;
+  margin-top: 0.75rem;
+  margin-bottom: 0;
+}
+
+.usa-sidenav__item {
+  font-size: 1rem;
+  color: color("ink");
+
+  & a.usa-current {
+    font-weight: 600; /* Bold the current section link */
+    color: color("accent-warm-dark"); /* Change color for better visibility */
+
+    &::after {
+      background-color: color("accent-warm-dark");
+      color: color("accent-warm-dark");
+      margin-left: 0;
+    }
+  }
+}
+
+/* Mobile */
+.secondary-nav-mobile {
+  display: block;
+  width: 100%;
+  margin-bottom: 0;
+  position: sticky;
+  top: 0;
+  padding-top: 1.5rem;
+  padding-bottom: 1rem;
+  z-index: var(--mobile-in-page-navigation-z-index);
+  background-color: #fff;
+
+  & .usa-label {
+    margin-top: 0;
+  }
+}
+
+/* Desktop styles */
+@include at-media(tablet-lg) {
+  .secondary-nav-mobile {
+    display: none; /* Hide on large tablets+ */
+  }
+
+  #sidenav-container {
+    display: flex; /* Show on large tablets+ */
+  }
+}

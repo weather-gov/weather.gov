@@ -1,0 +1,42 @@
+{% extends "weather/page.html" %}
+{% comment %}
+-- Template purpose:
+--   Displays the beta.weather.gov hazard safety guides.
+-- Url: https://beta.weather.gov/prepare/hazard-guides/
+{% endcomment %}
+{% load i18n %}
+{% load weather_i18n %}
+{% load static %}
+{% load wagtailcore_tags %}
+{% block page_content %}
+<div class="grid-container">
+  <div class="index-page-header bg-primary-darker padding-bottom-4 padding-top-1">
+    <div class="grid-row flex-no-wrap margin-x-0">
+      <h1 class="text-white tablet:flex-1 margin-bottom-0">{{ page.title }}</h1>
+    </div>
+    <div class="grid-row grid-gap margin-x-0">
+      <div class="grid-col-12 tablet:grid-col-8">
+        <p class="text-white font-sans-md">{{ page.content }}</p>
+      </div>
+      <div class="grid-col-12 tablet:grid-col-4 display-flex flex-justify-center tablet:flex-align-start">
+        <img src="{% static 'images/hazards/wx_hazards-alerts.svg' %}"
+             width="100%"
+             alt=""
+             class="margin-y-0 tablet:margin-y-2" />
+      </div>
+    </div>
+  </div>
+  <div class="grid-row grid-gap-4 margin-bottom-5 margin-top-2">
+    <div class="grid-col-12 use-columns">
+      <ul class="usa-list page-list margin-top-105 padding-left-0 margin-top-4"
+          id="hazards-index-list">
+        {% for guide in hazard_guides %}
+          <li>
+            <a class="usa-link font-sans-md text-normal" href="{% pageurl guide %}">{{ guide.title }}</a>
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+</div>
+{% endblock %}

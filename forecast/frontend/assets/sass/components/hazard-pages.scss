@@ -1,0 +1,94 @@
+@forward "uswds";
+@use "uswds-core" as *;
+
+.hazard-guide-header {
+  width: 100vw;
+  position: relative;
+  left: 50%;
+  margin-left: -50vw;
+  padding-left: calc((100vw - 100%) / 2);
+  padding-right: calc((100vw - 100%) / 2);
+}
+
+.clipped-wrapper {
+  width: 100vw;
+  position: relative;
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
+  aspect-ratio: 16 / 9;
+  max-height: 320px;
+  overflow: hidden;
+}
+
+.clipped-wrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: var(--x, 50%) var(--y, 50%);
+}
+
+.section-content {
+  line-height: 1.5;
+}
+
+.section-content * {
+  a {
+    // Make any links, no matter how nested, use the compiled USWDS classes
+    @extend .usa-link;
+
+    // Links to non-NOAA, non-NWS sites get marked external.
+    &:not([href*="noaa.gov"], [href*="weather.gov"]) {
+      @extend .usa-link--external;
+    }
+  }
+}
+
+.subheader-image-container {
+  width: 100vw;
+  position: relative;
+  left: 50%;
+  right: 50%;
+  margin: units(4) -50vw units(2);
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  background-color: color("primary-darker");
+}
+
+.alert-levels-section {
+  p {
+    &:first-of-type {
+      margin-top: units(1);
+    }
+  }
+}
+
+#main-content-area {
+  h2 {
+    scroll-margin-top: 100px;
+    font-weight: normal;
+
+    &:first-of-type {
+      margin-top: units(1);
+    }
+  }
+}
+
+@include at-media(tablet-lg) {
+  #main-content-area {
+    h2 {
+      scroll-margin-top: 1rem;
+    }
+  }
+
+  .subheader-image-container {
+    width: 100%;
+    margin-left: 0;
+    margin-right: 0;
+    left: 0;
+    right: 0;
+    padding: units(1) 0;
+  }
+}

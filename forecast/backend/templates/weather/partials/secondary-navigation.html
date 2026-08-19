@@ -1,0 +1,45 @@
+{% comment %}
+-- Template purpose:
+--   Display the in-page "On this page..." sub-navigation menu.
+-- Used by: backend/hazard_guide_page.html
+
+-- Args:
+    -nav-list: list of headings (h2 or h3) in the page content to build nav around
+
+{% endcomment %}
+<!-- Mobile: dropdown select -->
+<div class="secondary-nav-mobile grid-col-12"
+     aria-label="In page navigation">
+  <label class="usa-label" for="in-page-select__input">On this page</label>
+  <wx-combobox tabindex="0" id="in-page-select" name="in-page-select" onchange="navigateToElement(this)">
+  <input id="in-page-select__input"
+         type="text"
+         autocomplete="off"
+         readonly
+         slot="input"
+         placeholder="Jump to section..." />
+  <button type="button"
+          aria-label="In page navigation toggle"
+          slot="toggle-button">&nbsp;</button>
+  <wx-listbox slot="popup" id="in-page-select--list" role="listbox">
+  {% for nav_item in nav_list %}
+    <li role="option"
+        id="in-page-select--{{ nav_item|slugify }}-{{ forloop.counter0 }}"
+        data-value="#{{ nav_item|slugify }}"
+        aria-selected="{{ nav_item.selected|lower }}">{{ nav_item }}</li>
+  {% endfor %}
+  </wx-listbox>
+  </wx-combobox>
+</div>
+<!-- Desktop: USWDS side nav -->
+<aside id="sidenav-container" class="grid-col-4 margin-bottom-4">
+  <nav class="usa-sidenav" aria-label="Side navigation">
+    <ul class="usa-sidenav__list">
+      {% for nav_item in nav_list %}
+        <li class="usa-sidenav__item">
+          <a href="#{{ nav_item|slugify }}">{{ nav_item }}</a>
+        </li>
+      {% endfor %}
+    </ul>
+  </nav>
+</aside>
