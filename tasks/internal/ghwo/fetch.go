@@ -202,8 +202,13 @@ func (d *GenericFetch) fetch(ctx context.Context, ch chan *GenericFetch) {
  */
 func (d *StateFetch) fetch(ctx context.Context, ch chan *StateFetch) {
 	url := d.getURL()
+
+	// If the url is an empty string, this indicates that the given State
+	// _never_ has detailed GHWO data, meaning that there is no
+	// state specific chicklet / legend available at any time.
+	// This is because as of this writing, not all states have detailed
+	// GHWO data.
 	if url == "" {
-		d.Error = fmt.Errorf("Empty or invalid url for state %s (%s)", d.StateCode, url)
 		ch <- d
 		return
 	}
@@ -432,21 +437,31 @@ func responseBytesToStateStructs(fetchData *StateFetch, result *StateFetchResult
 	// corresponding struct for that type
 	switch resourceType := fetchData.ResourceType; resourceType {
 	case LegendResource:
-		dataStruct := SourceLegend{}
-		err := json.Unmarshal(fetchData.ResponseBytes, &dataStruct)
-		if err != nil {
-			result.Errors = append(result.Errors, err)
-			return
+		// Only try to parse out the bytes if we received
+		// byte data during the fetch. In cases where there is
+		// no state specific legend/chicklet, there will be no bytes
+		if len(fetchData.ResponseBytes) > 0 {
+			dataStruct := SourceLegend{}
+			err := json.Unmarshal(fetchData.ResponseBytes, &dataStruct)
+			if err != nil {
+				result.Errors = append(result.Errors, err)
+				return
+			}
+			result.Legend = &dataStruct
 		}
-		result.Legend = &dataStruct
 	case ChickletResource:
-		dataStruct := SourceChicklet{}
-		err := json.Unmarshal(fetchData.ResponseBytes, &dataStruct)
-		if err != nil {
-			result.Errors = append(result.Errors, err)
-			return
+		// Only try to parse out the bytes if we received
+		// byte data during the fetch. In cases where there is
+		// no state specific legend/chicklet, there will be no bytes
+		if len(fetchData.ResponseBytes) > 0 {
+			dataStruct := SourceChicklet{}
+			err := json.Unmarshal(fetchData.ResponseBytes, &dataStruct)
+			if err != nil {
+				result.Errors = append(result.Errors, err)
+				return
+			}
+			result.Chicklet = &dataStruct
 		}
-		result.Chicklet = &dataStruct
 	default:
 		return
 	}
