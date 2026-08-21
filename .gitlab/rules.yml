@@ -1,0 +1,59 @@
+# named pipeline rules to be used as gitlab reference tags, for clarity.
+
+# every merge request, on every push to its source branch
+.on_mr:
+  - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+
+# main was updated
+.on_main:
+  - if: $CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+
+# a release tag was pushed, e.g. v1.2.3-beta. any other tag is ignored.
+.on_release_tag:
+  - if: $CI_COMMIT_TAG =~ /^v\d+\.\d+\.\d+-beta$/
+
+# for gitlab scheduling. not used at the moment.
+.on_schedule:
+  - if: $CI_PIPELINE_SOURCE == "schedule"
+
+# these are manual pipeline rules. you cannot trigger these except through the Gitlab UI.
+
+# build images
+.on_manual_build_images:
+  - if: $CI_PIPELINE_SOURCE == "web" && $BUILD_IMAGES == "true"
+
+# run node tests
+.on_manual_js_ci:
+  - if: $CI_PIPELINE_SOURCE == "web" && $RUN_JS_CI == "true"
+
+# run django tests
+.on_manual_django_ci:
+  - if: $CI_PIPELINE_SOURCE == "web" && $RUN_DJANGO_CI == "true"
+
+# run golang tests
+.on_manual_golang_ci:
+  - if: $CI_PIPELINE_SOURCE == "web" && $RUN_GOLANG_CI == "true"
+
+# run playwright tests
+.on_manual_playwright_ci:
+  - if: $CI_PIPELINE_SOURCE == "web" && $RUN_PLAYWRIGHT_CI == "true"
+
+# on bootstrapping nec (dev only)
+.on_manual_nec_bootstrap:
+  - if: $CI_PIPELINE_SOURCE == "web" && $CONFIRM_NEC_BOOTSTRAP == "BOOTSTRAP"
+
+# on deploying to nec (dev only)
+.on_manual_nec_deploy:
+  - if: $CI_PIPELINE_SOURCE == "web" && $CONFIRM_NEC_DEPLOY == "NEC"
+
+# deploy to the test env
+.on_manual_deploy_test:
+  - if: $CI_PIPELINE_SOURCE == "web" && $DEPLOY_TO_ENVIRONMENT == "test"
+
+# deploy to the staging env
+.on_manual_deploy_staging:
+  - if: $CI_PIPELINE_SOURCE == "web" && $DEPLOY_TO_ENVIRONMENT == "staging"
+
+# deploy to the prod env
+.on_manual_deploy_prod:
+  - if: $CI_PIPELINE_SOURCE == "web" && $DEPLOY_TO_ENVIRONMENT == "prod" && $CONFIRM_BETA_DEPLOY == "YES"

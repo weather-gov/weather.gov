@@ -1,11 +1,3 @@
-spec:
-  inputs:
-    confirm-nec-deploy:
-      default: ""
----
-variables:
-  CONFIRM_NEC_DEPLOY: "$[[ inputs.confirm-nec-deploy ]]"
-
 include:
   - component: ${CI_SERVER_FQDN}/NWS/Systems/NCO/NEC/shared-catalogs/iac/plan@main
     inputs:
@@ -14,7 +6,7 @@ include:
       root_dir: ./terraform-aws/envs/dev
       environment: dev
       rules:
-        - if: $CI_PIPELINE_SOURCE == "web" && $CONFIRM_NEC_DEPLOY == "NEC"
+        - !reference [.on_manual_nec_deploy]
   - component: ${CI_SERVER_FQDN}/NWS/Systems/NCO/NEC/shared-catalogs/iac/apply@main
     inputs:
       stage: deploy
@@ -22,7 +14,7 @@ include:
       root_dir: ./terraform-aws/envs/dev
       environment: dev
       rules:
-        - if: $CI_PIPELINE_SOURCE == "web" && $CONFIRM_NEC_DEPLOY == "NEC"
+        - !reference [.on_manual_nec_deploy]
 
 # override rules to pass in the proper variables and tags
 terraform-plan-nec-infra-dev:

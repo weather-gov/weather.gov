@@ -35,9 +35,6 @@ spec:
       default: false
       description: "Run playwright end-to-end and accessibility tests in the selected branch using config from that branch."
 ---
-# NB: this file is less confusing to read once you realize that it does
-#     different things, depending on which branch is in the pipeline
-
 stages:
   - gather # gather the 3rd party dependencies and push images of them to the registry
   - lint # pull the code images and lint
@@ -55,34 +52,38 @@ variables:
   POSTGRES_PASSWORD: drupal
   POSTGRES_DB: weathergov
   DJANGO_SETTINGS_MODULE: backend.config.settings.ci
-  USE_LATEST_TAG: main
+  USE_LATEST_TAG: $CI_COMMIT_REF_SLUG
+  # promote gitlab inputs to variables so we can use them in rules.
+  BUILD_IMAGES: "$[[ inputs.build-images ]]"
+  RUN_JS_CI: "$[[ inputs.run-js-ci ]]"
+  RUN_DJANGO_CI: "$[[ inputs.run-django-ci ]]"
+  RUN_GOLANG_CI: "$[[ inputs.run-golang-ci ]]"
+  RUN_PLAYWRIGHT_CI: "$[[ inputs.run-playwright-ci ]]"
+  DEPLOY_TO_ENVIRONMENT: "$[[ inputs.deploy-to-environment ]]"
+  CONFIRM_BETA_DEPLOY: "$[[ inputs.confirm-beta-deploy ]]"
+  CONFIRM_NEC_DEPLOY: "$[[ inputs.confirm-nec-deploy ]]"
+  CONFIRM_NEC_BOOTSTRAP: "$[[ inputs.confirm-nec-bootstrap ]]"
+  # enable SAST as per Gitlab security scanning
+  AST_ENABLE_MR_PIPELINES: "true"
 
-# control when pipelines run and override some parameters
+# determine which events produce a pipeline. see .gitlab/rules.yml for job-specific rules.
 workflow:
   rules:
-    # when building from the GitLab UI, use dependency images built on the current branch
-    - if: $CI_PIPELINE_SOURCE == "web" && "$[[ inputs.build-images ]]" == "true"
+    # if deploying from the GitLab UI without building images, use the images built on main
+    - if: $CI_PIPELINE_SOURCE == "web" && $BUILD_IMAGES != "true"
       variables:
-        USE_LATEST_TAG: $CI_COMMIT_REF_SLUG
-    # always allow CI pipelines on pushes and from UI -- nb: a merge will cause a push to the target branch
+        USE_LATEST_TAG: main
     - if: $CI_PIPELINE_SOURCE == "web"
-    - if: $CI_PIPELINE_SOURCE == "push"
-      variables:
-        USE_LATEST_TAG: $CI_COMMIT_REF_SLUG
-    - if: $CI_PIPELINE_SOURCE == "schedule"
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - if: $CI_COMMIT_TAG =~ /^v\d+\.\d+\.\d+-beta$/
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
 
 # set up NEC-specific CI/CD jobs
 include:
+  - local: ".gitlab/rules.yml"
   - local: ".gitlab/nec/bootstrap.yml"
-    inputs:
-      confirm-nec-bootstrap: "$[[ inputs.confirm-nec-bootstrap ]]"
   - local: ".gitlab/nec/infra.yml"
-    inputs:
-      confirm-nec-deploy: "$[[ inputs.confirm-nec-deploy ]]"
   - local: ".gitlab/nec/containers.yml"
-    inputs:
-      build-images: "$[[ inputs.build-images ]]"
-      run-playwright-ci: "$[[ inputs.run-playwright-ci ]]"
   - template: Security/SAST.gitlab-ci.yml
 
 # gather up commits which have a `Changelog: ...` trailer and push them to CHANGELOG.md (via GitLab's API)
@@ -97,7 +98,7 @@ write-release-notes:
     paths:
       - release_notes.md
   rules:
-    - if: '$CI_COMMIT_TAG =~ /^v\d+\.\d+\.\d+-beta$/'
+    - !reference [.on_release_tag]
 
 # create a release (in GitLab) using the markdown release notes from the pervious job
 make-tagged-release:
@@ -114,7 +115,7 @@ make-tagged-release:
     tag_name: "$CI_COMMIT_TAG"
     ref: "$CI_COMMIT_SHA"
   rules:
-    - if: '$CI_COMMIT_TAG =~ /^v\d+\.\d+\.\d+-beta$/'
+    - !reference [.on_release_tag]
 
 # deploy to prod/beta automatically on a beta version tag (like `beta-v1.3.5`) or manually from the GitLab New Pipeline page
 deploy-to-prod:
@@ -151,8 +152,8 @@ deploy-to-prod:
     - terraform init -backend-config=secrets.backend.tfvars -backend-config="key=terraform.tfstate.weathergov-prod" -reconfigure
     - terraform apply -var="git_sha_hash=$(git rev-parse HEAD)" -var-file="weathergov-prod.tfvars" -auto-approve
   rules:
-    - if: '$CI_COMMIT_TAG =~ /^v\d+\.\d+\.\d+-beta$/'
-    - if: $CI_PIPELINE_SOURCE == "web" && "$[[ inputs.deploy-to-environment ]]" == "prod" && "$[[ inputs.confirm-beta-deploy ]]" == "YES"
+    - !reference [.on_release_tag]
+    - !reference [.on_manual_deploy_prod]
 
 # deploy to staging automatically when main is updated
 deploy-to-staging:
@@ -189,8 +190,8 @@ deploy-to-staging:
     - terraform init -backend-config=secrets.backend.tfvars -backend-config="key=terraform.tfstate.weathergov-staging" -reconfigure
     - terraform apply -var="git_sha_hash=$(git rev-parse HEAD)" -var-file="weathergov-staging.tfvars" -auto-approve
   rules:
-    - if: $CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_REF_SLUG == "main"
-    - if: $CI_PIPELINE_SOURCE == "web" && "$[[ inputs.deploy-to-environment ]]" == "staging"
+    - !reference [.on_main]
+    - !reference [.on_manual_deploy_staging]
 
 # deploy to test manually from the GitLab New Pipeline page
 deploy-to-test:
@@ -227,8 +228,7 @@ deploy-to-test:
     - terraform init -backend-config=secrets.backend.tfvars -backend-config="key=terraform.tfstate.weathergov-test" -reconfigure
     - terraform apply -var="git_sha_hash=$(git rev-parse HEAD)" -var-file="weathergov-test.tfvars" -auto-approve
   rules:
-    - if: $CI_PIPELINE_SOURCE == "web" && "$[[ inputs.deploy-to-environment ]]" == "test"
-    - if: $CI_PIPELINE_SOURCE == "schedule" && "$[[ inputs.deploy-to-environment ]]" == "test"
+    - !reference [.on_manual_deploy_test]
 
 .playwright:
   stage: test
@@ -238,8 +238,7 @@ deploy-to-test:
     API_URL: https://api-proxy-weathergov-test.app.cloud.gov/
     WEB_URL: $DEPLOYED_URL
   rules:
-    - if: $CI_PIPELINE_SOURCE == "web" && "$[[ inputs.run-playwright-ci ]]" == "true"
-    - if: $CI_PIPELINE_SOURCE == "schedule" && "$[[ inputs.run-playwright-ci ]]" == "true"
+    - !reference [.on_manual_playwright_ci]
 
 # run end-to-end tests against the deployed environment
 playwright-e2e:
@@ -278,9 +277,13 @@ bundle-js:
       - forecast/frontend/assets/js/**/*.html.js
       - forecast/frontend/assets/js/**/*.html.js.map
   rules:
-    - if: $CI_PIPELINE_SOURCE == "push"
-    - if: $CI_PIPELINE_SOURCE == "web" && "$[[ inputs.run-js-ci ]]" == "true"
-    - if: $CI_PIPELINE_SOURCE == "schedule" && "$[[ inputs.deploy-to-environment ]]" != "no deploy"
+    - !reference [.on_mr]
+    - !reference [.on_main]
+    - !reference [.on_release_tag]
+    - !reference [.on_manual_js_ci]
+    - !reference [.on_manual_deploy_test]
+    - !reference [.on_manual_deploy_staging]
+    - !reference [.on_manual_deploy_prod]
 
 # lint all JavaScript in the repo in one job
 js-lint:
@@ -309,8 +312,9 @@ js-lint:
       '.gitlab-ci.yml' \
       '.gitlab/**/*.yml'
   rules:
-    - if: $CI_PIPELINE_SOURCE == "push"
-    - if: $CI_PIPELINE_SOURCE == "web" && "$[[ inputs.run-js-ci ]]" == "true"
+    - !reference [.on_mr]
+    - !reference [.on_main]
+    - !reference [.on_manual_js_ci]
 
 django-lint:
   stage: lint
@@ -323,8 +327,9 @@ django-lint:
     - python -m ruff check .
     - python -m djlint backend/templates/ --extension=html
   rules:
-    - if: $CI_PIPELINE_SOURCE == "push"
-    - if: $CI_PIPELINE_SOURCE == "web" && "$[[ inputs.run-django-ci ]]" == "true"
+    - !reference [.on_mr]
+    - !reference [.on_main]
+    - !reference [.on_manual_django_ci]
 
 django-test:
   stage: test
@@ -355,8 +360,9 @@ django-test:
         coverage_format: cobertura
         path: forecast/coverage.xml
   rules:
-    - if: $CI_PIPELINE_SOURCE == "push"
-    - if: $CI_PIPELINE_SOURCE == "web" && "$[[ inputs.run-django-ci ]]" == "true"
+    - !reference [.on_mr]
+    - !reference [.on_main]
+    - !reference [.on_manual_django_ci]
 
 web-component-test:
   stage: test
@@ -382,8 +388,9 @@ web-component-test:
         coverage_format: cobertura
         path: coverage/*/cobertura-coverage.xml
   rules:
-    - if: $CI_PIPELINE_SOURCE == "push"
-    - if: $CI_PIPELINE_SOURCE == "web" && "$[[ inputs.run-js-ci ]]" == "true"
+    - !reference [.on_mr]
+    - !reference [.on_main]
+    - !reference [.on_manual_js_ci]
 
 interop-test:
   stage: test
@@ -412,8 +419,9 @@ interop-test:
         coverage_format: cobertura
         path: coverage/*/cobertura-coverage.xml
   rules:
-    - if: $CI_PIPELINE_SOURCE == "push"
-    - if: $CI_PIPELINE_SOURCE == "web" && "$[[ inputs.run-js-ci ]]" == "true"
+    - !reference [.on_mr]
+    - !reference [.on_main]
+    - !reference [.on_manual_js_ci]
 
 golang-test:
   stage: test
@@ -433,8 +441,9 @@ golang-test:
         coverage_format: cobertura
         path: tasks/coverage.xml
   rules:
-    - if: $CI_PIPELINE_SOURCE == "push"
-    - if: $CI_PIPELINE_SOURCE == "web" && "$[[ inputs.run-golang-ci ]]" == "true"
+    - !reference [.on_mr]
+    - !reference [.on_main]
+    - !reference [.on_manual_golang_ci]
 
 sast:
   stage: test
