@@ -1,14 +1,3 @@
-spec:
-  inputs:
-    build-images:
-      default: ""
-    run-playwright-ci:
-      default: ""
----
-variables:
-  BUILD_IMAGES: "$[[ inputs.build-images ]]"
-  RUN_PLAYWRIGHT_CI: "$[[ inputs.run-playwright-ci ]]"
-
 include:
   - component: ${CI_SERVER_FQDN}/NWS/Systems/NCO/NEC/shared-catalogs/utility/anchors@main
   - component: ${CI_SERVER_FQDN}/NWS/Systems/NCO/NEC/shared-catalogs/container/build@main
@@ -42,13 +31,16 @@ include:
 # override rules so we build a new image on each push
 gather-node-dependencies:
   rules:
-    - if: $CI_PIPELINE_SOURCE == "push"
-    - if: $CI_PIPELINE_SOURCE == "web" && $BUILD_IMAGES == "true"
+    - !reference [.on_mr]
+    - !reference [.on_main]
+    - !reference [.on_release_tag]
+    - !reference [.on_manual_build_images]
 gather-django-dependencies:
   rules:
-    - if: $CI_PIPELINE_SOURCE == "push"
-    - if: $CI_PIPELINE_SOURCE == "web" && $BUILD_IMAGES == "true"
+    - !reference [.on_mr]
+    - !reference [.on_main]
+    - !reference [.on_manual_build_images]
 # for playwright, build a new image every time we run through the Gitlab UI
 gather-playwright-dependencies:
   rules:
-    - if: $CI_PIPELINE_SOURCE == "web" && $RUN_PLAYWRIGHT_CI == "true"
+    - !reference [.on_manual_playwright_ci]
