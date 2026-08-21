@@ -141,7 +141,7 @@ def ghwo_index(request):
     Intended to be used by the <form> element in
     <wx-county-ghwo-selector>
     """
-    current_state = request.POST.get("current-state")
+    current_state = request.POST.get("current_state")
     selected_state = request.POST.get("state")
     selected_county = request.POST.get("county")
 

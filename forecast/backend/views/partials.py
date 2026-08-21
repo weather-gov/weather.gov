@@ -11,6 +11,7 @@ from django.views.decorators.http import require_GET, require_POST
 from shapely import MultiPolygon, Polygon
 
 from backend import interop
+from backend.forms import SelectGHWOCountiesForm
 from backend.util import get_counties_combo_box_list, get_states_combo_box_list, process_state_alerts
 from backend.views.risk import process_ghwo_data
 from risk_data.util import get_risk_data_for_county, get_risk_data_for_state
@@ -123,10 +124,19 @@ def wx_select_ghwo_counties(request):
     using the state and county information provided in the POST
     data.
     """
-    current_state = request.POST.get("current-state")
-    current_county = request.POST.get("current-county")
-    selected_state = request.POST.get("state", current_state)
-    selected_county = request.POST.get("county", current_county)
+    form = SelectGHWOCountiesForm(request.POST)
+    if not form.is_valid():
+        return render(
+            request,
+            "errors/500.html",
+            {},
+            status=422 # unprocessable, invalid form data
+        )
+    current_state = form.cleaned_data["current_state"]
+    current_county = form.cleaned_data["current_county"]
+    selected_state = form.cleaned_data.get("state", current_state)
+    selected_county = form.cleaned_data.get("county", current_county)
+
 
     # By default, we assume there is no incoming county
     # (which results in listing all counties)

@@ -27,10 +27,10 @@ class TestUrls(TestCase):
     def test_office_url(self):
         """Test WFO office."""
         resolver = resolve("/about/offices/WFO/")
-        back = reverse("office", kwargs={"wfo": "Howdy"})
+        back = reverse("office", kwargs={"wfo": "HHH"})
         self.assertEqual(resolver.func, offices.offices_specific)
         self.assertEqual(resolver.kwargs, {"wfo": "WFO"})
-        self.assertEqual(back, "/about/offices/Howdy/")
+        self.assertEqual(back, "/about/offices/HHH/")
 
     def test_afd_index(self):
         """Test AFD index."""
@@ -42,34 +42,34 @@ class TestUrls(TestCase):
     def test_afd_by_office(self):
         """Test AFD by office."""
         resolver = resolve("/tools/afd/WFO/")
-        back = reverse("afd_by_office", kwargs={"wfo": "Doody"})
+        back = reverse("afd_by_office", kwargs={"wfo": "DDD"})
         self.assertEqual(resolver.func, point.afd_by_office)
         self.assertEqual(resolver.kwargs, {"wfo": "WFO"})
-        self.assertEqual(back, "/tools/afd/Doody/")
+        self.assertEqual(back, "/tools/afd/DDD/")
 
     def test_afd_by_office_and_id(self):
         """Test AFD by office and ID."""
-        resolver = resolve("/tools/afd/WFO/afdid/")
-        back = reverse("afd_by_office_and_id", kwargs={"wfo": "To", "afd_id": "Fro"})
+        resolver = resolve("/tools/afd/WFO/aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeef/")
+        back = reverse("afd_by_office_and_id", kwargs={"wfo": "TTT", "afd_id": "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee"})
         self.assertEqual(resolver.func, point.afd_by_office_and_id)
-        self.assertEqual(resolver.kwargs, {"wfo": "WFO", "afd_id": "afdid"})
-        self.assertEqual(back, "/tools/afd/To/Fro/")
+        self.assertEqual(resolver.kwargs, {"wfo": "WFO", "afd_id": "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeef"})
+        self.assertEqual(back, "/tools/afd/TTT/aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee/")
 
     def test_wx_afd_id(self):
         """Test AFD by ID fragment."""
-        resolver = resolve("/wx/afd/totoro/")
-        back = reverse("wx_afd_id", kwargs={"afd_id": "catbus"})
+        resolver = resolve("/wx/afd/aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee/")
+        back = reverse("wx_afd_id", kwargs={"afd_id": "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee"})
         self.assertEqual(resolver.func, partials.wx_afd_id)
-        self.assertEqual(resolver.kwargs, {"afd_id": "totoro"})
-        self.assertEqual(back, "/wx/afd/catbus/")
+        self.assertEqual(resolver.kwargs, {"afd_id": "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee"})
+        self.assertEqual(back, "/wx/afd/aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee/")
 
     def test_wx_afd_location_versions(self):
         """Test AFD location versions fragment."""
-        resolver = resolve("/wx/afd/locations/Columbus/")
-        back = reverse("wx_afd_versions", kwargs={"wfo": "Jackson"})
+        resolver = resolve("/wx/afd/locations/ABC/")
+        back = reverse("wx_afd_versions", kwargs={"wfo": "DEF"})
         self.assertEqual(resolver.func, partials.wx_afd_versions)
-        self.assertEqual(resolver.kwargs, {"wfo": "Columbus"})
-        self.assertEqual(back, "/wx/afd/locations/Jackson/")
+        self.assertEqual(resolver.kwargs, {"wfo": "ABC"})
+        self.assertEqual(back, "/wx/afd/locations/DEF/")
 
     def test_point(self):
         """Test point forecast."""
@@ -89,14 +89,14 @@ class TestUrls(TestCase):
 
     def test_place(self):
         """Test place forecast."""
-        resolver = resolve("/place/State/Of_Mind/")
+        resolver = resolve("/place/XX/Of_Mind/")
         back = reverse(
             "place_forecast",
-            kwargs={"state": "Franklin", "place": "Anywhere"},
+            kwargs={"state": "FF", "place": "Anywhere"},
         )
         self.assertEqual(resolver.func, point.place_forecast)
-        self.assertEqual(resolver.kwargs, {"state": "State", "place": "Of_Mind"})
-        self.assertEqual(back, "/place/Franklin/Anywhere/")
+        self.assertEqual(resolver.kwargs, {"state": "XX", "place": "Of_Mind"})
+        self.assertEqual(back, "/place/FF/Anywhere/")
 
     def test_health(self):
         """Test health endpoint."""
