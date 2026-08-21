@@ -58,10 +58,17 @@
 }
 
 .alert-levels-section {
-  p {
-    &:first-of-type {
-      margin-top: units(1);
-    }
+  > p {
+    margin-top: units(1);
+    margin-bottom: units(1);
+  }
+
+  .usa-alert {
+    margin-top: units(3);
+  }
+
+  &:first-of-type .usa-alert {
+    margin-top: 0;
   }
 }
 
@@ -89,6 +96,5 @@
     margin-right: 0;
     left: 0;
     right: 0;
-    padding: units(1) 0;
   }
 }
