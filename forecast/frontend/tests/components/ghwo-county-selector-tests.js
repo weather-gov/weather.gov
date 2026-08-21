@@ -124,7 +124,7 @@ describe("<wx-ghwo-county-selector> component tests", () => {
 
 
     // Add the hidden inputs
-    ["current-state", "current-county"].forEach((name) => {
+    ["current_state", "current_county"].forEach((name) => {
       const input = document.createElement("input");
       input.setAttribute("type", "hidden");
       input.setAttribute("name", name);

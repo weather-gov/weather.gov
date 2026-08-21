@@ -306,13 +306,12 @@ class TestRiskViews(TestCase):
         """
         mock_get_county_list.return_value = []
         mock_get_risk_data_for_county.return_value = {"error": "Error fetching GHWO for 1"}
-        mock_county = mock.Mock()
-        mock_county.state.fips.return_value = "1"
-        mock_county.county.countyfips.return_value = "1"
+        mock_state = mock.Mock(fips="1", state="VA")
+        mock_county = mock.Mock(countyfips="12345", state=mock_state)
         mock_county.timezone = "America/Denver"
         mock_get_object_or_404.return_value = mock_county
 
-        response = self.client.get(reverse("county_risk_overview", kwargs={"county_fips": "1"}))
+        response = self.client.get(reverse("county_risk_overview", kwargs={"county_fips": "12345"}))
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "weather/partials/ghwo-details.html")
         self.assertContains(response, "images/weather/wx_error-cloud_error")
@@ -333,13 +332,12 @@ class TestRiskViews(TestCase):
         """
         mock_get_county_list.return_value = []
         mock_get_risk_data.return_value = {"error": True}
-        mock_county = mock.Mock()
-        mock_county.state.fips.return_value = "1"
-        mock_county.county.countyfips.return_value = "1"
+        mock_state = mock.Mock(state="VA", fips="1")
+        mock_county = mock.Mock(state=mock_state, countyfips="12345")
         mock_county.timezone = "America/New_York"
         mock_get_object_or_404.return_value = mock_county
 
-        response = self.client.get(reverse("county_risk_overview", kwargs={"county_fips": "1"}))
+        response = self.client.get(reverse("county_risk_overview", kwargs={"county_fips": "12345"}))
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "weather/partials/ghwo-details.html")
         self.assertContains(response, "images/weather/wx_error-cloud_error")
@@ -356,13 +354,12 @@ class TestRiskViews(TestCase):
         """Test the success case for requesting a GHWO county details page."""
         mock_get_county_list.return_value = []
         mock_get_risk_data_for_county.return_value = self.county_ghwo_data
-        mock_county = mock.Mock()
-        mock_county.state.fips.return_value = "1"
-        mock_county.county.countyfips.return_value = "1"
+        state_mock = mock.Mock(state="IL", fips="1")
+        mock_county = mock.Mock(countyfips="11111", state=state_mock)
         mock_county.timezone = "America/Chicago"
         mock_get_object_or_404.return_value = mock_county
 
-        response = self.client.get(reverse("county_risk_overview", kwargs={"county_fips": "1"}))
+        response = self.client.get(reverse("county_risk_overview", kwargs={"county_fips": "11111"}))
 
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "weather/county/ghwo.html")
@@ -388,7 +385,7 @@ class TestRiskViews(TestCase):
         response = self.client.post(
             reverse("risk_index"),
             {
-                "current-state": "1",
+                "current_state": "1",
                 "state-select": "2",
                 "county-select": "2",
             },
@@ -401,7 +398,7 @@ class TestRiskViews(TestCase):
     def test_risk_index_invalid_selected_county(self, mock_county_get):
         """Posting to the county ghwo index page with an invalid selected county fips 404s."""
         post_data = {
-            "current-state": "51",
+            "current_state": "51",
             "state-select": "51",
             "county-select": "1",
         }
@@ -419,7 +416,7 @@ class TestRiskViews(TestCase):
     def test_risk_index_valid_selected_state_redirects(self, mock_state_objects, mock_county_objects):
         """Posting to the county ghwo index page with a different selected state redirects to the state url."""
         post_data = {
-            "current-state": "AK",
+            "current_state": "AK",
             "state": "DC",
             "county": "1",
         }
@@ -446,11 +443,11 @@ class TestRiskViews(TestCase):
     def test_risk_index_valid_selected_county_redirects(self, mock_county_get):
         """Posting to the county ghwo index page with a valid selected county redirects to the proper url."""
         post_data = {
-            "current-state": "51",
+            "current_state": "51",
             "state": "51",
             "county": "1",
         }
-        mock_county = mock.MagicMock(countyfips="1")
+        mock_county = mock.MagicMock(countyfips="11111")
         mock_county_get.return_value = mock_county
 
         response = self.client.post(
@@ -460,7 +457,7 @@ class TestRiskViews(TestCase):
 
         self.assertRedirects(
             response,
-            reverse("county_risk_overview", kwargs={"county_fips": "1"}),
+            reverse("county_risk_overview", kwargs={"county_fips": "11111"}),
             fetch_redirect_response=False,
         )
 
@@ -469,9 +466,9 @@ class TestRiskViews(TestCase):
     def test_risk_index_selected_county_is_all_redirects(self, mock_state_get, mock_county_get):
         """Posting to the risk index page with a selected county of 'all' redirects to the state url."""
         post_data = {
-            "current-state": "VA",
+            "current_state": "VA",
             "state": "VA",
-            "current-county": "51013",
+            "current_county": "51013",
             "county": "all"
         }
         mock_county = mock.MagicMock(countyfips="51013")
@@ -510,7 +507,7 @@ class TestRiskViews(TestCase):
         response = self.client.post(
             reverse("wx_select_ghwo_counties"),
             {
-                "current-state": "1",
+                "current_state": "1",
                 "state-select": "2",
                 "county-select": "2",
             },
@@ -523,7 +520,7 @@ class TestRiskViews(TestCase):
     def test_wx_select_ghwo_counties_invalid_selected_county(self, mock_county_get):
         """Posting to wx select ghwo counties with an invalid selected county fips 404s."""
         post_data = {
-            "current-state": "51",
+            "current_state": "51",
             "state-select": "51",
             "county-select": "1",
         }
@@ -541,18 +538,18 @@ class TestRiskViews(TestCase):
     def test_wx_select_ghwo_counties_valid_selected_state(self, mock_state_objects, mock_county_objects):
         """Posting to wx select ghwo counties endpoint with valid state renders the correct template partial."""
         post_data = {
-            "current-state": "51",
-            "state-select": "50",
-            "county-select": "1",
+            "current_state": "51",
+            "state": "50",
+            "county": "1",
         }
 
-        mock_county = mock.MagicMock(countyfips="501")
-        mock_county_objects.defer.return_value.filter.return_value.order_by.return_value.first.return_value = (
-            mock_county
-        )
+        mock_query = mock.Mock()
+        mock_county_objects.defer.return_value = mock_query
+        mock_query.get.return_value = self.county1
 
-        mock_state = mock.MagicMock(id="51")
-        mock_state_objects.defer.get.return_value = mock_state
+        mock_state_query = mock.Mock()
+        mock_state_objects.defer.return_value = mock_state_query
+        mock_state_query.get.return_value = self.county1.state
 
         response = self.client.post(
             reverse("wx_select_ghwo_counties"),
@@ -566,12 +563,14 @@ class TestRiskViews(TestCase):
     def test_wx_select_ghwo_counties_valid_selected_county(self, mock_county_objects):
         """Posting to wx select ghwo counties endpoint with valid county renders the correct template partial."""
         post_data = {
-            "current-state": "51",
-            "state-select": "51",
-            "county-select": "1",
+            "current_state": "51",
+            "state": "51",
+            "county": "1",
         }
-        mock_county = mock.MagicMock(countyfips="1")
-        mock_county_objects.defer.return_value.get.return_value = mock_county
+
+        mock_query = mock.Mock()
+        mock_county_objects.defer.return_value = mock_query
+        mock_query.get.return_value = self.county1
 
         response = self.client.post(
             reverse("wx_select_ghwo_counties"),
@@ -588,7 +587,7 @@ class TestRiskViews(TestCase):
         mock_get_county.side_effect = Exception
 
         response = self.client.get(
-            reverse("wx_ghwo_counties", kwargs={"county_fips": "invalid fips"}),
+            "/wx/ghwo/counties/abcdef/"
         )
 
         self.assertEqual(response.status_code, 404)
@@ -655,7 +654,7 @@ class TestRiskViews(TestCase):
     def test_wx_ghwo_counties_cannot_post(self):
         """Ensure we cannot POST on the wx ghwo counties partial endpoint."""
         response = self.client.post(
-            reverse("wx_ghwo_counties", kwargs={"county_fips": "valid"}),
+            reverse("wx_ghwo_counties", kwargs={"county_fips": "55555"}),
             {},
         )
 
@@ -672,7 +671,7 @@ class TestRiskViews(TestCase):
         mock_get_risk_data.return_value = self.county_ghwo_data
 
         response = self.client.get(
-            reverse("wx_ghwo_counties", kwargs={"county_fips": "valid"}),
+            reverse("wx_ghwo_counties", kwargs={"county_fips": "55555"}),
         )
 
         self.assertEqual(response.status_code, 200)
@@ -694,7 +693,7 @@ class TestRiskViews(TestCase):
         mock_get_risk_data_for_county.return_value = self.county_ghwo_data
         mock_get_county.side_effect = spatial.WeatherCounties.DoesNotExist
 
-        response = self.client.get(reverse("county_risk_overview", kwargs={"county_fips": "1"}))
+        response = self.client.get(reverse("county_risk_overview", kwargs={"county_fips": "12345"}))
 
         self.assertEqual(response.status_code, 404)
 

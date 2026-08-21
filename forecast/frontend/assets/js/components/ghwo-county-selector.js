@@ -117,7 +117,7 @@ class GHWOCountySelector extends HTMLElement {
    */
   async fetchUpdatedSelectComponent() {
     const formData = new FormData();
-    ["current-county", "current-state"].forEach((name) => {
+    ["current_county", "current_state"].forEach((name) => {
       formData.append(name, this.querySelector(`[name="${name}"]`).value);
     });
     ["state", "county"].forEach((name) => {

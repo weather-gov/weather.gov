@@ -7,9 +7,21 @@ from wagtail.documents import urls as wagtaildocs_urls
 from backend.views import county, errors, index, location_search, offices, partials, point, risk, state
 from backend.views.cms_logout import cms_logout
 
-from .url_converters import FloatConverter
+from .url_converters import (
+    AFDIdentifierConverter,
+    FIPSConverter,
+    FloatConverter,
+    PlaceNameConverter,
+    StateCodeConverter,
+    WFOConverter,
+)
 
 register_converter(FloatConverter, "float")
+register_converter(WFOConverter, "wfocode")
+register_converter(AFDIdentifierConverter, "afdid")
+register_converter(FIPSConverter, "fips")
+register_converter(StateCodeConverter, "statecode")
+register_converter(PlaceNameConverter, "placename")
 
 # Page titles are in django.po with keys like "site.meta.titles.<url_name>".
 # These are parsed by the set_title_and_description templatetag.
@@ -23,45 +35,49 @@ urlpatterns = [
     # trailing slashes to requests that don't have them, so if our URLs DON'T
     # have trailing slashes, they'll never match.
     # Forecast specific URLS
-    path("about/offices/<wfo>/", offices.offices_specific, name="office"),
+    path("about/offices/<wfocode:wfo>/", offices.offices_specific, name="office"),
     path("tools/afd/", point.afd_index, name="afd_index"),
-    path("tools/afd/<wfo>/", point.afd_by_office, name="afd_by_office"),
-    path("tools/afd/<wfo>/<afd_id>/", point.afd_by_office_and_id, name="afd_by_office_and_id"),
+    path("tools/afd/<wfocode:wfo>/", point.afd_by_office, name="afd_by_office"),
+    path("tools/afd/<wfocode:wfo>/<afdid:afd_id>/", point.afd_by_office_and_id, name="afd_by_office_and_id"),
     # County pages
     path("forecast/county/", county.index, name="county_index"),
     re_path(r"forecast/county/(?P<county_slug>[\w|-]+-\w+)/$", county.county_overview, name="county_state_overview"),
-    path("forecast/county/<str:countyfips>/", county.county_overview, name="county_overview"),
-    path("forecast/county/<str:county_fips>/risk-overview/", risk.risk_details_by_county, name="county_risk_overview"),
+    path("forecast/county/<fips:countyfips>/", county.county_overview, name="county_overview"),
+    path("forecast/county/<fips:county_fips>/risk-overview/", risk.risk_details_by_county, name="county_risk_overview"),
     # State pages
     path("forecast/state/", state.index, name="state_index"),
-    path("forecast/state/<state>/", state.state_alerts, name="state_overview"),
-    path("forecast/state/<state>/alerts/", state.state_alerts, name="state_alerts"),
-    path("forecast/state/<state>/risks/", state.state_risks, name="state_risks"),
-    path("forecast/state/<state_code>/risk-overview/", risk.risk_details_by_state, name="state_risk_overview"),
-    path("forecast/state/<state>/radar/", state.state_radar, name="state_radar"),
-    path("forecast/state/<state>/analysis/", state.state_analysis, name="state_analysis"),
+    path("forecast/state/<statecode:state>/", state.state_alerts, name="state_overview"),
+    path("forecast/state/<statecode:state>/alerts/", state.state_alerts, name="state_alerts"),
+    path("forecast/state/<statecode:state>/risks/", state.state_risks, name="state_risks"),
+    path(
+        "forecast/state/<statecode:state_code>/risk-overview/",
+        risk.risk_details_by_state,
+        name="state_risk_overview"
+    ),
+    path("forecast/state/<statecode:state>/radar/", state.state_radar, name="state_radar"),
+    path("forecast/state/<statecode:state>/analysis/", state.state_analysis, name="state_analysis"),
     path("forecast/risk-overview/", risk.ghwo_index, name="risk_index"),
     # WX routes are those that return partial HTML markup
     # that will be requested from the frontend (htmx style)
-    path("wx/afd/<afd_id>/", partials.wx_afd_id, name="wx_afd_id"),
-    path("wx/afd/locations/<wfo>/", partials.wx_afd_versions, name="wx_afd_versions"),
+    path("wx/afd/<afdid:afd_id>/", partials.wx_afd_id, name="wx_afd_id"),
+    path("wx/afd/locations/<wfocode:wfo>/", partials.wx_afd_versions, name="wx_afd_versions"),
     path("wx/select/ghwo/counties/", partials.wx_select_ghwo_counties, name="wx_select_ghwo_counties"),
-    path("wx/ghwo/counties/<str:county_fips>/", partials.wx_ghwo_counties, name="wx_ghwo_counties"),
+    path("wx/ghwo/counties/<fips:county_fips>/", partials.wx_ghwo_counties, name="wx_ghwo_counties"),
     path("wx/ghwo/state/<str:state_code>/", partials.wx_ghwo_all_counties_for_state, name="wx_ghwo_state_all"),
-    path("wx/state/<state>/", partials.wx_state_boundaries_pbf, name="wx_state_boundary"),
-    path("wx/state/<state>/alerts", partials.wx_state_alerts_pbf, name="wx_state_boundary"),
+    path("wx/state/<statecode:state>/", partials.wx_state_boundaries_pbf, name="wx_state_boundary"),
+    path("wx/state/<statecode:state>/alerts", partials.wx_state_alerts_pbf, name="wx_state_boundary"),
     # Wagtail
     path("cms/logout/", cms_logout),
     path("cms/", include(wagtailadmin_urls)),
     path("documents/", include(wagtaildocs_urls)),
     # Point forecast related, etc
     path("forecast/point/<float:lat>/<float:lon>/", point.point_location, name="point"),
-    path("place/<state>/<place>/", point.place_forecast, name="place_forecast"),
+    path("place/<statecode:state>/<placename:place>/", point.place_forecast, name="place_forecast"),
     path("health/", index.health, name="health"),
     path("llms.txt", TemplateView.as_view(template_name="llms.txt", content_type="text/plain")),
     path("robots.txt", TemplateView.as_view(template_name="robots.txt", content_type="text/plain")),
     # Deprecated URLs with custom 404 pages
-    path("offices/<wfo>/", errors.deprecated_office, name="deprecated_office"),
+    path("offices/<wfocode:wfo>/", errors.deprecated_office, name="deprecated_office"),
     path("point/<float:lat>/<float:lon>/", errors.deprecated_path, name="deprecated_point"),
     path("county<path:rest>", errors.deprecated_path, name="deprecated_county_pages"),
     # Internal rerouting from location search

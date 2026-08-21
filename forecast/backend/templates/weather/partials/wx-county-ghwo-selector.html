@@ -70,12 +70,12 @@
     </wx-filterable-listbox>
     </wx-combobox>
     <input type="hidden"
-           id="current-county"
-           name="current-county"
+           id="current_county"
+           name="current_county"
            value="{% if county %}{{ county.countyfips }}{% else %}all{% endif %}" />
     <input type="hidden"
-           id="current-state"
-           name="current-state"
+           id="current_state"
+           name="current_state"
            value="{{ state.state }}" />
   </div>
   <div class="grid-col-12 tablet-lg:grid-col-3 line-height-sans-5 display-flex flex-row tablet-lg:flex-column flex-align-left flex-justify-left tablet-lg:flex-align-left tablet-lg:flex-justify-center tablet-lg:border-left-1px border-base-light margin-top-3 tablet-lg:margin-top-0">
@@ -85,11 +85,6 @@
         <a href="{% url 'county_overview' countyfips=county.countyfips %}"
            class="usa-link"
            id="view-county-details-link">{{ "ghwo.selector.label.county-link.01" | t }}</a>
-      {% else %}
-        <a href="{% url 'county_overview' countyfips='all' %}"
-           class="usa-link"
-           id="view-county-details-link"
-           aria-hidden="true">{{ "ghwo.selector.label.county-link.01" | t }}</a>
       {% endif %}
     </div>
     <div id="view-state-details-container"

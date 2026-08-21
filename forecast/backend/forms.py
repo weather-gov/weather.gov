@@ -26,3 +26,23 @@ class CustomUserCreationForm(UserCreationForm):
 
     class Meta(UserEditForm.Meta):  # noqa: D106
         fields = UserEditForm.Meta.fields | {"username", "email"}
+
+
+class SelectGHWOCountiesForm(forms.Form):
+    """Validation form for Risk Overview post requests."""
+
+    current_state = forms.CharField(
+        max_length=2
+    )
+    current_county = forms.CharField(
+        max_length=5,
+        required=False
+    )
+    state = forms.CharField(
+        max_length=2,
+        required=False
+    )
+    county=forms.CharField(
+        max_length=5,
+        required=False
+    )

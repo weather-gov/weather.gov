@@ -426,26 +426,32 @@ class TestViews(TestCase):
 
     def test_afd_index_with_afd_changed(self):
         """Tests getting the AFD index where the AFD changed."""
-        response = self.client.get("/tools/afd/?wfo=WFO&id=AFD&current-wfo=WFO")
+        response = self.client.get(
+            "/tools/afd/?wfo=WFO&id=aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee&current-wfo=WFO"
+        )
         self.assertRedirects(
             response,
-            "/tools/afd/wfo/AFD/",
+            "/tools/afd/wfo/aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee/",
             fetch_redirect_response=False,
         )
 
     def test_afd_index_with_wfo_and_afd_changed(self):
         """Tests getting the AFD index where the WFO and AFD changed."""
-        response = self.client.get("/tools/afd/?wfo=WFO&id=AFD")
+        response = self.client.get("/tools/afd/?wfo=WFO&id=aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee")
         self.assertRedirects(
             response,
-            "/tools/afd/wfo/AFD/",
+            "/tools/afd/wfo/aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee/",
             fetch_redirect_response=False,
         )
 
     @mock.patch("backend.views.partials.interop.get_wx_afd_versions_by_wfo")
     def test_afd_index(self, mock_get_wx_afd_versions):
         """Tests getting the AFD index."""
-        mock_get_wx_afd_versions.return_value = {"@graph": [{"id": "afd_id"}]}
+        mock_get_wx_afd_versions.return_value = {
+            "@graph": [
+                {"id": "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee"}
+            ]
+        }
 
         response = self.client.get("/tools/afd/")
         self.assertTemplateUsed(response, "weather/afd/afd_page.html")
@@ -461,11 +467,15 @@ class TestViews(TestCase):
     @mock.patch("backend.views.partials.interop.get_wx_afd_versions_by_wfo")
     def test_afd_by_office(self, mock_get_wx_afd_versions_by_wfo):
         """Test getting an AFD by office."""
-        mock_get_wx_afd_versions_by_wfo.return_value = {"@graph": [{"id": "magic_afd"}]}
+        mock_get_wx_afd_versions_by_wfo.return_value = {
+            "@graph": [
+                {"id": "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee"}
+            ]
+        }
         response = self.client.get("/tools/afd/TST/")
         self.assertRedirects(
             response,
-            "/tools/afd/tst/magic_afd/",
+            "/tools/afd/tst/aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee/",
             fetch_redirect_response=False,
         )
 
@@ -481,7 +491,7 @@ class TestViews(TestCase):
     def test_afd_by_office_and_id_with_redirect_wfo(self, mock_get_wx_afd_by_id):
         """Test getting an AFD by office and ID where the WFOs don't match."""
         mock_get_wx_afd_by_id.return_value = {"issuingOffice": "KTST"}
-        response = self.client.get("/tools/afd/BOB/afd_id/")
+        response = self.client.get("/tools/afd/BOB/aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee/")
         self.assertRedirects(
             response,
             "/tools/afd/bob/",
@@ -499,7 +509,7 @@ class TestViews(TestCase):
         mock_get_wx_afd_by_id.return_value = {"issuingOffice": "KBOB"}
         mock_get_wx_afd_versions_by_wfo.return_value = {"@graph": ["v1", "v2", "v3"]}
 
-        response = self.client.get("/tools/afd/bob/afd_id/")
+        response = self.client.get("/tools/afd/bob/aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee/")
 
         self.assertTemplateUsed(response, "weather/afd/afd_page.html")
 
