@@ -62,7 +62,7 @@ describe("wpcProbPrecip module", () => {
     });
   });
 
-  it("brackets the low, expected, and high amounts off the percentiles", async () => {
+  it("brackets low and high off the percentiles and takes expected from the accumulation", async () => {
     db.query.resolves(
       row({
         accumulation: 0.6799212694168091,
@@ -79,7 +79,7 @@ describe("wpcProbPrecip module", () => {
     expect(rain.accumulation).to.equal(0.68);
     expect(rain.range).to.eql({
       low: { amount: 0.32, chance: 0.9 },
-      expected: { amount: 0.96, chance: 0.5 },
+      expected: { amount: 0.68, chance: 0.5 },
       high: { amount: 1.98, chance: 0.1 },
     });
   });

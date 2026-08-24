@@ -84,7 +84,7 @@
             </h4>
           </div>
           {% include 'weather/partials/forecast-details-toggle.html' %}
-          {% hourly_table day=day qpf=day.qpf hours=day.hours itemId=day.itemId %}
+          {% hourly_table day=day qpf=day.qpf hours=day.hours itemId=day.itemId first=first %}
           {% hourly_charts hours=day.hours qpf=day.qpf itemId=day.itemId day=day %}
         </div>
       {% endif %}
