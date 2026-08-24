@@ -1,0 +1,12 @@
+.ruff_cache/
+*.pyc
+spatial/management/commands/__cache
+frontend/public
+frontend/node_modules
+Dockerfile.*
+# cloud.gov specific files.
+Procfile
+apt.yml
+run.sh
+runtime.txt
+# end

@@ -8,14 +8,18 @@ ENV DJANGO_DEBUG=false
 
 # Do all this in one shot so we don't get a ton of intermediate image layers,
 # and then clean up the cache so our final image is smaller.
+
+# hadolint ignore=DL3027
 RUN apt update && \
   apt install -y \
   gettext \
   binutils \
   libproj-dev \
-  gdal-bin \
-  && apt-get clean
+  gdal-bin && \
+  apt-get clean
 
 WORKDIR /code
 COPY requirements.dev.txt /code/requirements.txt
+
+# hadolint ignore=DL3042
 RUN pip install -r requirements.txt

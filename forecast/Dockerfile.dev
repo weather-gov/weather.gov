@@ -8,6 +8,8 @@ ENV DJANGO_DEBUG=true
 
 # Do all this in one shot so we don't get a ton of intermediate image layers,
 # and then clean up the cache so our final image is smaller.
+
+# hadolint ignore=DL3027
 RUN apt update && \
   apt install -y \
   gettext \
@@ -18,4 +20,6 @@ RUN apt update && \
 
 WORKDIR /code
 COPY requirements.dev.txt .
+
+# hadolint ignore=DL3042
 RUN pip install -r requirements.dev.txt
