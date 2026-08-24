@@ -95,103 +95,90 @@
       </nav>
     </div>
   </div>
-  <div id="hover-buttons" class="position-fixed z-top">
+  <div id="hover-buttons" class="position-fixed">
     <button type="button"
-      class="ride-up-button--mobile"
-      aria-label="{{ "footer.link.scroll-to-top.01" | t }}">
+            class="ride-up-button--mobile"
+            aria-label="{{ "footer.link.scroll-to-top.01" | t }}">
       <svg width="56" height="56" role="img">
         <use xlink:href="{% static 'images/weather/wx_to_top_arrow.svg' %}#arrow"></use>
       </svg>
     </button>
     <button type="button"
-      class="ride-up-button--tablet usa-button usa-button--outline">
+            class="ride-up-button--tablet usa-button usa-button--outline">
       <span>{{ "footer.link.scroll-to-top.01" | t }}</span>
     </button>
     <a href="https://touchpoints.app.cloud.gov/touchpoints/22acf675/submit"
        class="touchpoints-button usa-button">{{ "footer.link.touchpoints.01" | t }}</a>
   </div>
-
   {% if timings %}
-  <div class="usa-footer__secondary-section">
-    <div class="grid-container">
-      <div class="usa-alert usa-alert--info usa-alert--slim">
-        <div class="usa-alert__body">
-          <p class="usa-alert__text">
-            You are seeing a debug version of this page. The below is provided for informational purposes only.
-          </p>
-        </div>
-      </div>
-      <div class="usa-summary-box overflow-scroll" role="region" aria-labelledby="summary-box-key-information">
-        <div class="usa-summary-box__body">
-          <h4 class="usa-summary-box__heading" id="summary-box-key-information">
-            API endpoints used
-          </h4>
-          <p class="usa-prose">Interop endpoint: {{timings.url}}</p>
-          <div class="usa-summary-box__text">
-            <ul>
-              {% for timing in timings.timings %}
-              <li class="maxw-none margin-top-1 margin-bottom-1">
-                <code>{{ timing.url }}</code> took {{ timing.timing|floatformat:2 }}ms
-                {% if timing.obsIndex > -1 %}
-                  <span class="usa-tag">Observation {{timing.obsIndex}}</span>
-                {% endif %}
-                {% if timing.awaited %}
-                  <span class="usa-tag">awaited</span>
-                {% endif %}
-                {% if timing.validObs %}
-                  <span class="usa-tag">selected obs</span>
-                {% endif %}
-                {% if timing.cached %}
-                  <span class="usa-tag">cached</span>
-                {% elif timing.correlationId %}
-                  <ul>
-                    <li class="margin-top-1 margin-bottom-1">API Correlation ID: <span>{{ timing.correlationId }}</span></li>
-                  </ul>
-                {% endif %}
-              </li>
-              {% endfor %}
-            </ul>
+    <div class="usa-footer__secondary-section">
+      <div class="grid-container">
+        <div class="usa-alert usa-alert--info usa-alert--slim">
+          <div class="usa-alert__body">
+            <p class="usa-alert__text">
+              You are seeing a debug version of this page. The below is provided for informational purposes only.
+            </p>
           </div>
-          <div>
-            {% if timings.batches %}
-              <p class="usa-prose">
-                Number of batches: {{timings.batches|length}}
-              </p>
+        </div>
+        <div class="usa-summary-box overflow-scroll"
+             role="region"
+             aria-labelledby="summary-box-key-information">
+          <div class="usa-summary-box__body">
+            <h4 class="usa-summary-box__heading" id="summary-box-key-information">API endpoints used</h4>
+            <p class="usa-prose">Interop endpoint: {{ timings.url }}</p>
+            <div class="usa-summary-box__text">
+              <ul>
+                {% for timing in timings.timings %}
+                  <li class="maxw-none margin-top-1 margin-bottom-1">
+                    <code>{{ timing.url }}</code> took {{ timing.timing|floatformat:2 }}ms
+                    {% if timing.obsIndex > -1 %}<span class="usa-tag">Observation {{ timing.obsIndex }}</span>{% endif %}
+                    {% if timing.awaited %}<span class="usa-tag">awaited</span>{% endif %}
+                    {% if timing.validObs %}<span class="usa-tag">selected obs</span>{% endif %}
+                    {% if timing.cached %}
+                      <span class="usa-tag">cached</span>
+                    {% elif timing.correlationId %}
+                      <ul>
+                        <li class="margin-top-1 margin-bottom-1">
+                          API Correlation ID: <span>{{ timing.correlationId }}</span>
+                        </li>
+                      </ul>
+                    {% endif %}
+                  </li>
+                {% endfor %}
+              </ul>
+            </div>
+            <div>
+              {% if timings.batches %}
+                <p class="usa-prose">Number of batches: {{ timings.batches|length }}</p>
                 <ol>
                   {% for batch in timings.batches %}
                     <li>
-                      <p>Time: {{batch.max|floatformat:2}}ms</p>
+                      <p>Time: {{ batch.max|floatformat:2 }}ms</p>
                       <p>Endpoints in batch:</p>
                       <ul>
-                        {% for item in batch.batch %}
-                          <li>{{item.url}}</li>
-                        {% endfor %}
+                        {% for item in batch.batch %}<li>{{ item.url }}</li>{% endfor %}
                       </ul>
                     </li>
                   {% endfor %}
                 </ol>
                 <p class="usa-prose">
-                  Total API request time: <span class=" text-bold">
-                  {{timings.total|floatformat:2}}ms
-                  </span>
-                </p>
+                  Total API request time: <span class=" text-bold">{{ timings.total|floatformat:2 }}ms</span>
+              </p>
             {% endif %}
             <p class="usa-prose">
-              Interop response time: <span class="text-bold">
-              {{timings.interopResponseTime|floatformat:2}}ms
-              </span>
-            </p>
-          </div>
+              Interop response time: <span class="text-bold">{{ timings.interopResponseTime|floatformat:2 }}ms</span>
+          </p>
         </div>
       </div>
     </div>
-  {% endif %}
-  {% if timings_serialized %}
-    <template>
-      BEGIN_INTEROP_TIMINGS
-      {{timings_serialized|safe}}
-      END_INTEROP_TIMINGS
-    </template>
-  {% endif %}
-
+  </div>
+{% endif %}
+{% if timings_serialized %}
+  <template>
+    BEGIN_INTEROP_TIMINGS
+    {{ timings_serialized|safe }}
+    END_INTEROP_TIMINGS
+  </template>
+{% endif %}
+</div>
 </footer>
