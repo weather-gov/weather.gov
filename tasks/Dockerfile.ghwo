@@ -1,0 +1,31 @@
+FROM ubuntu:24.04 AS geo-base
+
+FROM geo-base AS builder
+
+RUN apt-get update && \
+    apt-get install software-properties-common -y
+
+RUN add-apt-repository ppa:longsleep/golang-backports && \
+    apt-get update && \
+    apt-get install -y \
+    golang-1.26 \
+    && rm -rf /var/lib/apt/lists/*
+
+ENV PATH=$PATH:/usr/lib/go-1.26/bin
+
+WORKDIR /tasks
+COPY . .
+
+RUN CGO_ENABLED=0 go build -o ghwo cmd/ghwo/main.go
+
+FROM ubuntu:24.04 AS runtime
+
+RUN rm -rf /var/lib/apt/lists/*
+
+COPY --from=builder --chown=1001:1001 tasks/ghwo /usr/local/bin/ghwo
+
+USER 1001
+
+ENV PATH=$PATH:/usr/local/bin/ghwo
+
+CMD ["ghwo"]
