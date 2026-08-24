@@ -1,0 +1,92 @@
+# syntax=docker/dockerfile:1
+#
+# Production image for the Django app.
+
+# to read the current tag:
+# $ aws ecr describe-images \
+#  --registry-id <golden-account> \
+#  --repository-name golden-base-ubuntu \
+#  --query 'reverse(sort_by(imageDetails,
+#            &imagePushedAt))[:5].imageTags' \
+#  --output table
+
+ARG BASE_REGISTRY
+ARG BASE_TAG=24.04-20260728
+
+# first, build a base image that contains geo libraries. this is because Django
+# depends on GeoDjango (`django.contrib.gis`) which requires libgdal and libgeos
+# to be installed.
+
+# NB: ECR golden images are not ready. use stock ubuntu as a workaround.
+FROM ubuntu:24.04 AS geo-base
+
+## FROM ${BASE_REGISTRY}/golden-base-ubuntu:${BASE_TAG} AS geo-base
+
+# per documentation for the golden image builder: "You are uid 1001. Add USER 0
+# before the install and USER 1001 after."
+# hadolint ignore=DL3002
+USER 0
+
+# we do not pin dependencies.
+# hadolint ignore=DL3008
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+      python3 \
+      libgdal34t64 \
+      libgeos3.12.1t64 \
+      libproj25 && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
+# GeoDjango does not automatically detect the libraries so set them explicitly.
+ENV GDAL_LIBRARY_PATH=/usr/lib/x86_64-linux-gnu/libgdal.so.34 \
+    GEOS_LIBRARY_PATH=/usr/lib/x86_64-linux-gnu/libgeos_c.so.1
+
+# Build the venv and the generated assets.
+FROM geo-base AS builder
+
+# hadolint ignore=DL3008
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+      python3-venv \
+      python3-pip \
+      gettext && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
+ENV VIRTUAL_ENV=/opt/venv
+RUN python3 -m venv "$VIRTUAL_ENV"
+ENV PATH="$VIRTUAL_ENV/bin:$PATH"
+
+WORKDIR /build
+COPY requirements.txt /build/requirements.txt
+
+RUN pip install --no-cache-dir --require-hashes -r requirements.txt
+
+COPY . .
+
+# generate static assets and translations. we piggy back on the ci settings and
+# set a fake key just to run these two commands.
+RUN export DJANGO_SETTINGS_MODULE="backend.config.settings.ci" \
+           DJANGO_DEBUG=false \
+           django_secret_key=this-is-not-an-actual-secret-key && \
+    python3 manage.py compilemessages && \
+    python3 manage.py collectstatic --noinput
+
+# The actual production image is geo-base plus the venv and the app, fin.
+FROM geo-base AS runtime
+
+ENV VIRTUAL_ENV=/opt/venv \
+    PATH=/opt/venv/bin:$PATH \
+    PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1
+
+# /app is owned by 1001:1001 as per documentation, so we have to chown.
+WORKDIR /app
+COPY --from=builder --chown=1001:1001 /opt/venv /opt/venv
+COPY --from=builder --chown=1001:1001 /build /app
+
+USER 1001
+
+EXPOSE 8080
+CMD ["gunicorn", "-c", "gunicorn.conf.py", "--bind", "0.0.0.0:8080", "--control-socket", "/tmp/gunicorn.ctl"]
