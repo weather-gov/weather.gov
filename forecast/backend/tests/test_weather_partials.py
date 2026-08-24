@@ -20,9 +20,10 @@ def wpc_prob_fixture():
         "snow": None,
         "freezingRain": None,
         "rain": {
+            "accumulation": 0.42,
             "range": {
                 "low": {"amount": 0.1, "chance": 0.9},
-                "expected": {"amount": 0.5, "chance": 0.5},
+                "expected": {"amount": 0.42, "chance": 0.5},
                 "high": {"amount": 1.25, "chance": 0.1},
             },
             "probabilities": [
@@ -488,6 +489,7 @@ class TestWeatherPartials(TestCase):
             {
                 "this key": "is preserved",
                 "alerts": "a list of alerts",
+                "first": False,
             },
         )
 
@@ -547,7 +549,7 @@ class TestWeatherPartials(TestCase):
                     "label": "the liquid one",
                     "bins": [
                         {"label": slot["label"], "amount": amount}
-                        for slot, amount in zip(weather_partials.PRECIP_BRACKET_SLOTS, [0.1, 0.5, 1.25], strict=True)
+                        for slot, amount in zip(weather_partials.PRECIP_BRACKET_SLOTS, [0.1, 0.42, 1.25], strict=True)
                     ],
                     "probabilities": [
                         {"atLeast": 0.01, "percent": 90},

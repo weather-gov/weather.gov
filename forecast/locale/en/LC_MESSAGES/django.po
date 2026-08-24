@@ -530,6 +530,9 @@ msgstr "24-Hour Precipitation Totals"
 msgid "precip-probability.text.period.01"
 msgstr "Total amount from {start} to {end}."
 
+msgid "precip-probability.text.unavailable.01"
+msgstr "24-hour totals are not available for this day."
+
 msgid "precip-probability.label.low-end.01"
 msgstr "LOW END"
 

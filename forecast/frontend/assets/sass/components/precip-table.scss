@@ -1,13 +1,5 @@
 @use "uswds-core" as *;
 
-/* Precipitation section
-------------------------------------- */
-@include at-media-max("desktop") {
-  .wx-forecast-list > li:nth-child(n + 4) .wx-precipitation {
-    display: none;
-  }
-}
-
 /* Hourly precipitation table overrides
 ------------------------------------- */
 .wx-precip-table {

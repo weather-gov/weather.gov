@@ -5,29 +5,34 @@
 -- Used by: partials/hourly-table.html
 {% endcomment %}
 {% with wpc=qpf.wpcProb %}
-  {% if qpf.noPrecipExpected or wpc or qpf.hasQPF %}
-    <div class="wx-precipitation border-top-2px border-primary-dark margin-top-3">
-      <div class="grid-row desktop__wx-grid-gap-lg">
-        <div class="grid-col-12">
-          <h4 class="font-heading-md text-normal text-primary-darker margin-top-105 margin-bottom-0">
-            {% trans "precipitation.heading.section.01" %}
-          </h4>
-        </div>
-        {% if qpf.noPrecipExpected %}
-          <div class="grid-col-12">
-            <p class="font-body-sm text-base-dark margin-top-2 margin-bottom-0">{% trans "precipitation.text.none.01" %}</p>
-          </div>
-        {% else %}
-          {% if wpc %}
-            <div class="grid-col-12 {% if qpf.hasQPF %}desktop:grid-col-6{% endif %}">
-              {% precip_probability wpc=wpc itemId=itemId %}
-            </div>
-          {% endif %}
-          {% if qpf.hasQPF %}
-            <div class="grid-col-12 {% if wpc %}desktop:grid-col-6{% endif %}">{% precip_table qpf=qpf as_table=True %}</div>
-          {% endif %}
-        {% endif %}
+  <div class="wx-precipitation border-top-2px border-primary-dark margin-top-3">
+    <div class="grid-row desktop__wx-grid-gap-lg">
+      <div class="grid-col-12">
+        <h4 class="font-heading-md text-normal text-primary-darker margin-top-105 margin-bottom-0">
+          {% trans "precipitation.heading.section.01" %}
+        </h4>
       </div>
+      {% if qpf.noPrecipExpected %}
+        <div class="grid-col-12">
+          <p class="font-body-sm text-base-dark margin-top-2 margin-bottom-0">{% trans "precipitation.text.none.01" %}</p>
+        </div>
+      {% else %}
+        <div class="grid-col-12 {% if qpf.hasQPF %}desktop:grid-col-6{% endif %}">
+          {% if first and wpc %}
+            {% precip_probability wpc=wpc itemId=itemId %}
+          {% else %}
+            <h5 class="font-heading-sm text-bold text-primary-darker margin-top-2 margin-bottom-05">
+              {% trans "precip-probability.heading.totals.01" %}
+            </h5>
+            <p class="font-body-xs text-base-dark line-height-sans-3 margin-y-0">
+              {% trans "precip-probability.text.unavailable.01" %}
+            </p>
+          {% endif %}
+        </div>
+        {% if qpf.hasQPF %}
+          <div class="grid-col-12 desktop:grid-col-6">{% precip_table qpf=qpf as_table=True %}</div>
+        {% endif %}
+      {% endif %}
     </div>
-  {% endif %}
+  </div>
 {% endwith %}

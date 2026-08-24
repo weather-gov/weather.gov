@@ -18,10 +18,10 @@ const round = (value) => Math.round(value * 100) / 100;
 // jsonb orders keys by length then bytewise, so "12.0" arrives between "1.00" and "2.00"
 const numerically = (a, b) => Number(a) - Number(b);
 
-const toRange = (percentiles) => {
+const toRange = (percentiles, accumulation) => {
   const range = {};
   for (const [slot, percentile, chance] of BRACKET) {
-    const amount = percentiles[percentile];
+    const amount = slot === "expected" ? accumulation : percentiles[percentile];
     if (amount !== undefined) {
       range[slot] = { amount: round(amount), chance };
     }
@@ -44,7 +44,7 @@ const toVariable = (data) => {
 
   return {
     accumulation: accumulation === undefined ? null : round(accumulation),
-    range: toRange(percentiles),
+    range: toRange(percentiles, accumulation),
     percentiles: Object.keys(percentiles)
       .sort(numerically)
       .map((key) => ({

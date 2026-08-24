@@ -15,7 +15,6 @@ from backend.util.alert import set_timing
 from spatial.models import WeatherAlertsCache
 
 _ID_REGEX = re.compile("[^A-Z0-9]", re.IGNORECASE)
-_NO_PRECIP_CHANCE_PERCENT = 5
 _requests_session = None
 
 
@@ -263,19 +262,14 @@ def _process_qpf(day, wpc_prob, tz):
         if period["start"] < day["end"] and period["end"] > day["start"]:
             qpf["wpcProb"] = wpc_prob
 
-    # day["pop"] is rounded to the nearest 5, so a true 2.5% chance reads as 5%
-    hourly_precip_chances = [chance for chance in day["hourly"]["pops"] if chance is not None]
+    wpc = qpf["wpcProb"] or {}
+    expected = []
+    for name in ("rain", "snow", "freezingRain"):
+        variable = wpc.get(name) or {}
+        expected.append(((variable.get("range") or {}).get("expected") or {}).get("amount"))
 
-    rain = (qpf["wpcProb"] or {}).get("rain") or {}
-    expected = (rain.get("range") or {}).get("expected") or {}
-    wpc_chances = rain.get("probabilities") or [{"chance": 0}]
-
-    qpf["noPrecipExpected"] = (
-        max(hourly_precip_chances, default=0) < _NO_PRECIP_CHANCE_PERCENT
-        and not any(qpf["liquid"] + qpf["snow"] + qpf["ice"])
-        and not expected.get("amount")
-        and wpc_chances[0]["chance"] * 100 < _NO_PRECIP_CHANCE_PERCENT
-    )
+    # QPF runs out a few days ahead, and a day it never reached is unknown rather than dry
+    qpf["noPrecipExpected"] = bool(qpf["periods"]) and not any(qpf["liquid"] + qpf["snow"] + qpf["ice"] + expected)
 
 
 def _process_hourly_interop_data(day_data, tz):  # noqa: C901
