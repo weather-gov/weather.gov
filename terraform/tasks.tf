@@ -11,7 +11,7 @@ resource "cloudfoundry_app" "tasks" {
   name       = "tasks-${local.app_name}-${var.env}"
   space_name = var.cf_space_name
   org_name   = local.cf_org_name
-  count      = (var.cf_space_name == "prod" ? 0 : 1)
+  count      = 1
 
   path              = data.archive_file.tasks_src.output_path
   source_code_hash  = data.archive_file.tasks_src.output_base64sha256
