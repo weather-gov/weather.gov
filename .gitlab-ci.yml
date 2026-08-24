@@ -52,7 +52,6 @@ variables:
   POSTGRES_PASSWORD: drupal
   POSTGRES_DB: weathergov
   DJANGO_SETTINGS_MODULE: backend.config.settings.ci
-  USE_LATEST_TAG: $CI_COMMIT_REF_SLUG
   # promote gitlab inputs to variables so we can use them in rules.
   BUILD_IMAGES: "$[[ inputs.build-images ]]"
   RUN_JS_CI: "$[[ inputs.run-js-ci ]]"
@@ -69,10 +68,6 @@ variables:
 # determine which events produce a pipeline. see .gitlab/rules.yml for job-specific rules.
 workflow:
   rules:
-    # if deploying from the GitLab UI without building images, use the images built on main
-    - if: $CI_PIPELINE_SOURCE == "web" && $BUILD_IMAGES != "true"
-      variables:
-        USE_LATEST_TAG: main
     - if: $CI_PIPELINE_SOURCE == "web"
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
     - if: $CI_COMMIT_TAG =~ /^v\d+\.\d+\.\d+-beta$/
@@ -230,9 +225,29 @@ deploy-to-test:
   rules:
     - !reference [.on_manual_deploy_test]
 
+# determine whether or not we need to rebuild images.
+compute-dependency-tags:
+  stage: .pre
+  image: alpine:latest
+  script:
+    - JS_DEPS="Dockerfile.node.ci package-lock.json api-interop-layer/package-lock.json api-proxy/package-lock.json spatial-data/package-lock.json"
+    - PY_DEPS="forecast/Dockerfile.ci forecast/requirements.dev.txt"
+    - PW_DEPS="Dockerfile.playwright.ci package-lock.json"
+    - echo "JS_TAG=deps-$(cat $JS_DEPS | sha256sum | cut -c1-12)" > deps.env
+    - echo "PY_TAG=deps-$(cat $PY_DEPS | sha256sum | cut -c1-12)" >> deps.env
+    - echo "PW_TAG=deps-$(cat $PW_DEPS | sha256sum | cut -c1-12)" >> deps.env
+    - cat deps.env
+  artifacts:
+    reports:
+      dotenv: deps.env
+
 .playwright:
   stage: test
-  image: $CI_REGISTRY_IMAGE/playwright:$CI_COMMIT_REF_SLUG
+  needs:
+    - job: compute-dependency-tags
+    - job: gather-playwright-dependencies
+      optional: true
+  image: $CI_REGISTRY_IMAGE/playwright:$PW_TAG
   variables:
     DEPLOYED_URL: https://weathergov-test.app.cloud.gov
     API_URL: https://api-proxy-weathergov-test.app.cloud.gov/
@@ -260,9 +275,10 @@ playwright-a11y:
 bundle-js:
   stage: build
   needs:
+    - job: compute-dependency-tags
     - job: gather-node-dependencies
       optional: true
-  image: $CI_REGISTRY_IMAGE/node-with-deps:$USE_LATEST_TAG
+  image: $CI_REGISTRY_IMAGE/node-with-deps:$JS_TAG
   script:
     # NB: GitLab clones into CI_BUILDS_DIR which defaults to
     # /builds/gitlab-licensed/NWS/Systems/DIS/Weather.gov-2.0/ whereas in our Docker
@@ -289,9 +305,10 @@ bundle-js:
 js-lint:
   stage: lint
   needs:
+    - job: compute-dependency-tags
     - job: gather-node-dependencies
       optional: true
-  image: $CI_REGISTRY_IMAGE/node-with-deps:$USE_LATEST_TAG
+  image: $CI_REGISTRY_IMAGE/node-with-deps:$JS_TAG
   script:
     # NB: GitLab clones into CI_BUILDS_DIR which defaults to
     # /builds/gitlab-licensed/NWS/Systems/DIS/Weather.gov-2.0/ whereas in our Docker
@@ -319,9 +336,10 @@ js-lint:
 django-lint:
   stage: lint
   needs:
+    - job: compute-dependency-tags
     - job: gather-django-dependencies
       optional: true
-  image: $CI_REGISTRY_IMAGE/python-with-deps:$USE_LATEST_TAG
+  image: $CI_REGISTRY_IMAGE/python-with-deps:$PY_TAG
   script:
     - cd forecast/
     - python -m ruff check .
@@ -334,9 +352,10 @@ django-lint:
 django-test:
   stage: test
   needs:
+    - job: compute-dependency-tags
     - job: gather-django-dependencies
       optional: true
-  image: $CI_REGISTRY_IMAGE/python-with-deps:$USE_LATEST_TAG
+  image: $CI_REGISTRY_IMAGE/python-with-deps:$PY_TAG
   services:
     - name: postgis/postgis:17-3.5
       alias: database
@@ -367,9 +386,10 @@ django-test:
 web-component-test:
   stage: test
   needs:
+    - job: compute-dependency-tags
     - job: gather-node-dependencies
       optional: true
-  image: $CI_REGISTRY_IMAGE/node-with-deps:$USE_LATEST_TAG
+  image: $CI_REGISTRY_IMAGE/node-with-deps:$JS_TAG
   variables:
     DISABLE_REDIS: true
   script:
@@ -395,9 +415,10 @@ web-component-test:
 interop-test:
   stage: test
   needs:
+    - job: compute-dependency-tags
     - job: gather-node-dependencies
       optional: true
-  image: $CI_REGISTRY_IMAGE/node-with-deps:$USE_LATEST_TAG
+  image: $CI_REGISTRY_IMAGE/node-with-deps:$JS_TAG
   variables:
     DISABLE_REDIS: true
   script:

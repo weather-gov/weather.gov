@@ -7,7 +7,8 @@ include:
       dockerfile: Dockerfile.node.ci
       context: ./
       image: $CI_REGISTRY_IMAGE/node-with-deps
-      tag: $CI_COMMIT_REF_SLUG
+      needs: ["compute-dependency-tags"]
+      tag: $JS_TAG
       opts: "--cache=true --cache-copy-layers=true --cache-repo=$CI_REGISTRY_IMAGE/cache --cache-ttl=168h"
   - component: ${CI_SERVER_FQDN}/NWS/Systems/NCO/NEC/shared-catalogs/container/build@main
     inputs:
@@ -16,7 +17,8 @@ include:
       dockerfile: Dockerfile.ci
       context: forecast/
       image: $CI_REGISTRY_IMAGE/python-with-deps
-      tag: $CI_COMMIT_REF_SLUG
+      needs: ["compute-dependency-tags"]
+      tag: $PY_TAG
       opts: "--cache=true --cache-copy-layers=true --cache-repo=$CI_REGISTRY_IMAGE/cache --cache-ttl=168h"
   - component: ${CI_SERVER_FQDN}/NWS/Systems/NCO/NEC/shared-catalogs/container/build@main
     inputs:
@@ -25,7 +27,8 @@ include:
       dockerfile: Dockerfile.playwright.ci
       context: ./
       image: $CI_REGISTRY_IMAGE/playwright
-      tag: $CI_COMMIT_REF_SLUG
+      needs: ["compute-dependency-tags"]
+      tag: $PW_TAG
       opts: "--cache=true --cache-copy-layers=true --cache-repo=$CI_REGISTRY_IMAGE/cache --cache-ttl=168h"
 
 # override rules so we build a new image on each push
