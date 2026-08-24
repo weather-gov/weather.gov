@@ -4,7 +4,7 @@
 -- Used by: county/dailyAlertAccordion.html
 {% endcomment %}
 <div class="usa-accordion usa-accordion--bordered margin-bottom-1 alert-level__{{ alert.metadata.level.text }}"
-  id="alert_{{ alert.unique_id }}" data-alert
+  id="alert_{{ alert.unique_id }}" data-alert>
   {# djlint:off #}
      {% for day_number in alert_days %}
          data-alert-day-{{ day_number }}
@@ -25,7 +25,9 @@
           </div>
         {% endif %}
         {{ alert.display_title }}
-        {% if icon %}</div>{% endif %}
+        {% if icon %}
+      </div>
+      {% endif %}
     </button>
   </h3>
   <div id="a{{ alert.unique_id }}" class="usa-accordion__content usa-prose">
@@ -70,11 +72,11 @@
         <div class="grid-col-12">
           <h4 class="wx-visual-h3 text-normal text-primary-dark margin-bottom-05">{{ "alerts.labels.areas-impacted.01" |t }}</h4>
           {% comment %}
-                                        # Some alerts come with location information in the description text
-                                        # in a common text formatting. In those cases, the location information
-                                        # is lists of counties by region of the state, and sometimes a list of
-                                        # impacted cities as well. When we have that more fine-grained data,
-                                        # we will display it.
+            # Some alerts come with location information in the description text
+            # in a common text formatting. In those cases, the location information
+            # is lists of counties by region of the state, and sometimes a list of
+            # impacted cities as well. When we have that more fine-grained data,
+            # we will display it.
           {% endcomment %}
           {% if alert.locations != false %}
             {% for area in alert.locations.regions %}
@@ -98,10 +100,10 @@
               </wx-alert-cities>
             {% endif %}
             {% comment %}
-                                            # If the alert doesn't have that location information in the description
-                                            # text, we can use the list of impacted areas provided by AWIPS. This
-                                            # list is based on the alert polygon drawn by a forecaster, and then
-                                            # AWIPS identifies the areas.
+              # If the alert doesn't have that location information in the description
+              # text, we can use the list of impacted areas provided by AWIPS. This
+              # list is based on the alert polygon drawn by a forecaster, and then
+              # AWIPS identifies the areas.
             {% endcomment %}
           {% else %}
             <ul class="usa-list {% if alert.area|length > 7 %}wx-col-2{% endif %}">
