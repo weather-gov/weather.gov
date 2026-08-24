@@ -10,6 +10,7 @@
 */
 #site-navigation {
   width: calc(units(5) * 7);
+  z-index: calc(var(--site-nav-search-popout-z-index) - 1);
 }
 
 #site-header-hamburger-button:hover {

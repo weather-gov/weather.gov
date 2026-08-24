@@ -75,7 +75,7 @@ describe("<wx-ghwo-county-selector> component tests", () => {
       { value: "1", text: "State 1" },
       { value: "2", text: "State 2" },
       { value: "3", text: "State 3" },
-    ].forEach(opt => {
+    ].forEach((opt) => {
       let stateOption = document.createElement("option");
       stateOption.setAttribute("role", "option");
       stateOption.setAttribute("id", `state-selector--01-${opt.value}`);
@@ -110,7 +110,7 @@ describe("<wx-ghwo-county-selector> component tests", () => {
       { value: "1", text: "County 1" },
       { value: "2", text: "County 2" },
       { value: "3", text: "County 3" },
-    ].forEach(opt => {
+    ].forEach((opt) => {
       let countyOption = document.createElement("option");
       countyOption.setAttribute("role", "option");
       countyOption.setAttribute("id", `county-selector--01-${opt.value}`);
@@ -121,7 +121,6 @@ describe("<wx-ghwo-county-selector> component tests", () => {
     });
     countyCombo.append(countyListbox);
     form.append(countyCombo);
-
 
     // Add the hidden inputs
     ["current_state", "current_county"].forEach((name) => {
@@ -245,8 +244,6 @@ describe("<wx-ghwo-county-selector> component tests", () => {
       ),
     ).to.equal(true);
   });
-
-  
 
   it("Appends the loader to the DOM if the request is taking longer than the timeout", async () => {
     // Mock the fetch call so it takes longer than the timeout
