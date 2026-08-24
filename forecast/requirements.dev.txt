@@ -66,12 +66,11 @@ click==8.3.1 \
     # via
     #   djlint
     #   geobuf
-colorama==0.4.6 \
+colorama==0.4.6 ; sys_platform == 'win32' \
     --hash=sha256:08695f5cb7ed6e0531a20572697297273c47b8cae5a63ffc6d6ed5c201be6e44 \
     --hash=sha256:4f1d9991f5acc0ca119f9d443620b77f9d6b33703e51011c16baf57afb285fc6
     # via
     #   click
-    #   djlint
     #   tqdm
 coverage==7.13.4 \
     --hash=sha256:01d4cbc3c283a17fc1e42d614a119f7f438eabb593391283adca8dc86eff1246 \
@@ -195,13 +194,18 @@ djangorestframework==3.16.1 \
     # via
     #   wagtail
     #   weather-gov
-djlint==1.36.4 \
-    --hash=sha256:17254f218b46fe5a714b224c85074c099bcb74e3b2e1f15c2ddc2cf415a408a1 \
-    --hash=sha256:79489e262b5ac23a8dfb7ca37f1eea979674cfc2d2644f7061d95bea12c38f7e \
-    --hash=sha256:bb6903777bf3124f5efedcddf1f4716aef097a7ec4223fc0fa54b865829a6e08 \
-    --hash=sha256:e58c5fa8c6477144a0be0a87273706a059e6dd0d6efae01146ae8c29cdfca675 \
-    --hash=sha256:e9699b8ac3057a6ed04fb90835b89bee954ed1959c01541ce4f8f729c938afdd \
-    --hash=sha256:ff9faffd7d43ac20467493fa71d5355b5b330a00ade1c4d1e859022f4195223b
+djlint==1.44.2 \
+    --hash=sha256:01d3def79866623b0f0617b652389142228c13ec6e7857d7c3d5ba8c1c71725f \
+    --hash=sha256:05a7af5f21e09c72834e28975248a1c3a9bc93e2d35d3b97f240cdcacdf37bbc \
+    --hash=sha256:27d5a5c87f3653fc274318edae439a8565468699563bc79456f161a17152b9c7 \
+    --hash=sha256:29944d512818b59d9a1c4ab31851143b456edd327f892329bd3ee3cf7d5da4e9 \
+    --hash=sha256:34c024c039ac39f7244335aaac92ae24d17eaedb7866d8e7160d1a2150afb320 \
+    --hash=sha256:4e910def22f288496d2856873d4fe2453318a79189086a53d4a0228b0b891bd6 \
+    --hash=sha256:4f1311796c33bb1bfa1487bcf4af023da8b87e8879d00fdadb1856fad98c2f53 \
+    --hash=sha256:509862f1edb4f66f7f6bc6a1fd6a4edb3a4b9a14e05dc7b016fa5a819239ee2d \
+    --hash=sha256:886f91f6deb54c89aed6e0bf756667835a92b5f3a06d9db9a1d0e3462805f1eb \
+    --hash=sha256:aac33684f55074680e34db93b14bdcd5254928686ee6a077c57dbabeb1ae4e12 \
+    --hash=sha256:eac3a4e52a0318d762063b9b3d490abd2a14aff435eb6b5d89310daf0a3a3287
 draftjs-exporter==5.2.0 \
     --hash=sha256:4d665f8c75fd173d2c99326405300e8defcf4961b9b2f16ff117486489c6760b \
     --hash=sha256:f5255510a9c1de60807c1ba4be9666fb44ba263841b63329c8ce70d66146764c
@@ -682,9 +686,7 @@ telepath==0.3.1 \
 tqdm==4.67.3 \
     --hash=sha256:7d825f03f89244ef73f1d4ce193cb1774a8179fd96f31d7e1dcde62092b960bb \
     --hash=sha256:ee1e4c0e59148062281c49d80b25b67771a127c85fc9676d3be5f243206826bf
-    # via
-    #   djlint
-    #   weather-gov
+    # via weather-gov
 typing-extensions==4.15.0 \
     --hash=sha256:0cea48d173cc12fa28ecabc3b837ea3cf6f38c6d1136f85cbaaf598984861466 \
     --hash=sha256:f0fa19c6845758ab08074a0cfa8b7aecb71c999ca73d62883bc25cc018c4e548
@@ -692,6 +694,7 @@ typing-extensions==4.15.0 \
     #   beautifulsoup4
     #   django-stubs-ext
     #   django-tasks
+    #   djlint
     #   grpcio
     #   opentelemetry-api
     #   opentelemetry-exporter-otlp-proto-grpc

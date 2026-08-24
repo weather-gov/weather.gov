@@ -175,11 +175,11 @@
         {% include "weather/partials/forecast.html" with forecast=point.forecast %}
         </wx-daily-forecast>
       {% endif %}
-      </wx-tabbed-nav>
-      <!-- Saved locations section-->
-       <div class="margin-y-3">
-        {% include 'weather/partials/saved-locations-section.html' with type="point" mode="dark" heading="saved-locations.heading.section-main.01" %}
-       </div>
+    </div>
+    </wx-tabbed-nav>
+    <!-- Saved locations section-->
+    <div class="margin-y-3">
+    {% include 'weather/partials/saved-locations-section.html' with type="point" mode="dark" heading="saved-locations.heading.section-main.01" %}
     </div>
   </div>
 {% endblock %}

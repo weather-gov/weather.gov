@@ -137,7 +137,7 @@ omit = ["manage.py", "backend/migrations/*.py", "risk_data/migrations/*.py"]
 dev = [
     "coverage>=7.13.4",
     "debugpy>=1.8.20",
-    "djlint>=1.36.4",
+    "djlint>=1.44.2",
     "freezegun>=1.5.5",
     "ruff>=0.15.4",
 ]

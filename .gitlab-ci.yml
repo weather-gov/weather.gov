@@ -62,8 +62,6 @@ variables:
   CONFIRM_BETA_DEPLOY: "$[[ inputs.confirm-beta-deploy ]]"
   CONFIRM_NEC_DEPLOY: "$[[ inputs.confirm-nec-deploy ]]"
   CONFIRM_NEC_BOOTSTRAP: "$[[ inputs.confirm-nec-bootstrap ]]"
-  # enable SAST as per Gitlab security scanning
-  AST_ENABLE_MR_PIPELINES: "true"
 
 # determine which events produce a pipeline. see .gitlab/rules.yml for job-specific rules.
 workflow:
@@ -79,7 +77,7 @@ include:
   - local: ".gitlab/nec/bootstrap.yml"
   - local: ".gitlab/nec/infra.yml"
   - local: ".gitlab/nec/containers.yml"
-  - template: Security/SAST.gitlab-ci.yml
+  - local: ".gitlab/nec/scanning.yml"
 
 # gather up commits which have a `Changelog: ...` trailer and push them to CHANGELOG.md (via GitLab's API)
 write-release-notes:
@@ -317,8 +315,9 @@ js-lint:
     - ln -s /app/node_modules/ .
     - ln -s /app/api-interop-layer/node_modules api-interop-layer/
     - ln -s /app/api-proxy/node_modules api-proxy
+    - export STYLELINT_CODE_QUALITY_REPORT=gl-code-quality-stylelint.json
+    - npx --no-install stylelint 'forecast/frontend/**/assets/**/*.scss' --custom-formatter=@studiometa/stylelint-formatter-gitlab
     - npx --no-install eslint
-    - npx --no-install stylelint 'forecast/frontend/**/assets/**/*.scss'
     - |
       npx --no-install prettier --check \
       'forecast/frontend/**/assets/**/*.js' \
@@ -328,6 +327,10 @@ js-lint:
       'api-interop-layer/**/*.js' \
       '.gitlab-ci.yml' \
       '.gitlab/**/*.yml'
+  artifacts:
+    when: always
+    reports:
+      codequality: gl-code-quality-stylelint.json
   rules:
     - !reference [.on_mr]
     - !reference [.on_main]
@@ -341,9 +344,12 @@ django-lint:
       optional: true
   image: $CI_REGISTRY_IMAGE/python-with-deps:$PY_TAG
   script:
-    - cd forecast/
-    - python -m ruff check .
-    - python -m djlint backend/templates/ --extension=html
+    - python -m ruff check forecast/ --output-format gitlab -o gl-code-quality-ruff.json
+    - python -m djlint forecast/backend/templates/ --extension=html
+  artifacts:
+    when: always
+    reports:
+      codequality: gl-code-quality-ruff.json
   rules:
     - !reference [.on_mr]
     - !reference [.on_main]
@@ -465,8 +471,3 @@ golang-test:
     - !reference [.on_mr]
     - !reference [.on_main]
     - !reference [.on_manual_golang_ci]
-
-sast:
-  stage: test
-  variables:
-    SAST_EXCLUDED_PATHS: "spec, test, tests, tmp, node_modules, forecast/frontend/assets/js/uswds*.js, forecast/frontend/assets/js/third-party, forecast/frontend/assets/js/cmi-radar*.js, forecast/frontend/public/js"
