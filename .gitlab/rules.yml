@@ -4,6 +4,18 @@
 .on_mr:
   - if: $CI_PIPELINE_SOURCE == "merge_request_event"
 
+# on every merge request that touches the django app
+.on_mr_forecast_changes:
+  - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    changes:
+      - forecast/**/*
+
+# on every merge request that touches the tasks app
+.on_mr_tasks_changes:
+  - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    changes:
+      - tasks/**/*
+
 # main was updated
 .on_main:
   - if: $CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
