@@ -5,13 +5,17 @@ FROM geo-base AS builder
 RUN apt-get update && \
     apt-get install software-properties-common -y
 
-RUN add-apt-repository ppa:longsleep/golang-backports && \
-    apt-get update && \
-    apt-get install -y \
-    golang-1.26 \
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+    curl \
+    ca-certificates \
     && rm -rf /var/lib/apt/lists/*
 
-ENV PATH=$PATH:/usr/lib/go-1.26/bin
+RUN curl -fsSL https://go.dev/dl/go1.26.5.linux-amd64.tar.gz -o golang.tar.gz && \
+    tar -C /usr/local -xzf golang.tar.gz && \
+    rm golang.tar.gz
+
+ENV PATH=$PATH:/usr/local/go/bin
 
 WORKDIR /tasks
 COPY . .
