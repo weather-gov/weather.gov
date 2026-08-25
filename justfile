@@ -120,6 +120,8 @@ format-js *files:
       -v "{{justfile_directory()}}/tests":"/app/tests" \
       -v "{{justfile_directory()}}/spatial-data":"/app/spatial-data" \
       -v "{{justfile_directory()}}/forecast/frontend":"/app/forecast/frontend" \
+      -v "{{justfile_directory()}}/.gitlab-ci.yml":"/app/.gitlab-ci.yml" \
+      -v "{{justfile_directory()}}/.gitlab":"/app/.gitlab" \
       node \
       npx --no-install prettier -w --list-different 'forecast/frontend/**/assets/**/*.js' 'tests/**/*.js' '*.js' 'api-interop-layer/**/*.js' '.gitlab-ci.yml' '.gitlab/**/*.yml'
   else

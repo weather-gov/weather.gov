@@ -63,6 +63,15 @@ include:
       image: $CI_REGISTRY_IMAGE/django-production
       tag: $CI_COMMIT_REF_SLUG
       opts: "--cache=true --cache-copy-layers=true --cache-repo=$CI_REGISTRY_IMAGE/cache --cache-ttl=168h"
+  - component: ${CI_SERVER_FQDN}/NWS/Systems/NCO/NEC/shared-catalogs/container/build@main
+    inputs:
+      stage: gather
+      job_name: push-ghwo-task-production-image
+      dockerfile: Dockerfile.ghwo
+      context: tasks/
+      image: $CI_REGISTRY_IMAGE/ghwo-task-production
+      tag: $CI_COMMIT_REF_SLUG
+      opts: "--cache=true --cache-copy-layers=true --cache-repo=$CI_REGISTRY_IMAGE/cache --cache-ttl=168h"
 
 # override rules so these jobs are in the pipeline on each push. NB:
 # `before_script` determines whether they actually build images.
@@ -82,7 +91,12 @@ push-django-production-image:
     - !reference [.on_mr]
     - !reference [.on_main]
     - !reference [.on_web]
-# NB: currently playwright is only run from the Gitlab UI
+push-ghwo-task-production-image:
+  rules:
+    - !reference [.on_mr]
+    - !reference [.on_main]
+    - !reference [.on_web]
+# for playwright, build a new image every time we run through the Gitlab UI
 gather-playwright-dependencies:
   rules:
     - !reference [.on_manual_playwright_ci]
