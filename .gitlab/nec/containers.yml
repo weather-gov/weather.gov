@@ -30,6 +30,15 @@ include:
       needs: ["compute-dependency-tags"]
       tag: $PW_TAG
       opts: "--cache=true --cache-copy-layers=true --cache-repo=$CI_REGISTRY_IMAGE/cache --cache-ttl=168h"
+  - component: ${CI_SERVER_FQDN}/NWS/Systems/NCO/NEC/shared-catalogs/container/build@main
+    inputs:
+      stage: gather
+      job_name: push-django-production-image
+      dockerfile: Dockerfile.prod
+      context: forecast/
+      image: $CI_REGISTRY_IMAGE/django-production
+      tag: $CI_COMMIT_REF_SLUG
+      opts: "--cache=true --cache-copy-layers=true --cache-repo=$CI_REGISTRY_IMAGE/cache --cache-ttl=168h"
 
 # override rules so we build a new image on each push
 gather-node-dependencies:
@@ -39,6 +48,11 @@ gather-node-dependencies:
     - !reference [.on_release_tag]
     - !reference [.on_manual_build_images]
 gather-django-dependencies:
+  rules:
+    - !reference [.on_mr]
+    - !reference [.on_main]
+    - !reference [.on_manual_build_images]
+push-django-production-image:
   rules:
     - !reference [.on_mr]
     - !reference [.on_main]

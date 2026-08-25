@@ -3,3 +3,19 @@ include:
     inputs:
       excluded_paths: "spec, test, tests, tmp, node_modules, forecast/frontend/assets/js/uswds*.js, forecast/frontend/assets/js/third-party, forecast/frontend/assets/js/cmi-radar*.js, forecast/frontend/public/js"
   - component: ${CI_SERVER_FQDN}/NWS/Systems/NCO/NEC/shared-catalogs/security/dependency_scanning@main
+  - component: ${CI_SERVER_FQDN}/NWS/Systems/NCO/NEC/shared-catalogs/security/container_scanning@main
+    inputs:
+      job_name: scan-django-production-image
+      image: $CI_REGISTRY_IMAGE/django-production:$CI_COMMIT_REF_SLUG
+      dockerfile: forecast/Dockerfile.prod
+      git_strategy: fetch
+
+# override needs so that scanning runs on targeted containers
+scan-django-production-image:
+  needs:
+    - job: push-django-production-image
+      optional: true
+  rules:
+    - !reference [.on_mr]
+    - !reference [.on_main]
+    - !reference [.on_manual_build_images]
