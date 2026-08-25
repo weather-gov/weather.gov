@@ -10,6 +10,14 @@ include:
       needs: ["compute-dependency-tags"]
       tag: $JS_TAG
       opts: "--cache=true --cache-copy-layers=true --cache-repo=$CI_REGISTRY_IMAGE/cache --cache-ttl=168h"
+      before_script:
+        - |
+          if [ "$JS_NEEDS_BUILD" = "false" ]; then
+            echo "node-with-deps:$JS_TAG is already in the gitlab container registry. Skipping the build."
+            echo "BUILD_IMAGE=$CI_REGISTRY_IMAGE/node-with-deps" > build.env
+            echo "BUILD_TAG=$JS_TAG" >> build.env
+            exit 0
+          fi
   - component: ${CI_SERVER_FQDN}/NWS/Systems/NCO/NEC/shared-catalogs/container/build@main
     inputs:
       stage: gather
@@ -20,6 +28,14 @@ include:
       needs: ["compute-dependency-tags"]
       tag: $PY_TAG
       opts: "--cache=true --cache-copy-layers=true --cache-repo=$CI_REGISTRY_IMAGE/cache --cache-ttl=168h"
+      before_script:
+        - |
+          if [ "$PY_NEEDS_BUILD" = "false" ]; then
+            echo "python-with-deps:$PY_TAG is already in the gitlab container registry. Skipping the build."
+            echo "BUILD_IMAGE=$CI_REGISTRY_IMAGE/python-with-deps" > build.env
+            echo "BUILD_TAG=$PY_TAG" >> build.env
+            exit 0
+          fi
   - component: ${CI_SERVER_FQDN}/NWS/Systems/NCO/NEC/shared-catalogs/container/build@main
     inputs:
       stage: gather
@@ -30,6 +46,14 @@ include:
       needs: ["compute-dependency-tags"]
       tag: $PW_TAG
       opts: "--cache=true --cache-copy-layers=true --cache-repo=$CI_REGISTRY_IMAGE/cache --cache-ttl=168h"
+      before_script:
+        - |
+          if [ "$PW_NEEDS_BUILD" = "false" ]; then
+            echo "playwright:$PW_TAG is already in the gitlab container registry. Skipping the build."
+            echo "BUILD_IMAGE=$CI_REGISTRY_IMAGE/playwright" > build.env
+            echo "BUILD_TAG=$PW_TAG" >> build.env
+            exit 0
+          fi
   - component: ${CI_SERVER_FQDN}/NWS/Systems/NCO/NEC/shared-catalogs/container/build@main
     inputs:
       stage: gather
@@ -40,24 +64,25 @@ include:
       tag: $CI_COMMIT_REF_SLUG
       opts: "--cache=true --cache-copy-layers=true --cache-repo=$CI_REGISTRY_IMAGE/cache --cache-ttl=168h"
 
-# override rules so we build a new image on each push
+# override rules so these jobs are in the pipeline on each push. NB:
+# `before_script` determines whether they actually build images.
 gather-node-dependencies:
   rules:
     - !reference [.on_mr]
     - !reference [.on_main]
     - !reference [.on_release_tag]
-    - !reference [.on_manual_build_images]
+    - !reference [.on_web]
 gather-django-dependencies:
   rules:
     - !reference [.on_mr]
     - !reference [.on_main]
-    - !reference [.on_manual_build_images]
+    - !reference [.on_web]
 push-django-production-image:
   rules:
     - !reference [.on_mr]
     - !reference [.on_main]
-    - !reference [.on_manual_build_images]
-# for playwright, build a new image every time we run through the Gitlab UI
+    - !reference [.on_web]
+# NB: currently playwright is only run from the Gitlab UI
 gather-playwright-dependencies:
   rules:
     - !reference [.on_manual_playwright_ci]
