@@ -18,9 +18,9 @@
 
 # these are manual pipeline rules. you cannot trigger these except through the Gitlab UI.
 
-# build images
-.on_manual_build_images:
-  - if: $CI_PIPELINE_SOURCE == "web" && $BUILD_IMAGES == "true"
+# every run from the Gitlab UI.
+.on_web:
+  - if: $CI_PIPELINE_SOURCE == "web"
 
 # run node tests
 .on_manual_js_ci:

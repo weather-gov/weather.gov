@@ -18,4 +18,3 @@ scan-django-production-image:
   rules:
     - !reference [.on_mr]
     - !reference [.on_main]
-    - !reference [.on_manual_build_images]

@@ -14,22 +14,18 @@ spec:
     confirm-nec-bootstrap:
       description: "To bootstrap a Terraform state bucket for NEC, type in BOOTSTRAP in this box."
       default: ""
-    build-images:
-      type: boolean
-      default: true
-      description: "Build Docker images containing 3rd party dependencies using the config files on the selected branch. Images are tagged with the branch slug and pushed to the NOAA GitLab container registry."
     run-django-ci:
       type: boolean
       default: true
-      description: "Lint and test Django in the selected branch using config from that branch. Uses dependencies from main, unless `build-images` is true."
+      description: "Lint and test Django in the selected branch using config from that branch."
     run-js-ci:
       type: boolean
       default: true
-      description: "Lint and test JS in the selected branch using config from that branch. Uses dependencies from main, unless `build-images` is true."
+      description: "Lint and test JS in the selected branch using config from that branch."
     run-golang-ci:
       type: boolean
       default: true
-      description: "Run golang tests in the selected branch using config from that branch. Uses dependencies from main, unless `build-images` is true."
+      description: "Run golang tests in the selected branch using config from that branch."
     run-playwright-ci:
       type: boolean
       default: false
@@ -53,7 +49,6 @@ variables:
   POSTGRES_DB: weathergov
   DJANGO_SETTINGS_MODULE: backend.config.settings.ci
   # promote gitlab inputs to variables so we can use them in rules.
-  BUILD_IMAGES: "$[[ inputs.build-images ]]"
   RUN_JS_CI: "$[[ inputs.run-js-ci ]]"
   RUN_DJANGO_CI: "$[[ inputs.run-django-ci ]]"
   RUN_GOLANG_CI: "$[[ inputs.run-golang-ci ]]"
@@ -110,7 +105,7 @@ make-tagged-release:
   rules:
     - !reference [.on_release_tag]
 
-# deploy to prod/beta automatically on a beta version tag (like `beta-v1.3.5`) or manually from the GitLab New Pipeline page
+# deploy to prod/beta automatically on a beta version tag (like `v1.3.5-beta`) or manually from the GitLab New Pipeline page
 deploy-to-prod:
   stage: deploy
   image: cloudfoundry/cli:8
@@ -226,14 +221,32 @@ deploy-to-test:
 # determine whether or not we need to rebuild images.
 compute-dependency-tags:
   stage: .pre
-  image: alpine:latest
+  image: docker:cli
   script:
+    - echo "$CI_REGISTRY_PASSWORD" | docker login -u "$CI_REGISTRY_USER" --password-stdin "$CI_REGISTRY"
     - JS_DEPS="Dockerfile.node.ci package-lock.json api-interop-layer/package-lock.json api-proxy/package-lock.json spatial-data/package-lock.json"
     - PY_DEPS="forecast/Dockerfile.ci forecast/requirements.dev.txt"
     - PW_DEPS="Dockerfile.playwright.ci package-lock.json"
-    - echo "JS_TAG=deps-$(cat $JS_DEPS | sha256sum | cut -c1-12)" > deps.env
-    - echo "PY_TAG=deps-$(cat $PY_DEPS | sha256sum | cut -c1-12)" >> deps.env
-    - echo "PW_TAG=deps-$(cat $PW_DEPS | sha256sum | cut -c1-12)" >> deps.env
+    - JS_TAG="deps-$(cat $JS_DEPS | sha256sum | cut -c1-12)"
+    - PY_TAG="deps-$(cat $PY_DEPS | sha256sum | cut -c1-12)"
+    - PW_TAG="deps-$(cat $PW_DEPS | sha256sum | cut -c1-12)"
+    - |
+      # $1: image, $2: tag, $3: prefix
+      check_for_image() {
+        if docker manifest inspect "$1:$2" >/dev/null 2>&1; then
+          echo "${3}_NEEDS_BUILD=false"
+        else
+          echo "${3}_NEEDS_BUILD=true"
+        fi
+      }
+      {
+        echo "JS_TAG=$JS_TAG"
+        echo "PY_TAG=$PY_TAG"
+        echo "PW_TAG=$PW_TAG"
+        check_for_image "$CI_REGISTRY_IMAGE/node-with-deps" "$JS_TAG" "JS"
+        check_for_image "$CI_REGISTRY_IMAGE/python-with-deps" "$PY_TAG" "PY"
+        check_for_image "$CI_REGISTRY_IMAGE/playwright" "$PW_TAG" "PW"
+      } > deps.env
     - cat deps.env
   artifacts:
     reports:
@@ -291,10 +304,8 @@ bundle-js:
       - forecast/frontend/assets/js/**/*.html.js
       - forecast/frontend/assets/js/**/*.html.js.map
   rules:
-    - !reference [.on_mr]
     - !reference [.on_main]
     - !reference [.on_release_tag]
-    - !reference [.on_manual_js_ci]
     - !reference [.on_manual_deploy_test]
     - !reference [.on_manual_deploy_staging]
     - !reference [.on_manual_deploy_prod]
