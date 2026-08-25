@@ -88,12 +88,12 @@ gather-django-dependencies:
     - !reference [.on_web]
 push-django-production-image:
   rules:
-    - !reference [.on_mr]
+    - !reference [.on_mr_forecast_changes]
     - !reference [.on_main]
     - !reference [.on_web]
 push-ghwo-task-production-image:
   rules:
-    - !reference [.on_mr]
+    - !reference [.on_mr_tasks_changes]
     - !reference [.on_main]
     - !reference [.on_web]
 # for playwright, build a new image every time we run through the Gitlab UI
