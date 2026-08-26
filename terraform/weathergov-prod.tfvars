@@ -18,4 +18,4 @@ redis_plan_name             = "redis-3node"
 rds_plan_name               = "large-gp-psql-redundant"
 internal_gridpoint_lookup   = true
 marine_coastal_experimental = false
-tasks_ghwo_interop          = true
+tasks_ghwo_interop          = false

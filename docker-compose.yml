@@ -177,7 +177,7 @@ services:
       MARINE_COASTAL_EXPERIMENTAL: false
       # Whether or not the GHWO/risk processing background
       # task should run from the interop.
-      TASKS_GHWO_INTEROP: true
+      TASKS_GHWO_INTEROP: false
     networks:
       - weather.gov
     links:
@@ -318,7 +318,7 @@ services:
     environment:
       - GOCACHE=/root/.cache/go-build
       - GOMODCACHE=/go/pkg/mod
-      - TASKS_GHWO_INTEROP=true
+      - TASKS_GHWO_INTEROP=false
     cap_add:
       - SYS_PTRACE
     security_opt:
