@@ -37,10 +37,13 @@ class HourlyTable extends HTMLElement {
     if (!this._offsetCalculated) {
       const firstColumn = this.querySelector("table th[scope='row']");
       if (firstColumn && firstColumn.offsetWidth > 0) {
-        this.style.setProperty(
-          "--sticky-presence-offset",
-          `${firstColumn.offsetWidth}px`,
-        );
+        const alertInners = this.querySelectorAll(".wx-alert-link-inner");
+        alertInners.forEach((inner) => {
+          inner.style.setProperty(
+            "--sticky-presence-offset",
+            `${firstColumn.offsetWidth}px`,
+          );
+        });
         this._offsetCalculated = true;
       }
     }
