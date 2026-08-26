@@ -66,6 +66,10 @@ $expand-duration: 250ms;
   tr[data-row-name="alert"] td,
   tr[data-row-name="alert"] th {
     border: 0;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    word-break: normal;
+    min-width: units("card");
   }
 
   tr[data-row-name="alert"] td {
