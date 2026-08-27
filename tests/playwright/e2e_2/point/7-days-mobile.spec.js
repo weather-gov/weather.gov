@@ -1,8 +1,10 @@
-const { test, expect } = require("@playwright/test");
+const { test, expect, devices } = require("@playwright/test");
 const { tomorrow, seventh } = require("../../util/daysOfWeek.js");
 const services = require("../../urls.js");
 
 const { describe, beforeEach, beforeAll } = test;
+
+test.use({ ...devices["Pixel 7"], hasTouch: true });
 
 describe("Point forecast › 7 Days tab", () => {
   beforeAll(async ({ request }) => {
@@ -18,121 +20,62 @@ describe("Point forecast › 7 Days tab", () => {
     });
     const djdt = page.getByRole("link", { name: "Hide »" });
     if (await djdt.isVisible()) {
-      await djdt.click(); // click to hide the overlay on dev
+      await djdt.tap(); // tap to hide the overlay on dev
     }
   });
 
-  describe("When navigating between days (on desktop)", () => {
-    test.beforeEach(({}, testInfo) => {
-      test.skip(testInfo.project.use.mobile);
-    });
-
-    test("I expect 7 days to choose from", async ({ page }) => {
+  describe("When navigating between days project (on mobile)", () => {
+    test("I expect 7 days to choose from project", async ({ page }) => {
       const lastDayName = seventh();
-      const list = page.getByRole("tablist", {
-        name: "daily forecast tab navigation",
-      });
-      const buttons = list.getByRole("tab");
+      const panel = page.getByRole("tabpanel", { name: "7 Days" });
+      const buttons = panel
+        .getByRole("list")
+        .getByRole("heading", { level: 3 });
 
       await expect(buttons).toHaveCount(7);
 
       const today =
-        /Today \d+\/\d+ Condition [\w+\s]+ Multiple weather alerts High \d+ ℉ Low \d+ ℉ \d+% chance of precipitation/i;
+        /Today \d+\/\d+ Condition: [\w\s]+ Multiple weather alerts High of \d+℉ Low of \d+℉ \d+% chance of precipitation/i;
       await expect(buttons.first()).toHaveAccessibleName(today);
       const seven = new RegExp(
-        String.raw`${lastDayName} \d+\/\d+ Condition [\w+\s]+ HIGH \d+ ℉ LOW \d+ ℉ \d+% chance of precipitation`,
+        String.raw`${lastDayName} \d+\/\d+ Condition: [\w+\s]+ High of \d+℉ Low of \d+℉ \d+% chance of precipitation`,
         "i",
       );
       await expect(buttons.last()).toHaveAccessibleName(seven);
     });
 
-    describe("When navigating with the keyboard", () => {
-      test("I expect the right arrow key focuses the next day", async ({
+    describe("When navigating with the keyboard project", () => {
+      test("I expect the tab key focuses the next day project", async ({
         page,
-      }) => {
-        const list = page.getByRole("tablist", {
-          name: "daily forecast tab navigation",
-        });
-        const buttons = list.getByRole("tab");
+      }, testInfo) => {
+        test.fixme(
+          testInfo.project.use.name === "Mobile Safari",
+          "Tab key doesn't work",
+        );
+        const panel = page.getByRole("tabpanel", { name: "7 Days" });
+        const buttons = panel.getByRole("list").getByRole("button");
         await buttons.first().focus();
 
-        await page.keyboard.press("ArrowRight");
-        await page.keyboard.press("ArrowRight");
-        await page.keyboard.press("ArrowRight");
-        await page.keyboard.press("ArrowRight");
-        await page.keyboard.press("ArrowRight");
-        await page.keyboard.press("ArrowRight");
-        await expect(buttons.last()).toBeFocused();
-
-        await page.keyboard.press("ArrowRight");
-        await expect(buttons.first()).toBeFocused();
-      });
-
-      test("I expect the left arrow key focuses the previous day", async ({
-        page,
-      }) => {
-        const list = page.getByRole("tablist", {
-          name: "daily forecast tab navigation",
-        });
-        const buttons = list.getByRole("tab");
-        await buttons.last().focus();
-
-        await page.keyboard.press("ArrowLeft");
-        await page.keyboard.press("ArrowLeft");
-        await page.keyboard.press("ArrowLeft");
-        await page.keyboard.press("ArrowLeft");
-        await page.keyboard.press("ArrowLeft");
-        await page.keyboard.press("ArrowLeft");
-        await expect(buttons.first()).toBeFocused();
-
-        await page.keyboard.press("ArrowLeft");
-        await expect(buttons.last()).toBeFocused();
-      });
-
-      test("I expect pressing the home key focuses the first day", async ({
-        page,
-      }) => {
-        const list = page.getByRole("tablist", {
-          name: "daily forecast tab navigation",
-        });
-        const buttons = list.getByRole("tab");
-        await buttons.nth(3).focus();
-
-        await page.keyboard.press("Home");
-        await expect(buttons.first()).toBeFocused();
-      });
-
-      test("I expect pressing the end key focuses the last day", async ({
-        page,
-      }) => {
-        const list = page.getByRole("tablist", {
-          name: "daily forecast tab navigation",
-        });
-        const buttons = list.getByRole("tab");
-        await buttons.nth(3).focus();
-
-        await page.keyboard.press("End");
-        await expect(buttons.last()).toBeFocused();
+        await page.keyboard.press("Tab");
+        await expect(buttons.nth(1)).toBeFocused();
       });
     });
 
-    describe("When selecting a day", () => {
-      test("I expect to see the correct day's information", async ({
+    describe("When selecting a day project", () => {
+      test("I expect to see that day's information project", async ({
         page,
       }) => {
-        const list = page.getByRole("tablist", {
-          name: "daily forecast tab navigation",
-        });
-        const buttons = list.getByRole("tab");
-        await buttons.nth(1).focus();
+        const panel = page.getByRole("tabpanel", { name: "7 Days" });
+        const buttons = panel.getByRole("list").getByRole("button");
+        await buttons.first().focus();
 
         await page.keyboard.press("Space");
-        await expect(buttons.nth(1)).toHaveAttribute("aria-selected", "true");
+        await expect(buttons.first()).toHaveAttribute("aria-expanded", "true");
 
-        const day = new RegExp(tomorrow(), "i");
-        const panel = page.getByRole("tabpanel", { name: day });
-        await expect(panel).toBeVisible();
-        panel.getByRole("heading", { name: day });
+        const day = panel.getByRole("list").getByRole("listitem").first();
+        const forecast = day.getByRole("heading", { name: "Hourly forecast" });
+
+        await expect(forecast).toBeVisible();
       });
     });
 
@@ -140,20 +83,25 @@ describe("Point forecast › 7 Days tab", () => {
       test("I expect to see the chart view persisted between days", async ({
         page,
       }) => {
-        const list = page.getByRole("tablist", {
-          name: "daily forecast tab navigation",
+        const panel = page.getByRole("tabpanel", { name: "7 Days" });
+        const buttons = panel.getByRole("list").getByRole("button");
+        await buttons.first().tap();
+
+        // Start on the first day
+        await expect(buttons.first()).toHaveAttribute("aria-expanded", "true");
+
+        const firstDay = panel.getByRole("list").getByRole("listitem").first();
+        const forecast = firstDay.getByRole("heading", {
+          name: "Hourly forecast",
         });
-        const dayButtons = list.getByRole("tab");
 
-        // Start on the first day (already selected by default)
-        await expect(dayButtons.first()).toHaveAttribute(
-          "aria-selected",
-          "true",
-        );
+        await expect(forecast).toBeVisible();
 
-        // Click the "Charts" toggle button to switch from Table to Charts
-        const chartsButton = page.getByRole("tab", { name: "Charts" }).first();
-        await chartsButton.click();
+        // Tap the "Charts" toggle button to switch from Table to Charts
+        const chartsButton = firstDay
+          .getByRole("tab", { name: "Charts" })
+          .first();
+        await chartsButton.tap();
         await expect(chartsButton).toHaveAttribute("aria-selected", "true");
 
         // Get the panel ID from the Charts button's aria-controls
@@ -165,31 +113,42 @@ describe("Point forecast › 7 Days tab", () => {
           "true",
         );
 
-        // Now navigate to the next day
-        await dayButtons.nth(1).click();
-        await expect(dayButtons.nth(1)).toHaveAttribute(
-          "aria-selected",
-          "true",
-        );
+        // Close the first day
+        await buttons.first().tap();
+
+        // And open the next day
+        await buttons.nth(1).tap();
+        await expect(buttons.nth(1)).toHaveAttribute("aria-expanded", "true");
+
+        const secondDay = panel.getByRole("list").getByRole("listitem").nth(1);
+        const secondDayForecast = secondDay.getByRole("heading", {
+          name: "Hourly forecast",
+        });
+
+        await expect(secondDayForecast).toBeVisible();
 
         // Get the Charts button for the now-visible day and read its aria-controls
         // to find the correct panel ID
-        const secondDayChartsButton = page
+        const secondDayChartsButton = secondDay
           .getByRole("tab", { name: "Charts" })
           .first();
-        const secondDayPanelId =
-          await secondDayChartsButton.getAttribute("aria-controls");
-        const secondDayChartsPanel = page.locator(`#${secondDayPanelId}`);
-
-        // The charts panel for the new day should be visible (preference persisted)
-        await expect(secondDayChartsPanel).toHaveAttribute(
-          "data-tabpanel-selected",
-          "true",
-        );
         await expect(secondDayChartsButton).toHaveAttribute(
           "aria-selected",
           "true",
         );
+
+        // Get the panel ID from the Charts button's aria-controls
+        const secondDayPanelId =
+          await secondDayChartsButton.getAttribute("aria-controls");
+        const secondDayChartsPanel = page.locator(`#${secondDayPanelId}`);
+        await expect(secondDayChartsPanel).toHaveAttribute(
+          "data-tabpanel-selected",
+          "true",
+        );
+
+        // Ensure that the two panel IDs are different, so we know we're not
+        // just looking at the same panel for both days
+        await expect(firstDayPanelId).not.toEqual(secondDayPanelId);
       });
     });
   });
@@ -199,14 +158,11 @@ describe("Point forecast › 7 Days tab", () => {
       await expect(page.getByRole("alert")).toHaveCount(7);
     });
 
-    describe("to check the hours for the alerts (on desktop)", () => {
-      test.beforeEach(({}, testInfo) => {
-        test.skip(testInfo.project.use.mobile);
-      });
-
+    describe("to check the hours for the alerts (on mobile)", () => {
       test("I expect 5 alert rows in the hourly forecast table", async ({
         page,
       }) => {
+        await page.getByRole("heading", { name: /Today/i }).tap();
         await expect(
           page.getByRole("rowheader", { name: "ALERT" }),
         ).toHaveCount(5);
@@ -215,6 +171,8 @@ describe("Point forecast › 7 Days tab", () => {
       test("I expect a Red Flag alert of the correct duration", async ({
         page,
       }) => {
+        await page.getByRole("heading", { name: /Today/i }).tap();
+
         // We expect there to be a red-flag alert that spans two hours
         // and that contains the correct event label
         const alert = page.getByRole("cell", { name: "Red Flag Warning" });
@@ -224,11 +182,13 @@ describe("Point forecast › 7 Days tab", () => {
         await expect(alert).toHaveAttribute("colspan", "4");
       });
 
-      describe("When I click the Red Flag alert", () => {
+      describe("When I tap the Red Flag alert", () => {
         test("I expect to navigate to the alerts tab", async ({ page }) => {
+          await page.getByRole("heading", { name: /Today/i }).tap();
+
           const alert = page.getByRole("cell", { name: "Red Flag Warning" });
           const link = alert.getByRole("link", { name: "Red Flag Warning" });
-          await link.click();
+          await link.tap();
 
           const tab = page.getByRole("tab", { name: "Alerts" });
           await expect(tab).toHaveAttribute("aria-expanded", "true");
@@ -245,6 +205,8 @@ describe("Point forecast › 7 Days tab", () => {
       test("I expect a Special Weather Statement that begins in the third hour and spans 5 hours", async ({
         page,
       }) => {
+        await page.getByRole("heading", { name: /Today/i }).tap();
+
         const alert = page.getByRole("cell", {
           name: "Special Weather Statement",
         });
@@ -258,8 +220,8 @@ describe("Point forecast › 7 Days tab", () => {
         page,
       }) => {
         await page
-          .getByRole("tab", { name: new RegExp(tomorrow(), "i") })
-          .click();
+          .getByRole("heading", { name: new RegExp(tomorrow(), "i") })
+          .tap();
 
         const alert = page.getByRole("cell", { name: "Blizzard Warning" });
         const spacing = alert.locator("//preceding-sibling::td");
@@ -271,13 +233,13 @@ describe("Point forecast › 7 Days tab", () => {
   });
 
   describe("When viewing my precipitation table", () => {
-    describe("to check how much rain and snow will fall (on desktop)", () => {
-      test.beforeEach(async ({}, testInfo) => {
-        test.skip(testInfo.project.use.mobile);
-      });
-
+    describe("to check how much rain and snow will fall (on mobile)", () => {
       test("I expect a different amount each day", async ({ page }) => {
-        let table = page.getByRole("table", {
+        let button = page.getByRole("heading", { name: /Today/i });
+        await button.tap();
+
+        let drawer = button.locator("//following-sibling::div");
+        let table = drawer.getByRole("table", {
           name: "precipitation amounts for the coming hours",
         });
         let row = table.getByRole("row").last();
@@ -285,11 +247,13 @@ describe("Point forecast › 7 Days tab", () => {
 
         await expect(waterToday).toHaveText(/(0|\d+.\d+)"/);
 
-        await page
-          .getByRole("tab", { name: new RegExp(tomorrow(), "i") })
-          .click();
+        button = page.getByRole("heading", {
+          name: new RegExp(tomorrow(), "i"),
+        });
+        await button.tap();
 
-        table = page.getByRole("table", {
+        drawer = button.locator("//following-sibling::div");
+        table = drawer.getByRole("table", {
           name: "precipitation amounts for the coming hours",
         });
         row = table.getByRole("row").last();
@@ -297,7 +261,7 @@ describe("Point forecast › 7 Days tab", () => {
 
         await expect(waterTomorrow).toHaveText(/(0|\d+.\d+)"/);
         await expect(waterToday.innerText()).not.toEqual(
-          waterTomorrow.innerText,
+          waterTomorrow.innerText(),
         );
       });
     });
