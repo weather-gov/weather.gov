@@ -18,6 +18,53 @@ const POSTGRES_UNDEFINED_TABLE = "42P01";
  */
 const USE_INTERNAL_LOOKUP = process.env.INTERNAL_GRIDPOINT_LOOKUP === "true";
 
+/**
+ * Given an object of gridData as returned by the API
+ * for the `/point/lat/lon` route, determine the specific type
+ * of marine zone (ie coastal or offshore) for the incoming point.
+ * If the 'type' property in the gridData is not 'marine' we bail out.
+ * This function should only be called in cases where the API was
+ * used to fetch point information.
+ * Our internal lookup function will automatically grab the marine type
+ * as part of its db query.
+ * This function manipulates the gridData object in place.
+ */
+const getMarineTypePromise = async (gridData, lat, lon) => {
+  // If this is not a marine point, then there's nothing to do!
+  if (gridData.type !== "marine") {
+    gridData.marineType = null;
+    return;
+  }
+
+  // If there is already a marineType property value set
+  // (usually because we did an internal point lookup instead
+  // of querying the API), then there is also nothing to do
+  if (gridData.marineType) {
+    return;
+  }
+
+  // Otherwise, we need to query the database zones table with the
+  // intersection of the point and pull out the specific marine type.
+  const pointGeom = `ST_SetSRID(ST_Point(${lon}, ${lat}), ${SPATIAL_PROJECTION.WGS84})`;
+  const result = await openDatabase().then((db) =>
+    db.query(
+      `SELECT id, type, REPLACE(type, 'marine:', '') AS marineType
+          FROM weathergov_geo_zones
+          WHERE type LIKE 'marine%'
+          AND
+          ST_Intersects(shape,${pointGeom})
+          LIMIT 1`,
+    ),
+  );
+
+  if (result.rows?.length) {
+    gridData.marineType = result.rows[0].marineType;
+    return;
+  }
+
+  gridData.marineType = null;
+};
+
 export const getClosestPlace = async (latitude, longitude) => {
   const pointGeom = `ST_SetSRID(ST_Point(${longitude}, ${latitude}), ${SPATIAL_PROJECTION.WGS84})`;
 
@@ -162,29 +209,15 @@ export const getPointData = async (lat, lon) => {
       status: 404,
     };
   }
-
-  const isMarine = grid?.type === "marine";
   const placePromise = getClosestPlace(latitude, longitude);
 
-  // If marine, check if it's coastal. If not marine, return empty promise
-  const pointGeom = `ST_SetSRID(ST_Point(${longitude}, ${latitude}), ${SPATIAL_PROJECTION.WGS84})`;
-  const marineTypePromise = isMarine
-    ? openDatabase().then((db) =>
-        db.query(
-          `SELECT id, type
-          FROM weathergov_geo_zones
-          WHERE type='marine:coastal'
-          AND
-          ST_Intersects(shape,${pointGeom})
-          LIMIT 1`,
-        ),
-      )
-    : Promise.resolve({});
+  const marineTypePromise = getMarineTypePromise(grid, latitude, longitude);
 
-  const [place, marineType] = await Promise.all([
-    placePromise,
-    marineTypePromise,
-  ]);
+  // We run both the marineType async check and
+  // the place query async at the same time. However,
+  // we only care to capture the return value of the place
+  // query.
+  const [place] = await Promise.all([placePromise, marineTypePromise]);
 
   if (USE_INTERNAL_LOOKUP && place) {
     // because we are skipping the points API call, astronomical data is not
@@ -195,13 +228,6 @@ export const getPointData = async (lat, lon) => {
       longitude,
     );
   }
-
-  // If marine, add type of marine to grid data, otherwise null
-  grid.marineType = isMarine
-    ? marineType?.rows?.length > 0
-      ? "coastal"
-      : "offshore"
-    : null;
 
   if (grid.wfo === null) {
     // If we did not get an error but the WFO is empty, then it's within our
@@ -221,25 +247,40 @@ const getInternalGridData = async (latitude, longitude) => {
     // THRESHOLD: 3500 meters. This covers the ~2 mile max distance in Alaska + truncation error.
     const MAX_DISTANCE_METERS = 3500;
 
+    // In order to properly determine the 'type' for the point
+    // (ie, whether it is 'marine' or 'land'), we need to check if the
+    // incoming lat/lon point intersects with any of the marine zones
+    // in addition to querying for the nearest gridpoint
     const query = `
-      SELECT UPPER(cwa) as wfo, x, y, ST_AsGeoJSON(point) as geometry, type
-      FROM weathergov_geo_gridpoints
-      WHERE ST_DWithin(point::geography, ${pointGeom}::geography, ${MAX_DISTANCE_METERS})
-      ORDER BY point::geography <-> ${pointGeom}::geography
-      LIMIT 1
-    `;
+SELECT
+    UPPER(g.cwa) as wfo,
+    g.x AS x,
+    g.y AS y,
+    ST_AsGeoJSON(g.point) as geometry,
+    CASE
+        WHEN ST_Intersects(${pointGeom}, z.shape) AND z.type LIKE 'marine%' THEN REPLACE(z.type, 'marine:', '')
+        ELSE 'land'
+    END AS type
+FROM weathergov_geo_gridpoints as g
+JOIN weathergov_geo_zones AS z ON ST_Intersects(${pointGeom}, z.shape)
+WHERE ST_DWithin(point::geography, ${pointGeom}::geography, ${MAX_DISTANCE_METERS})
+ORDER BY point::geography <-> ${pointGeom}::geography
+LIMIT 1`;
 
     const result = await db.query(query);
 
     if (result.rows?.length > 0) {
       const row = result.rows[0];
+      const marineType = row.type ? row.type : null;
+      const type = row.type.startsWith("marine") ? "marine" : "land";
       return {
         wfo: row.wfo,
         x: row.x,
         y: row.y,
         // We parse here because PostGIS returns a string; NWS API returns an object.
         geometry: JSON.parse(row.geometry),
-        type: row.type,
+        type: type,
+        marineType,
         source: "internal",
       };
     }

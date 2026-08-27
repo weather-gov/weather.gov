@@ -29,7 +29,6 @@ class Command(BaseCommand):
         """Handle the loadgridpoints management command."""
         self.ensure_source_file(options["source_file"])
         self.stream_data_to_table(options["source_file"])
-        self.update_gridpoints_with_marine_columns()
         self.stdout.write("Gridpoints loaded and processed!")
 
     def ensure_source_file(self, source_file_path):
@@ -79,14 +78,12 @@ class Command(BaseCommand):
             # geometry
             self.stdout.write("Inserting and formatting from temp tables")
             cursor.execute("""
-            INSERT INTO weathergov_geo_gridpoints (cwa, x, y, point, is_marine, type)
+            INSERT INTO weathergov_geo_gridpoints (cwa, x, y, point)
             SELECT
                 UPPER(raw_cwa),
                 raw_x::integer,
                 raw_y::integer,
-                ST_SetSRID(ST_Point(raw_lon::float, raw_lat::float), 4326),
-                false,
-                'land'
+                ST_SetSRID(ST_Point(raw_lon::float, raw_lat::float), 4326)
             FROM temp_grid;""")
 
             self.stdout.write("Optimizing table")
@@ -95,9 +92,6 @@ class Command(BaseCommand):
 
             # Drop false CWAs that might be in the data
             self.drop_ignored_cwas()
-
-            # Drop the non-US gridpoints
-            self.drop_non_us_gridpoints()
 
     def drop_ignored_cwas(self):
         """Drop an gridpoints with CWAs we ignore."""
@@ -122,49 +116,3 @@ class Command(BaseCommand):
             self.stdout.write(f"Dropping gridpoints from CWAs we don't know about: {diff_cwas}")
             cursor.execute(query, [known_cwas])
             self.stdout.write(f"Dropped {cursor.rowcount} gridpoints from unknown CWAs")
-
-
-    def drop_non_us_gridpoints(self):
-        """
-        Drop all gridpoints that are not in the US.
-
-        Gridpoints overlap national borders in certain places, as
-        a kind of 'bleed' (if you're familiar with print layout design).
-        We need to exclude any gridpoints that are not in the US.
-        We do this by cross referencing each point with the existing
-        forecast zones that we have.
-        Note that we ignore the fire zones for now. These comprise
-        some amount of 'bleed' between adjacent CWAs
-        """
-        with connection.cursor() as cursor:
-            self.stdout.write("Removing non-US gridpoints (this might take a few minutes)")
-            cursor.execute("""
-            DELETE FROM weathergov_geo_gridpoints AS g
-            WHERE NOT EXISTS
-            (SELECT 1 FROM weathergov_geo_zones AS z
-             WHERE z.wfo=g.cwa
-             AND
-             z.type != 'fire'
-             AND
-             ST_Contains(z.shape, g.point) LIMIT 1);
-            """)
-            self.stdout.write(f"Removed {cursor.rowcount} gridpoints that were not in the US")
-
-
-    def update_gridpoints_with_marine_columns(self):
-        """
-        Update the gridpoints table to have correct data about marine.
-
-        This method will cross-reference the existing zones table and update
-        the is_marine columns if there is any intersection of the given point.
-        """
-        with connection.cursor() as cursor:
-            self.stdout.write("Updating marine information for gridpoints")
-            cursor.execute("""
-            UPDATE weathergov_geo_gridpoints AS gridpoints
-            SET is_marine=true, type='marine'
-            FROM weathergov_geo_zones AS zones
-            WHERE
-                ST_Contains(zones.shape, gridpoints.point)
-                AND
-                (zones.type='marine:offshore' OR zones.type='marine:coastal');""")

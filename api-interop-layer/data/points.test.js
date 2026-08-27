@@ -260,7 +260,7 @@ describe("point method", () => {
       }),
     );
     db.query.withArgs(sinon.match(/FROM weathergov_geo_zones/i)).resolves({
-      rows: [{ type: "marine:coastal" }],
+      rows: [{ type: "marine:coastal", marineType: "coastal" }],
     });
 
     const actual = await points(4, 5);
@@ -400,16 +400,18 @@ describe("point method", () => {
           x: 1,
           y: 102,
           geometry: '{"type":"Point","coordinates":[-102,45]}',
+          type: "land",
         },
       ],
     });
 
     const actual = await points(45.5, -102.0);
 
-    expect(actual.grid.wfo).to.equal("ABR");
-    expect(actual.grid.source).to.equal("internal");
     // Verify we DID NOT call the NWS API
     expect(connectionPool.request.called).to.be.false;
+
+    expect(actual.grid.wfo).to.equal("ABR");
+    expect(actual.grid.source).to.equal("internal");
   });
 
   it("calls the API if the internal gridpoint lookup is empty", async () => {
