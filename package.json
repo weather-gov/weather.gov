@@ -70,5 +70,8 @@
     "pg": "^8.16.3",
     "shapefile": "^0.6.6",
     "twing": "^7.0.0"
+  },
+  "overrides": {
+    "locutus": "3.0.25"
   }
 }
