@@ -29,7 +29,12 @@ export const parseLocations = (description) => {
     // the entire line and another for just the region area name.
     updatedDescription
       .slice(endIndex)
-      .match(/IN (.+)\n/g)
+      // We're looking for the line that says something like:
+      //    IN NORTHERN NEBRASKA
+      // Start the match with a word boundary so we don't accidentally
+      // match on counties within the region whose names just happen
+      // to end with -IN.
+      .match(/\bIN (.+)\n/g)
       // The region description will end with a newline. For
       // simplicity in the regex later, we'll eat this newline
       // here.
