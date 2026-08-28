@@ -7,8 +7,8 @@
 {% load i18n %}
 {% load weather_i18n %}
 <footer role="contentinfo" class="margin-top-0">
-  <div class="usa-identifier padding-bottom-6">
-    <nav class="usa-identifier__section usa-identifier__section--required-links"
+  <div class="usa-identifier padding-bottom-6 border-top-05 border-primary-light">
+    <nav class="usa-identifier__section usa-identifier__section--required-links padding-top-2 desktop:padding-top-3"
          aria-label="Important links,">
       <div class="grid-container">
         <div class="grid-row">
@@ -163,22 +163,22 @@
                 </ol>
                 <p class="usa-prose">
                   Total API request time: <span class=" text-bold">{{ timings.total|floatformat:2 }}ms</span>
+                </p>
+              {% endif %}
+              <p class="usa-prose">
+                Interop response time: <span class="text-bold">{{ timings.interopResponseTime|floatformat:2 }}ms</span>
               </p>
-            {% endif %}
-            <p class="usa-prose">
-              Interop response time: <span class="text-bold">{{ timings.interopResponseTime|floatformat:2 }}ms</span>
-          </p>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
+    {% endif %}
+    {% if timings_serialized %}
+      <template>
+        BEGIN_INTEROP_TIMINGS
+        {{ timings_serialized|safe }}
+        END_INTEROP_TIMINGS
+      </template>
+    {% endif %}
   </div>
-{% endif %}
-{% if timings_serialized %}
-  <template>
-    BEGIN_INTEROP_TIMINGS
-    {{ timings_serialized|safe }}
-    END_INTEROP_TIMINGS
-  </template>
-{% endif %}
-</div>
 </footer>

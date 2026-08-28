@@ -3,19 +3,19 @@
 from django.db import migrations
 
 
-class Migration(migrations.Migration):
+class Migration(migrations.Migration):  # noqa: D101
 
     dependencies = [
-        ('spatial', '0043_wpcprobabilisticprecip'),
+        ("spatial", "0043_wpcprobabilisticprecip"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='weathergridpoints',
-            name='is_marine',
+            model_name="weathergridpoints",
+            name="is_marine",
         ),
         migrations.RemoveField(
-            model_name='weathergridpoints',
-            name='type',
+            model_name="weathergridpoints",
+            name="type",
         ),
     ]

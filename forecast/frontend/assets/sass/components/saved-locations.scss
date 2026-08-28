@@ -77,9 +77,11 @@
     @include set-columns("desktop");
   }
 
-  // Front-page and point page sections
+  // Front-page and /forecast page sections
   &--front,
-  &--point {
+  &--point,
+  &--county,
+  &--state {
     background-color: color("primary-darker");
     color: color("primary-lightest");
 

@@ -39,7 +39,7 @@
     <div class="grid-col-12">
       {% for state in states %}
         <div id="{{ state.state|lower }}"
-          data-state-abbrev="{{ state.state }}"
+             data-state-abbrev="{{ state.state }}"
              data-state-name="{{ state.name }}"
              data-filter-by="state"
              class="use-columns margin-bottom-3">
@@ -62,4 +62,6 @@
     </div>
   </section>
   </wx-county-index-filter>
+  <!-- Saved locations section-->
+  {% include 'weather/partials/saved-locations-section.html' with type="county" mode="dark" heading="saved-locations.heading.section-main.01" %}
 {% endblock %}

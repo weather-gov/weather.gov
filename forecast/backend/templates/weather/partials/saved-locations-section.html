@@ -7,8 +7,8 @@
 {% if allowColumns %}data-columns="{{ allowColumns }}"{% endif %}
 >
 <section id="saved-locations-section-{{ type }}"
-         class="padding-y-3 saved-locations-section saved-locations-section--{{ type }}">
-  <div class="grid-container {% if type == "nav" %}padding-x-0 desktop:padding-x-2{% endif %}">
+         class="padding-top-3 saved-locations-section saved-locations-section--{{ type }} {% if type == 'front' %} padding-bottom-3 {% else %} padding-bottom-8 {% endif %}">
+  <div class="grid-container {% if type == 'nav' %}padding-x-0 desktop:padding-x-2{% endif %}">
     <div class="grid-row">
       {% if type == "nav" %}
         <span class="font-body-xs margin-bottom-05">{{ heading | t }}</span>
@@ -18,7 +18,7 @@
     </div>
     <div class="grid-row">
       <div class="saved-locations-list">
-        <ul class="usa-list usa-list--unstyled {% if type == "nav" %}font-body-xs{% else %}font-body-md{% endif %}">
+        <ul class="usa-list usa-list--unstyled {% if type == 'nav' %}font-body-xs{% else %}font-body-md{% endif %}">
         </ul>
       </div>
     </div>
