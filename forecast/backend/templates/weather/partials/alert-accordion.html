@@ -4,12 +4,13 @@
 -- Used by: county/dailyAlertAccordion.html
 {% endcomment %}
 <div class="usa-accordion usa-accordion--bordered margin-bottom-1 alert-level__{{ alert.metadata.level.text }}"
-  id="alert_{{ alert.unique_id }}" data-alert>
+  id="alert_{{ alert.unique_id }}" data-alert
   {# djlint:off #}
      {% for day_number in alert_days %}
          data-alert-day-{{ day_number }}
-     {% endfor %}>
+     {% endfor %}
   {# djlint:on #}
+  >
   <h3 class="usa-accordion__heading font-heading-md">
     <button type="button"
             class="usa-accordion__button text-ls-1 wx-line-height-tight"
