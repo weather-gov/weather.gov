@@ -93,30 +93,18 @@
           {% if office.has_first_pane %}
             <address class="grid-col-12 tablet:grid-col-4">
               {% if office.phone %}
-                {% comment %}
-                # Taken from
-                # web/themes/new_weather_theme/templates/field/field--node--field-phone-number-opt.html.twig
-                {% endcomment %}
                 <div class="wfo-phone">
                   <span class="text-bold text-primary-darker">{{ "node.fields.labels.field_phone_number_opt.01" | t }}:</span>
                   <a class="usa-link" href="tel:{{ office.phone }}">{{ office.phone }}</a>
                 </div>
               {% endif %}
               {% if office.email %}
-                {% comment %}
-                # Taken from
-                # web/themes/new_weather_theme/templates/field/field--node--field-wfo_email.html.twig
-                {% endcomment %}
                 <div class="wfo-email{% if office.phone %} margin-top-105{% endif %}">
                   <span class="text-bold text-primary-darker">{{ "node.fields.labels.field_wfo_email.01" | t }}:</span>
                   <a class="usa-link" href="mailto:{{ office.email }}">{{ office.email }}</a>
                 </div>
               {% endif %}
               {% if office.address %}
-                {% comment %}
-                # Taken from
-                # web/themes/new_weather_theme/templates/field/field--node--field-address.html.twig
-                {% endcomment %}
                 <div class="wfo-address{% if office.phone or office.address %} margin-top-105{% endif %}">
                   <span class="text-bold text-primary-darker">{{ "node.fields.labels.field_address.01" | t }}:</span>
                   <span class="text-pre-line line-height-sans-3">{{ office.address }}</span>
@@ -128,10 +116,6 @@
             {% if office.has_social %}
               <ul class="usa-list usa-list--unstyled">
                 {% if office.facebook %}
-                  {% comment %}
-                  # Taken from
-                  # web/themes/new_weather_theme/templates/field/field--node--field-facebook-url.html.twig
-                  {% endcomment %}
                   <li class="li-margin-bottom-2">
                     <a href="{{ office.facebook }}"
                        class="usa-link display-flex flex-align-center">
@@ -153,10 +137,6 @@
                   </li>
                 {% endif %}
                 {% if office.twitter %}
-                  {% comment %}
-                  # Taken from
-                  # web/themes/new_weather_theme/templates/field/field--node--field-twitter-url.html.twig
-                  {% endcomment %}
                   <li class="li-margin-bottom-2">
                     <a href="{{ office.twitter }}"
                        class="usa-link display-flex flex-align-center">
@@ -178,10 +158,6 @@
                   </li>
                 {% endif %}
                 {% if office.youtube %}
-                  {% comment %}
-                  # Taken from
-                  # web/themes/new_weather_theme/templates/field/field--node--field-youtube-url.html.twig
-                  {% endcomment %}
                   <li class="li-margin-bottom-2">
                     <a href="{{ office.youtube }}"
                        class="usa-link display-flex flex-align-center">
