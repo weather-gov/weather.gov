@@ -6,13 +6,13 @@ include:
   - component: ${CI_SERVER_FQDN}/NWS/Systems/NCO/NEC/shared-catalogs/security/container_scanning@main
     inputs:
       job_name: scan-django-production-image
-      image: $CI_REGISTRY_IMAGE/django-production:$CI_COMMIT_REF_SLUG
+      image: $CI_REGISTRY_IMAGE/django-production:$CI_COMMIT_SHORT_SHA
       dockerfile: forecast/Dockerfile.prod
       git_strategy: fetch
   - component: ${CI_SERVER_FQDN}/NWS/Systems/NCO/NEC/shared-catalogs/security/container_scanning@main
     inputs:
       job_name: scan-ghwo-task-production-image
-      image: $CI_REGISTRY_IMAGE/ghwo-task-production:$CI_COMMIT_REF_SLUG
+      image: $CI_REGISTRY_IMAGE/ghwo-task-production:$CI_COMMIT_SHORT_SHA
       dockerfile: tasks/Dockerfile.ghwo
       git_strategy: fetch
 
