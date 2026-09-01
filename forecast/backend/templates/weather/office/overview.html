@@ -55,7 +55,9 @@
             </h3>
             <div class="font-body-sm measure-6 line-height-body-4">
               <p class="measure-6">{{ "wfo-info.text.forecast-discussion.01" | t }}</p>
-              <a class="usa-link" href="/afd/{{ office.code|lower }}">{{ "wfo-info.link.area-forecast-discussion.01" | t }}</a>
+              <a class="usa-link" href="{% url 'afd_by_office' office.code|lower %}">
+                {{ "wfo-info.link.area-forecast-discussion.01" | t }}
+              </a>
             </div>
           </div>
         </div>
