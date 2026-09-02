@@ -34,5 +34,14 @@
         {% endif %}
       {% endif %}
     </div>
+    <div class="grid-col-12 margin-top-205">
+      <p>
+        {% if wfo %}
+          {% trans_with_args "precip-probability.wfo-portal-text.01" wfo=wfo %}
+        {% else %}
+          {% trans "precip-probability.portal-text.01" %}
+        {% endif %}
+      </p>
+    </div>
   </div>
 {% endwith %}

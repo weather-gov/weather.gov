@@ -569,6 +569,12 @@ msgstr "Hide Details"
 msgid "precip-probability.button.show-details.01"
 msgstr "Show Details"
 
+msgid "precip-probability.wfo-portal-text.01"
+msgstr "<a class='usa-link' href='https://www.wpc.ncep.noaa.gov/Prob_Precip/?zoom={wfo}'>Explore the Probabilistic Precipitation Portal</a> for more detailed precipitation and accumulation chances."
+
+msgid "precip-probability.portal-text.01"
+msgstr "<a class='usa-link' href='https://www.wpc.ncep.noaa.gov/Prob_Precip/'>Explore the Probabilistic Precipitation Portal</a> for more detailed precipitation and accumulation chances."
+
 msgid "precipitation.heading.section.01"
 msgstr "Precipitation"
 

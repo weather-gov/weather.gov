@@ -206,10 +206,13 @@ def _process_interop_point_forecast(data):
         wpc_prob["liquidTitle"] = _get_liquid_title(wpc_prob["snow"] or wpc_prob["freezingRain"])
     data["wpcProb"] = wpc_prob
 
+    wfo = data.get("grid", {}).get("wfo")
+
     if "days" in data["forecast"]:
         for day in data["forecast"]["days"]:
             day["start"] = datetime.fromisoformat(day["start"]).astimezone(tz=tz)
             day["end"] = datetime.fromisoformat(day["end"]).astimezone(tz=tz)
+            day["wfo"] = wfo
 
             if not is_marine:
                 _set_day_period_info(day, tz)
