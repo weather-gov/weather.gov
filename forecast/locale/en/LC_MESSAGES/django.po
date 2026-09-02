@@ -573,7 +573,7 @@ msgid "precipitation.heading.section.01"
 msgstr "Precipitation"
 
 msgid "precipitation.text.none.01"
-msgstr "No precipitation expected on this day (Less than 5% chance)."
+msgstr "No precipitation expected on this day."
 
 msgid "precip-table.aria.amounts.01"
 msgstr "precipitation amounts for the coming hours"

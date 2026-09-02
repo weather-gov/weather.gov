@@ -15,6 +15,7 @@ from backend.util.alert import set_timing
 from spatial.models import WeatherAlertsCache
 
 _ID_REGEX = re.compile("[^A-Z0-9]", re.IGNORECASE)
+_WPC_VARIABLES = ("rain", "snow", "freezingRain")
 _requests_session = None
 
 
@@ -197,7 +198,7 @@ def _process_interop_point_forecast(data):
 
     # Process the WPC probabilistic precipitation (wpcProb)
     wpc_prob = data.get("wpcProb")
-    if not wpc_prob or wpc_prob.get("error") or not wpc_prob["rain"]:
+    if not wpc_prob or wpc_prob.get("error") or not any(wpc_prob[name] for name in _WPC_VARIABLES):
         wpc_prob = None
     else:
         wpc_prob["period"]["start"] = datetime.fromisoformat(wpc_prob["period"]["start"]).astimezone(tz=tz)
@@ -263,13 +264,17 @@ def _process_qpf(day, wpc_prob, tz):
             qpf["wpcProb"] = wpc_prob
 
     wpc = qpf["wpcProb"] or {}
-    expected = []
-    for name in ("rain", "snow", "freezingRain"):
+    high_end = []
+    for name in _WPC_VARIABLES:
         variable = wpc.get(name) or {}
-        expected.append(((variable.get("range") or {}).get("expected") or {}).get("amount"))
+        high_end.append(((variable.get("range") or {}).get("high") or {}).get("amount"))
+
+    # A high end of zero is a day WPC has nothing to say about, so it gets the unavailable copy
+    if not any(high_end):
+        qpf["wpcProb"] = None
 
     # QPF runs out a few days ahead, and a day it never reached is unknown rather than dry
-    qpf["noPrecipExpected"] = bool(qpf["periods"]) and not any(qpf["liquid"] + qpf["snow"] + qpf["ice"] + expected)
+    qpf["noPrecipExpected"] = bool(qpf["periods"]) and not any(qpf["liquid"] + qpf["snow"] + qpf["ice"] + high_end)
 
 
 def _process_hourly_interop_data(day_data, tz):  # noqa: C901
