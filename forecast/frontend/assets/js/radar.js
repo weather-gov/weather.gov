@@ -126,7 +126,7 @@ const setupRadar = () => {
           layers: ["activearea", "national"],
           area: {
             fitMaxZoom: 20,
-            fitPadding: [160, 160, 160, 160],
+            fitPadding: [85, 85, 85, 85],
             polygon: boundingCoordinates,
             style: {
               stroke: { color: "transparent" },
