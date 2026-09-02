@@ -82,8 +82,12 @@ func run(ctx context.Context, logger *slog.Logger) error {
 	bands := wpcprob.BandList()
 	logger.Info("downloading bands", "count", len(bands))
 	stageStart = time.Now()
-	if err := wpcprob.DownloadBands(ctx, client, cycle, fhour, destDir, bands); err != nil {
+	bands, missing, err := wpcprob.DownloadBands(ctx, client, cycle, fhour, destDir, bands)
+	if err != nil {
 		return fmt.Errorf("downloading bands: %w", err)
+	}
+	if len(missing) > 0 {
+		logger.Warn("bands not published, decoding without them", "count", len(missing), "bands", missing)
 	}
 	logger.Info("downloaded bands", "count", len(bands), "duration", time.Since(stageStart).String())
 

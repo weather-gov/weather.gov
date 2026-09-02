@@ -2,6 +2,7 @@ package wpcprob
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"io"
 	"net/http"
@@ -14,7 +15,7 @@ import (
 	"time"
 )
 
-const wpcBaseURL = "https://ftp-wpc.ncep.noaa.gov/prob_precip_portal/co"
+var wpcBaseURL = "https://ftp-wpc.ncep.noaa.gov/prob_precip_portal/co"
 
 // Length of the window each file accumulates over, ending at the file's forecast hour
 const accumulationHours = 24
@@ -114,16 +115,41 @@ func WaitForCycle(ctx context.Context, client *http.Client, expectedCycle string
 	return "", "", fmt.Errorf("cycle %s not published in time: %w", expectedCycle, lastErr)
 }
 
-// Download every band's grib2 file for the given cycle/fhour into destDir
-func DownloadBands(ctx context.Context, client *http.Client, cycle, fhour, destDir string, bands []Band) error {
+// Download each band's grib2 file for the given cycle/fhour into destDir, returning the bands WPC publishes
+func DownloadBands(ctx context.Context, client *http.Client, cycle, fhour, destDir string, bands []Band) ([]Band, []string, error) {
+	var kept []Band
+	var missing []string
 	for _, b := range bands {
 		filename := bandFilename(b, cycle, fhour)
 		url := fmt.Sprintf("%s/ppp_co_24hr_%s/%s", wpcBaseURL, cycle, filename)
-		if err := downloadFile(ctx, client, url, filepath.Join(destDir, filename)); err != nil {
-			return fmt.Errorf("downloading %s: %w", filename, err)
+		err := downloadFile(ctx, client, url, filepath.Join(destDir, filename))
+		if err != nil {
+			// An unpublished band 404s, and only that band is lost, so the rest of the run still stands
+			var status *statusError
+			if errors.As(err, &status) && status.code == http.StatusNotFound {
+				missing = append(missing, b.FileFragment)
+				continue
+			}
+			return nil, nil, fmt.Errorf("downloading %s: %w", filename, err)
 		}
+		kept = append(kept, b)
 	}
-	return nil
+	// Every band 404ing means an outage or a moved directory rather than an unpublished band
+	if len(kept) == 0 {
+		return nil, nil, fmt.Errorf("no bands published for cycle %s fhour %s", cycle, fhour)
+	}
+	return kept, missing, nil
+}
+
+// Carries the status code so callers can tell an unpublished band from an outage
+type statusError struct {
+	url  string
+	code int
+	text string
+}
+
+func (e *statusError) Error() string {
+	return fmt.Sprintf("%s: %s", e.url, e.text)
 }
 
 // GET url, returning an error if the response isn't 200. Caller must close the body.
@@ -138,7 +164,7 @@ func doGet(ctx context.Context, client *http.Client, url string) (*http.Response
 	}
 	if resp.StatusCode != http.StatusOK {
 		resp.Body.Close()
-		return nil, fmt.Errorf("%s: %s", url, resp.Status)
+		return nil, &statusError{url: url, code: resp.StatusCode, text: resp.Status}
 	}
 	return resp, nil
 }

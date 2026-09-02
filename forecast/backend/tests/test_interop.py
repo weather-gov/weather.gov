@@ -337,7 +337,7 @@ class TestInteropInterface(TestCase):
         # The fixture's first day runs from 2009-01-02T13:00Z, so this window covers it and the next
         point["wpcProb"] = {
             "period": {"start": "2009-01-02T18:00:00Z", "end": "2009-01-03T18:00:00Z", "hours": 24},
-            "rain": {"range": None, "probabilities": []},
+            "rain": {"range": {"high": {"amount": 1.25, "chance": 0.1}}, "probabilities": []},
             "snow": None,
             "freezingRain": None,
         }

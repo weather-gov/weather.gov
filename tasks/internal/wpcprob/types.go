@@ -85,7 +85,7 @@ var wpcVariables = []wpcVariable{
 	},
 }
 
-var percentiles = []string{"01", "05", "10", "25", "50", "75", "90", "95", "99"}
+var percentiles = []string{"05", "10", "25", "50", "75", "90", "95"}
 
 // Build the full list of bands (accumulation, percentile, probability) across all variables
 func BandList() []Band {
