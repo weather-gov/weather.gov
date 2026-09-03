@@ -54,6 +54,7 @@ resource "cloudfoundry_app" "interop" {
     PROXY_STANDALONE            = var.cf_space_name == "test"
     INTERNAL_GRIDPOINT_LOOKUP   = var.internal_gridpoint_lookup
     MARINE_COASTAL_EXPERIMENTAL = var.marine_coastal_experimental
+    TASKS_ALERTS_INTEROP        = var.tasks_alerts_interop
   }
 
   service_bindings = [

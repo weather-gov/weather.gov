@@ -81,6 +81,10 @@ export const startAlertProcessing = async () => {
   }
 };
 
+if (process.env.TASKS_ALERTS_INTEROP === "true") {
+  startAlertProcessing();
+}
+
 export const postProcessAlerts = (alerts, { timezone }) => {
   alerts.forEach((alert) => {
     // We need to turn all of the relevant timestamp

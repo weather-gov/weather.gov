@@ -9,6 +9,7 @@ import { AlertsCache } from "./cache.js";
 describe("alert background processing module", () => {
   let response,
     parent,
+    ensureTableStub,
     getHashesStub,
     addAlertStub,
     removeAlertsStub,
@@ -37,6 +38,8 @@ describe("alert background processing module", () => {
 
     storedHashes = [];
     storedAlerts = {};
+    ensureTableStub = sandbox.stub(AlertsCache.prototype, "ensureTable");
+    ensureTableStub.resolves();
     getHashesStub = sandbox.stub(AlertsCache.prototype, "getHashes");
     getHashesStub.callsFake(() => storedHashes);
     addAlertStub = sandbox.stub(AlertsCache.prototype, "add");
@@ -72,6 +75,7 @@ describe("alert background processing module", () => {
     response.body.text.resolves(JSON.stringify({ features: [] }));
     sandbox.resetBehavior();
     sandbox.resetHistory();
+    ensureTableStub.restore();
     getHashesStub.restore();
     addAlertStub.restore();
     removeAlertsStub.restore();

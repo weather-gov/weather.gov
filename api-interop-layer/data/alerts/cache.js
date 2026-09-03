@@ -6,6 +6,9 @@ import { logger } from "../../util/monitoring/logger.js";
 
 const log = logger.child({ subsystem: "alert cache" });
 
+// Reads come from here, and the Go alerts task owns the writes
+export const LIVE_TABLE = "weathergov_geo_alerts_cache";
+
 /**
  * AlertsCache
  * -----------------------------------
@@ -18,8 +21,19 @@ const log = logger.child({ subsystem: "alert cache" });
  * to the cache table.
  */
 export class AlertsCache {
-  constructor(tableName = "weathergov_geo_alerts_cache") {
+  constructor(tableName = LIVE_TABLE) {
     this.tableName = tableName;
+  }
+
+  // A comparison table has no migration behind it, so clone one off the live table
+  async ensureTable() {
+    if (this.tableName === LIVE_TABLE) {
+      return;
+    }
+
+    await this.db.query(
+      `CREATE TABLE IF NOT EXISTS ${this.tableName} (LIKE ${LIVE_TABLE} INCLUDING ALL)`,
+    );
   }
 
   async getHashes() {
@@ -233,7 +247,7 @@ export class AlertsCache {
    */
   async getIntersectingAlertsForPoint(lat, lon) {
     const sql = `SELECT alertjson
-    FROM weathergov_geo_alerts_cache
+    FROM ${this.tableName}
     WHERE ST_DWithin(
         ST_SetSRID(ST_Point($2, $1), 4326)::geography,
         shape_simplified::geography,
