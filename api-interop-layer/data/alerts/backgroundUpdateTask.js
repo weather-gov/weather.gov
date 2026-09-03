@@ -9,7 +9,7 @@ import openDatabase from "../db.js";
 import alertKinds from "./kinds.js";
 import { parseDescription, parseLocations } from "./parse/index.js";
 import { generateAlertGeometry } from "./geometry.js";
-import { AlertsCache } from "./cache.js";
+import { AlertsCache, LIVE_TABLE } from "./cache.js";
 import { logger } from "../../util/monitoring/index.js";
 
 /**
@@ -31,7 +31,8 @@ const alertsLogger = logger.child({ subsystem: "alerts" });
 
 // The hashes of all the active alerts we know about. Anything in this list will
 // not be processed in future updates, since we've already captured it.
-const alertsCache = new AlertsCache();
+// Writes go to a copy of the live table so the two implementations can be diffed.
+const alertsCache = new AlertsCache(`${LIVE_TABLE}_interop`);
 
 // An undici client that will be used as the dispatcher
 const client = new Client(BASE_URL, { allowH2: true });
@@ -95,6 +96,7 @@ export const updateAlerts = async ({ parent = parentPort } = {}) => {
   // based on the incoming hashes and the current cache.
   const db = await openDatabase();
   alertsCache.db = db;
+  await alertsCache.ensureTable();
 
   const incomingHashes = rawAlerts.map((alert) => alert.properties.hash);
 

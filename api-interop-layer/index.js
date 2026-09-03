@@ -1,7 +1,6 @@
 import fastify from "fastify";
 import fs from "fs";
 import inspector from "inspector";
-import { startAlertProcessing } from "./data/alerts/index.js";
 import routes from "./routes/index.js";
 import { logger } from "./util/monitoring/index.js";
 import ConnectionTracker from "./ConnectionTracker.js";
@@ -201,8 +200,6 @@ export const main = async () => {
       },
     });
   });
-
-  startAlertProcessing();
 
   await server.listen({ port, host: "0.0.0.0" });
   logger.info({ port }, "listening");

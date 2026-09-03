@@ -437,7 +437,14 @@ go-run-ghwo:
 # Run the alerts program without compiling (interpreted)
 [group("golang")]
 go-run-alerts:
-    docker compose run --rm tasks-dev go run /tasks/cmd/alerts/main.go
+    docker compose run --rm  \
+    -e DB_HOST=database \
+    -e DB_PORT=5432 \
+    -e DB_NAME=weathergov \
+    -e DB_USERNAME=drupal \
+    -e DB_PASSWORD=drupal \
+    -e API_URL=http://api-proxy:8081 \
+    tasks-dev go run /tasks/cmd/alerts/main.go
 
 # Run the gridcache heat interval program without compiling (interpreted)
 [group("golang")]

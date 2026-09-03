@@ -36,10 +36,14 @@ We have added convenience commands to the root justfile of this repository:
 | `just go-build-gridcache` | Compile the gridcache heat interval program and place the binary at `tasks/bin/gridcache` |
 
 ## Description of Tasks
-### Alerts
-The alerts processing task.
+### Alerts ###
+Runs every 60 seconds, offset to the :30 second mark so it doesn't share a tick with the other tasks. Fetches every active alert from `${API_URL}/alerts/active?status=actual`, transforms each one, and reconciles `weathergov_geo_alerts_cache`: alerts that dropped out of the feed are deleted, alerts whose hash is new are inserted, and the rest are left alone. An alert's hash is sha256/base64 over the compacted JSON of its `properties`.
 
-This program, which runs every 30s, will fetch the latest alerts across the country and update our own alerts cache database table.
+- Code layout: `cmd/alerts/main.go` just orchestrates. The fetching, parsing, and geometry and DB logic live in `internal/alerts`.
+- Database: writes `weathergov_geo_alerts_cache`, and reads `weathergov_geo_zones` and `weathergov_geo_counties` to build alert shapes. Only this task writes the cache table; the interop layer still serves all alert reads from it.
+- Only land alerts get a geometry. Marine and other kinds are stored as a hash with a null shape, so they are not reprocessed on every run but never come back out of a point lookup.
+- Geometry comes from the alert's own GeoJSON, else a union of its forecast zones, else a union of its SAME county shapes. Union shapes are also stored simplified to 200m.
+- Running it locally: `just go-run-alerts`. `API_URL` defaults to `https://api.weather.gov`, and docker-compose points it at `api-proxy`.
 
 ### GHWO (a.k.a Risk Overviews)
 The Graphical Hazardous Weather Outlook (GHWO, also known as Risks Overview) processing task.

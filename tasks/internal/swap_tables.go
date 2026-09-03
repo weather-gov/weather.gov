@@ -4,6 +4,9 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"maps"
+	"slices"
+	"strings"
 
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
@@ -21,7 +24,7 @@ import (
 var (
 	tablePKeyQueryString   = `SELECT conname FROM pg_constraint WHERE conrelid = $1::regclass AND contype = 'p'`
 	tableUniqueQueryString = `SELECT conname FROM pg_constraint WHERE conrelid = $1::regclass AND contype = 'u'`
-	tableIndexQueryString  = `SELECT indexname FROM pg_indexes
+	tableIndexQueryString  = `SELECT indexname, indexdef FROM pg_indexes
 		WHERE schemaname = 'public' AND tablename = $1
 		  AND indexname NOT IN (
 		    SELECT conname FROM pg_constraint WHERE conrelid = $1::regclass AND contype IN ('p', 'u')
@@ -31,7 +34,15 @@ var (
 
 // A struct representing information about table indices
 type tableMeta struct {
-	pkey, unique, lookup string
+	pkey, unique string
+
+	// Keyed on the part of the definition a clone keeps, since the names differ
+	lookups map[string]string
+}
+
+func indexShape(definition string) string {
+	_, shape, _ := strings.Cut(definition, " USING ")
+	return shape
 }
 
 func getRenameConstraintQueryString(from, to, tableName string) string {
@@ -100,16 +111,23 @@ func getTableMeta(ctx context.Context, pool *pgxpool.Pool, tableName string) (ta
 	}
 
 	// Attempt to get everything else, which should correspond to the
-	// lookup index
-	err = pool.QueryRow(ctx, tableIndexQueryString, tableName).Scan(&meta.lookup)
-	// If the error is simply indicating that there are no rows, we ignore it.
+	// lookup indices
+	rows, err := pool.Query(ctx, tableIndexQueryString, tableName)
 	if err != nil {
-		if !errors.Is(err, pgx.ErrNoRows) {
-			return meta, fmt.Errorf("Error finding lookup index of %s: %w", tableName, err)
+		return meta, fmt.Errorf("Error finding lookup indices of %s: %w", tableName, err)
+	}
+	defer rows.Close()
+
+	meta.lookups = map[string]string{}
+	for rows.Next() {
+		var name, definition string
+		if err := rows.Scan(&name, &definition); err != nil {
+			return meta, fmt.Errorf("Error finding lookup indices of %s: %w", tableName, err)
 		}
+		meta.lookups[indexShape(definition)] = name
 	}
 
-	return meta, nil
+	return meta, rows.Err()
 }
 
 /**
@@ -159,8 +177,12 @@ func (swapData *SwapTableData) getIndexNameStatements(from, to tableMeta) []stri
 	if from.unique != "" && from.unique != to.unique {
 		statements = append(statements, getRenameConstraintQueryString(from.unique, to.unique, swapData.SourceName))
 	}
-	if from.lookup != "" && from.lookup != to.lookup {
-		statements = append(statements, getRenameIndexQueryString(from.lookup, to.lookup))
+	for _, shape := range slices.Sorted(maps.Keys(from.lookups)) {
+		live, ok := to.lookups[shape]
+		if !ok || from.lookups[shape] == live {
+			continue
+		}
+		statements = append(statements, getRenameIndexQueryString(from.lookups[shape], live))
 	}
 	return statements
 }

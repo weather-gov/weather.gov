@@ -175,6 +175,9 @@ services:
       INTERNAL_GRIDPOINT_LOOKUP: true
       # Whether to allow for coastal marine data
       MARINE_COASTAL_EXPERIMENTAL: false
+      # Whether or not the alerts processing background
+      # task should run from the interop.
+      TASKS_ALERTS_INTEROP: false
     networks:
       - weather.gov
     links:
@@ -315,6 +318,7 @@ services:
     environment:
       - GOCACHE=/root/.cache/go-build
       - GOMODCACHE=/go/pkg/mod
+      - TASKS_ALERTS_INTEROP=false
     cap_add:
       - SYS_PTRACE
     security_opt:
@@ -331,10 +335,13 @@ services:
     build:
       context: ./tasks
       dockerfile: Dockerfile
+    environment:
+      API_URL: ${API_URL:-http://api-proxy:8081}
     networks:
       - weather.gov
     depends_on:
       - database
+      - api-proxy
     logging:
       driver: fluentd
       options:

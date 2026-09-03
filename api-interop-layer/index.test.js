@@ -3,7 +3,7 @@ import quibble from "quibble";
 import sinon from "sinon";
 
 describe("main bootstrapper", () => {
-  let server, fastify, startAlertProcessing, handler, urls, main, sandbox;
+  let server, fastify, handler, urls, main, sandbox;
 
   before(async () => {
     sandbox = sinon.createSandbox();
@@ -17,8 +17,6 @@ describe("main bootstrapper", () => {
     };
 
     fastify = () => server;
-
-    startAlertProcessing = sandbox.spy();
 
     handler = sandbox.stub();
 
@@ -44,7 +42,6 @@ describe("main bootstrapper", () => {
     // default argument. The default argument should *ALWAYS* be set, even if
     // it's just an empty argument.
     await quibble.esm("fastify", {}, fastify);
-    await quibble.esm("./data/alerts/index.js", { startAlertProcessing }, {});
     await quibble.esm("./routes/index.js", {}, urls);
 
     // Now that we've mocked the dependency imports, we can import the code
@@ -95,10 +92,6 @@ describe("main bootstrapper", () => {
         expect(+port).to.equal(9999);
         expect(host).to.equal("0.0.0.0");
       });
-    });
-
-    it("starts the alert processing loop", () => {
-      expect(startAlertProcessing.called).to.be.true;
     });
 
     it("hooks up routes as provided", () => {

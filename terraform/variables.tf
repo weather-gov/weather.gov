@@ -191,6 +191,12 @@ variable "tasks_disk_quota" {
   description = "The amount of disk memory to allocate per tasks instance"
 }
 
+variable "tasks_alerts_interop" {
+  type        = bool
+  default     = false
+  description = "Whether or not to turn on alerts background processing in the interop"
+}
+
 variable "ghwo_t_worker_num" {
   type        = number
   default     = 60
