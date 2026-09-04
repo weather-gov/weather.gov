@@ -1,0 +1,29 @@
+# syntax=docker/dockerfile:1
+#
+# Production image for the tasks app, parameterized on TASK.
+FROM ubuntu:24.04 AS builder
+
+ARG TASK
+
+# hadolint ignore=DL3008
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends software-properties-common curl ca-certificates && \
+    rm -rf /var/lib/apt/lists/*
+
+RUN curl -fsSL https://go.dev/dl/go1.26.5.linux-amd64.tar.gz -o golang.tar.gz && \
+    tar -C /usr/local -xzf golang.tar.gz && \
+    rm golang.tar.gz
+
+WORKDIR /tasks
+COPY . .
+
+RUN CGO_ENABLED=0 /usr/local/go/bin/go build -o task "cmd/${TASK}/main.go"
+
+FROM ubuntu:24.04 AS runtime
+
+COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
+COPY --from=builder --chown=1001:1001 tasks/task /usr/local/bin/task
+
+USER 1001
+
+CMD ["/usr/local/bin/task"]

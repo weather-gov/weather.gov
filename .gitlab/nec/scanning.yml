@@ -11,9 +11,21 @@ include:
       git_strategy: fetch
   - component: ${CI_SERVER_FQDN}/NWS/Systems/NCO/NEC/shared-catalogs/security/container_scanning@main
     inputs:
-      job_name: scan-ghwo-task-production-image
-      image: $CI_REGISTRY_IMAGE/ghwo-task-production:$CI_COMMIT_SHORT_SHA
-      dockerfile: tasks/Dockerfile.ghwo
+      job_name: scan-tasks-ghwo-production-image
+      image: $CI_REGISTRY_IMAGE/tasks-ghwo-production:$CI_COMMIT_SHORT_SHA
+      dockerfile: tasks/Dockerfile.prod
+      git_strategy: fetch
+  - component: ${CI_SERVER_FQDN}/NWS/Systems/NCO/NEC/shared-catalogs/security/container_scanning@main
+    inputs:
+      job_name: scan-tasks-alerts-production-image
+      image: $CI_REGISTRY_IMAGE/tasks-alerts-production:$CI_COMMIT_SHORT_SHA
+      dockerfile: tasks/Dockerfile.prod
+      git_strategy: fetch
+  - component: ${CI_SERVER_FQDN}/NWS/Systems/NCO/NEC/shared-catalogs/security/container_scanning@main
+    inputs:
+      job_name: scan-tasks-gridcache-production-image
+      image: $CI_REGISTRY_IMAGE/tasks-gridcache-production:$CI_COMMIT_SHORT_SHA
+      dockerfile: tasks/Dockerfile.prod
       git_strategy: fetch
 
 # override needs so that scanning runs on targeted containers
@@ -24,9 +36,23 @@ scan-django-production-image:
   rules:
     - !reference [.on_mr_forecast_changes]
     - !reference [.on_main]
-scan-ghwo-task-production-image:
+scan-tasks-ghwo-production-image:
   needs:
-    - job: push-ghwo-task-production-image
+    - job: push-tasks-ghwo-production-image
+      optional: true
+  rules:
+    - !reference [.on_mr_tasks_changes]
+    - !reference [.on_main]
+scan-tasks-alerts-production-image:
+  needs:
+    - job: push-tasks-alerts-production-image
+      optional: true
+  rules:
+    - !reference [.on_mr_tasks_changes]
+    - !reference [.on_main]
+scan-tasks-gridcache-production-image:
+  needs:
+    - job: push-tasks-gridcache-production-image
       optional: true
   rules:
     - !reference [.on_mr_tasks_changes]

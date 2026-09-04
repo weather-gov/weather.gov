@@ -69,12 +69,30 @@ include:
   - component: ${CI_SERVER_FQDN}/NWS/Systems/NCO/NEC/shared-catalogs/container/build@main
     inputs:
       stage: gather
-      job_name: push-ghwo-task-production-image
-      dockerfile: Dockerfile.ghwo
+      job_name: push-tasks-ghwo-production-image
+      dockerfile: Dockerfile.prod
       context: tasks/
-      image: $CI_REGISTRY_IMAGE/ghwo-task-production
+      image: $CI_REGISTRY_IMAGE/tasks-ghwo-production
       tag: $CI_COMMIT_SHORT_SHA
-      opts: "--cache=true --cache-copy-layers=true --cache-repo=$CI_REGISTRY_IMAGE/cache --cache-ttl=168h"
+      opts: "--build-arg TASK=ghwo --cache=true --cache-copy-layers=true --cache-repo=$CI_REGISTRY_IMAGE/cache --cache-ttl=168h"
+  - component: ${CI_SERVER_FQDN}/NWS/Systems/NCO/NEC/shared-catalogs/container/build@main
+    inputs:
+      stage: gather
+      job_name: push-tasks-alerts-production-image
+      dockerfile: Dockerfile.prod
+      context: tasks/
+      image: $CI_REGISTRY_IMAGE/tasks-alerts-production
+      tag: $CI_COMMIT_SHORT_SHA
+      opts: "--build-arg TASK=alerts --cache=true --cache-copy-layers=true --cache-repo=$CI_REGISTRY_IMAGE/cache --cache-ttl=168h"
+  - component: ${CI_SERVER_FQDN}/NWS/Systems/NCO/NEC/shared-catalogs/container/build@main
+    inputs:
+      stage: gather
+      job_name: push-tasks-gridcache-production-image
+      dockerfile: Dockerfile.prod
+      context: tasks/
+      image: $CI_REGISTRY_IMAGE/tasks-gridcache-production
+      tag: $CI_COMMIT_SHORT_SHA
+      opts: "--build-arg TASK=gridcache --cache=true --cache-copy-layers=true --cache-repo=$CI_REGISTRY_IMAGE/cache --cache-ttl=168h"
   - component: ${CI_SERVER_FQDN}/NWS/Systems/NCO/NEC/shared-catalogs/container/release@main
     inputs:
       job_name: push-django-image-to-ecr
@@ -83,6 +101,36 @@ include:
       source_tag: $CI_COMMIT_SHORT_SHA
       release_registry: $NEC_ECR_URL
       release_image: $NEC_ECR_URL/weathergov-dev-django
+      release_tags: $CI_COMMIT_SHORT_SHA
+      allow_failure: "false"
+  - component: ${CI_SERVER_FQDN}/NWS/Systems/NCO/NEC/shared-catalogs/container/release@main
+    inputs:
+      job_name: push-tasks-ghwo-image-to-ecr
+      stage: deploy
+      source_image: $CI_REGISTRY_IMAGE/tasks-ghwo-production
+      source_tag: $CI_COMMIT_SHORT_SHA
+      release_registry: $NEC_ECR_URL
+      release_image: $NEC_ECR_URL/weathergov-dev-tasks-ghwo
+      release_tags: $CI_COMMIT_SHORT_SHA
+      allow_failure: "false"
+  - component: ${CI_SERVER_FQDN}/NWS/Systems/NCO/NEC/shared-catalogs/container/release@main
+    inputs:
+      job_name: push-tasks-alerts-image-to-ecr
+      stage: deploy
+      source_image: $CI_REGISTRY_IMAGE/tasks-alerts-production
+      source_tag: $CI_COMMIT_SHORT_SHA
+      release_registry: $NEC_ECR_URL
+      release_image: $NEC_ECR_URL/weathergov-dev-tasks-alerts
+      release_tags: $CI_COMMIT_SHORT_SHA
+      allow_failure: "false"
+  - component: ${CI_SERVER_FQDN}/NWS/Systems/NCO/NEC/shared-catalogs/container/release@main
+    inputs:
+      job_name: push-tasks-gridcache-image-to-ecr
+      stage: deploy
+      source_image: $CI_REGISTRY_IMAGE/tasks-gridcache-production
+      source_tag: $CI_COMMIT_SHORT_SHA
+      release_registry: $NEC_ECR_URL
+      release_image: $NEC_ECR_URL/weathergov-dev-tasks-gridcache
       release_tags: $CI_COMMIT_SHORT_SHA
       allow_failure: "false"
 
@@ -105,20 +153,46 @@ push-django-production-image:
     - !reference [.on_mr_forecast_changes]
     - !reference [.on_main]
     - !reference [.on_web]
-push-ghwo-task-production-image:
+push-tasks-ghwo-production-image:
   rules:
     - !reference [.on_mr_tasks_changes]
     - !reference [.on_main]
     - !reference [.on_web]
-push-django-image-to-ecr:
+push-tasks-alerts-production-image:
+  rules:
+    - !reference [.on_mr_tasks_changes]
+    - !reference [.on_main]
+    - !reference [.on_web]
+push-tasks-gridcache-production-image:
+  rules:
+    - !reference [.on_mr_tasks_changes]
+    - !reference [.on_main]
+    - !reference [.on_web]
+# shared config for pushing to NEC ECR. note that we need an anchor, we cannot
+# extend as that would override the original job block.
+.nec_ecr_push: &nec_ecr_push
   environment: dev
   variables:
     ROLE_NAME: $NEC_ECR_ROLE_NAME
     ACCOUNT_ID: $NEC_ACCOUNT_ID
-  rules:
-    - !reference [.on_manual_nec_deploy]
   tags:
     - nec-cloud
+push-django-image-to-ecr:
+  <<: *nec_ecr_push
+  rules:
+    - !reference [.on_manual_nec_deploy]
+push-tasks-ghwo-image-to-ecr:
+  <<: *nec_ecr_push
+  rules:
+    - !reference [.on_manual_nec_deploy]
+push-tasks-alerts-image-to-ecr:
+  <<: *nec_ecr_push
+  rules:
+    - !reference [.on_manual_nec_deploy]
+push-tasks-gridcache-image-to-ecr:
+  <<: *nec_ecr_push
+  rules:
+    - !reference [.on_manual_nec_deploy]
 # for playwright, build a new image every time we run through the Gitlab UI
 gather-playwright-dependencies:
   rules:
