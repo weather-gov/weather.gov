@@ -249,7 +249,7 @@ gitlab-sast:
 
 [group("code quality")]
 lint-docker:
-    hadolint ./tasks/Dockerfile*
+    hadolint ./forecast/Dockerfile* ./tasks/Dockerfile*
 
 # Run goimports on the files in the tasks directory
 [group("code quality")]
