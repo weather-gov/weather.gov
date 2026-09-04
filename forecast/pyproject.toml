@@ -6,12 +6,12 @@ dependencies = [
     "boto3==1.42.59",
     "cfenv==0.5.3",
     "deepmerge==2.0",
-    "django>=6.0.3",
+    "django>=6.0.7",
     "django-allow-cidr==0.8.0",
     "django-csp==4.0",
     "django-debug-toolbar>=6.2.0",
     "django-storages[s3]==1.14.6",
-    "djangorestframework>=3.16.1",
+    "djangorestframework>=3.17.2",
     "environs[django]==14.6.0 ; python_full_version >= '3.8'",
     "geobuf==2.0.1",
     "gevent==25.9.1 ; python_full_version >= '3.9'",
@@ -33,7 +33,7 @@ dependencies = [
     "responses>=0.26.0",
     "shapely>=2.1.2",
     "tqdm>=4.67.3",
-    "wagtail>=7.3.1",
+    "wagtail>=7.3.4,<8",
     "whitenoise==6.12.0 ; python_full_version >= '3.9'",
 ]
 
