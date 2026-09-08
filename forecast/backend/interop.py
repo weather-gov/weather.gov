@@ -196,20 +196,13 @@ def _process_interop_point_forecast(data):
         # time between when the interop sent us this and when we queried.
         data["alerts"]["items"] = [alerts[hash] for hash in data["alerts"]["items"] if hash in alerts]
 
-    # Process the WPC probabilistic precipitation (wpcProb)
-    wpc_prob = data.get("wpcProb")
-    if not wpc_prob or wpc_prob.get("error") or not any(wpc_prob[name] for name in _WPC_VARIABLES):
-        wpc_prob = None
-    else:
-        wpc_prob["period"]["start"] = datetime.fromisoformat(wpc_prob["period"]["start"]).astimezone(tz=tz)
-        wpc_prob["period"]["end"] = datetime.fromisoformat(wpc_prob["period"]["end"]).astimezone(tz=tz)
-        wpc_prob["liquidTitle"] = _get_liquid_title(wpc_prob["snow"] or wpc_prob["freezingRain"])
-    data["wpcProb"] = wpc_prob
+    _process_wpc_prob(data, tz)
+    wpc_prob = data["wpcProb"]
 
     wfo = data.get("grid", {}).get("wfo")
 
     if "days" in data["forecast"]:
-        for day in data["forecast"]["days"]:
+        for index, day in enumerate(data["forecast"]["days"]):
             day["start"] = datetime.fromisoformat(day["start"]).astimezone(tz=tz)
             day["end"] = datetime.fromisoformat(day["end"]).astimezone(tz=tz)
             day["wfo"] = wfo
@@ -230,7 +223,7 @@ def _process_interop_point_forecast(data):
             if day["alerts"]["metadata"]["count"] > 0:
                 day["hasAlertIcon"] = day["alerts"]["metadata"]["highest"] != ""
 
-            _process_qpf(day, wpc_prob, tz)
+            _process_qpf(day, wpc_prob, index, tz)
 
     if "timestamp" in data["observed"]:
         data["observed"]["timestamp"] = datetime.fromisoformat(data["observed"]["timestamp"]).astimezone(tz=tz)
@@ -240,7 +233,27 @@ def _process_interop_point_forecast(data):
     return data
 
 
-def _process_qpf(day, wpc_prob, tz):
+def _process_wpc_prob(data, tz):
+    """Localize each WPC period, keeping a slot for the ones with nothing to say."""
+    wpc_prob = data.get("wpcProb")
+    if not wpc_prob or wpc_prob.get("error"):
+        data["wpcProb"] = None
+        return
+
+    periods = []
+    for entry in wpc_prob.get("periods", []):
+        if not any(entry[name] for name in _WPC_VARIABLES):
+            periods.append(None)
+            continue
+        entry["period"]["start"] = datetime.fromisoformat(entry["period"]["start"]).astimezone(tz=tz)
+        entry["period"]["end"] = datetime.fromisoformat(entry["period"]["end"]).astimezone(tz=tz)
+        entry["liquidTitle"] = _get_liquid_title(entry["snow"] or entry["freezingRain"])
+        periods.append(entry)
+
+    data["wpcProb"] = periods if any(periods) else None
+
+
+def _process_qpf(day, wpc_prob, day_index, tz):
     """Build the QPF lists and flags used by the precipitation section."""
     qpf = day["qpf"]
 
@@ -261,10 +274,11 @@ def _process_qpf(day, wpc_prob, tz):
 
     # precip.html only ever sees the qpf dict, so the block rides along there
     qpf["wpcProb"] = None
-    if wpc_prob:
-        period = wpc_prob["period"]
-        if period["start"] < day["end"] and period["end"] > day["start"]:
-            qpf["wpcProb"] = wpc_prob
+    if wpc_prob and day_index < len(wpc_prob):
+        period = wpc_prob[day_index]
+        # WPC's windows don't line up with local days, so drop one that doesn't reach this day at all
+        if period and period["period"]["start"] < day["end"] and period["period"]["end"] > day["start"]:
+            qpf["wpcProb"] = period
 
     wpc = qpf["wpcProb"] or {}
     high_end = []

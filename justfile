@@ -478,10 +478,10 @@ go-test:
 
 alias test-go := go-test
 
-# Run the WPC probabilistic precip program
+# Run the WPC probabilistic precip program against the newest published cycle
 [group("golang")]
 go-run-wpcprob:
     docker build -t wpcprob-tasks -f tasks/Dockerfile tasks/
     docker run --rm --network "$(docker network ls --filter name=weather.gov -q | head -1)" \
         -e DB_HOST=database -e DB_PORT=5432 -e DB_NAME=weathergov -e DB_USERNAME=drupal -e DB_PASSWORD=drupal \
-        --entrypoint /usr/local/bin/wpcprob wpcprob-tasks
+        --entrypoint /usr/local/bin/wpcprob wpcprob-tasks -latest
