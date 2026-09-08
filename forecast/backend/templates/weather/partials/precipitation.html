@@ -18,7 +18,7 @@
         </div>
       {% else %}
         <div class="grid-col-12 {% if qpf.hasQPF %}desktop:grid-col-6{% endif %}">
-          {% if first and wpc %}
+          {% if wpc %}
             {% precip_probability wpc=wpc itemId=itemId %}
           {% else %}
             <h5 class="font-heading-sm text-bold text-primary-darker margin-top-2 margin-bottom-05">

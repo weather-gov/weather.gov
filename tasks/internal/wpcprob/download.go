@@ -12,6 +12,7 @@ import (
 	"sort"
 	"strconv"
 	"strings"
+	"sync"
 	"time"
 )
 
@@ -19,6 +20,14 @@ var wpcBaseURL = "https://ftp-wpc.ncep.noaa.gov/prob_precip_portal/co"
 
 // Length of the window each file accumulates over, ending at the file's forecast hour
 const accumulationHours = 24
+
+// Consecutive 24-hour windows pulled per cycle, one per rendered forecast day
+const periodCount = 3
+
+const (
+	downloadWorkers  = 6
+	downloadAttempts = 3
+)
 
 var fhourRe = regexp.MustCompile(`f(\d{3})\.grib2`)
 
@@ -35,65 +44,85 @@ func fetchLatestCycle(ctx context.Context, client *http.Client) (string, error) 
 	return fields[0], nil
 }
 
-// List the cycle's directory and return the forecast hour to download
-func currentWindowFHour(ctx context.Context, client *http.Client, cycle string) (string, error) {
+// List the cycle's directory and return every forecast hour it publishes, ascending
+func publishedFHours(ctx context.Context, client *http.Client, cycle string) ([]string, error) {
 	dirURL := fmt.Sprintf("%s/ppp_co_24hr_%s/", wpcBaseURL, cycle)
 	body, err := httpGet(ctx, client, dirURL)
 	if err != nil {
-		return "", err
+		return nil, err
 	}
 
 	// The directory holds one file per band per forecast hour, so the same hour shows up many times over
+	seen := map[string]bool{}
 	var fhours []string
 	for _, m := range fhourRe.FindAllStringSubmatch(string(body), -1) {
+		if seen[m[1]] {
+			continue
+		}
+		seen[m[1]] = true
 		fhours = append(fhours, m[1])
 	}
-
-	fhour, err := selectFHour(fhours)
-	if err != nil {
-		return "", fmt.Errorf("%w in %s", err, dirURL)
+	if len(fhours) == 0 {
+		return nil, fmt.Errorf("no forecast-hour files in %s", dirURL)
 	}
-	return fhour, nil
-}
 
-// Pick the forecast hour whose 24-hour window covers the most of the day after the cycle
-func selectFHour(fhours []string) (string, error) {
 	// Forecast hours are zero-padded to three digits, so sorting them as text also sorts them by number
 	sort.Strings(fhours)
-
-	// Each window ends on a 6-hourly boundary, so the last hour up to 24 is the window already underway
-	underway := ""
-	for _, fhour := range fhours {
-		hours, err := strconv.Atoi(fhour)
-		if err != nil {
-			return "", fmt.Errorf("parsing forecast hour %q", fhour)
-		}
-		if hours > accumulationHours {
-			break
-		}
-		underway = fhour
-	}
-	if underway != "" {
-		return underway, nil
-	}
-
-	// Every window still starts after the cycle, so the soonest one is the closest available
-	if len(fhours) > 0 {
-		return fhours[0], nil
-	}
-	return "", fmt.Errorf("no forecast-hour files")
+	return fhours, nil
 }
 
+// Pick the window already underway, then the next two 24-hour windows after it
+func selectFHours(fhours []string) ([]string, error) {
+	hours := make([]int, len(fhours))
+	for i, f := range fhours {
+		h, err := strconv.Atoi(f)
+		if err != nil {
+			return nil, fmt.Errorf("parsing forecast hour %q", f)
+		}
+		hours[i] = h
+	}
+
+	// Each window ends on a 6-hourly boundary, so the last hour up to 24 is the one already underway
+	start := largestAtMost(hours, accumulationHours)
+
+	var selected []string
+	for p := range periodCount {
+		idx := largestAtMost(hours, hours[start]+p*accumulationHours)
+		// WPC stops near +66, so day 3 lands on the last published window instead of repeating day 2
+		if len(selected) > 0 && fhours[idx] == selected[len(selected)-1] {
+			break
+		}
+		selected = append(selected, fhours[idx])
+	}
+	return selected, nil
+}
+
+// Index of the last hour that does not run past want
+func largestAtMost(hours []int, want int) int {
+	idx := 0
+	for i, h := range hours {
+		if h > want {
+			break
+		}
+		idx = i
+	}
+	return idx
+}
+
+// Takes whatever WPC last published, for a manual run that would otherwise wait out the current hour
+const AnyCycle = ""
+
 // Poll WPC with backoff until expectedCycle is published
-func WaitForCycle(ctx context.Context, client *http.Client, expectedCycle string) (cycle, fhour string, err error) {
-	delays := []time.Duration{0, 30 * time.Second, 60 * time.Second, 90 * time.Second, 120 * time.Second}
+func WaitForCycle(ctx context.Context, client *http.Client, expectedCycle string) (cycle string, fhours []string, err error) {
+	// Capped at 90 s so a late publish leaves the rest of the run inside its deadline
+	delays := []time.Duration{0, 30 * time.Second, 60 * time.Second}
 	var lastErr error
 	for _, d := range delays {
 		if d > 0 {
 			select {
 			case <-time.After(d):
 			case <-ctx.Done():
-				return "", "", ctx.Err()
+				return "", nil, ctx.Err()
 			}
 		}
 		latest, err := fetchLatestCycle(ctx, client)
@@ -105,40 +134,104 @@ func WaitForCycle(ctx context.Context, client *http.Client, expectedCycle string
 			lastErr = fmt.Errorf("latest cycle %s not yet >= expected %s", latest, expectedCycle)
 			continue
 		}
-		fh, err := currentWindowFHour(ctx, client, latest)
+		published, err := publishedFHours(ctx, client, latest)
 		if err != nil {
 			lastErr = err
 			continue
 		}
-		return latest, fh, nil
+		selected, err := selectFHours(published)
+		if err != nil {
+			lastErr = err
+			continue
+		}
+		return latest, selected, nil
 	}
-	return "", "", fmt.Errorf("cycle %s not published in time: %w", expectedCycle, lastErr)
+	return "", nil, fmt.Errorf("cycle %q not published in time: %w", expectedCycle, lastErr)
 }
 
-// Download each band's grib2 file for the given cycle/fhour into destDir, returning the bands WPC publishes
-func DownloadBands(ctx context.Context, client *http.Client, cycle, fhour, destDir string, bands []Band) ([]Band, []string, error) {
-	var kept []Band
-	var missing []string
-	for _, b := range bands {
-		filename := bandFilename(b, cycle, fhour)
-		url := fmt.Sprintf("%s/ppp_co_24hr_%s/%s", wpcBaseURL, cycle, filename)
-		err := downloadFile(ctx, client, url, filepath.Join(destDir, filename))
-		if err != nil {
-			// An unpublished band 404s, and only that band is lost, so the rest of the run still stands
-			var status *statusError
-			if errors.As(err, &status) && status.code == http.StatusNotFound {
-				missing = append(missing, b.FileFragment)
-				continue
+type download struct {
+	band  Band
+	fhour string
+}
+
+// Fetch every band for every forecast hour, reporting the files WPC did not serve
+func DownloadBands(ctx context.Context, client *http.Client, cycle string, fhours []string, destDir string, bands []Band) ([]string, error) {
+	queue := make(chan download)
+	go func() {
+		defer close(queue)
+		for _, fhour := range fhours {
+			for _, b := range bands {
+				select {
+				case queue <- download{band: b, fhour: fhour}:
+				case <-ctx.Done():
+					return
+				}
 			}
-			return nil, nil, fmt.Errorf("downloading %s: %w", filename, err)
 		}
-		kept = append(kept, b)
+	}()
+
+	var mu sync.Mutex
+	var missing []string
+	got := 0
+
+	var wg sync.WaitGroup
+	for range downloadWorkers {
+		wg.Add(1)
+		go func() {
+			defer wg.Done()
+			// One file's panic would otherwise take the whole process down with it
+			defer func() {
+				if r := recover(); r != nil {
+					mu.Lock()
+					missing = append(missing, fmt.Sprintf("panic: %v", r))
+					mu.Unlock()
+				}
+			}()
+			for d := range queue {
+				filename := bandFilename(d.band, cycle, d.fhour)
+				url := fmt.Sprintf("%s/ppp_co_24hr_%s/%s", wpcBaseURL, cycle, filename)
+				err := fetchWithRetry(ctx, client, url, filepath.Join(destDir, filename))
+				mu.Lock()
+				if err != nil {
+					missing = append(missing, filename)
+				} else {
+					got++
+				}
+				mu.Unlock()
+			}
+		}()
 	}
-	// Every band 404ing means an outage or a moved directory rather than an unpublished band
-	if len(kept) == 0 {
-		return nil, nil, fmt.Errorf("no bands published for cycle %s fhour %s", cycle, fhour)
+	wg.Wait()
+
+	// Every file failing means an outage or a moved directory rather than an unpublished band
+	if got == 0 {
+		return nil, fmt.Errorf("no bands published for cycle %s fhours %v", cycle, fhours)
 	}
-	return kept, missing, nil
+	return missing, nil
+}
+
+// Fetch one file, treating a 404 as WPC simply not publishing it and anything else as worth another try
+func fetchWithRetry(ctx context.Context, client *http.Client, url, dest string) error {
+	var lastErr error
+	for attempt := range downloadAttempts {
+		if attempt > 0 {
+			select {
+			case <-time.After(time.Duration(attempt) * time.Second):
+			case <-ctx.Done():
+				return ctx.Err()
+			}
+		}
+		err := downloadFile(ctx, client, url, dest)
+		if err == nil {
+			return nil
+		}
+		var status *statusError
+		if errors.As(err, &status) && status.code == http.StatusNotFound {
+			return err
+		}
+		lastErr = err
+	}
+	return lastErr
 }
 
 // Carries the status code so callers can tell an unpublished band from an outage

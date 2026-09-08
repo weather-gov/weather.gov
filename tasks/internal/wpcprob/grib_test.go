@@ -3,6 +3,8 @@ package wpcprob
 import (
 	"encoding/binary"
 	"math"
+	"os"
+	"path/filepath"
 	"testing"
 )
 
@@ -17,41 +19,41 @@ func buildIEEERecord(values []float32) []byte {
 	return data
 }
 
-// ValueAt should return the value and true for an in-bounds, defined cell
-func TestValueAt_InBounds(t *testing.T) {
+// valueAtCell should return the value and true for an in-bounds, defined cell
+func TestValueAtCell_InBounds(t *testing.T) {
 	grid := make([]float32, gridNX*gridNY)
-	grid[0] = 42.5        // col 1, row 1
-	grid[gridNX+1] = 7.25 // col 2, row 2
+	grid[0] = 42.5
+	grid[gridNX+1] = 7.25
 
-	if v, ok := ValueAt(grid, 1, 1); !ok || v != 42.5 {
+	if v, ok := valueAtCell(grid, 0); !ok || v != 42.5 {
 		t.Errorf("expected (42.5, true), got (%v, %v)", v, ok)
 	}
-	if v, ok := ValueAt(grid, 2, 2); !ok || v != 7.25 {
+	if v, ok := valueAtCell(grid, gridNX+1); !ok || v != 7.25 {
 		t.Errorf("expected (7.25, true), got (%v, %v)", v, ok)
 	}
 }
 
-// ValueAt should reject columns/rows outside the grid
-func TestValueAt_OutOfBounds(t *testing.T) {
+// valueAtCell should reject offsets outside the grid
+func TestValueAtCell_OutOfBounds(t *testing.T) {
 	grid := make([]float32, gridNX*gridNY)
 
-	cases := []struct{ col, row int }{
-		{0, 1}, {1, 0}, {gridNX + 1, 1}, {1, gridNY + 1},
-	}
-	for _, c := range cases {
-		if _, ok := ValueAt(grid, c.col, c.row); ok {
-			t.Errorf("expected out-of-bounds (%d,%d) to be rejected", c.col, c.row)
+	for _, cell := range []int32{-1, gridNX * gridNY} {
+		if _, ok := valueAtCell(grid, cell); ok {
+			t.Errorf("expected out-of-bounds cell %d to be rejected", cell)
 		}
 	}
 }
 
-// ValueAt should treat grib2's undefined sentinel as missing
-func TestValueAt_Undefined(t *testing.T) {
+// valueAtCell should treat grib2's undefined sentinel and the negative easternmost column as missing
+func TestValueAtCell_Undefined(t *testing.T) {
 	grid := make([]float32, gridNX*gridNY)
 	grid[0] = gribUndefined
+	grid[1] = -9999
 
-	if _, ok := ValueAt(grid, 1, 1); ok {
-		t.Error("expected undefined cell to be reported as missing")
+	for _, cell := range []int32{0, 1} {
+		if _, ok := valueAtCell(grid, cell); ok {
+			t.Errorf("expected cell %d to be reported as missing", cell)
+		}
 	}
 }
 
@@ -61,8 +63,8 @@ func TestParseGrid(t *testing.T) {
 	want[0] = 42.5
 	want[len(want)-1] = -7.25
 
-	got, err := parseGrid(buildIEEERecord(want))
-	if err != nil {
+	got := make([]float32, gridNX*gridNY)
+	if err := parseGrid(buildIEEERecord(want), got); err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
 	if got[0] != 42.5 || got[len(got)-1] != -7.25 {
@@ -70,19 +72,36 @@ func TestParseGrid(t *testing.T) {
 	}
 }
 
-// parseGrid should reject a record whose overall length doesn't match the expected grid size
-func TestParseGrid_WrongLength(t *testing.T) {
-	data := buildIEEERecord(make([]float32, gridNX*gridNY-1))
-	if _, err := parseGrid(data); err == nil {
-		t.Error("expected an error for a short record")
-	}
-}
-
 // parseGrid should reject a record whose length-prefixed header doesn't match its data
 func TestParseGrid_WrongRecordLength(t *testing.T) {
 	data := buildIEEERecord(make([]float32, gridNX*gridNY))
 	binary.BigEndian.PutUint32(data[:4], 0)
-	if _, err := parseGrid(data); err == nil {
+
+	if err := parseGrid(data, make([]float32, gridNX*gridNY)); err == nil {
 		t.Error("expected an error for a corrupt record length header")
+	}
+}
+
+// readInto should reject a dump that isn't exactly one full grid, which is what a truncated file looks like
+func TestReadInto_WrongSize(t *testing.T) {
+	bufs := newDecodeBuffers()
+	dir := t.TempDir()
+
+	for _, tc := range []struct {
+		name string
+		size int
+	}{
+		{"truncated", len(bufs.raw) - 4},
+		{"overlong", len(bufs.raw) + 4},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			path := filepath.Join(dir, tc.name)
+			if err := os.WriteFile(path, make([]byte, tc.size), 0o600); err != nil {
+				t.Fatalf("writing fixture: %v", err)
+			}
+			if _, err := readInto(path, bufs.raw); err == nil {
+				t.Errorf("expected an error for a %s dump", tc.name)
+			}
+		})
 	}
 }

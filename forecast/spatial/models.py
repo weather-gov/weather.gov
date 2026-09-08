@@ -1,4 +1,5 @@
 from django.contrib.gis.db import models
+from django.contrib.postgres.fields import ArrayField
 from django.contrib.postgres.indexes import GistIndex
 from django.db.models import Func, JSONField
 from django.utils.text import format_lazy
@@ -337,6 +338,13 @@ class WeatherGridPoints(models.Model):
         ]
 
 
+class RealField(models.FloatField):
+    """A 4-byte float, where FloatField is double precision."""
+
+    def db_type(self, connection):  # noqa: D102, ARG002
+        return "real"
+
+
 class WPCProbabilisticPrecip(models.Model):
     """WPC probabilistic precip/snow/freezing-rain, keyed by NDFD gridpoint."""
 
@@ -344,16 +352,16 @@ class WPCProbabilisticPrecip(models.Model):
     x = models.IntegerField()
     y = models.IntegerField()
     cycle = models.DateTimeField()
-    valid_time = models.DateTimeField()
+    valid_times = ArrayField(models.DateTimeField())
 
-    # Each field: {"accumulation": <inches>, "percentiles": {...inches}, "probabilities": {...percent}}.
-    rain_data = JSONField(null=True)
-    snow_data = JSONField(null=True)
-    freezing_rain_data = JSONField(null=True)
+    # [accumulation, percentiles(7 ascending), probabilities(N ascending)], once per period.
+    # NaN marks a band that never decoded. rain 19/period, snow 16/period, freezing_rain 17/period.
+    rain_data = ArrayField(RealField(), null=True)
+    snow_data = ArrayField(RealField(), null=True)
+    freezing_rain_data = ArrayField(RealField(), null=True)
 
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:  # noqa: D106
         db_table = "weathergov_wpc_prob_precip"
         unique_together = ("wfo", "x", "y")
-        indexes = [models.Index(fields=["wfo", "x", "y"])]

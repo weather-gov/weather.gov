@@ -2,66 +2,96 @@ package wpcprob
 
 import (
 	"bytes"
+	"context"
 	"encoding/binary"
 	"fmt"
+	"io"
+	"log/slog"
 	"math"
 	"os"
 	"os/exec"
+	"path/filepath"
 )
 
 // wgrib2's -ieee output is a Fortran unformatted record: 4-byte length, data, 4-byte length
 const ieeeRecordOverhead = 8
 
-// Run wgrib2 on a grib2 file and read its "-ieee" binary dump into a flat value grid
-func DecodeGrid(wgrib2Bin, gribPath string) ([]float32, error) {
+// Reused across all 156 decodes, which allocated fresh would churn 3.7 GB of garbage
+type decodeBuffers struct {
+	raw  []byte
+	grid []float32
+}
+
+func newDecodeBuffers() *decodeBuffers {
+	return &decodeBuffers{
+		raw:  make([]byte, gridNX*gridNY*4+ieeeRecordOverhead),
+		grid: make([]float32, gridNX*gridNY),
+	}
+}
+
+// The returned slice is bufs.grid, so the next decode overwrites it
+func DecodeGrid(ctx context.Context, wgrib2Bin, gribPath string, bufs *decodeBuffers) ([]float32, error) {
 	outPath := gribPath + ".ieee"
 	defer os.Remove(outPath)
 
-	cmd := exec.Command(wgrib2Bin, gribPath, "-ieee", outPath)
+	// Bounded by ctx so a wedged wgrib2 cannot run past the whole run's deadline
+	cmd := exec.CommandContext(ctx, wgrib2Bin, gribPath, "-ieee", outPath)
 	var stderr bytes.Buffer
 	cmd.Stderr = &stderr
 	if err := cmd.Run(); err != nil {
 		return nil, fmt.Errorf("wgrib2 -ieee %s: %w: %s", gribPath, err, stderr.String())
 	}
 
-	data, err := os.ReadFile(outPath)
+	data, err := readInto(outPath, bufs.raw)
 	if err != nil {
 		return nil, fmt.Errorf("reading wgrib2 -ieee output for %s: %w", gribPath, err)
 	}
 
-	values, err := parseGrid(data)
-	if err != nil {
+	if err := parseGrid(data, bufs.grid); err != nil {
 		return nil, fmt.Errorf("parsing -ieee output for %s: %w", gribPath, err)
 	}
-	return values, nil
+	return bufs.grid, nil
 }
 
-// Validate and decode a wgrib2 "-ieee" record into a flat float32 grid
-func parseGrid(data []byte) ([]float32, error) {
-	wantLen := gridNX*gridNY*4 + ieeeRecordOverhead
-	if len(data) != wantLen {
-		return nil, fmt.Errorf("unexpected output size %d, expected %d (grid %dx%d)", len(data), wantLen, gridNX, gridNY)
+func readInto(path string, buf []byte) ([]byte, error) {
+	f, err := os.Open(path)
+	if err != nil {
+		return nil, err
 	}
+	defer f.Close()
+
+	info, err := f.Stat()
+	if err != nil {
+		return nil, err
+	}
+	// A short file is a truncated dump, a long one is a grid that isn't WPC's
+	if info.Size() != int64(len(buf)) {
+		return nil, fmt.Errorf("unexpected output size %d, expected %d (grid %dx%d)", info.Size(), len(buf), gridNX, gridNY)
+	}
+	if _, err := io.ReadFull(f, buf); err != nil {
+		return nil, err
+	}
+	return buf, nil
+}
+
+func parseGrid(data []byte, grid []float32) error {
 	recordLen := binary.BigEndian.Uint32(data[:4])
 	if recordLen != uint32(gridNX*gridNY*4) {
-		return nil, fmt.Errorf("unexpected record length %d, expected %d", recordLen, gridNX*gridNY*4)
+		return fmt.Errorf("unexpected record length %d, expected %d", recordLen, gridNX*gridNY*4)
 	}
 
-	values := make([]float32, gridNX*gridNY)
-	for i := range values {
-		bits := binary.BigEndian.Uint32(data[4+i*4:])
-		values[i] = math.Float32frombits(bits)
+	for i := range grid {
+		grid[i] = math.Float32frombits(binary.BigEndian.Uint32(data[4+i*4:]))
 	}
-
-	return values, nil
+	return nil
 }
 
-// Look up the value at a 1-based col/row, treating out-of-bounds or undefined cells as missing
-func ValueAt(grid []float32, col, row int) (float32, bool) {
-	if col < 1 || col > gridNX || row < 1 || row > gridNY {
+// Look up a cell by its flat offset, treating out-of-bounds or undefined cells as missing
+func valueAtCell(grid []float32, cell int32) (float32, bool) {
+	if cell < 0 || int(cell) >= len(grid) {
 		return 0, false
 	}
-	v := grid[(row-1)*gridNX+(col-1)]
+	v := grid[cell]
 	// The percentile grids fill their easternmost column with -9999 instead of flagging it undefined
 	if v == gribUndefined || v < 0 {
 		return 0, false
@@ -69,35 +99,41 @@ func ValueAt(grid []float32, col, row int) (float32, bool) {
 	return v, true
 }
 
-// DecodeAndStoreVariables decodes bands one at a time, grouped by variable (BandList emits each variable's bands contiguously), and hands store one variable's matrix at a time
-func DecodeAndStoreVariables(wgrib2Bin, destDir, cycle, fhour string, bands []Band, gridpoints []Gridpoint, store func(variable string, matrix *VariableMatrix) error) error {
-	for i := 0; i < len(bands); {
-		j := i + 1
-		for j < len(bands) && bands[j].Variable == bands[i].Variable {
-			j++
-		}
-		variableBands := bands[i:j]
+// Decode every (variable, period, band), one grid live at a time, and store each variable once
+func DecodeAndStoreVariables(ctx context.Context, logger *slog.Logger, wgrib2Bin, destDir, cycle string, fhours []string, bands []Band, gridpoints []Gridpoint, store func(string, *VariableMatrix) error) error {
+	buf := newMatrixBuffer(bands, len(fhours), len(gridpoints))
+	bufs := newDecodeBuffers()
+	decoded := 0
 
-		matrix := newVariableMatrix(variableBands, len(gridpoints))
-		for bandIdx, b := range variableBands {
-			path := destDir + "/" + bandFilename(b, cycle, fhour)
-			grid, err := DecodeGrid(wgrib2Bin, path)
-			if err != nil {
-				return fmt.Errorf("decoding %s: %w", b.FileFragment, err)
-			}
-			// Only this band's grid is live at once; discarded before the next band in this variable is decoded
-			for pointIdx, gp := range gridpoints {
-				raw, ok := ValueAt(grid, gp.Col, gp.Row)
-				if !ok {
+	for _, group := range groupByVariable(bands) {
+		matrix := matrixFor(buf, group, len(fhours), len(gridpoints))
+		for periodIdx, fhour := range fhours {
+			for bandIdx, b := range group {
+				path := filepath.Join(destDir, bandFilename(b, cycle, fhour))
+				grid, err := DecodeGrid(ctx, wgrib2Bin, path, bufs)
+				// Disk falls back as the run proceeds rather than holding all 156 files at once
+				os.Remove(path)
+				if err != nil {
+					// A band WPC never published or served short leaves NaN, which reads back as no value
+					logger.Warn("skipping band", "band", b.FileFragment, "fhour", fhour, "err", err)
 					continue
 				}
-				matrix.set(pointIdx, bandIdx, b.convert(raw))
+				decoded++
+				for pointIdx, gp := range gridpoints {
+					if raw, ok := valueAtCell(grid, gp.Cell); ok {
+						matrix.set(pointIdx, periodIdx, bandIdx, b.convert(raw))
+					}
+				}
 			}
 		}
-		if err := store(bands[i].Variable, matrix); err != nil {
-			return fmt.Errorf("storing %s: %w", bands[i].Variable, err)
+		if err := store(group[0].Variable, matrix); err != nil {
+			return fmt.Errorf("storing %s: %w", group[0].Variable, err)
 		}
-		i = j
+	}
+
+	// Nothing decoded means an outage, and swapping would blank the live table
+	if decoded == 0 {
+		return fmt.Errorf("no bands decoded for cycle %s", cycle)
 	}
 	return nil
 }

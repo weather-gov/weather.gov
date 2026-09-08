@@ -11,7 +11,7 @@ type Band struct {
 	FileFragment string
 	Variable     string
 	Kind         BandKind
-	Key          string // dict key within Percentiles/Probabilities; unused for KindAccumulationInches
+	Key          string // names this band's slot in the stored array, empty for KindAccumulationInches
 	ToInches     float32
 }
 
@@ -29,7 +29,6 @@ const (
 	inchesPerMetre = 39.370079
 )
 
-// Convert a raw grib2 value into the unit it's stored in
 func (b Band) convert(raw float32) float32 {
 	switch b.Kind {
 	case KindAccumulationInches, KindPercentileInches:
@@ -87,7 +86,7 @@ var wpcVariables = []wpcVariable{
 
 var percentiles = []string{"05", "10", "25", "50", "75", "90", "95"}
 
-// Build the full list of bands (accumulation, percentile, probability) across all variables
+// Order here is the stored array layout, which interop reads back positionally
 func BandList() []Band {
 	var bands []Band
 	for _, v := range wpcVariables {
@@ -118,7 +117,6 @@ func BandList() []Band {
 	return bands
 }
 
-// Strip a leading "0" from a percentile string (e.g. "05" -> "5")
 func trimLeadingZero(pct string) string {
 	if pct[0] == '0' {
 		return pct[1:]
@@ -126,81 +124,79 @@ func trimLeadingZero(pct string) string {
 	return pct
 }
 
-// Convert a WPC threshold fragment like "0p01" into a JSON key like "0.01"
+// WPC writes the decimal point as "p", so "0p01" is the 0.01 inch threshold
 func thresholdKey(th string) string {
 	return strings.Replace(th, "p", ".", 1)
 }
 
-// Build the grib2 filename WPC publishes for a band at a given cycle/fhour
 func bandFilename(b Band, cycle, fhour string) string {
 	return fmt.Sprintf("ndfd_co_%s_%sf%s.grib2", b.FileFragment, cycle, fhour)
 }
 
-// An NDFD gridpoint (WFO, X, Y) paired with the WPC grid cell (Col, Row) it falls in
+// An NDFD gridpoint paired with the flat offset of the WPC grid cell it falls in
 type Gridpoint struct {
-	WFO      string
-	X, Y     int
-	Col, Row int
+	Cell int32 // (row-1)*gridNX + (col-1)
+	X, Y int16 // NDFD grid tops out at 613 x 478
+	WFO  uint8 // index into the WFO table LoadGridpoints returns, 123 today
 }
 
-// VariableRow holds one variable's decoded values at a gridpoint; its json tags double as the jsonb column's keys
-type VariableRow struct {
-	// float32 rather than float64 to match wgrib2's -ieee single-precision output
-	Accumulation  *float32           `json:"accumulation,omitempty"`
-	Percentiles   map[string]float32 `json:"percentiles,omitempty"`
-	Probabilities map[string]float32 `json:"probabilities,omitempty"`
-}
-
-// IsEmpty reports whether nothing was decoded for this variable at this gridpoint
-func (r VariableRow) IsEmpty() bool {
-	return r.Accumulation == nil && len(r.Percentiles) == 0 && len(r.Probabilities) == 0
-}
-
-// missingValue marks a (gridpoint, band) never decoded; real values are always finite so NaN can't collide
+// Marks a (gridpoint, band) never decoded, and real values are always finite so NaN never collides
 var missingValue = float32(math.NaN())
 
-// VariableMatrix holds one decoded value per (gridpoint, band) for a single variable's bands, as a flat float32 array
+// One decoded value per (gridpoint, period, band) for a single variable, flat
 type VariableMatrix struct {
-	bands  []Band
-	values []float32 // values[pointIdx*len(bands)+bandIdx]; row() below builds the per-point maps only transiently, one at a time
+	bands   []Band
+	periods int
+	values  []float32 // values[pointIdx*width + periodIdx*len(bands) + bandIdx]
 }
 
-// newVariableMatrix allocates a matrix for n gridpoints across one variable's bands, pre-filled with missingValue
-func newVariableMatrix(bands []Band, n int) *VariableMatrix {
-	values := make([]float32, n*len(bands))
+// Every period's bands laid out end to end, which is one gridpoint's stored array
+func (m *VariableMatrix) width() int { return m.periods * len(m.bands) }
+
+func (m *VariableMatrix) set(pointIdx, periodIdx, bandIdx int, v float32) {
+	m.values[pointIdx*m.width()+periodIdx*len(m.bands)+bandIdx] = v
+}
+
+// One gridpoint's stored array, or nil when this variable has nothing to say here
+func (m *VariableMatrix) point(pointIdx int) []float32 {
+	row := m.values[pointIdx*m.width() : (pointIdx+1)*m.width()]
+	for _, v := range row {
+		if v != 0 && !math.IsNaN(float64(v)) {
+			return row
+		}
+	}
+	return nil
+}
+
+// Size one reusable backing array for the widest variable, so a run makes a single large allocation
+func newMatrixBuffer(bands []Band, periods, points int) []float32 {
+	widest := 0
+	for _, group := range groupByVariable(bands) {
+		widest = max(widest, len(group))
+	}
+	// ~390MB at full scale, which is most of what a run holds live
+	return make([]float32, points*periods*widest)
+}
+
+// Re-point the shared buffer at one variable's bands and clear it
+func matrixFor(buf []float32, bands []Band, periods, points int) *VariableMatrix {
+	values := buf[:points*periods*len(bands)]
 	for i := range values {
 		values[i] = missingValue
 	}
-	return &VariableMatrix{bands: bands, values: values}
+	return &VariableMatrix{bands: bands, periods: periods, values: values}
 }
 
-func (m *VariableMatrix) set(pointIdx, bandIdx int, v float32) {
-	m.values[pointIdx*len(m.bands)+bandIdx] = v
-}
-
-// row reconstructs one gridpoint's VariableRow, transiently, from the flat matrix
-func (m *VariableMatrix) row(pointIdx int) VariableRow {
-	var row VariableRow
-	base := pointIdx * len(m.bands)
-	for bandIdx, b := range m.bands {
-		v := m.values[base+bandIdx]
-		if math.IsNaN(float64(v)) {
-			continue
+// BandList emits each variable's bands contiguously, so a group is just a run
+func groupByVariable(bands []Band) [][]Band {
+	var groups [][]Band
+	for i := 0; i < len(bands); {
+		j := i + 1
+		for j < len(bands) && bands[j].Variable == bands[i].Variable {
+			j++
 		}
-		switch b.Kind {
-		case KindAccumulationInches:
-			row.Accumulation = &v
-		case KindPercentileInches:
-			if row.Percentiles == nil {
-				row.Percentiles = make(map[string]float32)
-			}
-			row.Percentiles[b.Key] = v
-		case KindProbabilityPercent:
-			if row.Probabilities == nil {
-				row.Probabilities = make(map[string]float32)
-			}
-			row.Probabilities[b.Key] = v
-		}
+		groups = append(groups, bands[i:j])
+		i = j
 	}
-	return row
+	return groups
 }

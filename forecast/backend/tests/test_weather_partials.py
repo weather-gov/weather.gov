@@ -489,7 +489,6 @@ class TestWeatherPartials(TestCase):
             {
                 "this key": "is preserved",
                 "alerts": "a list of alerts",
-                "first": False,
             },
         )
 

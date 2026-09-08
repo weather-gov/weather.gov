@@ -235,7 +235,7 @@ def hourly_table(**kwargs):
     """Render an hourly details table."""
     day = kwargs["day"]
 
-    return {**day, "alerts": day["alerts"]["items"], "first": kwargs.get("first") or False}
+    return {**day, "alerts": day["alerts"]["items"]}
 
 
 @register.inclusion_tag("weather/partials/hourly-charts.html")
