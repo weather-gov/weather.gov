@@ -466,6 +466,11 @@ go-build-alerts:
 go-build-gridcache:
     docker compose run --rm tasks-dev go build -o /tasks/bin/gridcache /tasks/cmd/gridcache/main.go
 
+# Compile the WPC program
+[group("golang")]
+go-build-wpcprob:
+    docker compose run --rm tasks-dev go build -o /tasks/bin/wpcprob /tasks/cmd/wpcprob/main.go
+
 # Compile all programs
 [group("golang")]
 go-build-check:

@@ -19,7 +19,6 @@ ARG BASE_TAG=24.04-20260728
 
 # NB: ECR golden images are not ready. use stock ubuntu as a workaround.
 FROM ubuntu:24.04 AS geo-base
-
 ## FROM ${BASE_REGISTRY}/golden-base-ubuntu:${BASE_TAG} AS geo-base
 
 # per documentation for the golden image builder: "You are uid 1001. Add USER 0
