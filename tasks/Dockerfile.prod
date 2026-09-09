@@ -1,7 +1,13 @@
 # syntax=docker/dockerfile:1
 #
 # Production image for the tasks app, parameterized on TASK.
+
+ARG BASE_REGISTRY
+ARG BASE_TAG=24.04-20260728
+
+# NB: ECR golden images are not ready. use stock ubuntu as a workaround.
 FROM ubuntu:24.04 AS builder
+## FROM ${BASE_REGISTRY}/golden-base-ubuntu:${BASE_TAG} AS builder
 
 ARG TASK
 
@@ -20,6 +26,7 @@ COPY . .
 RUN CGO_ENABLED=0 /usr/local/go/bin/go build -o task "cmd/${TASK}/main.go"
 
 FROM ubuntu:24.04 AS runtime
+## FROM ${BASE_REGISTRY}/golden-base-ubuntu:${BASE_TAG} AS runtime
 
 COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
 COPY --from=builder --chown=1001:1001 tasks/task /usr/local/bin/task

@@ -1,10 +1,20 @@
-# Note: this Dockerfile is for building wgrib2 from source and making a static binary
+# syntax=docker/dockerfile:1
+# check=skip=FromPlatformFlagConstDisallowed
+#
+# Production image for the wpcprob task, which requires wgrib2.
 
+ARG BASE_REGISTRY
+ARG BASE_TAG=24.04-20260728
 ARG G2C_VERSION=v2.3.0
 ARG WGRIB2_VERSION=v3.8.0
 
-FROM debian:bookworm-slim AS builder
+# NB: ECR golden images are not ready. use stock ubuntu as a workaround.
+# hadolint ignore=DL3029
+FROM --platform=linux/amd64 ubuntu:24.04 AS builder
+## FROM ${BASE_REGISTRY}/golden-base-ubuntu:${BASE_TAG} AS builder
 
+# step 1: build the wgrib2 binary image that we depend on for wpcprob. We need to
+# pull in the relevant libraries and build https://github.com/NOAA-EMC/wgrib2
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
 # hadolint ignore=DL3008
@@ -63,5 +73,34 @@ RUN sed -i 's/g2c::g2c)/g2c::g2c_static)/g' /src/wgrib2/wgrib2/CMakeLists.txt &&
     # check for non-zero exit if not statically created
     ! ldd /opt/wgrib2/bin/wgrib2 >/dev/null 2>&1
 
-FROM scratch AS artifact
-COPY --from=builder /opt/wgrib2/bin/wgrib2 /wgrib2
+# step 2: set up a separate builder to compile the wpcprob golang code
+# hadolint ignore=DL3029
+FROM --platform=linux/amd64 ubuntu:24.04 AS go-builder
+## FROM ${BASE_REGISTRY}/golden-base-ubuntu:${BASE_TAG} AS go-builder
+
+# hadolint ignore=DL3008
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends software-properties-common curl ca-certificates && \
+    rm -rf /var/lib/apt/lists/*
+
+RUN curl -fsSL https://go.dev/dl/go1.26.5.linux-amd64.tar.gz -o golang.tar.gz && \
+    tar -C /usr/local -xzf golang.tar.gz && \
+    rm golang.tar.gz
+
+WORKDIR /tasks
+COPY . .
+
+RUN CGO_ENABLED=0 /usr/local/go/bin/go build -o wpcprob "cmd/wpcprob/main.go"
+
+# step 3: finally, copy over the binaries to a clean image
+# hadolint ignore=DL3029
+FROM --platform=linux/amd64 ubuntu:24.04 AS runtime
+## FROM ${BASE_REGISTRY}/golden-base-ubuntu:${BASE_TAG} AS runtime
+
+COPY --from=go-builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
+COPY --from=go-builder --chown=1001:1001 tasks/wpcprob /usr/local/bin/wpcprob
+COPY --from=builder /opt/wgrib2/bin/wgrib2 /usr/local/bin/wgrib2
+
+USER 1001
+
+CMD ["/usr/local/bin/wpcprob"]

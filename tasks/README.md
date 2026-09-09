@@ -70,5 +70,5 @@ Runs every 30 minutes. Aggregates NDFD gridpoint hit logs (`weathergov_ndfd_grid
 #### wgrib2 ####
 `wgrib2` isn't packaged for Debian/Ubuntu, so we build it from source
 
-- `Dockerfile.wgrib2` builds [NCEPLIBS-g2c](https://github.com/NOAA-EMC/NCEPLIBS-g2c) and [wgrib2](https://github.com/NOAA-EMC/wgrib2) into a static binary with JPEG2000 support
-- The binary has no runtime library dependencies, so it also works outside Docker
+- `Dockerfile.wpcprob.prod` builds [NCEPLIBS-g2c](https://github.com/NOAA-EMC/NCEPLIBS-g2c) and [wgrib2](https://github.com/NOAA-EMC/wgrib2) into a static binary with JPEG2000 support
+- The binary has no runtime library dependencies, so it also works outside Docker (assuming an x86 architecture)
