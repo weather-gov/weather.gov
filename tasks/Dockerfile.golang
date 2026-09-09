@@ -1,0 +1,9 @@
+# syntax=docker/dockerfile:1
+#
+# Dev image to run the tasks app
+FROM golang:1.26.5-bookworm
+
+WORKDIR "$GOPATH"
+
+# Install the Delve debugger for Go
+RUN go install github.com/go-delve/delve/cmd/dlv@latest

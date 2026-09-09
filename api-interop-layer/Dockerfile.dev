@@ -3,8 +3,8 @@ FROM node:24
 RUN mkdir /app
 WORKDIR /app
 
-ADD ./package.json .
-ADD ./package-lock.json .
+COPY ./package.json .
+COPY ./package-lock.json .
 
 RUN npm ci
 

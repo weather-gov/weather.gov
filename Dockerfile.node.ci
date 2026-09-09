@@ -1,11 +1,15 @@
+# syntax=docker/dockerfile:1
+#
+# generic node docker image so we can run anything node-related
 FROM node:24
 
 RUN mkdir -p /app /app/api-interop-layer /app/api-proxy /app/spatial-data
 
 WORKDIR /app
 
-RUN apt update \
-  && apt install -y \
+# hadolint ignore=DL3008
+RUN apt-get update && \
+  apt-get install -y --no-install-recommends \
   libgtk2.0-0 \
   libgtk-3-0 \
   libgbm-dev \
@@ -18,17 +22,20 @@ RUN apt update \
   xvfb \
   && rm -rf /var/lib/apt/lists/*
 
-# set up this docker image so we can run anything node-related in our app
-ADD ./package.json .
-ADD ./package-lock.json .
-ADD ./api-interop-layer/package.json /app/api-interop-layer/
-ADD ./api-interop-layer/package-lock.json /app/api-interop-layer/
-ADD ./api-proxy/package.json /app/api-proxy/
-ADD ./api-proxy/package-lock.json /app/api-proxy/
-ADD ./spatial-data/package.json /app/spatial-data/
-ADD ./spatial-data/package-lock.json /app/spatial-data/
+COPY ./package.json .
+COPY ./package-lock.json .
+COPY ./api-interop-layer/package.json /app/api-interop-layer/
+COPY ./api-interop-layer/package-lock.json /app/api-interop-layer/
+COPY ./api-proxy/package.json /app/api-proxy/
+COPY ./api-proxy/package-lock.json /app/api-proxy/
+COPY ./spatial-data/package.json /app/spatial-data/
+COPY ./spatial-data/package-lock.json /app/spatial-data/
 
-RUN cd /app && npm ci --dev && \
-  cd /app/spatial-data && npm ci --dev && \
-  cd /app/api-interop-layer && npm ci --dev && \
-  cd /app/api-proxy && npm ci --dev
+WORKDIR /app
+RUN npm ci --dev
+WORKDIR /app/spatial-data
+RUN npm ci --dev
+WORKDIR /app/api-interop-layer
+RUN npm ci --dev
+WORKDIR /app/api-proxy
+RUN npm ci --dev

@@ -43,7 +43,7 @@ include:
     inputs:
       stage: gather
       job_name: gather-playwright-dependencies
-      dockerfile: Dockerfile.playwright.ci
+      dockerfile: Dockerfile.playwright
       context: ./
       image: $CI_REGISTRY_IMAGE/playwright
       needs: ["compute-dependency-tags"]
