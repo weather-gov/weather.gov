@@ -202,7 +202,7 @@ services:
 
   uswds:
     build:
-      context: ./
+      context: ./forecast
       dockerfile: Dockerfile.uswds.dev
     volumes:
       - ./forecast/frontend/:/app
@@ -225,8 +225,7 @@ services:
 
   playwright:
     build:
-      dockerfile: Dockerfile.node
-      target: playwright
+      dockerfile: Dockerfile.playwright
     networks:
       - weather.gov
     depends_on:
@@ -247,8 +246,7 @@ services:
   node:
     build:
       context: .
-      dockerfile: Dockerfile.node
-      target: node
+      dockerfile: Dockerfile.node.ci
     networks:
       - weather.gov
     volumes:
@@ -309,6 +307,7 @@ services:
   tasks-dev:
     platform: linux/amd64
     build:
+      context: tasks/
       dockerfile: Dockerfile.golang
     working_dir: /tasks
     volumes:

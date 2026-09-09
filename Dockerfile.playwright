@@ -1,11 +1,14 @@
+# syntax=docker/dockerfile:1
+#
+# playwright.
 FROM mcr.microsoft.com/playwright:v1.59.1-noble
 
 RUN mkdir -p /app
 
 WORKDIR /app
 
-ADD ./package.json .
-ADD ./package-lock.json .
+COPY ./package.json .
+COPY ./package-lock.json .
 
 RUN npm ci --dev && \
   npx playwright install msedge && \

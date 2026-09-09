@@ -226,7 +226,7 @@ compute-dependency-tags:
     - echo "$CI_REGISTRY_PASSWORD" | docker login -u "$CI_REGISTRY_USER" --password-stdin "$CI_REGISTRY"
     - JS_DEPS="Dockerfile.node.ci package-lock.json api-interop-layer/package-lock.json api-proxy/package-lock.json spatial-data/package-lock.json"
     - PY_DEPS="forecast/Dockerfile.ci forecast/requirements.dev.txt"
-    - PW_DEPS="Dockerfile.playwright.ci package-lock.json"
+    - PW_DEPS="Dockerfile.playwright package-lock.json"
     - JS_TAG="deps-$(cat $JS_DEPS | sha256sum | cut -c1-12)"
     - PY_TAG="deps-$(cat $PY_DEPS | sha256sum | cut -c1-12)"
     - PW_TAG="deps-$(cat $PW_DEPS | sha256sum | cut -c1-12)"

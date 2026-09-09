@@ -1,0 +1,4 @@
+# syntax=docker/dockerfile:1
+#
+# for documentation purposes.
+FROM plantuml/plantuml-server:jetty
