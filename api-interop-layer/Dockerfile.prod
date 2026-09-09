@@ -1,0 +1,53 @@
+# syntax=docker/dockerfile:1
+# check=skip=FromPlatformFlagConstDisallowed
+#
+# Production image for the interop layer.
+
+ARG BASE_REGISTRY
+ARG BASE_TAG=24.04-20260728
+
+# NB: ECR golden images are not ready. use stock ubuntu as a workaround.
+# hadolint ignore=DL3029
+FROM --platform=linux/amd64 ubuntu:24.04 AS builder
+## FROM ${BASE_REGISTRY}/golden-base-ubuntu:${BASE_TAG} AS geo-base
+
+# per documentation for the golden image builder: "You are uid 1001. Add USER 0
+# before the install and USER 1001 after."
+# hadolint ignore=DL3002
+USER 0
+
+# we do not pin dependencies.
+# hadolint ignore=DL3008
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends ca-certificates curl xz-utils && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
+# the stock node v18.19.1 on ubuntu is too old; we require v24 or newer
+ARG NODE_VERSION=24.20.0
+RUN curl -fsSL https://nodejs.org/dist/v${NODE_VERSION}/node-v${NODE_VERSION}-linux-x64.tar.xz -o node.tar.xz && \
+    tar -C /usr/local --strip-components=1 -xJf node.tar.xz && \
+    rm node.tar.xz
+
+WORKDIR /build
+COPY ./package.json .
+COPY ./package-lock.json .
+RUN npm ci
+
+COPY . .
+
+# the actual production image only has nodejs/npm and code.
+# hadolint ignore=DL3029
+FROM --platform=linux/amd64 ubuntu:24.04 AS runtime
+## FROM ${BASE_REGISTRY}/golden-base-ubuntu:${BASE_TAG} AS geo-base
+
+# /app is owned by 1001:1001 as per documentation, so we have to chown.
+WORKDIR /app
+COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
+COPY --from=builder --chown=1001:1001 /build /app
+COPY --from=builder /usr/local /usr/local
+
+USER 1001
+
+EXPOSE 8080
+CMD ["node", "--experimental-loader", "newrelic/esm-loader.mjs", "-r", "newrelic", "main.js"]
