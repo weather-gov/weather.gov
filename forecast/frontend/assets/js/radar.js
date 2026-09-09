@@ -87,7 +87,7 @@ const updateRadarTimestamps = async (container) => {
 
       const label = document.getElementById("wx-radar-timestamp-label");
       if (label) {
-        label.innerText = `${startFormatter.format(start)} - ${endFormatter.format(end)}`;
+        label.innerText = `${startFormatter.format(start)} – ${endFormatter.format(end)}`;
       }
     }
   } catch (e) {
