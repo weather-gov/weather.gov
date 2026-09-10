@@ -11,6 +11,12 @@ include:
       git_strategy: fetch
   - component: ${CI_SERVER_FQDN}/NWS/Systems/NCO/NEC/shared-catalogs/security/container_scanning@main
     inputs:
+      job_name: scan-api-interop-layer-production-image
+      image: $CI_REGISTRY_IMAGE/api-interop-layer-production:$CI_COMMIT_SHORT_SHA
+      dockerfile: api-interop-layer/Dockerfile.prod
+      git_strategy: fetch
+  - component: ${CI_SERVER_FQDN}/NWS/Systems/NCO/NEC/shared-catalogs/security/container_scanning@main
+    inputs:
       job_name: scan-tasks-ghwo-production-image
       image: $CI_REGISTRY_IMAGE/tasks-ghwo-production:$CI_COMMIT_SHORT_SHA
       dockerfile: tasks/Dockerfile.prod
@@ -27,11 +33,24 @@ include:
       image: $CI_REGISTRY_IMAGE/tasks-gridcache-production:$CI_COMMIT_SHORT_SHA
       dockerfile: tasks/Dockerfile.prod
       git_strategy: fetch
+  - component: ${CI_SERVER_FQDN}/NWS/Systems/NCO/NEC/shared-catalogs/security/container_scanning@main
+    inputs:
+      job_name: scan-tasks-wpcprob-production-image
+      image: $CI_REGISTRY_IMAGE/tasks-wpcprob-production:$CI_COMMIT_SHORT_SHA
+      dockerfile: tasks/Dockerfile.wpcprob.prod
+      git_strategy: fetch
 
 # override needs so that scanning runs on targeted containers
 scan-django-production-image:
   needs:
     - job: push-django-production-image
+      optional: true
+  rules:
+    - !reference [.on_mr_forecast_changes]
+    - !reference [.on_main]
+scan-api-interop-layer-production-image:
+  needs:
+    - job: push-api-interop-layer-production-image
       optional: true
   rules:
     - !reference [.on_mr_forecast_changes]
@@ -53,6 +72,13 @@ scan-tasks-alerts-production-image:
 scan-tasks-gridcache-production-image:
   needs:
     - job: push-tasks-gridcache-production-image
+      optional: true
+  rules:
+    - !reference [.on_mr_tasks_changes]
+    - !reference [.on_main]
+scan-tasks-wpcprob-production-image:
+  needs:
+    - job: push-tasks-wpcprob-production-image
       optional: true
   rules:
     - !reference [.on_mr_tasks_changes]

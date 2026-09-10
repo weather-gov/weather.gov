@@ -45,7 +45,11 @@ FROM --platform=linux/amd64 ubuntu:24.04 AS runtime
 WORKDIR /app
 COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
 COPY --from=builder --chown=1001:1001 /build /app
-COPY --from=builder /usr/local /usr/local
+# manually copy over because kaniko prevents /usr/local/sbin
+COPY --from=builder /usr/local/bin /usr/local/bin
+COPY --from=builder /usr/local/lib /usr/local/lib
+COPY --from=builder /usr/local/include /usr/local/include
+COPY --from=builder /usr/local/share /usr/local/share
 
 USER 1001
 
