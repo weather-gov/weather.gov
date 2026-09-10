@@ -69,6 +69,15 @@ include:
   - component: ${CI_SERVER_FQDN}/NWS/Systems/NCO/NEC/shared-catalogs/container/build@main
     inputs:
       stage: gather
+      job_name: push-api-interop-layer-production-image
+      dockerfile: Dockerfile.prod
+      context: api-interop-layer/
+      image: $CI_REGISTRY_IMAGE/api-interop-layer-production
+      tag: $CI_COMMIT_SHORT_SHA
+      opts: "--cache=true --cache-copy-layers=true --cache-repo=$CI_REGISTRY_IMAGE/cache --cache-ttl=168h"
+  - component: ${CI_SERVER_FQDN}/NWS/Systems/NCO/NEC/shared-catalogs/container/build@main
+    inputs:
+      stage: gather
       job_name: push-tasks-ghwo-production-image
       dockerfile: Dockerfile.prod
       context: tasks/
@@ -93,6 +102,16 @@ include:
       image: $CI_REGISTRY_IMAGE/tasks-gridcache-production
       tag: $CI_COMMIT_SHORT_SHA
       opts: "--build-arg TASK=gridcache --cache=true --cache-copy-layers=true --cache-repo=$CI_REGISTRY_IMAGE/cache --cache-ttl=168h"
+  - component: ${CI_SERVER_FQDN}/NWS/Systems/NCO/NEC/shared-catalogs/container/build@main
+    inputs:
+      stage: gather
+      job_name: push-tasks-wpcprob-production-image
+      dockerfile: Dockerfile.wpcprob.prod
+      context: tasks/
+      image: $CI_REGISTRY_IMAGE/tasks-wpcprob-production
+      tag: $CI_COMMIT_SHORT_SHA
+      opts: "--build-arg TASK=gridcache --cache=true --cache-copy-layers=true --cache-repo=$CI_REGISTRY_IMAGE/cache --cache-ttl=168h"
+  # ECR
   - component: ${CI_SERVER_FQDN}/NWS/Systems/NCO/NEC/shared-catalogs/container/release@main
     inputs:
       job_name: push-django-image-to-ecr
@@ -101,6 +120,17 @@ include:
       source_tag: $CI_COMMIT_SHORT_SHA
       release_registry: $NEC_ECR_URL
       release_image: $NEC_ECR_URL/weathergov-dev-django
+      release_tags: $CI_COMMIT_SHORT_SHA
+      allow_failure: "false"
+  - component: ${CI_SERVER_FQDN}/NWS/Systems/NCO/NEC/shared-catalogs/container/release@main
+    inputs:
+      job_name: push-api-interop-layer-image-to-ecr
+      stage: deploy
+      source_image: $CI_REGISTRY_IMAGE/api-interop-layer-production
+      source_tag: $CI_COMMIT_SHORT_SHA
+      release_registry: $NEC_ECR_URL
+      # intentionally different
+      release_image: $NEC_ECR_URL/weathergov-dev-interop
       release_tags: $CI_COMMIT_SHORT_SHA
       allow_failure: "false"
   - component: ${CI_SERVER_FQDN}/NWS/Systems/NCO/NEC/shared-catalogs/container/release@main
@@ -133,6 +163,16 @@ include:
       release_image: $NEC_ECR_URL/weathergov-dev-tasks-gridcache
       release_tags: $CI_COMMIT_SHORT_SHA
       allow_failure: "false"
+  - component: ${CI_SERVER_FQDN}/NWS/Systems/NCO/NEC/shared-catalogs/container/release@main
+    inputs:
+      job_name: push-tasks-wpcprob-image-to-ecr
+      stage: deploy
+      source_image: $CI_REGISTRY_IMAGE/tasks-wpcprob-production
+      source_tag: $CI_COMMIT_SHORT_SHA
+      release_registry: $NEC_ECR_URL
+      release_image: $NEC_ECR_URL/weathergov-dev-tasks-wpcprob
+      release_tags: $CI_COMMIT_SHORT_SHA
+      allow_failure: "false"
 
 # override rules so these jobs are in the pipeline on each push. NB:
 # `before_script` determines whether they actually build images.
@@ -153,6 +193,11 @@ push-django-production-image:
     - !reference [.on_mr_forecast_changes]
     - !reference [.on_main]
     - !reference [.on_web]
+push-api-interop-layer-production-image:
+  rules:
+    - !reference [.on_mr_forecast_changes]
+    - !reference [.on_main]
+    - !reference [.on_web]
 push-tasks-ghwo-production-image:
   rules:
     - !reference [.on_mr_tasks_changes]
@@ -164,6 +209,11 @@ push-tasks-alerts-production-image:
     - !reference [.on_main]
     - !reference [.on_web]
 push-tasks-gridcache-production-image:
+  rules:
+    - !reference [.on_mr_tasks_changes]
+    - !reference [.on_main]
+    - !reference [.on_web]
+push-tasks-wpcprob-production-image:
   rules:
     - !reference [.on_mr_tasks_changes]
     - !reference [.on_main]
@@ -181,6 +231,10 @@ push-django-image-to-ecr:
   <<: *nec_ecr_push
   rules:
     - !reference [.on_manual_nec_deploy]
+push-api-interop-layer-image-to-ecr:
+  <<: *nec_ecr_push
+  rules:
+    - !reference [.on_manual_nec_deploy]
 push-tasks-ghwo-image-to-ecr:
   <<: *nec_ecr_push
   rules:
@@ -190,6 +244,10 @@ push-tasks-alerts-image-to-ecr:
   rules:
     - !reference [.on_manual_nec_deploy]
 push-tasks-gridcache-image-to-ecr:
+  <<: *nec_ecr_push
+  rules:
+    - !reference [.on_manual_nec_deploy]
+push-tasks-wpcprob-image-to-ecr:
   <<: *nec_ecr_push
   rules:
     - !reference [.on_manual_nec_deploy]
