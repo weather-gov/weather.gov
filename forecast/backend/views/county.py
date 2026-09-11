@@ -1,3 +1,4 @@
+import json
 import logging
 from datetime import datetime
 from zoneinfo import ZoneInfo
@@ -5,7 +6,6 @@ from zoneinfo import ZoneInfo
 from django.db.models import Prefetch
 from django.shortcuts import get_object_or_404, render
 from django.views.decorators.cache import cache_control, never_cache
-from shapely import MultiPolygon, Polygon
 
 from backend import interop
 from backend.models import WFO
@@ -13,11 +13,15 @@ from backend.util import (
     get_briefings_from_county_data,
     get_weather_stories_from_county_data,
     process_county_alerts,
+    sort_multipolygon_by_area,
 )
 from backend.util.county import risk_overview_timestamps_to_dates
 from spatial.models import WeatherCounties, WeatherStates
 
 logger = logging.getLogger(__name__)
+
+# Above this many bytes of inline geometry the map pulls shapes from the pbf endpoints
+GEOMETRY_BINARY_THRESHOLD = 30000
 
 
 @cache_control(public=True, max_age=3600)
@@ -104,25 +108,20 @@ def county_overview(request, countyfips=None, county_slug=None):  # noqa: C901
         day["end"] = datetime.fromisoformat(day["end"]).astimezone(tz=localtz)
         day["day"] = day["start"].strftime("%A")
 
-    # Format GeoJSON, sorting polygons within a Mutlipolygon by size (desc). Ticket #207
-    for i, alert in enumerate(county_data["alerts"]["items"]):
-        # Continue if geometry is missing OR if the type is not "MultiPolygon"
-        if not alert.get("geometry") or alert["geometry"].get("type") != "MultiPolygon":
-            continue
+    geometry_bytes = len(json.dumps(county_data["county"].get("shape") or {}))
+    for alert in county_data["alerts"]["items"]:
+        geometry_bytes += len(json.dumps(alert.get("geometry") or {}))
 
-        polygons = []
+    is_binary = geometry_bytes > GEOMETRY_BINARY_THRESHOLD
 
-        # Loop through nested polygons and format for shapely
-        for polygon in alert["geometry"]["coordinates"]:
-            shapely_polygon = Polygon(shell=polygon[0], holes=polygon[1:])
-            polygons.append(shapely_polygon)
-
-        # Sort and output
-        sorted_polygons = sorted(polygons, key=lambda a: a.area, reverse=True)
-        mu_polygon_sorted = MultiPolygon(polygons=sorted_polygons).__geo_interface__
-
-        # Overwrite current alert coordinates
-        county_data["alerts"]["items"][i]["geometry"] = mu_polygon_sorted
+    if is_binary:
+        county_data["county"].pop("shape", None)
+        for alert in county_data["alerts"]["items"]:
+            alert.pop("geometry", None)
+    else:
+        for alert in county_data["alerts"]["items"]:
+            if alert.get("geometry"):
+                alert["geometry"] = sort_multipolygon_by_area(alert["geometry"])
 
     # Fixup risk overview timestamps to local
     risk_overview_timestamps_to_dates(county_data.get("riskOverview", False), localtz)
@@ -151,6 +150,7 @@ def county_overview(request, countyfips=None, county_slug=None):  # noqa: C901
         "weather/county/overview.html",
         {
             "countyfips": county.countyfips,
+            "is_binary": is_binary,
             "alerts_error": alerts_metadata.get("error", False),
             "title_trans_args": {
                 "county": county.countyname,

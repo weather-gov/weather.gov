@@ -43,6 +43,7 @@
 {% block page_end_js %}
   <script type="module" src="{% static 'js/state/alerts.html.js' %}"></script>
   {% include "weather/scripts/leaflet.html" %}
+  {% include "weather/scripts/geobuf.html" %}
 {% endblock %}
 {% block page_content %}
   <div class="height-full display-flex flex-column">

@@ -66,6 +66,8 @@ urlpatterns = [
     path("wx/ghwo/state/<str:state_code>/", partials.wx_ghwo_all_counties_for_state, name="wx_ghwo_state_all"),
     path("wx/state/<statecode:state>/", partials.wx_state_boundaries_pbf, name="wx_state_boundary"),
     path("wx/state/<statecode:state>/alerts", partials.wx_state_alerts_pbf, name="wx_state_boundary"),
+    path("wx/county/<fips:countyfips>/", partials.wx_county_boundary_pbf, name="wx_county_boundary"),
+    path("wx/county/<fips:countyfips>/alerts", partials.wx_county_alerts_pbf, name="wx_county_alerts"),
     # Wagtail
     path("cms/logout/", cms_logout),
     path("cms/", include(wagtailadmin_urls)),

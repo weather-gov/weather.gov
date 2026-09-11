@@ -9,6 +9,7 @@ from django.shortcuts import get_object_or_404
 from django.utils.safestring import mark_safe
 from django.utils.translation import gettext as _
 from html_sanitizer import Sanitizer
+from shapely import MultiPolygon, Polygon
 
 from backend.models import WFO, HazardousWeatherOutlookMetadata
 from spatial.models import WeatherCounties, WeatherStates
@@ -423,6 +424,17 @@ def process_county_alerts(alert_items: list) -> list:
             alert["display_title"] = format_string % {"event": event_type, "day": day_translated}
 
     return sorted_items
+
+
+def sort_multipolygon_by_area(geometry: dict) -> dict:
+    """Return a GeoJSON geometry with its polygons ordered largest first."""
+    if geometry.get("type") != "MultiPolygon":
+        return geometry
+
+    polygons = [Polygon(shell=ring[0], holes=ring[1:]) for ring in geometry["coordinates"]]
+    polygons.sort(key=lambda polygon: polygon.area, reverse=True)
+
+    return MultiPolygon(polygons=polygons).__geo_interface__
 
 
 def process_state_alerts(alert_geojsons: list, state_timezone: str = "UTC") -> list:

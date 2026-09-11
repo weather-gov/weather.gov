@@ -8,6 +8,7 @@ from django.urls import reverse
 import backend.models as backend
 import spatial.models as spatial
 from backend.util import disable_logging_for_quieter_tests
+from backend.views.county import GEOMETRY_BINARY_THRESHOLD
 
 
 class TestCountyViews(TestCase):
@@ -514,5 +515,60 @@ class TestCountyViews(TestCase):
         self.assertFalse(response.context["alerts_error"])
         # Verify the non-critical-component-error partial is rendered for risk overview
         error_count = response.content.decode().count("non-critical-component-error")
-        # The count includes one hidden (display-none) component (for the radar), so we expect 2 total
-        self.assertEqual(error_count, 2)
+        # The count includes two hidden (display-none) components (the radar and the alert map), so we expect 3 total
+        self.assertEqual(error_count, 3)
+
+    def _county_data_with_geometry(self, county_shape):
+        """Build county data with a shaped county and one alert whose polygons are smallest first."""
+        small = [[[0, 0], [1, 0], [1, 1], [0, 1], [0, 0]]]
+        big = [[[0, 0], [5, 0], [5, 5], [0, 5], [0, 0]]]
+        return {
+            "riskOverview": self.ghwo,
+            "alerts": {
+                "items": [
+                    {
+                        "id": "a1",
+                        "event": "Flood Warning",
+                        "metadata": {"level": {"text": "warning"}},
+                        "hash": "h1",
+                        "geometry": {"type": "MultiPolygon", "coordinates": [small, big]},
+                    },
+                ],
+            },
+            "alertDays": [],
+            "county": {"wfos": ["YND"], "shape": county_shape},
+            "weatherstories": [],
+            "briefings": [],
+            "slug": "anansi-gh",
+        }
+
+    @mock.patch("backend.interop.get_county_data")
+    def test_overview_keeps_small_geometry_inline(self, mock_get_county_data):
+        """Test that geometry under the threshold stays inline with alert polygons sorted largest first."""
+        mock_get_county_data.return_value = self._county_data_with_geometry(
+            {"type": "Polygon", "coordinates": [[[0, 0], [1, 0], [1, 1], [0, 1], [0, 0]]]}
+        )
+
+        response = self.client.get(reverse("county_overview", kwargs={"countyfips": "44444"}))
+        public = response.context["data"]["public"]
+
+        self.assertFalse(response.context["is_binary"])
+        self.assertIn("shape", public["county"])
+        outer_ring = public["alerts"]["items"][0]["geometry"]["coordinates"][0][0]
+        self.assertEqual(max(x for x, _ in outer_ring), 5)
+        self.assertNotContains(response, "geobuf@3.0.1")
+
+    @mock.patch("backend.interop.get_county_data")
+    def test_overview_strips_large_geometry(self, mock_get_county_data):
+        """Test that geometry over the threshold is stripped so the map pulls it from the pbf endpoints."""
+        mock_get_county_data.return_value = self._county_data_with_geometry(
+            {"type": "Polygon", "coordinates": [[[0.0, 0.0]] * GEOMETRY_BINARY_THRESHOLD]}
+        )
+
+        response = self.client.get(reverse("county_overview", kwargs={"countyfips": "44444"}))
+        public = response.context["data"]["public"]
+
+        self.assertTrue(response.context["is_binary"])
+        self.assertNotIn("shape", public["county"])
+        self.assertNotIn("geometry", public["alerts"]["items"][0])
+        self.assertContains(response, "geobuf@3.0.1")
