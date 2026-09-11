@@ -10,7 +10,11 @@
          role="alert"
          data-alert-level="{{ alert.metadata.level.text | lower }}">
       <div class="usa-alert__body wx-alert-li">
-        <a href="#alert_{{ alert.id }}">{{ alert.event | t }} {{ alert.duration }}</a>
+        {% if is_alerts_page %}
+          <a href="#alert_{{ alert.id }}">{{ alert.event | t }} {{ alert.duration }}</a>
+        {% else %}
+          <a href="{% url 'point_forecast_alerts'  lat=lat lon=lon %}#alert_{{ alert.id }}">{{ alert.event | t }} {{ alert.duration }}</a>
+        {% endif %}
       </div>
     </div>
   {% endfor %}

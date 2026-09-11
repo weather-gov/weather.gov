@@ -38,7 +38,7 @@
       </div>
       {% if alerts.items|length > 0 %}
         <div class="grid-col-12 tablet:grid-col-6 tablet:display-flex tablet:flex-justify-end margin-top-2 tablet:margin-top-0 daily-alert-summary">
-          {% summary_alert_link alerts=alerts %}
+          {% summary_alert_link alerts=alerts lat=lat lon=lon %}
         </div>
       {% endif %}
     </div>

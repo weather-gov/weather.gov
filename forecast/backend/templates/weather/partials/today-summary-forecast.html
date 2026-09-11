@@ -13,7 +13,7 @@
     <div class="flex-auto bg-white shadow-1 padding-y-2">
       <ol class="usa-list--unstyled">
         {# Attempt to render the period(s) associated with the current day #}
-        {% daily_summary_list_item day=forecast.days.0 %}
+        {% daily_summary_list_item day=forecast.days.0 lat=point.point.latitude lon=point.point.longitude %}
       </ol>
       {% if astronomical_data.isNull %}
         {# render the no data available content #}
