@@ -1,3 +1,4 @@
+from functools import wraps
 from http import HTTPStatus
 from zoneinfo import ZoneInfo
 
@@ -16,42 +17,51 @@ from ._helpers import get_redirect_for_afd_queries
 
 MAX_DEGREE_DECIMALS = 3
 
+def decimal_redirect(view_func):
+    """Wrap any point location view handler to limit lat/lon decimals."""
+    @wraps(view_func)
+    def _decimal_redirect(request, lat, lon):
+        # If there are more than 3 decimal places in the latitude, we redirect.
+        # We determine whether to redirect based on the number of decimal points
+        # given to us, rather than rounding and then comparing, to avoid any
+        # weird floating-point math goof-ups.
+        [whole, decimal] = f"{lat}".split(".")
+        decimal_redirect = decimal and len(decimal) > MAX_DEGREE_DECIMALS
+
+        # Or if there are more than 3 decimal places in the longitude
+        if not decimal_redirect:
+            [whole, decimal] = f"{lon}".split(".")
+            decimal_redirect = decimal and len(decimal) > MAX_DEGREE_DECIMALS
+
+        if decimal_redirect:
+            # Round them both to 3 decimal places and carry on
+            lat = float(f"{lat:.3f}")
+            lon = float(f"{lon:.3f}")
+            return redirect(f"/forecast/point/{lat}/{lon}/")
+
+        # If the latitude or longitude are invalid, bail with an out-of-bounds
+        # error. This will result in a 404 page.
+        if lat > 90 or lat < -90 or lon < -180 or lon > 180:  # noqa: PLR2004
+            raise Http404(
+                {
+                    "error": True,
+                    "status": 404,
+                    "reason": "out-of-bounds",
+                    "point": {
+                        "latitude": lat,
+                        "longitude": lon,
+                    },
+                },
+            )
+
+        return view_func(request, lat, lon)
+    return _decimal_redirect
+
 @cache_control(max_age=120, smax_age=120, public=True)
+@decimal_redirect
 def point_location(request, lat, lon):  # noqa: C901
     """Render the forecast for a given latitude & longitude."""
     allow_coastal = settings.MARINE_COASTAL_EXPERIMENTAL
-    # If there are more than 3 decimal places in the latitude, we redirect.
-    # We determine whether to redirect based on the number of decimal points
-    # given to us, rather than rounding and then comparing, to avoid any
-    # weird floating-point math goof-ups.
-    [whole, decimal] = f"{lat}".split(".")
-    decimal_redirect = decimal and len(decimal) > MAX_DEGREE_DECIMALS
-
-    # Or if there are more than 3 decimal places in the longitude
-    if not decimal_redirect:
-        [whole, decimal] = f"{lon}".split(".")
-        decimal_redirect = decimal and len(decimal) > MAX_DEGREE_DECIMALS
-
-    if decimal_redirect:
-        # Round them both to 3 decimal places and carry on
-        lat = float(f"{lat:.3f}")
-        lon = float(f"{lon:.3f}")
-        return redirect(f"/forecast/point/{lat}/{lon}/")
-
-    # If the latitude or longitude are invalid, bail with an out-of-bounds
-    # error. This will result in a 404 page.
-    if lat > 90 or lat < -90 or lon < -180 or lon > 180:  # noqa: PLR2004
-        raise Http404(
-            {
-                "error": True,
-                "status": 404,
-                "reason": "out-of-bounds",
-                "point": {
-                    "latitude": lat,
-                    "longitude": lon,
-                },
-            },
-        )
 
     point = interop.get_point_forecast(lat, lon)
     fullname = point.get("place", {}).get("fullName", None)
@@ -68,6 +78,125 @@ def point_location(request, lat, lon):  # noqa: C901
     if "grid" in point and "type" in point["grid"] and point["grid"]["type"] == "marine":
         if not (allow_coastal and point["grid"].get("marineType") == "coastal"):
             return render(request, "errors/404/marine-point.html", context, status=404)
+
+    # If there is not latitude and longitude data in the returned
+    # point dict, we need to add it from the url params
+    if "point" not in point:
+        point["point"] = {"latitude": lat, "longitude": lon}
+    elif "latitude" not in point["point"] or "longitude" not in point["point"]:
+        point["point"]["latitude"] = lat
+        point["point"]["longitude"] = lon
+
+    # If there are alerts for this point location, redirect to the alerts
+    # tab page
+    alert_items = point.get("alerts", {}).get("items", [])
+    if len(alert_items) > 0:
+        return redirect(
+            reverse(
+                "point_forecast_alerts",
+                kwargs={
+                    "lat": lat,
+                    "lon": lon,
+                }
+            )
+        )
+
+    # Otherwise, we redirect to the today tab
+    return redirect(
+        reverse(
+            "point_forecast_today",
+            kwargs={
+                "lat": lat,
+                "lon": lon,
+            }
+        )
+    )
+
+@cache_control(max_age=120, smax_age=120, public=True)
+@decimal_redirect
+def point_location_alerts(request, lat, lon):
+    """Render alerts at the specific points location."""
+    # For now, simply retrieve the whole point forecast from
+    # the interop.
+    # TODO: in the future, either fetch the point information
+    # from the db directly from Django, or create a smaller
+    # interop endpoint for retrieving only the information we need
+    # for this endpoint
+    allow_coastal = settings.MARINE_COASTAL_EXPERIMENTAL
+    point = interop.get_point_forecast(lat, lon)
+    fullname = point.get("place", {}).get("fullName", None)
+
+    # Check if there was an error retrieving alerts from the cache/background process
+    alerts_error = point.get("alerts", {}).get("metadata", {}).get("error", False)
+
+    context = {"point": point, "alerts_error": alerts_error, "title_trans_args": {"fullName": fullname}}
+
+    if "status" in point and point["status"] == HTTPStatus.NOT_FOUND:
+        raise Http404(point)
+
+    # If a marine point, check if coastal is allowed, else block all marine
+    if "grid" in point and "type" in point["grid"] and point["grid"]["type"] == "marine":
+        if not (allow_coastal and point["grid"].get("marineType") == "coastal"):
+            return render(request, "errors/404/marine-point.html", context, status=404)
+
+    # If there is not latitude and longitude data in the returned
+    # point dict, we need to add it from the url params
+    if "point" not in point:
+        point["point"] = {"latitude": lat, "longitude": lon}
+    elif "latitude" not in point["point"] or "longitude" not in point["point"]:
+        point["point"]["latitude"] = lat
+        point["point"]["longitude"] = lon
+
+    # If there are no alerts for this location, redirect to the today tab
+    alert_items = point.get("alerts", {}).get("items", [])
+    if len(alert_items) == 0:
+        return redirect(
+            reverse(
+                "point_forecast_today",
+                kwargs={
+                    "lat": lat,
+                    "lon": lon,
+                }
+            )
+        )
+
+    return render(
+        request,
+        "weather/point/alerts.html",
+        {
+            **context,
+        },
+    )
+
+@cache_control(max_age=120, smax_age=120, public=True)
+@decimal_redirect
+def point_location_today(request, lat, lon):
+    """Render the today tab page for the point location."""
+    allow_coastal = settings.MARINE_COASTAL_EXPERIMENTAL
+
+    point = interop.get_point_forecast(lat, lon)
+    fullname = point.get("place", {}).get("fullName", None)
+
+    # Check if there was an error retrieving alerts from the cache/background process
+    alerts_error = point.get("alerts", {}).get("metadata", {}).get("error", False)
+
+    context = {"point": point, "alerts_error": alerts_error, "title_trans_args": {"fullName": fullname}}
+
+    if "status" in point and point["status"] == HTTPStatus.NOT_FOUND:
+        raise Http404(point)
+
+    # If a marine point, check if coastal is allowed, else block all marine
+    if "grid" in point and "type" in point["grid"] and point["grid"]["type"] == "marine":
+        if not (allow_coastal and point["grid"].get("marineType") == "coastal"):
+            return render(request, "errors/404/marine-point.html", context, status=404)
+
+    # If there is not latitude and longitude data in the returned
+    # point dict, we need to add it from the url params
+    if "point" not in point:
+        point["point"] = {"latitude": lat, "longitude": lon}
+    elif "latitude" not in point["point"] or "longitude" not in point["point"]:
+        point["point"]["latitude"] = lat
+        point["point"]["longitude"] = lon
 
     # Get the local timezone for the current point place
     # If there was an error retrieving the place API endpoint,
@@ -105,13 +234,68 @@ def point_location(request, lat, lon):  # noqa: C901
 
     return render(
         request,
-        "weather/point/overview.html",
+        "weather/point/today.html",
         {
             **context,
             "weather_story": weather_story,
         },
     )
 
+@cache_control(max_age=120, smax_age=120, public=True)
+@decimal_redirect
+def point_location_seven_day(request, lat, lon):
+    """Render the 7-day detailed forecast for the point location."""
+    allow_coastal = settings.MARINE_COASTAL_EXPERIMENTAL
+
+    point = interop.get_point_forecast(lat, lon)
+    fullname = point.get("place", {}).get("fullName", None)
+
+    # Check if there was an error retrieving alerts from the cache/background process
+    alerts_error = point.get("alerts", {}).get("metadata", {}).get("error", False)
+
+    context = {"point": point, "alerts_error": alerts_error, "title_trans_args": {"fullName": fullname}}
+
+    if "status" in point and point["status"] == HTTPStatus.NOT_FOUND:
+        raise Http404(point)
+
+    # If a marine point, check if coastal is allowed, else block all marine
+    if "grid" in point and "type" in point["grid"] and point["grid"]["type"] == "marine":
+        if not (allow_coastal and point["grid"].get("marineType") == "coastal"):
+            return render(request, "errors/404/marine-point.html", context, status=404)
+
+    # If there is not latitude and longitude data in the returned
+    # point dict, we need to add it from the url params
+    if "point" not in point:
+        point["point"] = {"latitude": lat, "longitude": lon}
+    elif "latitude" not in point["point"] or "longitude" not in point["point"]:
+        point["point"]["latitude"] = lat
+        point["point"]["longitude"] = lon
+
+    # Get the local timezone for the current point place
+    # If there was an error retrieving the place API endpoint,
+    # we set to None
+    # NOTE: If we permanently remove generated timestamps
+    # from the weather stories, we can safely remove this timezone
+    # code, which is only used for that purpose currently
+    if "place" in point and "timezone" in point["place"]:
+        localtz = ZoneInfo(point["place"]["timezone"])
+    else:
+        localtz = None
+
+    if "grid" in point and "wfo" in point["grid"] and localtz:
+        code = point["grid"]["wfo"]
+        wfo = WFO.objects.get(code=WFO.normalize_code(code))
+        point["wfo"] = wfo
+        point["isAlaska"] = wfo.code.lower() in ["afc", "afg", "ajk"]
+
+
+    return render(
+        request,
+        "weather/point/seven-day.html",
+        {
+            **context,
+        },
+    )
 
 @cache_control(max_age=120, smax_age=120, public=True)
 def place_forecast(request, state, place):
