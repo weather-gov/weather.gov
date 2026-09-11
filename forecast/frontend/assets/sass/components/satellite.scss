@@ -35,3 +35,20 @@ wx-satellite-video {
 [data-wx-satellite-error] {
   margin: auto;
 }
+
+.missing-timestamp {
+  margin-top: 0;
+
+  @include at-media("desktop") {
+    margin-top: 3.5rem;
+  }
+
+  [data-wx-satellite-content] {
+    @include at-media("tablet") {
+      // Keep controls visible
+      // Only an issue at the tablet 4/3 aspect ratio
+      position: absolute;
+      bottom: 0;
+    }
+  }
+}

@@ -108,7 +108,33 @@ class TestViews(TestCase):
             response.context["point"],
             {"grid": {"wfo": "TST", "type": "land", "marineType": None},
              "wfo": self.wfo,
-             "place": {"timezone": "America/New_York"}},
+             "place": {"timezone": "America/New_York"},
+             "isAlaska": False,
+            },
+        )
+
+        self.assertEqual(response.context["weather_story"], self.weather_story)
+
+    @mock.patch("backend.views.point.interop.get_point_forecast")
+    def test_point_location_in_alaska(self, mock_get_point_forecast):
+        """Test the point location view."""
+        mock_get_point_forecast.return_value = {
+            "grid": {"wfo": "AFG", "type": "land", "marineType": None },
+            "place": {"timezone": "America/Los_Angeles"},
+            "weatherstory": [self.weather_story],
+        }
+
+        response = self.client.get("/forecast/point/11.1/22.2", follow=True)
+
+        mock_get_point_forecast.assert_called_once_with(11.1, 22.2)
+        self.assertTemplateUsed(response, "weather/point/overview.html")
+        self.assertEqual(
+            response.context["point"],
+            {"grid": {"wfo": "AFG", "type": "land", "marineType": None},
+             "wfo": models.WFO.objects.get(code="AFG"),
+             "place": {"timezone": "America/Los_Angeles"},
+             "isAlaska": True,
+            },
         )
 
         self.assertEqual(response.context["weather_story"], self.weather_story)
@@ -136,7 +162,10 @@ class TestViews(TestCase):
             response.context["point"],
             {"grid": {"wfo": "TST", "type": "land", "marineType": None },
              "wfo": self.wfo,
-             "place": {"timezone": "America/New_York"}},
+             "place": {"timezone": "America/New_York"},
+             "isAlaska": False,
+            },
+
         )
 
     @mock.patch("backend.views.point.interop.get_point_forecast")
@@ -156,7 +185,9 @@ class TestViews(TestCase):
             response.context["point"],
             {"grid": {"wfo": "TST", "type": "land", "marineType": None},
              "wfo": self.wfo,
-             "place": {"timezone": "America/New_York"}},
+             "place": {"timezone": "America/New_York"},
+             "isAlaska": False,
+            },
         )
         expected = {"is_empty": True, "officeId": "TST", "wfo_name": "Test WFO", "wfo_url": "/about/offices/TST/"}
         self.assertEqual(response.context["weather_story"], expected)
@@ -192,7 +223,9 @@ class TestViews(TestCase):
             response.context["point"],
             {"grid": {"wfo": "TST", "type": "land", "marineType": None},
              "wfo": self.wfo,
-             "place": {"timezone": "America/New_York"}},
+             "place": {"timezone": "America/New_York"},
+             "isAlaska": False,
+            },
         )
         self.assertEqual(response.context["weather_story"], weather_story)
         self.assertTemplateUsed("weather/partials/point-weather-story.html")
@@ -402,7 +435,9 @@ class TestViews(TestCase):
             response.context["point"],
             {"grid": {"wfo": "TST", "type": "land", "marineType": None},
              "wfo": self.wfo,
-             "place": {"timezone": "America/New_York"}},
+             "place": {"timezone": "America/New_York"},
+             "isAlaska": False,
+            },
         )
 
         self.assertEqual(response.context["weather_story"], self.weather_story)
