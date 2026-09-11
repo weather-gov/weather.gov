@@ -16,6 +16,15 @@ We will use Geobuf (`geobuf`) to encode and compress our spatial data and GeoJSO
 - On the backend, we use the `geobuf` Python library to encode GeoJSON dictionaries into `.pbf` (Protocolbuffer Binary Format) data payloads. 
 - On the frontend, we use the `geobuf` JavaScript library to decode these binary streams back into usable GeoJSON objects.
 
+### Size gate on county pages
+
+State pages always go over the wire as Geobuf. County pages are gated on size: the view sums the
+byte length of the county boundary plus every alert geometry, and only past 30,000 bytes does it
+strip those geometries from the inline page data and let the map fetch them from
+`wx/county/<fips>/` and `wx/county/<fips>/alerts`. Under the threshold the geometries stay inline
+as GeoJSON and the page loads neither `pbf` nor `geobuf`. Most counties are quiet enough to stay
+under it, so paying for two extra requests and two JavaScript libraries is not worth it there.
+
 ### Consequences
 
 - **Reduced Payload Sizes**: Geobuf offers significant compression over standard GeoJSON, improving network transfer speeds.

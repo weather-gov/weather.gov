@@ -1,569 +1,130 @@
+import { createAlertMap, showMapError } from "./alertMap.js";
+import { decodeGeobuf, fetchGeobuf } from "./geobuf.js";
 import { checkForLeaflet } from "./util.js";
 
-/** Initialize county alert map after Leaflet has loaded. */
-const setupMap = () => {
-  const L = window.L;
-  const polylabel = window.polylabel;
-  const countyAlertLayers = { 1: [], 2: [], 3: [], 4: [], 5: [], all: [] };
-  const iconOffsets = [
-    { x: 0, y: 0 },
-    { x: 0, y: -34 },
-    { x: 34, y: 0 },
-    { x: 0, y: 34 },
-    { x: -34, y: 0 },
-  ];
-  let curDayIndex = "all";
+const MAP_ID = "wx_county_alert_map";
 
-  const json = JSON.parse(document.getElementById("county-data").textContent);
-  const map = L.map(`wx_county_alert_map`, {
-    zoomDelta: 1,
-    zoomSnap: 0.5,
-    maxZoom: 18,
-  }).setView([0, 0], 0);
+const meta = JSON.parse(document.getElementById("county-metadata").textContent);
 
-  /** Show alerts for the selected day or for "all". */
-  const filterMap = () => {
-    if (curDayIndex !== "all") {
-      countyAlertLayers["all"].forEach((layer) => {
-        try {
-          layer.setStyle({
-            fillOpacity: 0,
-            opacity: 0,
-          });
-          layer.wx_marker.remove();
-        } catch (error) {
-          console.log(error);
-        }
-      });
-    }
-    // Remove existing markers
-    markers.clearLayers();
-    countyAlertLayers[curDayIndex].forEach((layer) => {
-      try {
-        layer.resetStyle();
-        markers.addLayer(layer.wx_marker);
-      } catch (error) {
-        console.log(error);
-      }
-    });
-    markers.refreshClusters();
-  };
+// Kick off at module load so the fetches overlap the Leaflet script load
+const geobufRequests = meta.isBinary
+  ? Promise.all([
+      fetchGeobuf(`/wx/county/${meta.countyFips}/`),
+      fetchGeobuf(`/wx/county/${meta.countyFips}/alerts`),
+    ])
+  : null;
 
-  /** Handle when a day is selected via the tab component. */
-  const handleDay = (e) => {
-    curDayIndex = e.detail.dataset.alertDay;
-    filterMap();
-  };
+/** Put the geometry the view stripped back where the page data expects it. */
+const hydrateGeometry = async (json) => {
+  const [boundaryBuf, alertsBuf] = await geobufRequests;
+  json.county.shape = decodeGeobuf(boundaryBuf);
 
-  /** A custom expand/shrink button for the map container. */
-  L.Control.Expand = L.Control.extend({
-    options: {
-      position: "topright",
-    },
-
-    onAdd: function (map) {
-      this.map = map;
-      this.container = map.getContainer().parentElement;
-      this.button = document.createElement("button");
-      this.button.classList.add("wx-radar-expand", "padding-0", "margin-1");
-      this.buttonSetToExpand();
-      this.button.addEventListener("click", this._resize.bind(this));
-      return this.button;
-    },
-
-    buttonSetToExpand: function () {
-      this.button.innerHTML = `<svg role="img" aria-hidden="true" class="width-full height-full"><use xlink:href="/public/images/uswds/sprite.svg#zoom_out_map"></use></svg>`;
-      this.button.setAttribute("aria-label", "Expand the county alert map");
-    },
-
-    buttonSetToCollapse: function () {
-      this.button.innerHTML = `<svg role="img" aria-hidden="true" class="width-full height-full"><use xlink:href="/public/images/spritesheet.svg#wx_zoom-in-map"></use></svg>`;
-      this.button.setAttribute("aria-label", "Collapse the county alert map");
-    },
-
-    _resize: function (event) {
-      this.container.parentElement.classList.toggle("tablet:grid-col-7");
-      this.container.classList.toggle(
-        "wx-county-alert-map-container__expanded",
-      );
-      this.button.classList.toggle("wx-map-control__expanded");
-      if (this.button.classList.contains("wx-map-control__expanded")) {
-        this.buttonSetToCollapse();
-      } else {
-        this.buttonSetToExpand();
-      }
-      this.map.invalidateSize();
-    },
-
-    onRemove: function (map) {
-      // noop
-    },
-  });
-  const expandButton = new L.Control.Expand();
-  expandButton.addTo(map);
-
-  /** Convert a map's bounds in lat/lng to x/y. */
-  const getXYBounds = () => {
-    const latlngBounds = map.getBounds();
-    const southeast = latlngBounds.getSouthEast();
-    const northwest = latlngBounds.getNorthWest();
-    return L.bounds(
-      [northwest.lat, northwest.lng],
-      [southeast.lat, southeast.lng],
-    );
-  };
-
-  /** Determine the center of a layer, considering only points within the viewport. */
-  const visibleCenter = (layer, xybounds) => {
-    const feature = layer.getLayers()[0].feature;
-    const geometry = feature.geometry;
-
-    // If it's a Polygon, we wrap it in an array to treat it like a MultiPolygon with one item
-    const polygonList =
-      geometry.type === "MultiPolygon"
-        ? geometry.coordinates
-        : [geometry.coordinates];
-
-    // Loop through list of polygons
-    // When finding the center, return center
-    for (let i = 0; i < polygonList.length; i++) {
-      const polygonCoords = polygonList[i];
-
-      // Get Center of polygon using polylabel (center of mass)
-      const [lng, lat] = polylabel(polygonCoords, 0.000001);
-      const labelCenter = L.latLng(lat, lng);
-
-      // If the natural center of this polygon is visible, return
-      if (map.getBounds().contains(labelCenter)) {
-        return labelCenter;
-      }
-
-      // If natural center isn't visible, the polygon might still be partially on screen
-      const outerRing = polygonCoords[0];
-      const points = outerRing.map(([lng, lat]) => L.point([lat, lng]));
-
-      // Clip polygon within viewport (`xybounds`)
-      const clippedPoints = L.PolyUtil.clipPolygon(points, xybounds);
-
-      if (clippedPoints.length > 0) {
-        // Convert clipped xy points back to LatLngs for polygonCenter
-        const clippedLatLngs = clippedPoints.map((p) => L.latLng([p.x, p.y]));
-        try {
-          return L.PolyUtil.polygonCenter(clippedLatLngs, map.options.crs);
-        } catch (e) {
-          // Fallback if polygonCenter fails on weird clipped shapes
-          continue;
-        }
-      }
-    }
-
-    // If no part of any polygon is within the viewport
-    return null;
-  };
-
-  /** Open the associated alert accordion and bring it into view. */
-  const handlePopupClick = (e) => {
-    const accordion = document.querySelector(
-      `button[aria-controls='a${e.target.dataset.alert_id}']`,
-    );
-    accordion.focus();
-    accordion.scrollIntoView({ behavior: "smooth" });
-    if (accordion.getAttribute("aria-expanded", "") === "false")
-      accordion.click();
-  };
-
-  /** Change the opacity of the selected alert. */
-  const handleMarkerEvent = (e, layer) => {
-    switch (e.type) {
-      case "click":
-        layer.setStyle(styles.active);
-        break;
-      case "popupclose":
-      case "mouseout":
-        layer.resetStyle();
-        break;
-      case "mouseover":
-        layer.setStyle(styles.hover);
-        break;
-      default:
-        break;
-    }
-  };
-
-  /** Marker Clusters for alert Icons **/
-  const markers = L.markerClusterGroup({
-    showCoverageOnHover: false,
-
-    // Cluster marker Icon rendering function, icon defaults to highest alert clustered
-    iconCreateFunction: function (cluster) {
-      const childMarkers = cluster.getAllChildMarkers();
-      const priorities = ["other", "watch", "warning"];
-
-      // Find the highest priority index
-      let highestIndex = 0;
-      for (let i = 0; i < childMarkers.length; i++) {
-        const typeAttr = childMarkers[i].alert_type;
-        const p = priorities.indexOf(typeAttr);
-        if (p > highestIndex) highestIndex = p;
-        if (highestIndex === 2) break;
-      }
-
-      const type = priorities[highestIndex] || "other";
-
-      // Ensure the icon object actually exists
-      const iconObj = icons[type] || icons["other"];
-      if (!iconObj) {
-        console.error("Critical: 'icons' object is missing keys for:", type);
-        return new L.DivIcon({ html: "<div>!</div>" });
-      }
-
-      const iconUrl = iconObj.options.iconUrl;
-
-      return L.divIcon({
-        html: `
-          <div class="alert-cluster-badge-container" title="${cluster.getChildCount()} ${type} alerts">
-            <img src="${iconUrl}" class="alert-cluster-main-icon" alt="" />
-            <div class="alert-cluster-badge alert-badge-${type}" aria-hidden="true">
-              ${cluster.getChildCount()}
-            </div>
-          </div>
-        `,
-        className: "leaflet-cluster-icon",
-        iconSize: [40, 40],
-        iconAnchor: [20, 20],
-      });
-    },
-  });
-
-  /** Marker Cluster event functions  **/
-  markers.on("spiderfied", function (e) {
-    if (e.cluster._icon) {
-      // When cluster is spiderfied, it needs to be invisible
-      e.cluster._icon.style.opacity = "0";
-      e.cluster._icon.style.pointerEvents = "none";
-    }
-  });
-
-  markers.on("unspiderfied", function (e) {
-    if (e.cluster._icon) {
-      // When cluster is unspiderfied, it needs to be visible
-      e.cluster._icon.style.opacity = "1";
-      e.cluster._icon.style.pointerEvents = "auto";
-    }
-  });
-
-  /** Restacks all active alert polygons reversed, based on their initial render index. */
-  const restackAlerts = () => {
-    const activeLayers = countyAlertLayers[curDayIndex];
-    const sorted = [...activeLayers].sort(
-      (a, b) => b.wx_render_index - a.wx_render_index,
-    );
-
-    sorted.forEach((layer) => {
-      if (map.hasLayer(layer)) {
-        layer.bringToFront();
-      }
-    });
-
-    // Bring County to the front at the end
-    countyOutline.bringToFront();
-  };
-
-  /** Redraw icons on zoom in or pan; reset them on zoom out. */
-  const handleMotion = (e) => {
-    // Reset style when moved
-    countyAlertLayers[curDayIndex].forEach((layer) => {
-      layer.resetStyle();
-    });
-
-    const zoomedOut =
-      e.target.getZoom() <= map.wx_county_zoom &&
-      map.wx_latest_zoom > map.wx_county_zoom;
-    const zoomedIn =
-      e.target.getZoom() > map.wx_county_zoom &&
-      e.target.getZoom() !== map.wx_latest_zoom;
-    const panned =
-      (e.target.getCenter() !== map.wx_county_center) !== map.wx_latest_center;
-    if (zoomedOut) {
-      countyAlertLayers[curDayIndex].forEach((layer) => {
-        try {
-          layer.wx_marker.setLatLng(layer.wx_marker.wx_orig_pos);
-        } catch (error) {
-          console.log(error);
-        }
-      });
-    } else if (zoomedIn || panned) {
-      countyAlertLayers[curDayIndex].forEach((layer) => {
-        try {
-          // Fix visible center can be null if the polygon isn't in viewport. if null, skip
-          let center = visibleCenter(layer, getXYBounds());
-          if (center) {
-            layer.wx_marker.setLatLng(center);
-          }
-        } catch (error) {
-          console.log(error);
-        }
-      });
-    }
-    map.wx_latest_zoom = e.target.getZoom();
-
-    // Only refresh if marker cluster is full
-    if (markers && markers.getLayers().length > 0) {
-      markers.refreshClusters();
-    }
-  };
-  map.on("zoomend", handleMotion);
-  map.on("moveend", handleMotion);
-
-  /** HTML shown inside a popup when clicking on an alert icon on the map. */
-  const getPopupHTML = (alertId, alertName) => {
-    const html = document.createElement("div");
-    html.classList.add("text-center");
-    html.innerHTML = `
-      <div class="font-body-xs margin-bottom-2px">${gettext(alertName)}</div>
-      <div>
-        <button class="usa-button usa-button--unstyled font-body-xs" type="button">
-          ${gettext("js.alerts.link.see-details.01")}
-        </button>
-      </div>
-    `;
-    const btn = html.querySelector("button");
-    btn.addEventListener("click", handlePopupClick);
-    btn.dataset.alert_id = alertId;
-    return html;
-  };
-
-  // Leaflet is managed by a Ukrainian team. The default attribution they put on
-  // maps includes a Ukrainian flag to show their national pride. But as an
-  // official website of the US Government, that might not be appropriate for
-  // us, so we remove the flag.
-  map.attributionControl.setPrefix(
-    "<a href='https://leafletjs.com' title='A JavaScript library for interactive maps'>Leaflet</a>",
+  const geometries = new Map(
+    decodeGeobuf(alertsBuf).features.map((feature) => [
+      feature.properties.id,
+      feature.geometry,
+    ]),
   );
-
-  const ESRI_API_KEY =
-    "AAPK1dd93729edc54e84ade1ea5dc0f4f9d3EPexfd5qirlO3QtHGBj5JQL7iUYHQOb4yLjfKEYFLcyN9PlMd87lMjjv8D3DxDsQ";
-  L.esri.Vector.vectorBasemapLayer("arcgis/streets", {
-    apiKey: ESRI_API_KEY,
-  }).addTo(map);
-
-  const MapIcon = L.Icon.extend({
-    options: {
-      // className: 'my-div-icon',
-      iconSize: [32, 32],
-      iconAnchor: [16, 16],
-      popupAnchor: [0, -8],
-    },
+  json.alerts.items.forEach((item) => {
+    item.geometry = geometries.get(item.id) ?? item.geometry;
   });
+};
 
-  const icons = {
-    warning: new MapIcon({
-      iconUrl: "/public/images/weather/wx_alerticon_circle_warning.svg",
-    }),
-    watch: new MapIcon({
-      iconUrl: "/public/images/weather/wx_alerticon_circle_watch.svg",
-    }),
-    other: new MapIcon({
-      iconUrl: "/public/images/weather/wx_alerticon_circle_other.svg",
-    }),
-  };
-
-  const getLargeIcon = (type) => {
-    return new MapIcon({
-      iconUrl: icons[type].options.iconUrl,
-      iconSize: [40, 40],
-      iconAnchor: [20, 20],
-      popupAnchor: [0, -10],
-    });
-  };
-
-  const styles = {
-    warning: {
-      fillColor: "#D83933",
-      color: "#FB5A47",
-      opacity: 0.85,
-      fillOpacity: 0.3,
-    },
-    watch: {
-      fillColor: "#D2B93B",
-      color: "#947100",
-      opacity: 0.85,
-      fillOpacity: 0.3,
-    },
-    other: {
-      fillColor: "#B4C1CD",
-      color: "#585E63",
-      opacity: 0.85,
-      fillOpacity: 0.3,
-    },
-    county: {
-      color: "#11181D",
-      opacity: 1,
-      fillOpacity: 0,
-      weight: 3,
-      dashArray: "1 4",
-    },
-    active: {
-      fillOpacity: 0.5,
-    },
-    hover: {
-      fillOpacity: 0.7,
-      opacity: 1.0,
-      weight: 7,
-    },
-  };
-
-  // zoom to the county outline (but do not draw it yet)
-  const countyOutline = L.geoJSON(json.county.shape, { style: styles.county });
-  map.fitBounds(countyOutline.getBounds(), { padding: [15, 15] });
-  map.wx_county_xybounds = getXYBounds();
-  map.wx_county_zoom = map.wx_latest_zoom = map.getZoom();
-  map.wx_county_center = map.wx_latest_center = map.getCenter();
-
-  // List for storing alert labels
-  const markerList = [];
-
-  // Empty map { alertId: layer } for hovering over alert accordian
-  const alertIdToLayer = {};
-
-  // Highlight function for mouseover events
-  const highlightAlert = (alertId) => {
-    const layer = alertIdToLayer[alertId];
-    if (!layer) return;
-
-    const marker = layer.wx_marker;
-    const alertType = marker.alert_type;
-
-    // Update Marker icon and z-index
-    marker.setIcon(getLargeIcon(alertType));
-    if (marker._icon) {
-      marker._icon.classList.add("alert-marker-mouseover");
-    }
-    marker.setZIndexOffset(100000);
-    layer.bringToFront();
-
-    // Set hover style
-    layer.setStyle(styles.hover);
-  };
-
-  // Highlight function for mouseout events
-  const unhighlightAlert = (alertId) => {
-    const layer = alertIdToLayer[alertId];
-    if (!layer) return;
-
-    const marker = layer.wx_marker;
-    const alertType = marker.alert_type;
-
-    // Reset Marker
-    marker.setIcon(icons[alertType]);
-    if (marker._icon) {
-      marker._icon.classList.remove("alert-marker-mouseover");
-    }
-    marker.setZIndexOffset(0);
-
-    // Reset Visual Style
-    layer.resetStyle();
-
-    // Place layer back in it's original order
-    restackAlerts();
-  };
-
-  // create alert layers and sort them
-  for (let i = json.alerts.items.length - 1; i >= 0; i--) {
-    try {
-      let {
-        geometry,
-        alertDays,
-        metadata: {
-          level: { text: alertType },
-        },
-      } = json.alerts.items[i];
-      let { unique_id: alertId, event: alertName } = json.alerts.items[i];
-
-      let layer = L.geoJSON(geometry, { style: styles[alertType] }).addTo(map);
-      alertIdToLayer[alertId] = layer;
-      let alertCenter = visibleCenter(layer, map.wx_county_xybounds);
-
-      // Store the render index for sorting during highlight events
-      layer.wx_render_index = i;
-
-      layer.wx_marker = L.marker(alertCenter, { icon: icons[alertType] });
-      layer.wx_marker.alert_type = alertType;
-      layer.wx_marker.bindPopup(getPopupHTML(alertId, alertName), {
-        autoPan: false,
-      });
-      layer.wx_marker.wx_orig_pos = alertCenter;
-      layer.wx_marker.on("click", (e) => handleMarkerEvent(e, layer));
-      layer.wx_marker.on("popupclose", (e) => handleMarkerEvent(e, layer));
-
-      layer.wx_marker.on("mouseover", () => highlightAlert(alertId));
-      layer.wx_marker.on("mouseout", () => unhighlightAlert(alertId));
-
-      // Add marker to list
-      markerList.push(layer.wx_marker);
-
-      alertDays.forEach((day) => {
-        countyAlertLayers[day].push(layer);
-      });
-      countyAlertLayers["all"].push(layer);
-    } catch (error) {
-      console.log(error);
-    }
-  }
-
-  // Add cluster markers
-  markers.addLayers(markerList);
-  map.addLayer(markers);
-
-  // day selection starts on "all", but the user might have changed it
-  const selected = document.querySelector(
-    "wx-tabs button[aria-selected='true']",
+/** Open the associated alert accordion and bring it into view. */
+const handlePopupClick = (e) => {
+  const accordion = document.querySelector(
+    `button[aria-controls='a${e.target.dataset.alert_id}']`,
   );
-  curDayIndex = selected.dataset.alertDay;
+  accordion.focus();
+  accordion.scrollIntoView({ behavior: "smooth" });
+  if (accordion.getAttribute("aria-expanded", "") === "false")
+    accordion.click();
+};
 
-  countyOutline.addTo(map);
-  filterMap();
+/** HTML shown inside a popup when clicking on an alert icon on the map. */
+const getPopupHTML = (alertId, alertName) => {
+  const html = document.createElement("div");
+  html.classList.add("text-center");
+  html.innerHTML = `
+    <div class="font-body-xs margin-bottom-2px">${gettext(alertName)}</div>
+    <div>
+      <button class="usa-button usa-button--unstyled font-body-xs" type="button">
+        ${gettext("js.alerts.link.see-details.01")}
+      </button>
+    </div>
+  `;
+  const btn = html.querySelector("button");
+  btn.addEventListener("click", handlePopupClick);
+  btn.dataset.alert_id = alertId;
+  return html;
+};
 
-  // ready to handle day change events
-  window.addEventListener("wx-tab-focused", handleDay);
-
-  // Hover alert accordion logic
-  const accordionItems = document.querySelectorAll(".usa-accordion");
-  accordionItems.forEach((item) => {
-    const alertId = item.id.replace("alert_", "");
-
-    item.addEventListener("mouseover", () => highlightAlert(alertId));
-    item.addEventListener("mouseout", () => unhighlightAlert(alertId));
-  });
-
-  // add the user's location if they've already agreed to share it
-  (async () => {
-    try {
-      const result = await navigator.permissions.query({ name: "geolocation" });
-      if (result.state === "granted") {
-        navigator.geolocation.getCurrentPosition((position) => {
-          const locationIcon = L.divIcon({
-            className: "wx-location-marker",
-          });
-          const lat = position.coords.latitude;
-          const lon = position.coords.longitude;
-          L.marker([lat, lon], {
-            icon: locationIcon,
-            interactive: false,
-          }).addTo(map);
-          // Hide the location marker from screen readers and remove it from the tab
-          // order. It's not interactive, so there's no reason it should be focusable.
-          const locationMarker = document.querySelector(
-            ".leaflet-marker-icon.wx-location-marker",
-          );
-          locationMarker?.setAttribute("aria-hidden", "true");
-          locationMarker?.setAttribute("tabindex", "-1");
+/** Add the user's location if they've already agreed to share it. */
+const showUserLocation = async (map) => {
+  try {
+    const result = await navigator.permissions.query({ name: "geolocation" });
+    if (result.state === "granted") {
+      navigator.geolocation.getCurrentPosition((position) => {
+        const locationIcon = window.L.divIcon({
+          className: "wx-location-marker",
         });
-      }
-    } catch (error) {
-      console.log(error);
+        window.L.marker([position.coords.latitude, position.coords.longitude], {
+          icon: locationIcon,
+          interactive: false,
+        }).addTo(map);
+        // Hide the location marker from screen readers and remove it from the tab
+        // order. It's not interactive, so there's no reason it should be focusable.
+        const locationMarker = document.querySelector(
+          ".leaflet-marker-icon.wx-location-marker",
+        );
+        locationMarker?.setAttribute("aria-hidden", "true");
+        locationMarker?.setAttribute("tabindex", "-1");
+      });
     }
-  })();
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+/** Initialize county alert map after Leaflet has loaded. */
+const setupMap = async () => {
+  try {
+    const json = JSON.parse(document.getElementById("county-data").textContent);
+    if (meta.isBinary) {
+      await hydrateGeometry(json);
+    }
+
+    const { map, highlightAlert, unhighlightAlert } = createAlertMap({
+      elementId: MAP_ID,
+      name: "county",
+      maxZoom: 18,
+      outline: json.county.shape,
+      autoPan: false,
+      onExpandToggle: (container) => {
+        container.parentElement.classList.toggle("tablet:grid-col-7");
+        container.classList.toggle("wx-county-alert-map-container__expanded");
+      },
+      alerts: json.alerts.items.map((item) => ({
+        id: item.unique_id,
+        type: item.metadata.level.text,
+        geometry: item.geometry,
+        days: item.alertDays,
+        popup: getPopupHTML(item.unique_id, item.event),
+      })),
+    });
+
+    // Hover alert accordion logic
+    document.querySelectorAll(".usa-accordion").forEach((item) => {
+      const alertId = item.id.replace("alert_", "");
+      item.addEventListener("mouseover", () => highlightAlert(alertId));
+      item.addEventListener("mouseout", () => unhighlightAlert(alertId));
+    });
+
+    showUserLocation(map);
+  } catch (error) {
+    console.error("Error loading county map data:", error);
+    showMapError(MAP_ID);
+  }
 };
 
 checkForLeaflet(setupMap);

@@ -4,12 +4,23 @@
 --   Display the weather for an individual county.
 -- Url: https://beta.weather.gov/forecast/county/01077/
 {% endcomment %}
-{% block head_js %}{{ data.public|json_script:"county-data" }}{% endblock %}
+{% block head_js %}
+  {{ data.public|json_script:"county-data" }}
+  <script id="county-metadata" type="application/json">
+    {
+      "countyFips": "{{ countyfips }}",
+      "isBinary": {{ is_binary|yesno:"true,false" }}
+    }
+  </script>
+{% endblock %}
 {% block page_end_js %}
   <script type="module"
           src="{% static 'js/county/overview.html.js' %}"
           type="module"></script>
   {% include "weather/scripts/leaflet.html" %}
+  {% if is_binary %}
+    {% include "weather/scripts/geobuf.html" %}
+  {% endif %}
   <script src="{% static 'js/cmi-radar.54fb0324.js' %}"
           nonce="{{ request.csp_nonce }}"
           data-wx-radar-cmi="true"

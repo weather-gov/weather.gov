@@ -8,14 +8,22 @@ from django.template.loader import render_to_string
 from django.views.decorators.cache import never_cache
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_GET, require_POST
-from shapely import MultiPolygon, Polygon
 
 from backend import interop
 from backend.forms import SelectGHWOCountiesForm
-from backend.util import get_counties_combo_box_list, get_states_combo_box_list, process_state_alerts
+from backend.util import (
+    get_counties_combo_box_list,
+    get_states_combo_box_list,
+    process_state_alerts,
+    sort_multipolygon_by_area,
+)
 from backend.views.risk import process_ghwo_data
 from risk_data.util import get_risk_data_for_county, get_risk_data_for_state
 from spatial.models import WeatherAlertsCache, WeatherCounties, WeatherStates
+
+# Same tolerance the interop simplifies county shapes with, so inline and pbf outlines match
+SIMPLIFICATION_METERS = 200
+
 
 
 @never_cache
@@ -34,13 +42,22 @@ def wx_afd_versions(_, wfo):
     return HttpResponse(markup, content_type="text/html")
 
 
+def geobuf_response(geojson_dict):
+    """Encode a GeoJSON dict as Geobuf and wrap it in a binary response."""
+    return HttpResponse(geobuf.encode(geojson_dict), content_type="application/x-protobuf")
+
+
+def alert_feature(shape, properties):
+    """Build a GeoJSON Feature from an alert shape with its polygons ordered largest first."""
+    geometry = sort_multipolygon_by_area(json.loads(shape.geojson))
+    return {"type": "Feature", "geometry": geometry, "properties": properties}
+
+
 @never_cache
 def wx_state_boundaries_pbf(_, state):
-    """Return a script tag containing the GeoJSON for the given state's boundaries."""
+    """Return Geobuf-encoded boundaries for the given state."""
     state_obj = get_object_or_404(WeatherStates, state=state.upper())
-    geojson_dict = json.loads(state_obj.shape.geojson)
-    pbf_data = geobuf.encode(geojson_dict)
-    return HttpResponse(pbf_data, content_type="application/x-protobuf")
+    return geobuf_response(json.loads(state_obj.shape.geojson))
 
 
 @never_cache
@@ -60,20 +77,11 @@ def wx_state_alerts_pbf(_, state):
         if a["counties"]:
             all_fips.update(a["counties"])
 
-    #  Internal Sorting Logic (Ticket #207)
     features = []
     for alert in alerts:
-        # Convert directly to a dict without huge string intermediates
-        geom_dict = json.loads(alert["shape"].geojson)
+        if not alert["shape"]:
+            continue
 
-        # Internal Sorting Logic
-        if geom_dict.get("type") == "MultiPolygon":
-            polys = [Polygon(shell=p[0], holes=p[1:]) for p in geom_dict["coordinates"]]
-            # Sort by area
-            polys.sort(key=lambda a: a.area, reverse=True)
-            geom_dict = MultiPolygon(polys).__geo_interface__
-
-        # Build feature manually
         properties = alert["alertjson"]
         properties.pop("geometry", None)
 
@@ -82,16 +90,37 @@ def wx_state_alerts_pbf(_, state):
         properties["alertkind"] = alert["alertkind"]
         properties["counties"] = alert["counties"]
 
-        features.append({"type": "Feature", "geometry": geom_dict, "properties": properties})
+        features.append(alert_feature(alert["shape"], properties))
 
     # Process alerts by sorting by timestamp and severity
     sorted_features = process_state_alerts(alert_geojsons=features, state_timezone=state_obj.timezone or "UTC")
-
-    # Encode and return
-    pbf_data = geobuf.encode({"type": "FeatureCollection", "features": sorted_features})
     del features
 
-    return HttpResponse(pbf_data, content_type="application/x-protobuf")
+    return geobuf_response({"type": "FeatureCollection", "features": sorted_features})
+
+
+@never_cache
+def wx_county_boundary_pbf(_, countyfips):
+    """Return Geobuf-encoded boundaries for the given county."""
+    county = get_object_or_404(WeatherCounties, countyfips=countyfips)
+    shape = county.shape.transform(3857, clone=True).simplify(SIMPLIFICATION_METERS).transform(4326, clone=True)
+    return geobuf_response(json.loads(shape.geojson))
+
+
+@never_cache
+def wx_county_alerts_pbf(_, countyfips):
+    """Return Geobuf-encoded alert geometries for a county, keyed by alert id."""
+    alerts = WeatherAlertsCache.objects.filter(counties__contains=[countyfips]).values("alertjson", "shape_simplified")
+
+    features = []
+    for alert in alerts:
+        alert_id = alert["alertjson"].get("id")
+        if not alert["shape_simplified"] or not alert_id:
+            continue
+
+        features.append(alert_feature(alert["shape_simplified"], {"id": alert_id}))
+
+    return geobuf_response({"type": "FeatureCollection", "features": features})
 
 
 def wx_select_state_counties(_request, state_fips):
