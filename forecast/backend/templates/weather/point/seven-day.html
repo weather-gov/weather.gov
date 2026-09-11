@@ -1,0 +1,77 @@
+{% extends "weather/page.html" %}
+{% comment %}
+-- Template purpose:
+--   This page displays the detailed 7 day forecast at the user's
+--   point location.
+-- Url: https://beta.weather.gov/forecast/point/43.156/-77.613/7-day/
+{% endcomment %}
+{% block head_js %}
+  <script src="{% static 'js/third-party/chartjs@4.5.1.js' %}"></script>
+  <script src="{% static 'js/third-party/chartjs-plugin-datalabels@2.2.0.js' %}"></script>
+{% endblock %}
+{% block page_end_js %}
+  <script type="module" src="{% static 'js/point.seven-day.html.js' %}" type="module"></script>
+{% endblock %}
+{% block page_head_css %}
+  <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}" />
+  <!-- Prefetch for other tab pages -->
+  <link rel="prefetch" href="{% url 'point_forecast_alerts' lat=point.point.latitude lon=point.point.longitude %}" />
+  <link rel="prefetch" href="{% url 'point_forecast_today' lat=point.point.latitude lon=point.point.longitude %}" />
+{% endblock %}
+{% block page_content %}
+  <div class="layout-container grid-row height-full flex-column flex-no-wrap">
+    {% include 'weather/partials/place-banner.html' with place=point.place %}
+    {% if point.alerts.items|length > 0 %}
+      <div class="bg-primary-darker padding-bottom-105">
+        <div class="grid-container margin-top-0">
+          {% include "weather/partials/alert-summary.html" with alerts=point.alerts.items %}
+        </div>
+      </div>
+    {% endif %}
+    <wx-tabbed-nav class="display-block position-relative" id="point-page-tabbed-nav">
+      <div id="tablist-label" class="usa-sr-only">{{ "forecast.labels.weather-info.01" | t }}</div>
+      <div class="position-sticky top-0 bg-white border-base-light border-top-0 border-bottom-2px margin-y-0">
+        <div class="grid-container padding-x-0">
+          <div role="tablist"
+               id="point-page-tablist"
+               class="tab-buttons display-flex flex-row top-4 grid-col-12"
+               aria-labelledby="tablist-label">
+
+            {% if point.alerts.items|length > 0 %}
+              <a role="tab"
+                 id="alerts-tab-button"
+                 href="{% url 'point_forecast_alerts' lat=point.point.latitude lon=point.point.longitude %}"
+                 class="tab-button"
+                 data-tab-name="alerts"
+                 aria-controls="alerts">{{ "forecast.labels.alerts.01" | t }}</a>
+            {% endif %}
+            <a role="tab"
+               id="current-conditions-tab-button"
+               href="{% url 'point_forecast_today' lat=point.point.latitude lon=point.point.longitude %}"
+               class="tab-button"
+               data-tab-name="today"
+               aria-controls="today">{{ "daily-forecast.labels.today.01" | t }}</a>
+            <a role="tab"
+               id="daily-tab-button"
+               href="{% url 'point_forecast_seven_day' lat=point.point.latitude lon=point.point.longitude %}"
+               class="tab-button"
+               data-tab-name="daily"
+               aria-controls="daily"
+               data-selected="true">{{ "forecast.labels.seven-days.01" | t }}</a>
+          </div>
+        </div>
+      </div>
+      <div class="bg-base-lightest padding-top-3 padding-bottom-8">
+        {% if point.forecast %}
+        <wx-daily-forecast class="wx-tab-container wx-focus-offset-205" id="daily" role="tabpanel" aria-labelledby="daily-tab-button" tabindex="0" data-selected="true">
+          <h2 class="usa-sr-only">{% trans "forecast.heading.daily-forecast.01" %}</h2>
+          {% include "weather/partials/forecast.html" with forecast=point.forecast %}
+        </wx-daily-forecast>
+        {% endif %}
+      </div>
+    </wx-tabbed-nav>
+
+    <!-- Saved locations section-->
+    {% include 'weather/partials/saved-locations-section.html' with type="point" mode="dark" heading="saved-locations.heading.section-main.01" %}
+  </div>
+{% endblock %}
