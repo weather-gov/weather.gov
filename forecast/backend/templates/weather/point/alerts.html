@@ -32,7 +32,7 @@
     {% if point.alerts.items|length > 0 %}
       <div class="bg-primary-darker padding-bottom-105">
         <div class="grid-container margin-top-0">
-          {% include "weather/partials/alert-summary.html" with alerts=point.alerts.items %}
+          {% include "weather/partials/alert-summary.html" with alerts=point.alerts.items is_alerts_page=True lat=point.point.latitude lon=point.point.longitude %}
         </div>
       </div>
     {% endif %}

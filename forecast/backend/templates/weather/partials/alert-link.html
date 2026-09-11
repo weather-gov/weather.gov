@@ -22,7 +22,7 @@
         {% endcomment %}
       <a
         class="line-height-sans-2 margin-top-05"
-        href="#{% if alertId %}alert_{{ alertId }}{% elif alertID %}alert_{{ alertID }}{% else %}alerts{% endif %}">
+        href="{% url 'point_forecast_alerts' lat=lat lon=lon %}#{% if alertId %}alert_{{ alertId }}{% elif alertID %}alert_{{ alertID }}{% else %}alerts{% endif %}">
         {{ alertType }}
       </a>
     </div>

@@ -115,6 +115,8 @@ def alert_link(**kwargs):
     result["alertId"] = alert["id"]
     result["alertType"] = alert["event"]
     result["alertLevel"] = alert["level"]
+    result["lat"] = kwargs.get("lat", None)
+    result["lon"] = kwargs.get("lon", None)
 
     return result
 
@@ -142,6 +144,8 @@ def summary_alert_link(**kwargs):
         "alertType": alert_type,
         "alertLevel": alert_level,
         "alertCount": num_alerts,
+        "lat": kwargs.get("lat", None),
+        "lon": kwargs.get("lon", None),
     }
 
 
@@ -149,7 +153,12 @@ def summary_alert_link(**kwargs):
 def daily_forecast_list_item(**kwargs):
     """Render a daily forecast list item for a given day."""
     day = kwargs["day"]
-    return {"day": day, "first": kwargs.get("first") or False}
+    return {
+        "lat": kwargs.get("lat", None),
+        "lon": kwargs.get("lon", None),
+        "day": day,
+        "first": kwargs.get("first") or False,
+    }
 
 
 @register.inclusion_tag("weather/partials/daily-summary-list-item.html")
@@ -165,6 +174,9 @@ def daily_summary_list_item(**kwargs):
         "times": day["hourly"]["times"],
         "temps": day["hourly"]["temps"],
         "feelsLike": day["hourly"]["feelsLike"],
+        "lat": kwargs.get("lat", None),
+        "lon": kwargs.get("lon", None),
+
     }
 
 
@@ -235,7 +247,12 @@ def hourly_table(**kwargs):
     """Render an hourly details table."""
     day = kwargs["day"]
 
-    return {**day, "alerts": day["alerts"]["items"]}
+    return {
+        **day,
+        "lat": kwargs.get("lat", None),
+        "lon": kwargs.get("lon", None),
+        "alerts": day["alerts"]["items"]
+    }
 
 
 @register.inclusion_tag("weather/partials/hourly-charts.html")

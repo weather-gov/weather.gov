@@ -203,9 +203,11 @@ class TestWeatherPartials(TestCase):
             "alertId": "alert id",
             "alertType": "boom boom",
             "alertLevel": "secret cow",
+            "lat": 11.1,
+            "lon": 22.2,
         }
 
-        actual = weather_partials.alert_link(alert=alert)
+        actual = weather_partials.alert_link(alert=alert, lat=11.1, lon=22.2)
 
         self.assertEqual(actual, expected)
 
@@ -231,6 +233,8 @@ class TestWeatherPartials(TestCase):
                     },
                 ],
             },
+            lat=11.1,
+            lon=22.2,
         )
         self.assertEqual(
             actual,
@@ -239,6 +243,8 @@ class TestWeatherPartials(TestCase):
                 "alertType": "panic",
                 "alertLevel": "at the disco",
                 "alertCount": 1,
+                "lat": 11.1,
+                "lon": 22.2,
             },
         )
 
@@ -265,6 +271,8 @@ class TestWeatherPartials(TestCase):
                     },
                 ],
             },
+            lat=11.1,
+            lon=22.2,
         )
 
         mock_gettext_lazy.assert_called_with("daily-forecast.labels.multiple-alerts.01")
@@ -276,20 +284,22 @@ class TestWeatherPartials(TestCase):
                 "alertType": "bippity boppity boop",
                 "alertLevel": "uppest",
                 "alertCount": 2,
+                "lat": 11.1,
+                "lon": 22.2,
             },
         )
 
     def test_daily_forecast_list_item_first(self):
         """Tests the daily forecast list item for the first entity."""
         day = {"periods": [{"dayName": "Twosday"}]}
-        actual = weather_partials.daily_forecast_list_item(day=day, first=True)
-        self.assertEqual(actual, {"day": day, "first": True})
+        actual = weather_partials.daily_forecast_list_item(day=day, first=True, lat=11.1, lon=22.2)
+        self.assertEqual(actual, {"day": day, "first": True, "lat": 11.1, "lon": 22.2})
 
     def test_daily_forecast_list_item_not_first(self):
         """Tests the daily forecast list item for a non-first item."""
         day = {"periods": [{"dayName": "Twosday"}]}
-        actual = weather_partials.daily_forecast_list_item(day=day)
-        self.assertEqual(actual, {"day": day, "first": False})
+        actual = weather_partials.daily_forecast_list_item(day=day, lat=11.1, lon=22.2)
+        self.assertEqual(actual, {"day": day, "first": False, "lat": 11.1, "lon": 22.2})
 
     def test_daily_summary_list_item(self):
         """Tests the daily summary list item."""
@@ -304,7 +314,7 @@ class TestWeatherPartials(TestCase):
                 "feelsLike": "other degrees",
             },
         }
-        actual = weather_partials.daily_summary_list_item(day=day)
+        actual = weather_partials.daily_summary_list_item(day=day, lat=11.1, lon=22.2)
         self.assertEqual(
             actual,
             {
@@ -315,6 +325,8 @@ class TestWeatherPartials(TestCase):
                 "times": "hour list",
                 "temps": "some degrees",
                 "feelsLike": "other degrees",
+                "lat": 11.1,
+                "lon": 22.2,
             },
         )
 
@@ -483,12 +495,14 @@ class TestWeatherPartials(TestCase):
     def test_hourly_table(self):
         """Tests the hourly table partial."""
         day = {"this key": "is preserved", "alerts": {"items": "a list of alerts"}}
-        actual = weather_partials.hourly_table(day=day)
+        actual = weather_partials.hourly_table(day=day, lat=11.1, lon=22.2)
         self.assertEqual(
             actual,
             {
                 "this key": "is preserved",
                 "alerts": "a list of alerts",
+                "lat": 11.1,
+                "lon": 22.2,
             },
         )
 

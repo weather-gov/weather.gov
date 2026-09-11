@@ -168,6 +168,7 @@ def point_location_alerts(request, lat, lon):
         },
     )
 
+
 @cache_control(max_age=120, smax_age=120, public=True)
 @decimal_redirect
 def point_location_today(request, lat, lon):
@@ -241,11 +242,13 @@ def point_location_today(request, lat, lon):
         },
     )
 
+
 @cache_control(max_age=120, smax_age=120, public=True)
 @decimal_redirect
 def point_location_seven_day(request, lat, lon):
     """Render the 7-day detailed forecast for the point location."""
     allow_coastal = settings.MARINE_COASTAL_EXPERIMENTAL
+
 
     point = interop.get_point_forecast(lat, lon)
     fullname = point.get("place", {}).get("fullName", None)
@@ -287,7 +290,6 @@ def point_location_seven_day(request, lat, lon):
         wfo = WFO.objects.get(code=WFO.normalize_code(code))
         point["wfo"] = wfo
         point["isAlaska"] = wfo.code.lower() in ["afc", "afg", "ajk"]
-
 
     return render(
         request,

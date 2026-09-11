@@ -26,7 +26,7 @@
       <span class="usa-sr-only">{% trans "daily-forecast.labels.alert.01" %}</span>
     </th>
     {% if alert.offset > 0 %}<td colspan="{{ alert.offset }}"></td>{% endif %}
-    <td colspan="{{ alert.duration }}">{% alert_link alert=alert %}</td>
+    <td colspan="{{ alert.duration }}">{% alert_link alert=alert lat=lat lon=lon %}</td>
     {% if alert.remainder > 0 %}<td colspan="{{ alert.remainder }}"></td>{% endif %}
   </tr>
 {% endfor %}
