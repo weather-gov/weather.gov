@@ -22,42 +22,68 @@ class SatelliteVideo extends HTMLElement {
     this.video = this.querySelector("video");
 
     const wfo = this.getAttribute("wfo");
+    const isAlaska = this.getAttribute("isAlaska") === "True";
     const timezone = this.getAttribute("timezone");
 
     if (!wfo || this.#state.failed) return;
 
     try {
-      const url = `https://cdn.star.nesdis.noaa.gov/WFO/catalogs/WFO_02_${wfo.toLowerCase()}_catalog.json`;
-      const response = await window._fetch(url, { wxMaxRetries: 1 });
-
-      if (!response.ok) {
-        this.#state.failed = true;
-        this.renderError();
-        return;
-      }
-      const satelliteMetadata = await response.json();
-
-      const satellite = satelliteMetadata?.meta?.satellite;
-      if (satellite) {
-        const goes = satellite === "GOES-West" ? "GOES18" : "GOES19";
-
-        // Use observation_time and subtract 8 hours for the range
-        const end = new Date(satelliteMetadata.meta.observation_time);
-        const start = new Date(end.getTime() - 8 * 60 * 60 * 1000);
-
+      // If Alaska, use the sector satellite view
+      if (isAlaska) {
+        // All Sector videos are 1000x1000px
         const result = {
-          times: {
-            start: start.toISOString(),
-            end: end.toISOString(),
-          },
-          latest: `https://cdn.star.nesdis.noaa.gov/WFO/${wfo.toLowerCase()}/GEOCOLOR/latest.jpg`,
-          gif: `https://cdn.star.nesdis.noaa.gov/WFO/${wfo.toLowerCase()}/GEOCOLOR/${goes}-${wfo.toUpperCase()}-GEOCOLOR-600x600.gif`,
-          mp4: `https://cdn.star.nesdis.noaa.gov/WFO/${wfo.toLowerCase()}/GEOCOLOR/${goes}-${wfo.toUpperCase()}-GEOCOLOR-600x600.mp4`,
+          latest:
+            "https://cdn.star.nesdis.noaa.gov/GOES18/ABI/SECTOR/ak/GEOCOLOR/latest.jpg",
+          gif: "https://cdn.star.nesdis.noaa.gov/GOES18/ABI/SECTOR/ak/GEOCOLOR/GOES18-AK-GEOCOLOR-1000x1000.gif",
+          mp4: "https://cdn.star.nesdis.noaa.gov/GOES18/ABI/SECTOR/ak/GEOCOLOR/GOES18-AK-GEOCOLOR-1000x1000.mp4",
         };
 
+        // We can get the satellite video, but not the metadata with start and end times
+        // So remove the time container and add extra margin so the layout looks correct
+        // and the radar and satellite containers are aligned (only on desktop)
+        const timeContainer = document.querySelector(
+          "#satellite-time-container",
+        );
+        const outerContainer = document.querySelector(
+          "[wx-outer-satellite-container]",
+        );
+        timeContainer?.classList.add("display-none");
+        outerContainer?.classList.add("missing-timestamp");
         this.render(result, timezone);
+        return;
       } else {
-        this.renderError();
+        const url = `https://cdn.star.nesdis.noaa.gov/WFO/catalogs/WFO_02_${wfo.toLowerCase()}_catalog.json`;
+        const response = await window._fetch(url, { wxMaxRetries: 1 });
+
+        if (!response.ok) {
+          this.#state.failed = true;
+          this.renderError();
+          return;
+        }
+        const satelliteMetadata = await response.json();
+
+        const satellite = satelliteMetadata?.meta?.satellite;
+        if (satellite) {
+          const goes = satellite === "GOES-West" ? "GOES18" : "GOES19";
+
+          // Use observation_time and subtract 8 hours for the range
+          const end = new Date(satelliteMetadata.meta.observation_time);
+          const start = new Date(end.getTime() - 8 * 60 * 60 * 1000);
+
+          const result = {
+            times: {
+              start: start.toISOString(),
+              end: end.toISOString(),
+            },
+            latest: `https://cdn.star.nesdis.noaa.gov/WFO/${wfo.toLowerCase()}/GEOCOLOR/latest.jpg`,
+            gif: `https://cdn.star.nesdis.noaa.gov/WFO/${wfo.toLowerCase()}/GEOCOLOR/${goes}-${wfo.toUpperCase()}-GEOCOLOR-600x600.gif`,
+            mp4: `https://cdn.star.nesdis.noaa.gov/WFO/${wfo.toLowerCase()}/GEOCOLOR/${goes}-${wfo.toUpperCase()}-GEOCOLOR-600x600.mp4`,
+          };
+
+          this.render(result, timezone);
+        } else {
+          this.renderError();
+        }
       }
     } catch (e) {
       console.error("Error getting satellite metadata", e);
@@ -68,7 +94,7 @@ class SatelliteVideo extends HTMLElement {
 
   render(data, timezone) {
     const timeContainer = document.querySelector("[data-wx-satellite-times]");
-    if (timeContainer) {
+    if (timeContainer && data.times) {
       const start = new Date(data.times.start);
       const end = new Date(data.times.end);
 

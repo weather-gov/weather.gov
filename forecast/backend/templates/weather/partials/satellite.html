@@ -22,7 +22,7 @@
   <div class="grid-container padding-0 bg-white shadow-1"
        wx-outer-satellite-container>
     <div class="grid-row wx-satellite-container position-relative">
-      <wx-satellite-video class="grid-col-12" wfo="{{ point.wfo.normalized_code | lower }}" timezone="{{ point.place.timezone }}">
+      <wx-satellite-video class="grid-col-12" wfo="{{ point.wfo.normalized_code | lower }}" isAlaska="{{ point.isAlaska }}" timezone="{{ point.place.timezone }}">
       <div data-wx-satellite-loading class="padding-4 width-full text-center">{% trans "satellite.video.loading.01" %}</div>
       <div data-wx-satellite-content class="display-none">
         <video id="satellite-video-player" controls class="width-full display-block">
@@ -31,8 +31,13 @@
       </wx-satellite-video>
     </div>
     <div class="padding-2">
-      <a href="https://www.star.nesdis.noaa.gov/GOES/wfo.php?wfo={{ point.wfo.normalized_code | lower }}"
+      {% if point.isAlaska %}
+        <a href="https://www.star.nesdis.noaa.gov/GOES/sector.php?sat=G18&sector=ak"
          class="usa-link">{% trans "satellite.link.explore-other.01" %}</a>
+      {% else %}
+        <a href="https://www.star.nesdis.noaa.gov/GOES/wfo.php?wfo={{ point.wfo.normalized_code | lower }}"
+          class="usa-link">{% trans "satellite.link.explore-other.01" %}</a>
+      {% endif %}
     </div>
   </div>
 </div>

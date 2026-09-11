@@ -85,6 +85,7 @@ def point_location(request, lat, lon):  # noqa: C901
         code = point["grid"]["wfo"]
         wfo = WFO.objects.get(code=WFO.normalize_code(code))
         point["wfo"] = wfo
+        point["isAlaska"] = wfo.code.lower() in ["afc", "afg", "ajk"]
 
         # Pull the weather story data out of the point interop response
         # and format the timestamps / handle errors as needed.
