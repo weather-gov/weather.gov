@@ -75,8 +75,8 @@
         </th>
         {% for period in hours %}
           <td>
-            {% if period.icon.icon %}
-              <div class="line-height-sans-3">
+            <div class="line-height-sans-3">
+              {% if period.icon.icon %}
                 <div class="icon margin-right-1 width-3 margin-top-05">
                   {% weather_icon period.icon.base size="sm" color_mode="light" class="maxh-3 maxw-3" aria_hidden="true" %}
                 </div>
@@ -87,6 +87,8 @@
                     <span class="text-base font-mono-xs">{{ "abbreviations.not-applicable.01" | t }}</span>
                   {% endif %}
                 </div>
+              {% else %}
+                <span class="text-base font-mono-xs">{{ "abbreviations.not-applicable.01" | t }}</span>
               </div>
             {% endif %}
           </td>
