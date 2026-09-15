@@ -18,9 +18,7 @@ before(async () => {
   // This component uses the window.matchMedia capability
   // so we need to stub it out
   window.matchMedia = stub();
-  window.matchMedia.returns(
-    document.createElement("div")
-  );
+  window.matchMedia.returns(document.createElement("div"));
 });
 
 describe("DailyForecast.js component tests", () => {
@@ -108,7 +106,9 @@ describe("DailyForecast.js component tests", () => {
 
     it("will activate the first quick forecast item if there is no preserved state", () => {
       component.getCachedState.returns({});
-      const firstItem = component.querySelector(".wx-quick-forecast-item:first-child");
+      const firstItem = component.querySelector(
+        ".wx-quick-forecast-item:first-child",
+      );
       sandbox.spy(firstItem, "click");
 
       component.loadCachedState();
@@ -120,22 +120,23 @@ describe("DailyForecast.js component tests", () => {
     it("will activate a given quick forecast item if it is in the state", () => {
       const state = {
         quickForecastItem: {
-          id: "day2-quick-forecast-button"
-        }
+          id: "day2-quick-forecast-button",
+        },
       };
-      const expectedItem = document.getElementById("day2-quick-forecast-button");
+      const expectedItem = document.getElementById(
+        "day2-quick-forecast-button",
+      );
       component.getCachedState.returns(state);
 
-
       expect(expectedItem.getAttribute("aria-selected")).to.equal("false");
-      
+
       component.loadCachedState();
 
       expect(expectedItem.getAttribute("aria-selected")).to.equal("true");
     });
 
     it("will click the appropriate charts/table toggle if the state is set", () => {
-      const state = { chartToggle: "hourly-charts-tab_day2"};
+      const state = { chartToggle: "hourly-charts-tab_day2" };
       const tabElement = document.getElementById("hourly-charts-tab_day2");
 
       // Note that this component does not handle state changes on
@@ -157,14 +158,14 @@ describe("DailyForecast.js component tests", () => {
       ];
       const state = {
         // The last two only
-        togglesToClick: [toggleIds[1], toggleIds[2]]
+        togglesToClick: [toggleIds[1], toggleIds[2]],
       };
-      const toggleElements = toggleIds.map(id => {
+      const toggleElements = toggleIds.map((id) => {
         // Note: it's the parent h3 that handles the clicks,
         // in the current toggle implementation
         return document.getElementById(id).parentElement;
       });
-      toggleElements.forEach(el => {
+      toggleElements.forEach((el) => {
         sandbox.spy(el, "click");
       });
       component.getCachedState.returns(state);
@@ -178,7 +179,9 @@ describe("DailyForecast.js component tests", () => {
 
     it("clicking on of the forecast quick-toggle elements will add its id to the state", () => {
       component.getCachedState.restore();
-      const secondQuickToggle = document.getElementById("day2-quick-toggle-button");
+      const secondQuickToggle = document.getElementById(
+        "day2-quick-toggle-button",
+      );
       expect(component.getCachedState().togglesToClick).to.have.length(0);
 
       // Note: because another component controls setting the toggle
@@ -186,13 +189,17 @@ describe("DailyForecast.js component tests", () => {
       // here in the test in order to properly trigger the state saving
       secondQuickToggle.setAttribute("aria-expanded", "true");
       secondQuickToggle.click();
-      
-      expect(component.getCachedState().togglesToClick).includes("day2-quick-toggle-button");
+
+      expect(component.getCachedState().togglesToClick).includes(
+        "day2-quick-toggle-button",
+      );
     });
 
     it("will not add a duplicate ID to the quick toggle state if it's already present", () => {
       component.getCachedState.restore();
-      component.setCachedStateItem("togglesToClick", ["day3-quick-toggle-button"]);
+      component.setCachedStateItem("togglesToClick", [
+        "day3-quick-toggle-button",
+      ]);
       const initialState = component.getCachedState();
       expect(initialState.togglesToClick).to.have.length(1);
       expect(initialState.togglesToClick).includes("day3-quick-toggle-button");
@@ -214,13 +221,15 @@ describe("DailyForecast.js component tests", () => {
 
       // Note: the tabs throw a custom event, and that is handled
       // by a separate component. So we need to simulate it here.
-      const event = new CustomEvent("wx-tab-focused", {detail: tab, bubbles: true});
+      const event = new CustomEvent("wx-tab-focused", {
+        detail: tab,
+        bubbles: true,
+      });
       tab.dispatchEvent(event);
 
       const finalState = component.getCachedState();
       expect(finalState.chartToggle).to.equal("charts");
     });
-    
 
     afterEach(() => {
       sandbox.restore();
