@@ -1,0 +1,76 @@
+{% load wagtailimages_tags %}
+<li class="tree-node">
+  <div class="folder-row">
+    <button type="button"
+            class="folder-title"
+            aria-expanded="false"
+            aria-controls="folder-{{ node.collection.id }}">
+      <span class="folder-caret" aria-hidden="true">
+        <svg class="icon icon-arrow-right carat-svg" aria-hidden="true">
+          <use href="#icon-arrow-right"></use>
+        </svg>
+      </span>
+      <span class="folder-name">{{ node.collection.name }}</span>
+      <span class="w-meta">({{ node.total_images }})</span>
+    </button>
+    {% if node.can_add %}
+      <div class="folder-menu">
+        <button type="button"
+                class="folder-menu-toggle button button-small button-secondary "
+                data-controller="w-tooltip"
+                data-w-tooltip-content-value="More actions"
+                aria-haspopup="true"
+                aria-controls="folder-menu-{{ node.collection.id }}"
+                aria-expanded="false">
+          <svg class="icon icon-plus-inverse menu-toggle-svg" aria-hidden="true">
+            <use href="#icon-plus-inverse"></use>
+          </svg>
+        </button>
+        <div class="folder-menu-popup"
+             id="folder-menu-{{ node.collection.id }}"
+             hidden>
+          <button type="button"
+                  class="folder-menu-item add-collection-toggle"
+                  aria-controls="add-collection-{{ node.collection.id }}"
+                  aria-expanded="false">Add sub-collection</button>
+          <a class="folder-menu-item"
+             href="{% url 'wagtailimages:add_multiple' %}?collection_id={{ node.collection.id }}">Add image</a>
+        </div>
+      </div>
+    {% endif %}
+  </div>
+  <form class="add-collection-form"
+        id="add-collection-{{ node.collection.id }}"
+        method="post"
+        action="{% url 'image_tree:add_collection' %}"
+        hidden>
+    {% csrf_token %}
+    <input type="hidden" name="parent_id" value="{{ node.collection.id }}">
+    <input type="text" name="name" placeholder="New collection name" required>
+    <button type="submit" class="button collection-quick-add-form-button">Add</button>
+    <button type="button" class="button button-secondary collection-quick-add-form-button add-collection-cancel">Cancel</button>
+    <p class="add-collection-error" hidden></p>
+  </form>
+  <div class="folder-contents" id="folder-{{ node.collection.id }}" hidden>
+    {% if node.images %}
+      <div class="image-grid">
+        {% for img in node.images %}
+          <div class="image-item">
+            <a href="{% url 'wagtailimages:edit' img.id %}">
+              {% image img max-100x100 %}
+              <div class="image-title" title="{{ img.title }}">{{ img.title }}</div>
+            </a>
+          </div>
+        {% endfor %}
+      </div>
+    {% endif %}
+    {% if node.children %}
+      <ul class="tree-branch">
+        {% for child in node.children %}
+          {% include "wagtailadmin/image_tree_node.html" with node=child %}
+        {% endfor %}
+      </ul>
+    {% endif %}
+    {% if not node.images and not node.children %}<p class="tree-empty">Empty folder</p>{% endif %}
+  </div>
+</li>
