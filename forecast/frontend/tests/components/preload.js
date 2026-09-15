@@ -31,6 +31,7 @@ global.HTMLInputElement = window.HTMLInputElement;
 global.requestAnimationFrame = window.requestAnimationFrame;
 global.localStorage = window.localStorage;
 global.sessionStorage = window.sessionStorage;
+global.getComputedStyle = window.getComputedStyle;
 
 // Fetch is _super_ annoying to stub out individually across test
 // files, because not cleaning up the mocks properly can cause

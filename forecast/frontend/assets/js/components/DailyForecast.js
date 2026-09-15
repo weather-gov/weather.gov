@@ -26,19 +26,32 @@ class DailyForecast extends HTMLElement {
     this.tabClickHandler = this.tabClickHandler.bind(this);
     this.setupMediaEvents = this.setupMediaEvents.bind(this);
     this.setupTabMode = this.setupTabMode.bind(this);
+    this.loadCachedState = this.loadCachedState.bind(this);
     this.undoTabMode = this.undoTabMode.bind(this);
     this.handleDesktopMediaChange = this.handleDesktopMediaChange.bind(this);
     this.handleKeys = this.handleKeys.bind(this);
     this.handleDetailsToggle = this.handleDetailsToggle.bind(this);
+    this.handleQuickToggle = this.handleQuickToggle.bind(this);
   }
 
   connectedCallback() {
+    // Listen for changes to the size of the window
     this.setupMediaEvents();
 
     this.addEventListener("keydown", this.handleKeys);
 
     // Listen for table/chart toggle changes and apply to all days
     window.addEventListener("wx-tab-focused", this.handleDetailsToggle);
+
+    // Listen to quick toggle clicks, so we can record the state
+    Array.from(
+      this.querySelectorAll(`.wx-daily-forecast-quick-toggle`),
+    ).forEach((el) => {
+      el.addEventListener("click", this.handleQuickToggle);
+    });
+
+    // Load any state from localStorage
+    this.loadCachedState();
   }
 
   disconnectedCallback() {
@@ -71,6 +84,108 @@ class DailyForecast extends HTMLElement {
     );
     this.desktopQuery.addEventListener("change", this.handleDesktopMediaChange);
     this.handleDesktopMediaChange();
+  }
+
+  loadCachedState() {
+    let firstItemSelected = false;
+    if (this.getAttribute("cache") === "true") {
+      const state = this.getCachedState();
+      if (state) {
+        // Load the quick forecast state and set it
+        const quickForecastItem = document.getElementById(
+          state.quickForecastItem?.id,
+        );
+        if (quickForecastItem) {
+          quickForecastItem.click();
+          firstItemSelected = true;
+        }
+
+        // Get and set chart/table toggle state
+        const { chartToggle } = state;
+        if (chartToggle) {
+          const foundToggler = document.querySelector(`[id^="${chartToggle}"]`);
+          if (foundToggler) {
+            foundToggler.click();
+          }
+        }
+
+        // Get and set accordion states
+        const { togglesToClick } = state;
+        if (Array.isArray(togglesToClick)) {
+          togglesToClick.forEach((toggleId) => {
+            let el = document.getElementById(toggleId);
+            if (el) {
+              el.parentElement.click();
+            }
+          });
+        }
+      }
+    }
+
+    // If no first item was selected from a loaded
+    // cache state, then we need to select the first item.
+    // We should probably be setting this state by default from the
+    // template side TODO
+    if (!firstItemSelected) {
+      this.querySelector(".wx-quick-forecast-item:first-child").click();
+    }
+  }
+
+  getCachedState() {
+    const found = window.localStorage.getItem("pointForecastState");
+    if (!found) {
+      return null;
+    }
+
+    return JSON.parse(found);
+  }
+
+  setCachedStateItem(key, val) {
+    const found = window.localStorage.getItem("pointForecastState");
+    let state = {};
+    if (found) {
+      state = JSON.parse(found);
+    }
+    state[key] = val;
+    window.localStorage.setItem("pointForecastState", JSON.stringify(state));
+  }
+
+  handleQuickToggle(event) {
+    // Unfortunately, due to the way these toggles are currently
+    // implements -- which is partially the fault of USWDS patterns --
+    // the event target can either be a heading element (h3) _or_
+    // a button that is the direct child of the heading element.
+    let button = event.target;
+    if (!event.target.matches("button")) {
+      button = event.target.querySelector("button");
+    }
+
+    const isExpanded = button.getAttribute("aria-expanded") === "true";
+    let state = {};
+    const found = this.getCachedState();
+    if (found) {
+      state = found;
+    }
+    let togglesToClick = state.togglesToClick;
+    if (!togglesToClick) {
+      togglesToClick = [];
+    }
+
+    if (isExpanded) {
+      // Add the toggler to the list of toggles that
+      // should be clicked
+      togglesToClick.push(button.id);
+    } else {
+      // Remove the toggler from the list to be clicked,
+      // if it is present in the list
+      togglesToClick = togglesToClick.filter((id) => id !== button.id);
+    }
+
+    // Finally, update the state with the new toggler list.
+    // We want to make sure that unique IDs only appear once
+    // in the list, so use a set.
+    togglesToClick = Array.from(new Set(togglesToClick));
+    this.setCachedStateItem("togglesToClick", togglesToClick);
   }
 
   /**
@@ -112,9 +227,6 @@ class DailyForecast extends HTMLElement {
         item.addEventListener("click", this.tabClickHandler);
       },
     );
-
-    // Click the first item in the list to select it
-    this.querySelector(".wx-quick-forecast-item:first-child").click();
   }
 
   /**
@@ -185,6 +297,12 @@ class DailyForecast extends HTMLElement {
       const correspondingPanelId = event.target.getAttribute("aria-controls");
       const correspondingPanel = document.getElementById(correspondingPanelId);
       correspondingPanel.setAttribute("data-tabpanel-active", "true");
+
+      // Serialize the change in state, for tab-page views
+      if (this.getAttribute("cache") === "true") {
+        const id = event.target.id;
+        this.setCachedStateItem("quickForecastItem", { id });
+      }
     }
   }
 
@@ -213,6 +331,11 @@ class DailyForecast extends HTMLElement {
         targetTab.click();
       }
     });
+
+    // Record the updated state to the state cache
+    if (this.getAttribute("cache") === "true") {
+      this.setCachedStateItem("chartToggle", prefix);
+    }
   }
 
   /**
