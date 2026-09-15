@@ -1,0 +1,14 @@
+{% extends "wagtailadmin/base.html" %}
+{% load static %}
+{% block title %}Image File Tree{% endblock %}
+{% block content %}
+  {% include "wagtailadmin/shared/header.html" with title="Media File Tree" subtitle="Browse image collections as a folder structure" %}
+  <div class="tree-container">
+    <ul class="tree-branch">
+      {% for node in tree_data %}
+        {% include "wagtailadmin/image_tree_node.html" with node=node %}
+      {% endfor %}
+    </ul>
+  </div>
+  <script type="module" src="{% static 'js/cms/image-tree.js' %}"></script>
+{% endblock %}
