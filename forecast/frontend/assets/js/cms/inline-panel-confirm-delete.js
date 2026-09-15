@@ -20,6 +20,10 @@ const preemptDeleteButtons = (container) => {
   container
     ?.querySelectorAll(`.w-panel__header button[type="button"][title="Delete"]`)
     .forEach((deleteButton) => {
+      // Skip buttons we've already wrapped, since w-formset:ready fires once
+      // per formset and could otherwise wrap the same button twice.
+      if (deleteButton.parentNode?.dataset?.wxDeleteWrapped) return;
+
       // We need to be able to capture click events on the button before any
       // of its other event handlers. In order to do that, we actually need to
       // attach our event listener to an element higher up in the DOM. But we
@@ -27,6 +31,7 @@ const preemptDeleteButtons = (container) => {
       // that, we create a brand new DOM node, move the button into it, and
       // then put the wrapper where the button used to be.
       const wrapper = document.createElement("span");
+      wrapper.dataset.wxDeleteWrapped = "true";
       deleteButton.parentNode.replaceChild(wrapper, deleteButton);
       wrapper.append(deleteButton);
 
@@ -39,21 +44,17 @@ const preemptDeleteButtons = (container) => {
     });
 };
 
-// When the inline panel is first loaded, it fires this w-formset:ready event.
-// In response, we should find the nearest ancestor to the target that has the
-// data-wx-confirm-delete attribute. This attribute is specified in the panel
-// configuration for the model. We will preempt all of the delete buttons in
-// the data-wx-confirm-delete ancestor.
-//
-// We only need to handle this event once.
-document.addEventListener(
-  "w-formset:ready",
-  (e) => {
-    preemptDeleteButtons(e?.target?.closest("[data-wx-confirm-delete]"));
-    return;
-  },
-  { once: true },
-);
+// When an inline panel is first loaded, it fires this w-formset:ready event.
+// This fires once per formset on the page (not once globally), so we must
+// not use { once: true } here or we'll only ever handle the first formset
+// that happens to fire, leaving every other panel's pre-existing items
+// unprotected. In response, we should find the nearest ancestor to the
+// target that has the data-wx-confirm-delete attribute. This attribute is
+// specified in the panel configuration for the model. We will preempt all
+// of the delete buttons in the data-wx-confirm-delete ancestor.
+document.addEventListener("w-formset:ready", (e) => {
+  preemptDeleteButtons(e?.target?.closest("[data-wx-confirm-delete]"));
+});
 
 // Any time an item is added to the inline panel, it fires this w-formset:added
 // event. The target is the container node for the new item. We want to check if

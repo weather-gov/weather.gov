@@ -1,9 +1,11 @@
 from django.core.exceptions import ValidationError
 from django.db import models
 from modelcluster.fields import ParentalKey
-from wagtail.admin.panels import FieldPanel, InlinePanel, MultiFieldPanel
+from wagtail.admin.panels import FieldPanel, MultiFieldPanel
 from wagtail.fields import RichTextField
 from wagtail.models import Orderable, Page
+
+from .panels import CustomInlinePanel
 
 
 class RoadmapPage(Page):
@@ -25,7 +27,7 @@ class RoadmapPage(Page):
         FieldPanel("body"),
         # Add a data attribute that flags this inline panel as one that we
         # want to enforce deletion confirmation on.
-        InlinePanel("entries", label="Roadmap entries", attrs={"data-wx-confirm-delete": "true"}),
+        CustomInlinePanel("entries", label="Roadmap entries", attrs={"data-wx-confirm-delete": "true"}),
         MultiFieldPanel(
             [
                 FieldPanel(

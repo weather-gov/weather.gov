@@ -9,7 +9,7 @@ import { stub } from "sinon";
 // Create the DOM and capture the parts that we will use directly.
 const dom = new JSDOM("undefined", { url: "http://localhost/" });
 global._jsDom = dom;
-const { window } =  dom;
+const { window } = dom;
 const { document } = window;
 
 // Create a version of requestAnimationFrame that immediately calls
@@ -39,7 +39,7 @@ global.getComputedStyle = window.getComputedStyle;
 // Let's stub fetch globally in one place, and have all tests
 // reset the stub whenever they can.
 export const mochaHooks = {
-  beforeEach(done){
+  beforeEach(done) {
     stub(global, "fetch");
 
     // JSDOM does not have the `scrollIntoView` method,
@@ -49,7 +49,7 @@ export const mochaHooks = {
     done();
   },
 
-  afterEach(done){
+  afterEach(done) {
     global.fetch.restore();
     done();
   },

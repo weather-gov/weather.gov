@@ -5,16 +5,20 @@ from wagtail.admin.panels import FieldPanel, InlinePanel, MultiFieldPanel
 from wagtail.fields import RichTextField
 from wagtail.models import Orderable, Page
 
+from .panels import CustomInlinePanel
+
 
 # The abstract model for related links
 class RelatedLink(models.Model):
     """The abstract model for related links."""
 
     text = models.CharField("Display text", max_length=255)
-    url = models.URLField(
+    url = models.CharField(
         "Link url",
+        max_length=255,
         blank=True,
-        help_text="The URL of the resource. Use the full URL (i.e. https://www.example.com/path/to/resource/).",
+        help_text="The full URL (i.e. https://www.example.com/path/to/resource/), "
+        + "or the path if an internal beta.weather.gov page.",
     )
 
     panels = [
@@ -33,17 +37,17 @@ class HazardLevels(models.Model):
     class HazardLevelAlertLevel(models.TextChoices):
         """Represents a other/watch/warning enum value."""
 
-        Other = "other", "Other"
+        Other = "other", "Other (Advisory, Special Weather Statement, etc.)"
         Watch = "watch", "Watch"
-        Warning = "warning", "Warning"
+        Warning = "warning", "Warning/Emergency"
 
     alert_level = models.CharField(max_length=10, choices=HazardLevelAlertLevel.choices)
-    alert_text = models.TextField(help_text="The name of the hazard alert (i.e. Tornado Advisory, Tornado Warning).")
+    alert_title = models.TextField(help_text="The name of the hazard alert (i.e. Tornado Advisory, Tornado Warning).")
     description = RichTextField(
         help_text="The description of the hazard level, including what it means and what actions to take."
     )
 
-    panels = [FieldPanel("alert_level"), FieldPanel("alert_text"), FieldPanel("description")]
+    panels = [FieldPanel("alert_level"), FieldPanel("alert_title"), FieldPanel("description")]
 
     class Meta:  # noqa: D106
         abstract = True
@@ -62,7 +66,8 @@ class HazardGuideIndexPage(Page):
     content_panels = Page.content_panels + [
         FieldPanel(
             "slug",
-            help_text="The name of the page as it will appear in URLs. For example, https://beta.weather.gov/[slug]",
+            help_text="The name of the page as it will appear in URLs. "
+                + "For example, https://beta.weather.gov/prepare/hazard-guides/[slug]",
         ),
         FieldPanel("content"),
     ]
@@ -107,7 +112,8 @@ class HazardGuidePage(Page):
     content_panels = Page.content_panels + [
         FieldPanel(
             "slug",
-            help_text="The name of the page as it will appear in URLs. For example, https://beta.weather.gov/[slug]",
+            help_text="The name of the page as it will appear in URLs. "
+                + "For example, https://beta.weather.gov/prepare/hazard-guides/[slug]",
         ),
         MultiFieldPanel(
             [
@@ -122,9 +128,6 @@ class HazardGuidePage(Page):
             ],
             heading="Hero image",
         ),
-        # Add a data attribute that flags this inline panel as one that we
-        # want to enforce deletion confirmation on.
-        InlinePanel("sections", label="New section", attrs={"data-wx-confirm-delete": "true"}),
         MultiFieldPanel(
             [
                 FieldPanel(
@@ -138,6 +141,9 @@ class HazardGuidePage(Page):
             ],
             heading="Search engine optimization",
         ),
+        # Add a data attribute that flags this inline panel as one that we
+        # want to enforce deletion confirmation on.
+        CustomInlinePanel("sections", label="", attrs={"data-wx-confirm-delete": "true"}),
     ]
 
     # Get rid of the separate SEO tab.
@@ -189,7 +195,7 @@ class HazardGuideSection(Orderable, ClusterableModel):
     ]
 
     def __str__(self):
-        return self.header or "Section"
+        return f"{self.header}"
 
 
 class HazardLevelEntry(Orderable, HazardLevels):
@@ -200,7 +206,7 @@ class HazardLevelEntry(Orderable, HazardLevels):
     panels = HazardLevels.panels
 
     def __str__(self):
-        return self.alert_text or "Alert"
+        return f"{self.alert_title}"
 
 
 class ResourceLink(Orderable, RelatedLink):
@@ -211,4 +217,4 @@ class ResourceLink(Orderable, RelatedLink):
     panels = RelatedLink.panels
 
     def __str__(self):
-        return self.text or "Resource Link"
+        return f"{self.text}"
