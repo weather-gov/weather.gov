@@ -32,11 +32,11 @@
     </div>
     <div class="padding-2">
       {% if point.isAlaska %}
-        <a href="https://www.star.nesdis.noaa.gov/GOES/sector.php?sat=G18&sector=ak"
-         class="usa-link">{% trans "satellite.link.explore-other.01" %}</a>
+        <a href="https://www.goes.noaa.gov/sector.php?sat=G18&sector=ak"
+         class="usa-link usa-link--external">{% trans "satellite.link.explore-other.01" %}</a>
       {% else %}
-        <a href="https://www.star.nesdis.noaa.gov/GOES/wfo.php?wfo={{ point.wfo.normalized_code | lower }}"
-          class="usa-link">{% trans "satellite.link.explore-other.01" %}</a>
+        <a href="https://www.goes.noaa.gov/wfo.php?wfo={{ point.wfo.normalized_code | lower }}"
+          class="usa-link usa-link--external">{% trans "satellite.link.explore-other.01" %}</a>
       {% endif %}
     </div>
   </div>

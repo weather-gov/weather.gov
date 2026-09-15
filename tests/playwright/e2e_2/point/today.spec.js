@@ -12,7 +12,7 @@ describe("Point forecast › Today tab", () => {
   });
 
   beforeEach(async ({ page }) => {
-    await page.goto(services.webApp("/forecast/point/34.749/-92.275/#today"), {
+    await page.goto(services.webApp("/forecast/point/34.749/-92.275/today"), {
       waitUntil: "load",
     });
     const djdt = page.getByRole("link", { name: "Hide »" });
@@ -52,26 +52,28 @@ describe("Point forecast › Today tab", () => {
       await expect(wind).toContainText("N/A");
     });
 
-    test("I expect to see my radar", async ({ page }) => {
-      const heading = page.getByRole("heading", {
-        name: "Radar",
-        exact: true,
-        includeHidden: true,
+    describe("I expect to see my radar", async () => {
+      test("I can to see my radar information", async ({ page }) => {
+        const heading = page.getByRole("heading", {
+          name: "Radar",
+          exact: true,
+          includeHidden: true,
+        });
+        const container = page.locator("div.cmi-radar-container");
+        const time = page.locator('div[wx-auto-update="radar"]');
+
+        await expect(heading).toBeVisible();
+        await expect(time).toHaveText(/Time shown/i, { useInnerText: true });
+        await expect(time).toHaveText(
+          /\w+, \d+:\d+ (AM|PM) [A-Z]{3,4} (–|-) \d+:\d+ (AM|PM) [A-Z]{3,4}/i,
+          { useInnerText: true },
+        );
+        await expect(container).toBeVisible();
       });
-      const container = page.locator("div.cmi-radar-container");
-      const time = page.locator('div[wx-auto-update="radar"]');
 
-      await expect(heading).toBeVisible();
-      await expect(time).toHaveText(/Time shown/i, { useInnerText: true });
-      await expect(time).toHaveText(
-        /\w+, \d+:\d+ (AM|PM) [A-Z]{3,4} - \d+:\d+ (AM|PM) [A-Z]{3,4}/i,
-        { useInnerText: true },
-      );
-      await expect(container).toBeVisible();
-    });
-
-    describe("When I toggle the radar legend", () => {
-      test("I expect to see the intensity key", async ({ page }) => {
+      test("I expect to see the intensity key in the radar legend", async ({
+        page,
+      }) => {
         const button = page.getByRole("button", {
           name: "Radar Legend",
           includeHidden: true,
@@ -83,6 +85,60 @@ describe("Point forecast › Today tab", () => {
         const row = table.getByRole("row", { includeHidden: true }).nth(1);
         await expect(row).toHaveText(/−35–0/i);
         await expect(row).toHaveText(/Extremely light \(drizzle\/snow\)/i);
+      });
+
+      test("I can access my radar link", async ({ page }) => {
+        const container = page.locator("div.wx-radar-wrapper");
+        const link = container.getByText("Explore other radar views");
+        await expect(link).toBeVisible();
+        await expect(link).toHaveAttribute("href", /radar\.weather\.gov/i);
+      });
+    });
+
+    describe("I expect to see my satellite", () => {
+      test("I can see my satellite information", async ({ page }) => {
+        const heading = page.getByRole("heading", {
+          name: "Satellite",
+          exact: true,
+          includeHidden: true,
+        });
+        const container = page.locator("div.wx-satellite-wrapper");
+        const timeTitle = container.getByText("time shown:");
+        const time = page.locator("div[data-wx-satellite-times]");
+
+        await expect(heading).toBeVisible();
+        await expect(timeTitle).toBeVisible();
+        await expect(time).toHaveText(
+          /\w+, \d+:\d+ (AM|PM) [A-Z]{3,4} (–|-) \d+:\d+ (AM|PM) [A-Z]{3,4}/i,
+          { useInnerText: true },
+        );
+        await expect(container).toBeVisible();
+      });
+
+      test("I can access my satellite link", async ({ page }) => {
+        const container = page.locator("div.wx-satellite-wrapper");
+        const link = container.getByText("Explore other satellite views");
+        await expect(link).toBeVisible();
+        await expect(link).toHaveAttribute(
+          "href",
+          /goes\.noaa\.gov\/wfo\.php/i,
+        );
+      });
+
+      test("I can access my satellite link for Alaska", async ({ page }) => {
+        await page.goto(
+          services.webApp("/forecast/point/59.284/-158.63/today/"),
+          {
+            waitUntil: "load",
+          },
+        );
+        const container = page.locator("div.wx-satellite-wrapper");
+        const link = container.getByText("Explore other satellite views");
+        await expect(link).toBeVisible();
+        await expect(link).toHaveAttribute(
+          "href",
+          /goes\.noaa\.gov\/sector\.php/i,
+        );
       });
     });
 
