@@ -1,9 +1,5 @@
-import { drawChart, setupScrollButtons } from "./WeatherChart.js";
+import { WeatherChartElement } from "./WeatherChart.js";
 import styles from "../styles.js";
-
-const chartContainers = Array.from(
-  document.querySelectorAll(".wx-hourly-wind-chart-container"),
-);
 
 /**
  * Source image for the arrow icon
@@ -94,111 +90,130 @@ const drawWindInfoLabels = (chart) => {
   });
 };
 
-for (const container of chartContainers) {
-  const times = JSON.parse(container.dataset.times);
-  const speeds = JSON.parse(container.dataset.windSpeeds);
-  const gusts = JSON.parse(container.dataset.windGusts);
+class HourlyWindChart extends WeatherChartElement {
+  constructor() {
+    super();
+  }
 
-  const config = {
-    type: "line",
-    plugins: [
-      {
-        afterDraw: drawWindInfoLabels,
-      },
-    ],
+  connectedCallback() {
+    super.connectedCallback();
 
-    options: {
-      animation: false,
-      responsive: true,
-      maintainAspectRatio: false,
-      interaction: {
-        intersect: false,
-        mode: "index",
-      },
-      plugins: {
-        legend: {
-          display: false,
-        },
-        tooltip: {
-          events: ["click", "mousemove", "mouseout"],
-        },
-      },
-      layout: {
-        padding: {
-          top: 24,
-          bottom: 50,
-        },
-      },
-      scales: {
-        x: {
-          ticks: {
-            autoSkip: true,
-            maxRotation: 0,
-            color: styles.colors.base,
-          },
-          grid: {
-            color: times.map((v) => {
-              if (v === "12 AM") {
-                return "black";
-              }
+    // Pull out the data we need from the
+    // element's dataset attributes
+    this.times = JSON.parse(this.dataset.times);
+    this.speeds = JSON.parse(this.dataset.windSpeeds);
+    this.gusts = JSON.parse(this.dataset.windGusts);
 
-              const even = Number.parseInt(v, 10) % 2 === 0;
-              if (even) {
-                return styles.colors.baseLighter;
-              }
-              return styles.colors.baseLightest;
-            }),
-          },
-        },
-        y: {
-          min: 0,
-          max: Math.max(
-            Math.round(Math.max(...speeds) / 10) * 10 + 10,
-            Math.round(Math.max(...gusts) / 10) * 10 + 10,
-          ),
-          ticks: {
-            autoSkip: true,
-            color: styles.colors.base,
-            maxTicksLimit: 6,
-            callback: (v) => `${v} mph`,
-          },
-        },
-      },
-    },
+    // Draw the chart!
+    this.drawChart();
+  }
 
-    data: {
-      labels: times,
-      datasets: [
+  getConfig() {
+    return {
+      type: "line",
+      plugins: [
         {
-          label: "Speed",
-          data: speeds,
-          datalabels: {
-            align: ({ dataIndex }) =>
-              speeds[dataIndex] >= gusts[dataIndex] ? "top" : "bottom",
-            color: styles.colors.primaryDark,
-          },
-          backgroundColor: styles.colors.secondaryDarker,
-          borderColor: styles.colors.secondaryDarker,
-          borderWidth: 1.5,
-        },
-        {
-          label: "Gusts",
-          data: gusts,
-          datalabels: {
-            align: ({ dataIndex }) =>
-              speeds[dataIndex] >= gusts[dataIndex] ? "bottom" : "top",
-            color: styles.colors.primary,
-            display: ({ dataIndex }) => speeds[dataIndex] !== gusts[dataIndex],
-          },
-          borderDash: [4],
-          backgroundColor: styles.colors.secondary,
-          borderColor: styles.colors.secondary,
-          borderWidth: 1.5,
+          afterDraw: drawWindInfoLabels,
         },
       ],
-    },
-  };
 
-  drawChart(container, config);
-  setupScrollButtons(container);
+      options: {
+        animation: false,
+        responsive: true,
+        maintainAspectRatio: false,
+        interaction: {
+          intersect: false,
+          mode: "index",
+        },
+        plugins: {
+          legend: {
+            display: false,
+          },
+          tooltip: {
+            events: ["click", "mousemove", "mouseout"],
+          },
+        },
+        layout: {
+          padding: {
+            top: 24,
+            bottom: 50,
+          },
+        },
+        scales: {
+          x: {
+            ticks: {
+              autoSkip: true,
+              maxRotation: 0,
+              color: styles.colors.base,
+            },
+            grid: {
+              color: this.times.map((v) => {
+                if (v === "12 AM") {
+                  return "black";
+                }
+
+                const even = Number.parseInt(v, 10) % 2 === 0;
+                if (even) {
+                  return styles.colors.baseLighter;
+                }
+                return styles.colors.baseLightest;
+              }),
+            },
+          },
+          y: {
+            min: 0,
+            max: Math.max(
+              Math.round(Math.max(...this.speeds) / 10) * 10 + 10,
+              Math.round(Math.max(...this.gusts) / 10) * 10 + 10,
+            ),
+            ticks: {
+              autoSkip: true,
+              color: styles.colors.base,
+              maxTicksLimit: 6,
+              callback: (v) => `${v} mph`,
+            },
+          },
+        },
+      },
+
+      data: {
+        labels: this.times,
+        datasets: [
+          {
+            label: "Speed",
+            data: this.speeds,
+            datalabels: {
+              align: ({ dataIndex }) =>
+                this.speeds[dataIndex] >= this.gusts[dataIndex]
+                  ? "top"
+                  : "bottom",
+              color: styles.colors.primaryDark,
+            },
+            backgroundColor: styles.colors.secondaryDarker,
+            borderColor: styles.colors.secondaryDarker,
+            borderWidth: 1.5,
+          },
+          {
+            label: "Gusts",
+            data: this.gusts,
+            datalabels: {
+              align: ({ dataIndex }) =>
+                this.speeds[dataIndex] >= this.gusts[dataIndex]
+                  ? "bottom"
+                  : "top",
+              color: styles.colors.primary,
+              display: ({ dataIndex }) =>
+                this.speeds[dataIndex] !== this.gusts[dataIndex],
+            },
+            borderDash: [4],
+            backgroundColor: styles.colors.secondary,
+            borderColor: styles.colors.secondary,
+            borderWidth: 1.5,
+          },
+        ],
+      },
+    };
+  }
 }
+
+window.customElements.define("wx-wind-chart", HourlyWindChart);

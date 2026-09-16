@@ -1,132 +1,146 @@
-import { drawChart, setupScrollButtons } from "./WeatherChart.js";
+import { WeatherChartElement } from "./WeatherChart.js";
 import styles from "../styles.js";
 
-const chartContainers = Array.from(
-  document.querySelectorAll(".wx-hourly-temp-chart-container"),
-);
-
-for (const container of chartContainers) {
-  const times = JSON.parse(container.dataset.times);
-  const temps = JSON.parse(container.dataset.temps).map((v) =>
-    Number.parseInt(v, 10),
-  );
-  const feelsLike = JSON.parse(container.dataset.feelsLike).map((v) =>
-    Number.parseInt(v, 10),
-  );
-  const hideYAxis = container.dataset.hideYAxis === "true";
-  const useMaxY = container.dataset.useMaxY === "true";
-
-  let yMax = Math.max(
-    Math.round(Math.max(...temps) / 10) * 10 + 10,
-    Math.round(Math.max(...feelsLike) / 10) * 10 + 10,
-  );
-
-  if (useMaxY) {
-    yMax =
-      Math.max(
-        Math.round(Math.max(...feelsLike)),
-        Math.round(Math.max(...temps)),
-      ) + 1;
+class HourlyTempChart extends WeatherChartElement {
+  constructor() {
+    super();
   }
 
-  const config = {
-    type: "line",
+  connectedCallback() {
+    super.connectedCallback();
 
-    options: {
-      animation: false,
-      responsive: true,
-      maintainAspectRatio: false,
-      interaction: {
-        intersect: false,
-        mode: "index",
-      },
-      plugins: {
-        legend: {
-          display: false,
+    // Pull out the data from the element's
+    // dataset attributes
+    this.times = JSON.parse(this.dataset.times);
+    this.temps = JSON.parse(this.dataset.temps).map((v) => {
+      return Number.parseInt(v, 10);
+    });
+    this.feelsLike = JSON.parse(this.dataset.feelsLike).map((v) =>
+      Number.parseInt(v, 10),
+    );
+
+    // Draw the chart!
+    this.drawChart();
+  }
+
+  getConfig() {
+    const hideYAxis = this.dataset.hideYAxis === "true";
+    const useMaxY = this.dataset.useMaxY === "true";
+
+    let yMax = Math.max(
+      Math.round(Math.max(...this.temps) / 10) * 10 + 10,
+      Math.round(Math.max(...this.feelsLike) / 10) * 10 + 10,
+    );
+
+    if (useMaxY) {
+      yMax =
+        Math.max(
+          Math.round(Math.max(...this.feelsLike)),
+          Math.round(Math.max(...this.temps)),
+        ) + 1;
+    }
+    return {
+      type: "line",
+
+      options: {
+        animation: false,
+        responsive: true,
+        maintainAspectRatio: false,
+        interaction: {
+          intersect: false,
+          mode: "index",
         },
-        tooltip: {
-          events: ["click", "mousemove", "mouseout"],
-        },
-      },
-      scales: {
-        x: {
-          ticks: {
-            autoSkip: true,
-            maxRotation: 0,
-            color: styles.colors.base,
+        plugins: {
+          legend: {
+            display: false,
           },
-          grid: {
-            color: times.map((v) => {
-              if (v === "12 AM") {
-                return "black";
-              }
+          tooltip: {
+            events: ["click", "mousemove", "mouseout"],
+          },
+        },
+        scales: {
+          x: {
+            ticks: {
+              autoSkip: true,
+              maxRotation: 0,
+              color: styles.colors.base,
+            },
+            grid: {
+              color: this.times.map((v) => {
+                if (v === "12 AM") {
+                  return "black";
+                }
 
-              const even = Number.parseInt(v, 10) % 2 === 0;
-              if (even) {
-                return styles.colors.baseLighter;
-              }
-              return styles.colors.baseLightest;
-            }),
+                const even = Number.parseInt(v, 10) % 2 === 0;
+                if (even) {
+                  return styles.colors.baseLighter;
+                }
+                return styles.colors.baseLightest;
+              }),
+              display: !hideYAxis,
+            },
+          },
+          y: {
+            min: Math.min(
+              Math.round(Math.min(...this.temps) / 10) * 10 - 10,
+              Math.round(Math.min(...this.feelsLike) / 10) * 10 - 10,
+            ),
+            max: yMax,
+            ticks: {
+              autoSkip: true,
+              color: styles.colors.base,
+              maxTicksLimit: 6,
+              callback: (v) => `${v}°`,
+            },
             display: !hideYAxis,
           },
         },
-        y: {
-          min: Math.min(
-            Math.round(Math.min(...temps) / 10) * 10 - 10,
-            Math.round(Math.min(...feelsLike) / 10) * 10 - 10,
-          ),
-          max: yMax,
-          ticks: {
-            autoSkip: true,
-            color: styles.colors.base,
-            maxTicksLimit: 6,
-            callback: (v) => `${v}°`,
+        layout: {
+          padding: {
+            top: 24,
+            bottom: 12,
           },
-          display: !hideYAxis,
         },
       },
-      layout: {
-        padding: {
-          top: 24,
-          bottom: 12,
-        },
+
+      data: {
+        labels: this.times,
+        datasets: [
+          {
+            label: "Temperature",
+            data: this.temps,
+            datalabels: {
+              align: ({ dataIndex }) =>
+                this.temps[dataIndex] >= this.feelsLike[dataIndex]
+                  ? "top"
+                  : "bottom",
+              color: styles.colors.primaryDark,
+            },
+            backgroundColor: styles.colors.primaryDark,
+            borderColor: styles.colors.primaryDark,
+            borderWidth: 1.5,
+          },
+          {
+            label: "Feels like",
+            data: this.feelsLike,
+            datalabels: {
+              align: ({ dataIndex }) =>
+                this.temps[dataIndex] >= this.feelsLike[dataIndex]
+                  ? "bottom"
+                  : "top",
+              color: styles.colors.primary,
+              display: ({ dataIndex }) =>
+                this.temps[dataIndex] !== this.feelsLike[dataIndex],
+            },
+            borderDash: [4],
+            backgroundColor: styles.colors.primaryLight,
+            borderColor: styles.colors.primaryLight,
+            borderWidth: 1.5,
+          },
+        ],
       },
-    },
-
-    data: {
-      labels: times,
-      datasets: [
-        {
-          label: "Temperature",
-          data: temps,
-          datalabels: {
-            align: ({ dataIndex }) =>
-              temps[dataIndex] >= feelsLike[dataIndex] ? "top" : "bottom",
-            color: styles.colors.primaryDark,
-          },
-          backgroundColor: styles.colors.primaryDark,
-          borderColor: styles.colors.primaryDark,
-          borderWidth: 1.5,
-        },
-        {
-          label: "Feels like",
-          data: feelsLike,
-          datalabels: {
-            align: ({ dataIndex }) =>
-              temps[dataIndex] >= feelsLike[dataIndex] ? "bottom" : "top",
-            color: styles.colors.primary,
-            display: ({ dataIndex }) =>
-              temps[dataIndex] !== feelsLike[dataIndex],
-          },
-          borderDash: [4],
-          backgroundColor: styles.colors.primaryLight,
-          borderColor: styles.colors.primaryLight,
-          borderWidth: 1.5,
-        },
-      ],
-    },
-  };
-
-  drawChart(container, config);
-  setupScrollButtons(container);
+    };
+  }
 }
+
+window.customElements.define("wx-temp-chart", HourlyTempChart);

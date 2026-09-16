@@ -1,85 +1,92 @@
-import { drawChart, setupScrollButtons } from "./WeatherChart.js";
+import { WeatherChartElement } from "./WeatherChart.js";
 import styles from "../styles.js";
 
-const chartContainers = Array.from(
-  document.querySelectorAll(".wx-hourly-humidity-chart-container"),
-);
+class HourlyHumidityChart extends WeatherChartElement {
+  constructor() {
+    super();
+  }
 
-for (const container of chartContainers) {
-  const times = JSON.parse(container.dataset.times);
-  const humidity = JSON.parse(container.dataset.humidity).map((v) =>
-    Number.parseInt(v, 10),
-  );
+  connectedCallback() {
+    super.connectedCallback();
 
-  // We don't need to keep a reference to the chart object. We only need the
-  // side-effects of creating it. This is not ideal, but it's how Chart.js
-  // works, so it's what we've got.
-  const config = {
-    type: "bar",
+    // Pull the required data from the dataset attributes
+    // on the element
+    this.times = JSON.parse(this.dataset.times);
+    this.humidity = JSON.parse(this.dataset.humidity).map((v) => {
+      return Number.parseInt(v, 10);
+    });
 
-    options: {
-      animation: false,
-      responsive: true,
-      maintainAspectRatio: false,
-      interaction: {
-        intersect: false,
-        mode: "index",
-      },
+    // Draw the chart!
+    this.drawChart();
+  }
 
-      plugins: {
-        legend: {
-          display: false,
+  getConfig() {
+    return {
+      type: "bar",
+
+      options: {
+        animation: false,
+        responsive: true,
+        maintainAspectRatio: false,
+        interaction: {
+          intersect: false,
+          mode: "index",
         },
-        tooltip: {
-          xAlign: "center",
-          yAlign: "bottom",
-          events: ["click", "mousemove", "mouseout"],
-        },
-      },
-      scales: {
-        x: {
-          ticks: {
-            maxRotation: 0,
-            color: styles.colors.base,
+
+        plugins: {
+          legend: {
+            display: false,
           },
-          grid: { display: false },
-        },
-        y: {
-          min: 0,
-          max: 100,
-          ticks: {
-            autoSkip: true,
-            color: styles.colors.base,
-            maxTicksLimit: 6,
-            callback: (v) => `${v}%`,
+          tooltip: {
+            xAlign: "center",
+            yAlign: "bottom",
+            events: ["click", "mousemove", "mouseout"],
           },
         },
-      },
-      layout: {
-        padding: {
-          top: 24,
-          bottom: 12,
-        },
-      },
-    },
-
-    data: {
-      labels: times,
-      datasets: [
-        {
-          label: "Humidity",
-          data: humidity,
-          datalabels: {
-            align: "end",
-            anchor: "end",
-            color: styles.colors.accentCoolDark,
+        scales: {
+          x: {
+            ticks: {
+              maxRotation: 0,
+              color: styles.colors.base,
+            },
+            grid: { display: false },
           },
-          backgroundColor: styles.colors.accentCoolDark,
+          y: {
+            min: 0,
+            max: 100,
+            ticks: {
+              autoSkip: true,
+              color: styles.colors.base,
+              maxTicksLimit: 6,
+              callback: (v) => `${v}%`,
+            },
+          },
         },
-      ],
-    },
-  };
+        layout: {
+          padding: {
+            top: 24,
+            bottom: 12,
+          },
+        },
+      },
 
-  drawChart(container, config);
-  setupScrollButtons(container);
+      data: {
+        labels: this.times,
+        datasets: [
+          {
+            label: "Humidity",
+            data: this.humidity,
+            datalabels: {
+              align: "end",
+              anchor: "end",
+              color: styles.colors.accentCoolDark,
+            },
+            backgroundColor: styles.colors.accentCoolDark,
+          },
+        ],
+      },
+    };
+  }
 }
+
+window.customElements.define("wx-humidity-chart", HourlyHumidityChart);
