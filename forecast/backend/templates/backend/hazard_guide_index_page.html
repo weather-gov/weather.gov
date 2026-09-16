@@ -8,6 +8,9 @@
 {% load weather_i18n %}
 {% load static %}
 {% load wagtailcore_tags %}
+{% block head_js %}
+  <script src="{% static 'js/hazard_guide_page.html.js' %}" type="module" defer></script>
+{% endblock %}
 {% block page_content %}
 <div class="grid-container">
   <div class="index-page-header bg-primary-darker padding-bottom-4 padding-top-1">

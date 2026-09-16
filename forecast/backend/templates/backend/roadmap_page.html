@@ -7,7 +7,7 @@
 {% load i18n %}
 {% load weather_i18n %}
 {% block page_end_js %}
-  <script src="{% static 'js/roadmap_page.html.js' %}" type="module"></script>
+  <script src="{% static 'js/roadmap_page.html.js' %}" type="module" defer></script>
 {% endblock %}
 {% block page_content %}
   <wx-roadmap>
@@ -27,7 +27,7 @@
     <div id="nav-link-now"
          class="grid-row text-base text-uppercase font-mono-xs">Jump to</div>
   </div>
-  <div class="position-sticky top-0 z-top grid-container margin-bottom-1">
+  <div class="position-sticky top-0 z-100 grid-container margin-bottom-1">
     <div class="grid-row font-sans-xs bg-white padding-top-1 padding-bottom-1">
       <div class="padding-right-2 border-right border-base-lighter">
         <a href="#nav-link-now" class="usa-link text-no-underline">Now</a>

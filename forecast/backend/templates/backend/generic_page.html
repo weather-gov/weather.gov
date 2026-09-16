@@ -3,7 +3,11 @@
 -- Template purpose:
 --   Display any CMS page which doesn't have a specific page template.
 {% endcomment %}
+{% load static %}
 {% load wagtailcore_tags %}
+{% block head_js %}
+  <script src="{% static 'js/page.html.js' %}" type="module" defer></script>
+{% endblock %}
 {% block page_content %}
   <div class="generic-page-container grid-container margin-top-2 margin-bottom-8 desktop:margin-bottom-10">
     <div class="grid-row">
