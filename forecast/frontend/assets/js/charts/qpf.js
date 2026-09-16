@@ -1,12 +1,8 @@
-import { drawChart } from "./WeatherChart.js";
+import { WeatherChartElement } from "./WeatherChart.js";
 import styles from "../styles.js";
 
 const round = (number, decimals) =>
   Math.round(number * 100 ** decimals) / 100 ** decimals;
-
-const chartContainers = Array.from(
-  document.querySelectorAll(".wx-qpf-chart-container"),
-);
 
 const makePattern = async (imageUrl, size = 60) =>
   new Promise((resolve) => {
@@ -29,63 +25,78 @@ const makePattern = async (imageUrl, size = 60) =>
 // We use esbuild to bundle our scripts together in testing and deployment. It
 // currently does not support top-level await, so we have to wrap those in a
 // function. That's why this is here.
-const createCharts = async () => {
-  const snowPattern = await makePattern(
-    "/public/images/weather/wx_snow_pattern.svg",
-  );
-  const icePattern = await makePattern(
-    "/public/images/weather/wx_ice_pattern.svg",
-  );
+class QPFChart extends WeatherChartElement {
+  constructor() {
+    super();
+  }
 
-  for (const container of chartContainers) {
-    const times = JSON.parse(container.dataset.times);
+  async connectedCallback() {
+    super.connectedCallback();
 
-    const liquid = JSON.parse(container.dataset.liquid).map((v) =>
-      round(Number.parseFloat(v, 10), 2),
+    // Get the pattern SVG data
+    this.snowPattern = await makePattern(
+      "/public/images/weather/wx_snow_pattern.svg",
     );
-    const snow = JSON.parse(container.dataset.snow).map((v) =>
-      round(Number.parseFloat(v, 10), 2),
-    );
-    const ice = JSON.parse(container.dataset.ice).map((v) =>
-      round(Number.parseFloat(v, 10), 2),
+    this.icePattern = await makePattern(
+      "/public/images/weather/wx_ice_pattern.svg",
     );
 
+    // Pull out the data we need from the
+    // elements' dataset attributes
+    this.times = JSON.parse(this.dataset.times);
+
+    this.liquid = JSON.parse(this.dataset.liquid).map((v) =>
+      round(Number.parseFloat(v, 10), 2),
+    );
+    this.snow = JSON.parse(this.dataset.snow).map((v) =>
+      round(Number.parseFloat(v, 10), 2),
+    );
+    this.ice = JSON.parse(this.dataset.ice).map((v) =>
+      round(Number.parseFloat(v, 10), 2),
+    );
+
+    // Draw the chart!
+    this.drawChart();
+  }
+
+  getConfig() {
     const datasets = [];
 
-    const liquidTitle = ice.length > 0 || snow.length > 0 ? "Water" : "Rain";
+    const liquidTitle =
+      this.ice.length > 0 || this.snow.length > 0 ? "Water" : "Rain";
 
-    if (snow.length > 0) {
+    if (this.snow.length > 0) {
       datasets.push({
         label: "Snow",
-        data: snow,
+        data: this.snow,
         datalabels: {
           align: "end",
           anchor: "end",
           color: styles.colors.baseDarker,
         },
-        backgroundColor: snowPattern,
+        backgroundColor: this.snowPattern,
         borderColor: styles.colors.baseDarker,
         borderWidth: 1,
       });
     }
-    if (ice.length > 0) {
+    if (this.ice.length > 0) {
       datasets.push({
         label: "Ice",
-        data: ice,
+        data: this.ice,
         datalabels: {
           align: "end",
           anchor: "end",
           color: styles.colors.cyan80,
         },
-        backgroundColor: icePattern,
+        backgroundColor: this.icePattern,
         borderColor: styles.colors.cyan80,
         borderWidth: 1,
       });
     }
-    if (liquid.length > 0) {
+    if (this.liquid.length > 0) {
       datasets.push({
         label: liquidTitle,
-        data: liquid,
+        data: this.liquid,
         datalabels: {
           align: "end",
           anchor: "end",
@@ -97,7 +108,7 @@ const createCharts = async () => {
       });
     }
 
-    const config = {
+    return {
       type: "bar",
 
       options: {
@@ -144,13 +155,11 @@ const createCharts = async () => {
       },
 
       data: {
-        labels: times,
+        labels: this.times,
         datasets,
       },
     };
-
-    drawChart(container, config);
   }
-};
+}
 
-createCharts();
+window.customElements.define("wx-qpf-chart", QPFChart);
