@@ -72,7 +72,7 @@
     }
   }
 
-  &[data-alert-level="warning"] {
+  &[data-alert-level^="warning"] {
     border-color: color("red-50");
 
     .alert-event-title {
@@ -81,7 +81,7 @@
     }
   }
 
-  &[data-alert-level="watch"] {
+  &[data-alert-level^="watch"] {
     border-color: color("yellow-50v");
 
     .alert-event-title {
@@ -91,7 +91,7 @@
   }
 
   &[data-alert-level="advisory"],
-  &[data-alert-level="other"] {
+  &[data-alert-level^="other"] {
     border-color: color("base-dark");
 
     .alert-event-title {
