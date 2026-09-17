@@ -88,11 +88,11 @@
       fill: color("base");
     }
 
-    &[data-alert-level="watch"] {
+    &[data-alert-level^="watch"] {
       fill: color("yellow-50v");
     }
 
-    &[data-alert-level="warning"] {
+    &[data-alert-level^="warning"] {
       fill: color("red-50");
     }
   }
