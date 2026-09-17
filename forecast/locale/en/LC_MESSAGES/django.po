@@ -840,6 +840,21 @@ msgstr "%(fullName)s Forecast"
 msgid "site.meta.description.point"
 msgstr "%(fullName)s Forecast"
 
+msgid "site.meta.titles.point_forecast_alerts"
+msgstr "%(fullName)s Forecast"
+msgid "site.meta.description.point_forecast_alerts"
+msgstr "%(fullName)s Forecast"
+
+msgid "site.meta.titles.point_forecast_today"
+msgstr "%(fullName)s Forecast"
+msgid "site.meta.description.point_forecast_today"
+msgstr "%(fullName)s Forecast"
+
+msgid "site.meta.titles.point_forecast_seven_day"
+msgstr "%(fullName)s Forecast"
+msgid "site.meta.description.point_forecast_seven_day"
+msgstr "%(fullName)s Forecast"
+
 msgid "site.meta.titles.place_forecast"
 msgstr "%(fullName)s Forecast"
 msgid "site.meta.description.place_forecast"
