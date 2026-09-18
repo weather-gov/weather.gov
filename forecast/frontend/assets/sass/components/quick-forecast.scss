@@ -165,11 +165,11 @@
         fill: color("base");
       }
 
-      &[data-alert-level^="watch"] {
+      &[data-alert-level="watch"] {
         fill: color("yellow-50v");
       }
 
-      &[data-alert-level^="warning"] {
+      &[data-alert-level="warning"] {
         fill: color("red-50");
       }
     }
@@ -204,11 +204,11 @@
           fill: color("base-lighter");
         }
 
-        &[data-alert-level^="watch"] {
+        &[data-alert-level="watch"] {
           fill: color("yellow-5v");
         }
 
-        &[data-alert-level^="warning"] {
+        &[data-alert-level="warning"] {
           fill: color("red-cool-30v");
         }
       }
