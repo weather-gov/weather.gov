@@ -1,8 +1,12 @@
 {% comment %}
 -- Template purpose:
 --   Display the navigation banner and sub-menus.
+--   If you want to add more CMS pages to the navigation, add them to the context processor first
+--   CMS urls use the `pageurl` syntax (see about and hazard guide links for reference)
 -- Used by: partials/site-branding.html
 {% endcomment %}
+{% load wagtailcore_tags %}
+{% load util %}
 <!-- djlint:off H019 -->
 <!-- We ignore H019 because we use javascript: void(0) instead of # for placeholder links to prevent the page from scrolling to the top when clicked. -->
 <div class="usa-overlay"></div>
@@ -17,7 +21,7 @@
       <ul class="usa-nav__primary usa-accordion margin-top-0 border-bottom-1px tablet-lg:border-bottom-0">
         <li class="usa-nav__primary-item">
           <button type="button"
-                  class="usa-accordion__button usa-nav__link {% if request.path != '/about/' %}usa-current{% endif %}"
+                  class="usa-accordion__button usa-nav__link {% if request.path == '/' or request.path|slice:'10' == '/forecast/' %}usa-current{% endif %}"
                   aria-expanded="false"
                   aria-controls="nav-section-forecast">
             <span class="font-sans-xs">{{ "menu.navigation.forecast.01" | t }}</span>
@@ -41,7 +45,7 @@
           </ul>
         </li>
         {% if debug_show_all_menu_links %}
-          <li class="usa-nav__primary-item" id="nav-section-observations">
+          <li class="usa-nav__primary-item {% if request.path|slice:'14' == '/observations/' %}usa-current{% endif %}" id="nav-section-observations">
             <a href="javascript:void(0);" class="usa-nav__link">
               <span class="font-sans-xs text-normal">{{ "menu.navigation.observations.01" | t }}</span>
             </a>
@@ -50,37 +54,39 @@
         {% if debug_show_all_menu_links %}
           <li class="usa-nav__primary-item">
             <button type="button"
-                    class="usa-accordion__button usa-nav__link"
+                    class="usa-accordion__button usa-nav__link {% if request.path|slice:'9' == '/prepare/' %}usa-current{% endif %}"
                     aria-expanded="false"
                     aria-controls="nav-section-preparedness">
               <span class="font-sans-xs">{{ "menu.navigation.preparedness.01" | t }}</span>
             </button>
             <ul id="nav-section-preparedness" class="usa-nav__submenu font-body-xs">
-              <li class="usa-nav__submenu-item">
-                <a href="javascript:void(0);"><span class="font-sans-xs">{{ "menu.navigation.preparedness.weather-hazards-guides.01" | t }}</span></a>
-              </li>
+              {% if hazard_guide_index %}
+                <li class="usa-nav__submenu-item" id="nav-section-preparedness-hazard-guides">
+                  <a href="{% pageurl hazard_guide_index %}"><span class="font-sans-xs">{{ "menu.navigation.preparedness.weather-hazards-guides.01" | t }}</span></a>
+                </li>
+              {% endif %}
             </ul>
           </li>
         {% endif %}
         {% if debug_show_all_menu_links %}
           <li class="usa-nav__primary-item">
             <button type="button"
-                    class="usa-accordion__button usa-nav__link"
+                    class="usa-accordion__button usa-nav__link {% if request.path|slice:'11' == '/resources/' %}usa-current{% endif %}"
                     aria-expanded="false"
                     aria-controls="nav-section-resources">
               <span class="font-sans-xs">{{ "menu.navigation.resources.01" | t }}</span>
             </button>
             <ul id="nav-section-resources" class="usa-nav__submenu font-body-xs">
-              <li class="usa-nav__submenu-item">
+              <li class="usa-nav__submenu-item" id="nav-section-resources-state-weather-overview">
                 <a href="javascript:void(0);"><span class="font-sans-xs">{{ "menu.navigation.resources.state-weather-overview.01" | t }}</span></a>
               </li>
-              <li class="usa-nav__submenu-item">
+              <li class="usa-nav__submenu-item" id="nav-section-resources-storm-recaps">
                 <a href="javascript:void(0);"><span class="font-sans-xs">{{ "menu.navigation.resources.storm-recaps.01" | t }}</span></a>
               </li>
-              <li class="usa-nav__submenu-item">
+              <li class="usa-nav__submenu-item" id="nav-section-resources-historical-weather">
                 <a href="javascript:void(0);"><span class="font-sans-xs">{{ "menu.navigation.resources.historical-weather.01" | t }}</span></a>
               </li>
-              <li class="usa-nav__submenu-item">
+              <li class="usa-nav__submenu-item" id="nav-section-resources-glossary">
                 <a href="javascript:void(0);"><span class="font-sans-xs">{{ "menu.navigation.resources.glossary.01" | t }}</span></a>
               </li>
             </ul>
@@ -88,26 +94,28 @@
         {% endif %}
         <li class="usa-nav__primary-item">
           <button type="button"
-                  class="usa-accordion__button usa-nav__link {% if request.path == '/about/' %}usa-current{% endif %}"
+                  class="usa-accordion__button usa-nav__link {% if request.path|slice:'7' == '/about/' %}usa-current{% endif %}"
                   aria-expanded="false"
                   aria-controls="nav-section-about">
             <span class="font-sans-xs">{{ "menu.navigation.about.01" | t }}</span>
           </button>
           <ul id="nav-section-about" class="usa-nav__submenu font-body-xs">
-            <li class="usa-nav__submenu-item">
-              <a href="/about"><span class="font-sans-xs">{{ "menu.navigation.about.mission.01" | t }}</span></a>
-            </li>
+            {% if about_page %}
+              <li class="usa-nav__submenu-item" id="nav-section-about-mission">
+                <a href="{% pageurl about_page %}"><span class="font-sans-xs">{{ "menu.navigation.about.mission.01" | t }}</span></a>
+              </li>
+            {% endif %}
             {% if debug_show_all_menu_links %}
-              <li class="usa-nav__submenu-item">
+              <li class="usa-nav__submenu-item" id="nav-section-about-offices">
                 <a href="javascript:void(0);"><span class="font-sans-xs">{{ "menu.navigation.about.offices.01" | t }}</span></a>
               </li>
-              <li class="usa-nav__submenu-item">
+              <li class="usa-nav__submenu-item" id="nav-section-about-centers">
                 <a href="javascript:void(0);"><span class="font-sans-xs">{{ "menu.navigation.about.centers.01" | t }}</span></a>
               </li>
-              <li class="usa-nav__submenu-item">
+              <li class="usa-nav__submenu-item" id="nav-section-about-news">
                 <a href="javascript:void(0);"><span class="font-sans-xs">{{ "menu.navigation.about.news.01" | t }}</span></a>
               </li>
-              <li class="usa-nav__submenu-item">
+              <li class="usa-nav__submenu-item" id="nav-section-about-history">
                 <a href="javascript:void(0);"><span class="font-sans-xs">{{ "menu.navigation.about.history.01" | t }}</span></a>
               </li>
             {% endif %}

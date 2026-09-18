@@ -17,11 +17,23 @@ class SiteNavigationAllMenuTests(TestCase):
         self.assertContains(response, 'id="nav-section-about"')
 
     def test_submenus(self):
-        """Verify that all submenu items are present."""
+        """Verify that all statically-rendered submenu items are present."""
         response = self.client.get(reverse("index"))
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed("weather/partials/site-navigation.html")
-        self.assertContains(response, "usa-nav__submenu-item", count=13)
+        # CMS-driven items (hazard guides, about mission) aren't checked here since they
+        # depend on whether those pages exist in the test database.
+        self.assertContains(response, 'id="nav-section-forecast-search"')
+        self.assertContains(response, 'id="nav-section-forecast-county"')
+        self.assertContains(response, 'id="nav-section-forecast-state"')
+        self.assertContains(response, 'id="nav-section-resources-state-weather-overview"')
+        self.assertContains(response, 'id="nav-section-resources-storm-recaps"')
+        self.assertContains(response, 'id="nav-section-resources-historical-weather"')
+        self.assertContains(response, 'id="nav-section-resources-glossary"')
+        self.assertContains(response, 'id="nav-section-about-offices"')
+        self.assertContains(response, 'id="nav-section-about-centers"')
+        self.assertContains(response, 'id="nav-section-about-news"')
+        self.assertContains(response, 'id="nav-section-about-history"')
 
 
 @override_settings(DEBUG_SHOW_ALL_MENU_LINKS=False)
