@@ -64,6 +64,8 @@ services:
       API_TIMINGS_METADATA: true
       # Whether to allow for coastal marine data
       MARINE_COASTAL_EXPERIMENTAL: false
+      # Whether to use HTMX for point forecast pages
+      POINT_FORECAST_HTMX: true
     networks:
       - weather.gov
     depends_on:

@@ -1,24 +1,22 @@
 {% extends "weather/page.html" %}
 {% comment %}
 -- Template purpose:
---   This page displays the detailed 7 day forecast at the user's
---   point location.
--- Url: https://beta.weather.gov/forecast/point/43.156/-77.613/7-day/
+--   This page displays alert information for people at their point location.
+--   NOTE: This is the "htmx enabled" version of the template, which should
+--   only be rendered when we are in htmx mode.
+--   It does _not_ serve the actual htmx content.
+-- Url: https://beta.weather.gov/forecast/point/43.156/-77.613/alerts/
 {% endcomment %}
-
 {% block head_js %}
-  <script src="{% static 'js/third-party/chartjs@4.5.1.js' %}"></script>
-  <script src="{% static 'js/third-party/chartjs-plugin-datalabels@2.2.0.js' %}"></script>
+  {% include 'weather/point/htmx-page-head-js.html' %}
 {% endblock %}
 
 {% block page_end_js %}
-  <script type="module" src="{% static 'js/point.seven-day.html.js' %}"></script>
+  {% include 'weather/point/htmx-page-end-js.html' %}
 {% endblock %}
 
 {% block page_head_css %}
-  <!-- Prefetch for other tab pages -->
-  <link rel="prefetch" href="{% url 'point_forecast_alerts' lat=point.point.latitude lon=point.point.longitude %}" />
-  <link rel="prefetch" href="{% url 'point_forecast_today' lat=point.point.latitude lon=point.point.longitude %}" />
+  {% include 'weather/point/htmx-page-head-css.html' %}
 {% endblock %}
 
 {% block page_content %}
@@ -27,7 +25,7 @@
     {% if point.alerts.items|length > 0 %}
       <div class="bg-primary-darker padding-bottom-105">
         <div class="grid-container margin-top-0">
-          {% include "weather/partials/alert-summary.html" with alerts=point.alerts.items lat=point.point.latitude lon=point.point.longitude %}
+          {% include "weather/partials/alert-summary.html" with alerts=point.alerts.items is_alerts_page=True lat=point.point.latitude lon=point.point.longitude %}
         </div>
       </div>
     {% endif %}
@@ -36,13 +34,13 @@
       <div class="position-sticky top-0 bg-white border-base-light border-top-0 border-bottom-2px margin-y-0">
         <div class="grid-container padding-x-0">
 
-          {# Include the tab buttons (or links, depending on htmx mode) #}
-          {% include 'weather/point/tabs.html' with selected="daily" %}
+          {# Include the tab buttons (or links, depending on htmx mode #}
+          {% include 'weather/point/tabs.html' with selected="alerts" %}
         </div>
       </div>
 
-      {# Include the tab containers, with the daily/seven-day container populated #}
-      {% include 'weather/point/tab-containers.html' with tab_name="daily" %}
+      {# Include the tab containers, with the alerts tab container populated #}
+      {% include 'weather/point/tab-containers.html' with tab_name="alerts" %}
     </wx-tabbed-nav>
 
     <!-- Saved locations section-->

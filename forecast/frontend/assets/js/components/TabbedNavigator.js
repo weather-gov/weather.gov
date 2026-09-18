@@ -4,9 +4,11 @@ class TabbedNavigator extends HTMLElement {
 
     // Bind this context to methods that need it
     this.handleAlertAnchorClick = this.handleAlertAnchorClick.bind(this);
+    this.handleDescendantClick = this.handleDescendantClick.bind(this);
     this.handleTabButtonClick = this.handleTabButtonClick.bind(this);
     this.switchToTab = this.switchToTab.bind(this);
     this.scrollToAccordion = this.scrollToAccordion.bind(this);
+    this.navigateAlertAnchor = this.navigateAlertAnchor.bind(this);
   }
 
   connectedCallback() {
@@ -18,27 +20,17 @@ class TabbedNavigator extends HTMLElement {
       this.switchToTab(this.querySelector("button").dataset.tabName);
     }
 
-    // The initial page load might contain a hash fragment
-    // referring either to content within a given tab
-    // (such as an alert) or a tab itself. We should handle
-    // these two cases.
-    this.navigateWithInitialHash();
-
     // Intercept click events on Alert links at the
     // top of the page and handle them in this component
-    Array.from(document.querySelectorAll("weathergov-alert-list a")).forEach(
+    Array.from(document.querySelectorAll("wx-point-alert-links a")).forEach(
       (alertAnchor) => {
         alertAnchor.addEventListener("click", this.handleAlertAnchorClick);
       },
     );
 
-    // Intercept click events on Alert spans in
-    // any hourly detail tables
-    Array.from(this.querySelectorAll(".wx-alert-link a")).forEach(
-      (alertSpan) => {
-        alertSpan.addEventListener("click", this.handleAlertAnchorClick);
-      },
-    );
+    // Intercept click events on Alert spans that are in tab
+    // containers controlled by this component
+    this.addEventListener("click", this.handleDescendantClick);
 
     // Add needed event listeners
     Array.from(this.querySelectorAll("button.tab-button")).forEach((button) => {
@@ -128,11 +120,28 @@ class TabbedNavigator extends HTMLElement {
     this.switchToTab(event.target.dataset.tabName);
     // Since this was an actual click, update the hash
     // of the site to the tab button's id
-    window.history.replaceState(null, null, `#${event.target.dataset.tabName}`);
+    window.history.replaceState(null, null, `${event.target.dataset.url}`);
   }
 
-  handleAlertAnchorClick(event) {
-    const hash = new URL(event.currentTarget.href).hash;
+  /**
+   * A catch-all listener for click events inside the navigator and any
+   * of its constituent tab content panes.
+   * We use this to filter out for wx-alert clicks, which will be handled
+   * separately.
+   */
+  handleDescendantClick(event) {
+    if (!event.target.matches("a")) {
+      return;
+    }
+    const linkWrapper = event.target.closest(".wx-alert-link");
+    if (!linkWrapper) {
+      return;
+    }
+    this.navigateAlertAnchor(event.target);
+  }
+
+  navigateAlertAnchor(anchorEl) {
+    const hash = new URL(anchorEl.href).hash;
     const accordionEl = this.querySelector(`${hash}.usa-accordion`);
 
     if (accordionEl) {
@@ -151,20 +160,13 @@ class TabbedNavigator extends HTMLElement {
       // to the user. Instead, we have to roll our
       // own scrolling method
       this.scrollToAccordion(accordionEl);
-      event.preventDefault();
       window.history.replaceState(null, null, hash);
-    } else {
-      // If we're not looking at one of the tab container's inner accordions,
-      // check if we're looking for a tab.
-      const tabContainer = this.querySelector(`${hash}.wx-tab-container`);
-      if (tabContainer) {
-        // If we are, switch to that tab.
-        this.switchToTab(tabContainer.id);
-        event.preventDefault();
-        this.scrollTo(0, 0);
-        window.history.replaceState(null, null, hash);
-      }
     }
+  }
+
+  handleAlertAnchorClick(event) {
+    event.prevendDefault();
+    this.navigateAlertAnchor(event.currentTarget);
   }
 
   toggleAccordion(accordionElement, on = true) {
