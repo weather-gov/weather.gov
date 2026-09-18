@@ -133,6 +133,7 @@ TEMPLATES = [
                 "django.template.context_processors.media",
                 "backend.context_processors.route_info",
                 "backend.context_processors.git_info",
+                "backend.context_processors.global_navigation",
             ],
             "builtins": [
                 "django.templatetags.i18n",

@@ -4,6 +4,7 @@
 -- Used by: page.html, index.html
 {% endcomment %}
 {% load i18n %}
+{% load wagtailcore_tags %}
 <section class="usa-banner bg-accent-cool-lighter beta-banner"
          aria-label="This is a beta website.">
   <div>
@@ -25,7 +26,7 @@
               <div class="clearfix text-formatted field field--name-body field--type-text-with-summary field--label-hidden field__item">
                 <p>
                   <strong>{% trans "This site is under development." %}</strong>
-                  See <a href="https://beta.weather.gov/roadmap">our roadmap</a> for updates. <a href="https://weather.gov/">https://weather.gov/</a>&nbsp;remains the authoritative source of weather information.
+                  See <a href="{% if roadmap_page %}{% pageurl roadmap_page %}{% endif %}">our roadmap</a> for updates. <a href="https://weather.gov/">https://weather.gov/</a>&nbsp;remains the authoritative source of weather information.
                 </p>
               </div>
             </div>
