@@ -3,14 +3,17 @@ from http import HTTPStatus
 from zoneinfo import ZoneInfo
 
 from django.conf import settings
-from django.http import Http404
+from django.http import Http404, HttpResponse
 from django.shortcuts import redirect, render
+from django.template.loader import render_to_string
 from django.urls import reverse
 from django.views.decorators.cache import cache_control
+from django.views.decorators.vary import vary_on_headers
 
 from backend import interop
 from backend.models import WFO
 from backend.util import get_weather_story_from_point_data, get_wfo_from_afd
+from backend.util.point import is_htmx_request, should_use_htmx_for_point
 from spatial.models import WeatherPlace
 
 from ._helpers import get_redirect_for_afd_queries
@@ -114,8 +117,10 @@ def point_location(request, lat, lon):  # noqa: C901
 
 @cache_control(max_age=120, smax_age=120, public=True)
 @decimal_redirect
+@vary_on_headers("HX-Request")
 def point_location_alerts(request, lat, lon):
     """Render alerts at the specific points location."""
+    use_htmx = should_use_htmx_for_point(request)
     # For now, simply retrieve the whole point forecast from
     # the interop.
     # TODO: in the future, either fetch the point information
@@ -129,7 +134,12 @@ def point_location_alerts(request, lat, lon):
     # Check if there was an error retrieving alerts from the cache/background process
     alerts_error = point.get("alerts", {}).get("metadata", {}).get("error", False)
 
-    context = {"point": point, "alerts_error": alerts_error, "title_trans_args": {"fullName": fullname}}
+    context = {
+        "point": point,
+        "alerts_error": alerts_error,
+        "title_trans_args": {"fullName": fullname},
+        "use_htmx": use_htmx,
+    }
 
     if "status" in point and point["status"] == HTTPStatus.NOT_FOUND:
         raise Http404(point)
@@ -160,6 +170,25 @@ def point_location_alerts(request, lat, lon):
             )
         )
 
+    if is_htmx_request(request):
+        # In this case, we only render and return the partial
+        # we need for alert tab content
+        markup = render_to_string("weather/point/alerts-tab-content.html", {
+            "alerts": alert_items,
+        })
+        return HttpResponse(markup, content_type="text/html")
+
+    if use_htmx:
+        # Render the template that has the "htmx-enabled"
+        # version of the page
+        return render(
+            request,
+            "weather/point/alerts-with-htmx.html",
+            {
+                **context,
+            }
+        )
+
     return render(
         request,
         "weather/point/alerts.html",
@@ -171,8 +200,10 @@ def point_location_alerts(request, lat, lon):
 
 @cache_control(max_age=120, smax_age=120, public=True)
 @decimal_redirect
-def point_location_today(request, lat, lon):
+@vary_on_headers("HX-Request")
+def point_location_today(request, lat, lon): # noqa: C901
     """Render the today tab page for the point location."""
+    use_htmx = should_use_htmx_for_point(request)
     allow_coastal = settings.MARINE_COASTAL_EXPERIMENTAL
 
     point = interop.get_point_forecast(lat, lon)
@@ -181,7 +212,12 @@ def point_location_today(request, lat, lon):
     # Check if there was an error retrieving alerts from the cache/background process
     alerts_error = point.get("alerts", {}).get("metadata", {}).get("error", False)
 
-    context = {"point": point, "alerts_error": alerts_error, "title_trans_args": {"fullName": fullname}}
+    context = {
+        "point": point,
+        "alerts_error": alerts_error,
+        "title_trans_args": {"fullName": fullname},
+        "use_htmx": use_htmx,
+    }
 
     if "status" in point and point["status"] == HTTPStatus.NOT_FOUND:
         raise Http404(point)
@@ -233,6 +269,27 @@ def point_location_today(request, lat, lon):
             context,
         )
 
+    if is_htmx_request(request):
+        # In this case, only render the partial needed
+        # for the tab content
+        markup = render_to_string("weather/point/today-tab-content.html", {
+            "weather_story": weather_story,
+            **context,
+        })
+        return HttpResponse(markup, content_type="text/html")
+
+    if use_htmx:
+        # Render the template that has the "htmx-enabled"
+        # version of the page
+        return render(
+            request,
+            "weather/point/today-with-htmx.html",
+            {
+                "weather_story": weather_story,
+                **context,
+            }
+        )
+
     return render(
         request,
         "weather/point/today.html",
@@ -245,8 +302,10 @@ def point_location_today(request, lat, lon):
 
 @cache_control(max_age=120, smax_age=120, public=True)
 @decimal_redirect
-def point_location_seven_day(request, lat, lon):
+@vary_on_headers("HX-Request")
+def point_location_seven_day(request, lat, lon): # noqa: C901
     """Render the 7-day detailed forecast for the point location."""
+    use_htmx = should_use_htmx_for_point(request)
     allow_coastal = settings.MARINE_COASTAL_EXPERIMENTAL
 
 
@@ -256,7 +315,12 @@ def point_location_seven_day(request, lat, lon):
     # Check if there was an error retrieving alerts from the cache/background process
     alerts_error = point.get("alerts", {}).get("metadata", {}).get("error", False)
 
-    context = {"point": point, "alerts_error": alerts_error, "title_trans_args": {"fullName": fullname}}
+    context = {
+        "point": point,
+        "alerts_error": alerts_error,
+        "title_trans_args": {"fullName": fullname},
+        "use_htmx": use_htmx,
+    }
 
     if "status" in point and point["status"] == HTTPStatus.NOT_FOUND:
         raise Http404(point)
@@ -290,6 +354,30 @@ def point_location_seven_day(request, lat, lon):
         wfo = WFO.objects.get(code=WFO.normalize_code(code))
         point["wfo"] = wfo
         point["isAlaska"] = wfo.code.lower() in ["afc", "afg", "ajk"]
+
+
+    if is_htmx_request(request):
+        # In this case, only render the partial markup
+        # needed for the tab's content
+        markup = render_to_string(
+            "weather/point/seven-day-tab-content.html",
+            {
+                "use_htmx": True,
+                "forecast": context["point"]["forecast"],
+                **context,
+            })
+        return HttpResponse(markup, content_type="text/html")
+
+    if use_htmx:
+        # Render the template that has the "htmx-enabled"
+        # version of the page
+        return render(
+            request,
+            "weather/point/seven-day-with-htmx.html",
+            {
+                **context,
+            }
+        )
 
     return render(
         request,

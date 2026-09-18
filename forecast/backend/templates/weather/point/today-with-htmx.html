@@ -1,0 +1,51 @@
+{% extends "weather/page.html" %}
+{% comment %}
+-- Template purpose:
+--   This page tells people the current conditions, radar, satellite, and today's
+--   forecast at their point location
+--   NOTE: This is the "htmx enabled" version of the template, which should
+--   only be rendered when we are in htmx mode.
+--   It does _not_ serve the actual htmx content.
+-- Url: https://beta.weather.gov/forecast/point/43.156/-77.613/today/
+{% endcomment %}
+{% block head_js %}
+  {% include 'weather/point/htmx-page-head-js.html' %}
+{% endblock %}
+
+{% block page_end_js %}
+  {% include 'weather/point/htmx-page-end-js.html' %}
+{% endblock %}
+
+{% block page_head_css %}
+  {% include 'weather/point/htmx-page-head-css.html' %}
+{% endblock %}
+
+{% block page_content %}
+<div class="layout-container grid-row height-full flex-column flex-no-wrap">
+  {% include 'weather/partials/place-banner.html' with place=point.place %}
+  {% if point.alerts.items|length > 0 %}
+  <div class="bg-primary-darker padding-bottom-105">
+    <div class="grid-container margin-top-0">
+      {% include "weather/partials/alert-summary.html" with alerts=point.alerts.items lat=point.point.latitude lon=point.point.longitude %}
+    </div>
+  </div>
+  {% endif %}
+
+  <wx-tabbed-nav class="display-block position-relative" id="point-page-tabbed-nav">
+    <div id="tablist-label" class="usa-sr-only">{{ "forecast.labels.weather-info.01" | t }}</div>
+    <div class="position-sticky top-0 bg-white border-base-light border-top-0 border-bottom-2px margin-y-0">
+      <div class="grid-container padding-x-0">
+
+        {# Include the alert tab buttons (or links, depending on htmx mode) #}
+        {% include 'weather/point/tabs.html' with selected="today" %}
+      </div>
+    </div>
+
+    {# Include the tab containers and populate contents for today  #}
+    {% include 'weather/point/tab-containers.html' with tab_name="today" %}
+  </wx-tabbed-nav>
+  
+  <!-- Saved locations section-->
+  {% include 'weather/partials/saved-locations-section.html' with type="point" mode="dark" heading="saved-locations.heading.section-main.01" %}
+</div>
+{% endblock %}

@@ -3,7 +3,7 @@
 --   Display a warning banner for each active alert with a link to more details.
 -- Used by: point/overview.html
 {% endcomment %}
-<weathergov-alert-list>
+<wx-point-alert-links>
 <div class="margin-top-0 margin-bottom-2">
   {% for alert in alerts %}
     <div class="usa-alert usa-alert--warning usa-alert--slim wx-alert margin-top-0 margin-bottom-1 padding-y-05"
@@ -19,4 +19,4 @@
     </div>
   {% endfor %}
 </div>
-</weathergov-alert-list>
+</wx-point-alert-links>

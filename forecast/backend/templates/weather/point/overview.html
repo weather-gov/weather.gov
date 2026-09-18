@@ -79,7 +79,7 @@
              role="tabpanel"
              aria-labelledby="alerts-tab-button"
              tabindex="0">
-          {% include 'weather/partials/forecast-alerts-map.html' with alerts=point.alerts.items %}
+          {% include 'weather/point/alerts-tab-content.html' with alerts=point.alerts.items %}
         </div>
       {% endif %}
       <div class="wx-tab-container wx-focus-offset-205"

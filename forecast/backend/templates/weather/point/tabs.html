@@ -1,0 +1,63 @@
+{% comment %}
+-- Template purpose:
+--  This partial will render the tabs (not tab content) used
+--  by the point forecast page(s).
+--  Note that the use of HTMX as the rendering strategy
+--  will determine if tabs are displayed as links or as buttons.
+{% endcomment %}
+<div role="tablist"
+     id="point-page-tablist"
+     class="tab-buttons display-flex flex-row top4 grid-col-12"
+     aria-labelledby="tablist-label">
+  {% if use_htmx %}
+    {% if point.alerts.items|length > 0 %}
+      <button role="tab"
+              id="alerts-tab-button"
+              class="tab-button"
+              data-tab-name="alerts"
+              aria-controls="alerts"
+              data-url="{% url 'point_forecast_alerts' lat=point.point.latitude lon=point.point.longitude %}"
+              {% if selected == "alerts" %}data-selected="true"{% endif %}>{{ "forecast.labels.alerts.01" | t }}</button>
+    {% endif %}
+    <button role="tab"
+            id="current-conditions-tab-button"
+            class="tab-button"
+            data-tab-name="today"
+            aria-controls="today"
+            data-url="{% url 'point_forecast_today' lat=point.point.latitude lon=point.point.longitude %}"
+            {% if selected == "today" %}data-selected="true"{% endif %}>{{ "daily-forecast.labels.today.01" | t }}</button>
+    <button role="tab"
+            id="daily-tab-button"
+            class="tab-button"
+            data-tab-name="daily"
+            aria-controls="daily"
+            data-url="{% url 'point_forecast_seven_day' lat=point.point.latitude lon=point.point.longitude %}"
+            {% if selected == "daily" %}data-selected="true"{% endif %}>{{ "forecast.labels.seven-days.01" | t }}</button>
+  {% else %}
+    {% if point.alerts.items|length > 0 %}
+      <a role="tab"
+         id="alerts-tab-button"
+         href="{% url 'point_forecast_alerts' lat=point.point.latitude lon=point.point.longitude %}"
+         class="tab-button"
+         data-tab-name="alerts"
+         aria-controls="alerts"
+         {% if selected == "alerts" %}data-selected="true"{% endif %}>{{ "forecast.labels.alerts.01" | t }}</a>
+    {% endif %}
+    <a role="tab"
+       id="current-conditions-tab-button"
+       href="{% url 'point_forecast_today' lat=point.point.latitude lon=point.point.longitude %}"
+       class="tab-button"
+       data-tab-name="today"
+       aria-controls="today"
+       {% if selected == "today" %}data-selected="true"{% endif %}>{{ "daily-forecast.labels.today.01" | t }}</a>
+    <a role="tab"
+       id="daily-tab-button"
+       href="{% url 'point_forecast_seven_day' lat=point.point.latitude lon=point.point.longitude %}"
+       class="tab-button"
+       data-tab-name="daily"
+       aria-controls="daily"
+       {% if selected == "daily" %}data-selected="true"{% endif %}>{{ "forecast.labels.seven-days.01" | t }}</a>
+  {% endif %}
+</div>
+
+  

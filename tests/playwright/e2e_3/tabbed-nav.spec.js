@@ -101,7 +101,7 @@ describe.skip("<wx-tabbed-nav> component tests", () => {
       test("Clicking an alert link opens the accordion for that link and scrolls to it", async ({
         page,
       }) => {
-        const alertLinks = await page.locator("weathergov-alert-list a").all();
+        const alertLinks = await page.locator("wx-point-alert-links a").all();
         for await (const link of alertLinks) {
           const alertID = await link
             .getAttribute("href")
@@ -138,7 +138,7 @@ describe.skip("<wx-tabbed-nav> component tests", () => {
         );
         await expect(alertTabButton).not.toHaveAttribute("data-selected");
 
-        await page.locator("weathergov-alert-list a").last().click();
+        await page.locator("wx-point-alert-links a").last().click();
 
         await expect(alertTab).toBeVisible();
         await expect(await alertTabButton.getAttribute("aria-expanded")).toBe(
