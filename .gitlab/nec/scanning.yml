@@ -48,6 +48,7 @@ scan-django-production-image:
   rules:
     - !reference [.on_mr_forecast_changes]
     - !reference [.on_main]
+    - !reference [.on_web]
 scan-api-interop-layer-production-image:
   needs:
     - job: push-api-interop-layer-production-image
@@ -55,6 +56,7 @@ scan-api-interop-layer-production-image:
   rules:
     - !reference [.on_mr_forecast_changes]
     - !reference [.on_main]
+    - !reference [.on_web]
 scan-tasks-ghwo-production-image:
   needs:
     - job: push-tasks-ghwo-production-image
@@ -62,6 +64,7 @@ scan-tasks-ghwo-production-image:
   rules:
     - !reference [.on_mr_tasks_changes]
     - !reference [.on_main]
+    - !reference [.on_web]
 scan-tasks-alerts-production-image:
   needs:
     - job: push-tasks-alerts-production-image
@@ -69,6 +72,7 @@ scan-tasks-alerts-production-image:
   rules:
     - !reference [.on_mr_tasks_changes]
     - !reference [.on_main]
+    - !reference [.on_web]
 scan-tasks-gridcache-production-image:
   needs:
     - job: push-tasks-gridcache-production-image
@@ -76,6 +80,7 @@ scan-tasks-gridcache-production-image:
   rules:
     - !reference [.on_mr_tasks_changes]
     - !reference [.on_main]
+    - !reference [.on_web]
 scan-tasks-wpcprob-production-image:
   needs:
     - job: push-tasks-wpcprob-production-image
@@ -83,3 +88,4 @@ scan-tasks-wpcprob-production-image:
   rules:
     - !reference [.on_mr_tasks_changes]
     - !reference [.on_main]
+    - !reference [.on_web]
