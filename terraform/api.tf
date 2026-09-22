@@ -55,6 +55,7 @@ resource "cloudfoundry_app" "interop" {
     INTERNAL_GRIDPOINT_LOOKUP   = var.internal_gridpoint_lookup
     MARINE_COASTAL_EXPERIMENTAL = var.marine_coastal_experimental
     TASKS_ALERTS_INTEROP        = var.tasks_alerts_interop
+    LOG_LEVEL                   = var.log_level
   }
 
   service_bindings = [

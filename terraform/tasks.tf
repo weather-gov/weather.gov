@@ -35,6 +35,7 @@ resource "cloudfoundry_app" "tasks" {
     GHWO_T_WORKER_NUM       = var.ghwo_t_worker_num
     GHWO_TL_WORKER_NUM      = var.ghwo_tl_worker_num
     GHWO_ERR_WORKER_NUM     = var.ghwo_err_worker_num
+    LOG_LEVEL               = var.log_level
   }
 
   service_bindings = [

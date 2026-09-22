@@ -44,7 +44,7 @@ resource "cloudfoundry_app" "app" {
     PYTHONUNBUFFERED            = "yup"
     DJANGO_SETTINGS_MODULE      = "backend.config.settings.production"
     DJANGO_BASE_URL             = coalesce(var.custom_domain_name, "app.cloud.gov")
-    DJANGO_LOG_LEVEL            = "INFO"
+    DJANGO_LOG_LEVEL            = var.log_level
     DJANGO_LOG_FORMAT           = "console"
     DISABLE_COLLECTSTATIC       = 1
     CLOUDGOV_SPACE              = var.cf_space_name

@@ -67,6 +67,12 @@ variable "env" {
   description = "The environment to set for the app (eg staging or production)"
 }
 
+variable "log_level" {
+  type        = string
+  default     = "WARNING"
+  description = "The logging level for the environment"
+}
+
 variable "enable_api_proxy" {
   type        = bool
   default     = false
