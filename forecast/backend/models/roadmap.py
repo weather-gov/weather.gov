@@ -17,7 +17,7 @@ class RoadmapPage(Page):
     # The default search_description provided by the base Page class is allowed
     # to be empty, which makes it optional. So... make our own that can't be
     # empty and carry on.
-    meta_description = models.TextField()
+    meta_description = models.TextField(max_length=155)
 
     content_panels = Page.content_panels + [
         FieldPanel(
@@ -37,6 +37,7 @@ class RoadmapPage(Page):
                     + "less. It should be a unique description of the page content "
                     + "and contain action verbs. Example: Learn how to prepare and "
                     + "stay safe during a hurricane.",
+                    attrs={"wx-char-counter": True},
                 ),
             ],
             heading="Search engine optimization",
