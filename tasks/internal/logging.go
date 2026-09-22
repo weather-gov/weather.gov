@@ -9,7 +9,7 @@ func GetJSONLogger(task string) *slog.Logger {
 	var level = os.Getenv("LOG_LEVEL")
 	logLevel := slog.LevelInfo
 	switch level {
-	case "WARN":
+	case "WARNING":
 		logLevel = slog.LevelWarn
 	case "ERROR":
 		logLevel = slog.LevelError
