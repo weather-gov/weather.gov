@@ -15,7 +15,7 @@ provider "aws" {
 
   default_tags {
     tags = {
-      "noaa:applicationname" = "weatherapi"
+      "noaa:applicationname" = "weathergov"
       "noaa:projectid"       = "noaa8501"
       "noaa:environment"     = "dev"
     }
