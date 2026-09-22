@@ -12,3 +12,18 @@ output "region" {
   value       = data.aws_region.current.region
   description = "Region for this env."
 }
+
+output "rds_database_name" {
+  value       = aws_db_instance.main.db_name
+  description = "Name of the database."
+}
+
+output "rds_address" {
+  value       = aws_db_instance.main.address
+  description = "Hostname of the database instance."
+}
+
+output "rds_port" {
+  value       = aws_db_instance.main.port
+  description = "Port the database listens on."
+}
