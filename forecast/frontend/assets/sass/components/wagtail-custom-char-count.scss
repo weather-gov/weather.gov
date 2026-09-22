@@ -1,0 +1,12 @@
+div[wx-char-counter] {
+  .wx-char-count-wrapper {
+    float: right;
+    visibility: hidden;
+  }
+
+  :hover {
+    .wx-char-count-wrapper {
+      visibility: inherit;
+    }
+  }
+}
