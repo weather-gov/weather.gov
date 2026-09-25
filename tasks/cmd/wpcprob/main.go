@@ -105,7 +105,7 @@ func run(ctx context.Context, logger *slog.Logger, latest bool) error {
 	// Poll WPC until this hour's cycle is published, since the cron fires at :10 and WPC lands around :11
 	expectedCycle := wpcprob.AnyCycle
 	if !latest {
-		expectedCycle = time.Now().UTC().Truncate(time.Hour).Format("2006010215")
+		expectedCycle = time.Now().UTC().Truncate(time.Hour).Format(wpcprob.CycleLayout)
 	}
 	logger.Info("waiting for cycle", "expected", expectedCycle)
 
@@ -116,7 +116,7 @@ func run(ctx context.Context, logger *slog.Logger, latest bool) error {
 	}
 	logger.Info("using cycle", "cycle", cycle, "fhours", fhours, "duration", time.Since(stageStart).String())
 
-	cycleTime, err := time.Parse("2006010215", cycle)
+	cycleTime, err := time.Parse(wpcprob.CycleLayout, cycle)
 	if err != nil {
 		return fmt.Errorf("parsing cycle %q: %w", cycle, err)
 	}

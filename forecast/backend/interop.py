@@ -1,5 +1,5 @@
 import re
-from datetime import datetime
+from datetime import UTC, datetime
 from os import getenv
 from zoneinfo import ZoneInfo
 
@@ -16,6 +16,7 @@ from spatial.models import WeatherAlertsCache
 
 _ID_REGEX = re.compile("[^A-Z0-9]", re.IGNORECASE)
 _WPC_VARIABLES = ("rain", "snow", "freezingRain")
+_WPC_ANCHOR_HOUR = 12
 _requests_session = None
 
 
@@ -274,9 +275,21 @@ def _process_qpf(day, wpc_prob, day_index, tz):
 
     # precip.html only ever sees the qpf dict, so the block rides along there
     qpf["wpcProb"] = None
-    if wpc_prob and day_index < len(wpc_prob):
-        period = wpc_prob[day_index]
-        # WPC's windows don't line up with local days, so drop one that doesn't reach this day at all
+    if wpc_prob:
+        # Each 12z window belongs to the local day it starts on, including the one underway from 12z to 18z
+        qpf["wpcProb"] = next(
+            (
+                p
+                for p in wpc_prob
+                if p
+                and p["period"]["start"].astimezone(UTC).hour == _WPC_ANCHOR_HOUR
+                and p["period"]["start"].date() == day["start"].date()
+            ),
+            None,
+        )
+    if wpc_prob and day_index == 0 and qpf["wpcProb"] is None:
+        period = wpc_prob[0]
+        # Day 1's own 12z window drops off at 18z, so the one underway stands in unless it misses the day
         if period and period["period"]["start"] < day["end"] and period["period"]["end"] > day["start"]:
             qpf["wpcProb"] = period
 
