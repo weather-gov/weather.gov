@@ -142,7 +142,7 @@ describe.skip("wx-combo-box-location tests", () => {
       const thirdItem = page.locator(
         "wx-combo-box-location ul > li:nth-child(3)",
       );
-      const loader = page.locator("wx-loader");
+      const loader = page.locator("wx-search-loading-indicator");
       await thirdItem.click();
 
       await expect(loader).toBeVisible();

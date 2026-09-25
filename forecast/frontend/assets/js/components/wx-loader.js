@@ -1,7 +1,7 @@
 /** @file this is for the events to show and hide the wx-loader */
 
 const hideNavigationLoader = () => {
-  document.querySelectorAll("wx-loader").forEach((loader) => {
+  document.querySelectorAll("wx-search-loading-indicator").forEach((loader) => {
     loader.setAttribute("aria-hidden", true);
   });
 };
@@ -15,7 +15,7 @@ const hideNavigationLoader = () => {
  * by passing the ID when emitting the event.
  */
 const showNavigationLoader = (event) => {
-  const loaders = document.querySelectorAll("wx-loader");
+  const loaders = document.querySelectorAll("wx-search-loading-indicator");
   const activeNav = event.detail?.id;
 
   loaders.forEach((loader) => {

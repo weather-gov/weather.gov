@@ -48,7 +48,7 @@
 {% block page_content %}
   <div class="height-full display-flex flex-column">
     {% include "weather/state/name.html" with state_name=state_name %}
-    <wx-tabbed-nav class="display-block position-relative flex-1" id="state-page-tabbed-nav">
+    <wx-tabbed-nav class="flex-1 display-flex flex-column position-relative flex-1" id="state-page-tabbed-nav">
     {% include "weather/state/tabs.html" with url_name=request.resolver_match.url_name %}
     <div class="bg-white {% if alerts_error %} padding-bottom-0 {% else %} padding-bottom-4 {% endif %}">
       <div class="wx-focus-offset-205" aria-labelledby="alerts-tab-button" id="alerts" tabindex="0">

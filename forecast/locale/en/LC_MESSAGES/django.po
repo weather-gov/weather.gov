@@ -480,7 +480,16 @@ msgid "hourly-table.text.gusting.01"
 msgstr "with gusts up to {gustSpeed} mph"
 
 msgid "loader.loading-text.01"
-msgstr "Loading the forecast"
+msgstr "Loading the forecast..."
+
+msgid "loader.loading-text.7day-tab.01"
+msgstr "Loading the 7 day forecast..."
+
+msgid "loader.loading-text.alerts-tab.01"
+msgstr "Loading alerts..."
+
+msgid "loader.loading-text.today-tab.01"
+msgstr "Loading today's forecast..."
 
 msgid "location-search.labels.enter-city-zip.01"
 msgstr "Enter city or zip code"
