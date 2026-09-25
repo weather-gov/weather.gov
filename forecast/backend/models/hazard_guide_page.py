@@ -44,7 +44,8 @@ class HazardLevels(models.Model):
     alert_level = models.CharField(max_length=10, choices=HazardLevelAlertLevel.choices)
     alert_title = models.TextField(help_text="The name of the hazard alert (i.e. Tornado Advisory, Tornado Warning).")
     description = RichTextField(
-        help_text="The description of the hazard level, including what it means and what actions to take."
+        help_text="The description of the hazard level, including what it means and what actions to take.",
+        features=["h3", "h4", "ol", "ul", "link"]
     )
 
     panels = [FieldPanel("alert_level"), FieldPanel("alert_title"), FieldPanel("description")]
@@ -171,7 +172,7 @@ class HazardGuideSection(Orderable, ClusterableModel):
     """Represents a single section in the hazard guide."""
 
     header = models.CharField(max_length=255)
-    content = RichTextField(blank=True)
+    content = RichTextField(blank=True, features=["h3", "h4", "ol", "ul", "link"])
 
     class SectionType(models.TextChoices):
         """Represents an alerts/resources/other enum value."""
