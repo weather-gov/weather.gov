@@ -8,24 +8,27 @@ import (
 	"testing"
 )
 
-// selectFHours should pick the window already underway, then the next two after it
+// selectFHours should pick the window already underway, then every published window after it that ends at 12z
 func TestSelectFHours(t *testing.T) {
 	tests := []struct {
 		name   string
+		cycle  string
 		fhours []string
 		want   []string
 	}{
-		// An 18Z cycle: windows [0,24] [24,48] [42,66], with day 3 overlapping day 2 by 6 hours
-		{"18Z cycle", []string{"024", "030", "036", "042", "048", "054", "060", "066"}, []string{"024", "048", "066"}},
-		// A 20Z cycle sits two hours into its first window, so every fhour shifts down by two
-		{"20Z cycle", []string{"022", "028", "034", "040", "046", "052", "058", "064"}, []string{"022", "046", "064"}},
-		// Nothing past day 2 is published, so the run covers two periods rather than repeating one
-		{"short feed", []string{"024", "030", "036", "042", "048"}, []string{"024", "048"}},
+		// Day 1 already ends at 12z, so it isn't picked a second time as a 12z window
+		{"16Z cycle", "2026091016", []string{"020", "026", "032", "038", "044", "050", "056", "062", "068"}, []string{"020", "044", "068"}},
+		// Day 1 runs 18z to 18z, then the 12z windows follow
+		{"21Z cycle", "2026091021", []string{"021", "027", "033", "039", "045", "051", "057", "063"}, []string{"021", "039", "063"}},
+		// East and West sit on different local dates overnight, so every 12z window is kept
+		{"08Z cycle", "2026091008", []string{"022", "028", "034", "040", "046", "052", "058", "064", "070", "076"}, []string{"022", "028", "052", "076"}},
+		// WPC stopping short of the last 12z window leaves one fewer period
+		{"08Z short feed", "2026091008", []string{"022", "028", "034", "040", "046", "052", "058", "064", "070"}, []string{"022", "028", "052"}},
 	}
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, err := selectFHours(tt.fhours)
+			got, err := selectFHours(tt.cycle, tt.fhours)
 			if err != nil {
 				t.Fatalf("unexpected error: %v", err)
 			}
@@ -36,10 +39,13 @@ func TestSelectFHours(t *testing.T) {
 	}
 }
 
-// selectFHours should error on a forecast hour it can't parse
+// selectFHours should error on a cycle or forecast hour it can't parse
 func TestSelectFHours_Unparseable(t *testing.T) {
-	if _, err := selectFHours([]string{"abc"}); err == nil {
+	if _, err := selectFHours("2026091016", []string{"abc"}); err == nil {
 		t.Error("expected an error for an unparseable forecast hour")
+	}
+	if _, err := selectFHours("abc", []string{"024"}); err == nil {
+		t.Error("expected an error for an unparseable cycle")
 	}
 }
 

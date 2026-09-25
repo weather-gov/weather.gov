@@ -330,12 +330,12 @@ class TestInteropInterface(TestCase):
     @responses.activate
     @mock.patch("backend.interop._")
     def test_point_forecast_wpc_prob(self, mock_gettext_lazy):
-        """Tests that each WPC period is localized and attached to the day at its own index."""
+        """Tests that Day 1 takes the window underway and later days take the 12z window starting on their date."""
         mock_gettext_lazy.side_effect = lambda key: key
         os.environ["INTEROP_URL"] = "https://interop"
         rain = {"range": {"high": {"amount": 1.25, "chance": 0.1}}, "probabilities": []}
         point = copy.deepcopy(self.forecast["nosnow_noice_noalerts"])
-        # The fixture's first day runs from 2009-01-02T13:00Z, so these three windows cover days 1-3
+        # The fixture's days start at 13z, so Day 1 gets an 18z window and Days 2 and 3 get 12z ones
         point["wpcProb"] = {
             "periods": [
                 {
@@ -345,12 +345,11 @@ class TestInteropInterface(TestCase):
                     "freezingRain": None,
                 },
                 {
-                    "period": {"start": "2009-01-03T18:00:00Z", "end": "2009-01-04T18:00:00Z", "hours": 24},
+                    "period": {"start": "2009-01-03T12:00:00Z", "end": "2009-01-04T12:00:00Z", "hours": 24},
                     "rain": rain,
                     "snow": None,
                     "freezingRain": None,
                 },
-                # Day 3's window overlaps day 2, so picking by index rather than overlap keeps them apart
                 {
                     "period": {"start": "2009-01-04T12:00:00Z", "end": "2009-01-05T12:00:00Z", "hours": 24},
                     "rain": rain,
@@ -389,7 +388,7 @@ class TestInteropInterface(TestCase):
                     "freezingRain": None,
                 },
                 {
-                    "period": {"start": "2009-01-03T18:00:00Z", "end": "2009-01-04T18:00:00Z", "hours": 24},
+                    "period": {"start": "2009-01-03T12:00:00Z", "end": "2009-01-04T12:00:00Z", "hours": 24},
                     "rain": None,
                     "snow": None,
                     "freezingRain": None,
@@ -406,6 +405,143 @@ class TestInteropInterface(TestCase):
         self.assertIs(days[0]["qpf"]["wpcProb"], periods[0])
         self.assertIsNone(days[1]["qpf"]["wpcProb"])
         self.assertIsNone(days[2]["qpf"]["wpcProb"])
+
+    @responses.activate
+    @mock.patch("backend.interop._")
+    def test_point_forecast_wpc_prob_east_west(self, mock_gettext_lazy):
+        """Tests that East and West points reading the same 05z run each get the 12z windows on their own dates."""
+        mock_gettext_lazy.side_effect = lambda key: key
+        os.environ["INTEROP_URL"] = "https://interop"
+        rain = {"range": {"high": {"amount": 1.25, "chance": 0.1}}, "probabilities": []}
+        periods = [
+            {
+                "period": {"start": start, "end": end, "hours": 24},
+                "rain": rain,
+                "snow": None,
+                "freezingRain": None,
+            }
+            for start, end in [
+                ("2009-01-02T00:00:00Z", "2009-01-03T00:00:00Z"),
+                ("2009-01-02T12:00:00Z", "2009-01-03T12:00:00Z"),
+                ("2009-01-03T12:00:00Z", "2009-01-04T12:00:00Z"),
+                ("2009-01-04T12:00:00Z", "2009-01-05T12:00:00Z"),
+            ]
+        ]
+        # At 05z it's already Jan 2 in New York but still Jan 1 in Los Angeles
+        cases = [
+            (
+                "America/New_York",
+                ["2009-01-02T05:00:00Z", "2009-01-03T05:00:00Z", "2009-01-04T05:00:00Z", "2009-01-05T05:00:00Z"],
+                [1, 2, 3],
+            ),
+            (
+                "America/Los_Angeles",
+                ["2009-01-01T08:00:00Z", "2009-01-02T08:00:00Z", "2009-01-03T08:00:00Z", "2009-01-04T08:00:00Z"],
+                [0, 1, 2],
+            ),
+        ]
+
+        for index, (timezone, midnights, expected) in enumerate(cases):
+            with self.subTest(timezone=timezone):
+                point = copy.deepcopy(self.forecast["nosnow_noice_noalerts"])
+                point["place"]["timezone"] = timezone
+                for day, start, end in zip(point["forecast"]["days"], midnights[:-1], midnights[1:], strict=True):
+                    day["start"] = start
+                    day["end"] = end
+                point["wpcProb"] = {"periods": periods}
+                responses.add(responses.GET, f"https://interop/point/13/{14 + index}", json=point, status=200)
+
+                actual = interop.get_point_forecast(13, 14 + index)
+                localized = actual["wpcProb"]
+                days = actual["forecast"]["days"]
+
+                for day, period_index in zip(days, expected, strict=True):
+                    self.assertIs(day["qpf"]["wpcProb"], localized[period_index])
+
+    @responses.activate
+    @mock.patch("backend.interop._")
+    def test_point_forecast_wpc_prob_skips_underway(self, mock_gettext_lazy):
+        """Tests that an Eastern point at 10:30z passes over the 06z window underway for its own 12z window."""
+        mock_gettext_lazy.side_effect = lambda key: key
+        os.environ["INTEROP_URL"] = "https://interop"
+        rain = {"range": {"high": {"amount": 1.25, "chance": 0.1}}, "probabilities": []}
+        point = copy.deepcopy(self.forecast["nosnow_noice_noalerts"])
+        point["place"]["timezone"] = "America/New_York"
+        point["wpcProb"] = {
+            "periods": [
+                {
+                    "period": {"start": start, "end": end, "hours": 24},
+                    "rain": rain,
+                    "snow": None,
+                    "freezingRain": None,
+                }
+                for start, end in [
+                    ("2009-01-02T06:00:00Z", "2009-01-03T06:00:00Z"),
+                    ("2009-01-02T12:00:00Z", "2009-01-03T12:00:00Z"),
+                    ("2009-01-03T12:00:00Z", "2009-01-04T12:00:00Z"),
+                    ("2009-01-04T12:00:00Z", "2009-01-05T12:00:00Z"),
+                ]
+            ]
+        }
+        # Day 1 runs from 5:30 AM to 6 AM the next morning, and the later days run 6 AM to 6 AM
+        bounds = [
+            ("2009-01-02T10:30:00Z", "2009-01-03T11:00:00Z"),
+            ("2009-01-03T11:00:00Z", "2009-01-04T11:00:00Z"),
+            ("2009-01-04T11:00:00Z", "2009-01-05T11:00:00Z"),
+        ]
+        for day, (start, end) in zip(point["forecast"]["days"], bounds, strict=True):
+            day["start"] = start
+            day["end"] = end
+        responses.add(responses.GET, "https://interop/point/15/16", json=point, status=200)
+
+        actual = interop.get_point_forecast(15, 16)
+        localized = actual["wpcProb"]
+        days = actual["forecast"]["days"]
+
+        for day, period_index in zip(days, [1, 2, 3], strict=True):
+            self.assertIs(day["qpf"]["wpcProb"], localized[period_index])
+
+    @responses.activate
+    @mock.patch("backend.interop._")
+    def test_point_forecast_wpc_prob_takes_underway(self, mock_gettext_lazy):
+        """Tests that a Pacific point at 12:30z takes the 12z window underway, since it starts on Day 1's date."""
+        mock_gettext_lazy.side_effect = lambda key: key
+        os.environ["INTEROP_URL"] = "https://interop"
+        rain = {"range": {"high": {"amount": 1.25, "chance": 0.1}}, "probabilities": []}
+        point = copy.deepcopy(self.forecast["nosnow_noice_noalerts"])
+        point["place"]["timezone"] = "America/Los_Angeles"
+        point["wpcProb"] = {
+            "periods": [
+                {
+                    "period": {"start": start, "end": end, "hours": 24},
+                    "rain": rain,
+                    "snow": None,
+                    "freezingRain": None,
+                }
+                for start, end in [
+                    ("2009-01-02T12:00:00Z", "2009-01-03T12:00:00Z"),
+                    ("2009-01-03T12:00:00Z", "2009-01-04T12:00:00Z"),
+                    ("2009-01-04T12:00:00Z", "2009-01-05T12:00:00Z"),
+                ]
+            ]
+        }
+        # Day 1 runs from 4:30 AM to 6 AM the next morning, and the later days run 6 AM to 6 AM
+        bounds = [
+            ("2009-01-02T12:30:00Z", "2009-01-03T14:00:00Z"),
+            ("2009-01-03T14:00:00Z", "2009-01-04T14:00:00Z"),
+            ("2009-01-04T14:00:00Z", "2009-01-05T14:00:00Z"),
+        ]
+        for day, (start, end) in zip(point["forecast"]["days"], bounds, strict=True):
+            day["start"] = start
+            day["end"] = end
+        responses.add(responses.GET, "https://interop/point/17/18", json=point, status=200)
+
+        actual = interop.get_point_forecast(17, 18)
+        localized = actual["wpcProb"]
+        days = actual["forecast"]["days"]
+
+        for day, period_index in zip(days, [0, 1, 2], strict=True):
+            self.assertIs(day["qpf"]["wpcProb"], localized[period_index])
 
     @responses.activate
     @mock.patch("backend.interop._")

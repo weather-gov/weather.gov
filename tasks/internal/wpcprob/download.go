@@ -21,15 +21,15 @@ var wpcBaseURL = "https://ftp-wpc.ncep.noaa.gov/prob_precip_portal/co"
 // Length of the window each file accumulates over, ending at the file's forecast hour
 const accumulationHours = 24
 
-// Consecutive 24-hour windows pulled per cycle, one per rendered forecast day
-const periodCount = 3
-
 const (
 	downloadWorkers  = 6
 	downloadAttempts = 3
 )
 
 var fhourRe = regexp.MustCompile(`f(\d{3})\.grib2`)
+
+// WPC names each cycle by its UTC run hour, like 2026091016
+const CycleLayout = "2006010215"
 
 // Read the most recently published cycle from WPC's latest_cycle.txt
 func fetchLatestCycle(ctx context.Context, client *http.Client) (string, error) {
@@ -71,8 +71,13 @@ func publishedFHours(ctx context.Context, client *http.Client, cycle string) ([]
 	return fhours, nil
 }
 
-// Pick the window already underway, then the next two 24-hour windows after it
-func selectFHours(fhours []string) ([]string, error) {
+// Pick the window already underway, then every published window after it that ends at 12z
+func selectFHours(cycle string, fhours []string) ([]string, error) {
+	cycleTime, err := time.Parse(CycleLayout, cycle)
+	if err != nil {
+		return nil, fmt.Errorf("parsing cycle %q: %w", cycle, err)
+	}
+
 	hours := make([]int, len(fhours))
 	for i, f := range fhours {
 		h, err := strconv.Atoi(f)
@@ -85,14 +90,12 @@ func selectFHours(fhours []string) ([]string, error) {
 	// Each window ends on a 6-hourly boundary, so the last hour up to 24 is the one already underway
 	start := largestAtMost(hours, accumulationHours)
 
-	var selected []string
-	for p := range periodCount {
-		idx := largestAtMost(hours, hours[start]+p*accumulationHours)
-		// WPC stops near +66, so day 3 lands on the last published window instead of repeating day 2
-		if len(selected) > 0 && fhours[idx] == selected[len(selected)-1] {
-			break
+	selected := []string{fhours[start]}
+	// East and West can sit on different local dates overnight, so every 12z window is kept for them to pick from
+	for i := start + 1; i < len(hours); i++ {
+		if (cycleTime.Hour()+hours[i])%24 == 12 {
+			selected = append(selected, fhours[i])
 		}
-		selected = append(selected, fhours[idx])
 	}
 	return selected, nil
 }
@@ -139,7 +142,7 @@ func WaitForCycle(ctx context.Context, client *http.Client, expectedCycle string
 			lastErr = err
 			continue
 		}
-		selected, err := selectFHours(published)
+		selected, err := selectFHours(latest, published)
 		if err != nil {
 			lastErr = err
 			continue
