@@ -762,3 +762,54 @@ class TestViews(TestCase):
         response = self.client.get("/forecast/point/11.1/22.2/alerts/")
 
         self.assertRedirects(response, "/forecast/point/11.1/22.2/today/")
+
+    @override_settings(POINT_FORECAST_HTMX=True)
+    @mock.patch("backend.views.point.interop.get_point_forecast")
+    def test_point_location_alerts_htmx_with_indicator(self, mock_get_point_forecast):
+        """Test that loading indicators are used for the other tabs."""
+        mock_get_point_forecast.return_value = {
+            "grid": {"wfo": "TST", "type": "land", "marineType": None },
+            "place": {"timezone": "America/New_York"},
+            "weatherstory": [self.weather_story],
+            "alerts": { "error": False, "items": [{}]},
+        }
+
+        response = self.client.get("/forecast/point/11.1/22.2/alerts/")
+
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "weather/point/tab-containers.html")
+        self.assertTemplateUsed(response, "weather/partials/wx-loading-indicator.html", count=2)
+
+    @override_settings(POINT_FORECAST_HTMX=True)
+    @mock.patch("backend.views.point.interop.get_point_forecast")
+    def test_point_location_today_htmx_with_indicator(self, mock_get_point_forecast):
+        """Test that loading indicators are used for the other tabs."""
+        mock_get_point_forecast.return_value = {
+            "grid": {"wfo": "TST", "type": "land", "marineType": None },
+            "place": {"timezone": "America/New_York"},
+            "weatherstory": [self.weather_story],
+            "alerts": { "error": False, "items": [{}]},
+        }
+
+        response = self.client.get("/forecast/point/11.1/22.2/today/")
+
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "weather/point/tab-containers.html")
+        self.assertTemplateUsed(response, "weather/partials/wx-loading-indicator.html", count=2)
+
+    @override_settings(POINT_FORECAST_HTMX=True)
+    @mock.patch("backend.views.point.interop.get_point_forecast")
+    def test_point_location_7day_htmx_with_indicator(self, mock_get_point_forecast):
+        """Test that loading indicators are used for the other tabs."""
+        mock_get_point_forecast.return_value = {
+            "grid": {"wfo": "TST", "type": "land", "marineType": None },
+            "place": {"timezone": "America/New_York"},
+            "weatherstory": [self.weather_story],
+            "alerts": { "error": False, "items": [{}]},
+        }
+
+        response = self.client.get("/forecast/point/11.1/22.2/7-day/")
+
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "weather/point/tab-containers.html")
+        self.assertTemplateUsed(response, "weather/partials/wx-loading-indicator.html", count=2)

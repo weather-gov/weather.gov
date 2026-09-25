@@ -18,7 +18,7 @@
 {% block page_content %}
   <div class="height-full display-flex flex-column">
     {% include "weather/state/name.html" with state_name=state_name %}
-    <wx-tabbed-nav class="display-block position-relative flex-1" id="state-page-tabbed-nav">
+    <wx-tabbed-nav class="flex-1 display-flex flex-column position-relative flex-1" id="state-page-tabbed-nav">
       {% include "weather/state/tabs.html" with url_name=request.resolver_match.url_name %}
       <div class="display-flex flex-column flex-no-wrap bg-base-white padding-top-3 padding-bottom-4">
         <div class="flex-1 wx-focus-offset-205"

@@ -1,0 +1,22 @@
+{% comment %}
+-- Template purpose:
+--   Display a loading indicator with icon and text.
+-- Expected variables:
+--   text(string): the text to display inside of the indicator
+--   hide_on_load(boolean): whether to show the loader by default. Default is hidden.
+--   pop_in(boolean): whether the loader should take up space while hidden
+-- Used by: index.html, partials/location-search.html
+{% endcomment %}
+{% load i18n %}
+{% load weather_i18n %}
+<wx-loading-indicator class="display-flex flex-row flex-align-center wx-loader-pop-in"
+           {% if hide_on_load %}
+           aria-hidden="true"
+           {% else %}
+           aria-hidden="false"
+           {% endif %}>
+<div class="wx-loader-icon display-block height-4 width-4 margin-right-1"></div>
+<span class="wx-loader-text text-base-darker">
+  {{ text }}
+</span>
+</wx-loading-indicator>
