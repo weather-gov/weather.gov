@@ -10,10 +10,12 @@ import (
 	"net/http/httptest"
 	"os"
 	"reflect"
+	"regexp"
 	"slices"
 	"strings"
 	"sync"
 	"testing"
+	"time"
 )
 
 // Implement the RoundTripper interface, so we can override
@@ -37,16 +39,45 @@ func getReadCloserForBytes(byteData []byte) io.ReadCloser {
 	return io.NopCloser(bytes.NewBuffer(byteData))
 }
 
+// For the purposes of these tests, we want to "mock" the generation_time
+// of the source data to equal time.Now().
+// This is because we have staleness checks on the incoming data, and because
+// we are using example JSON files with hard-coded timestamps, we need to replace
+// these values
+var timeNow = time.Now()
+var timeNowBytes, _ = timeNow.MarshalJSON()
+var timeNowString = string(timeNowBytes)
+var generationTimestampRegex = regexp.MustCompile(`(.*?["]generation_time["][:]\s+?)["][A-Za-z:\-0-9]+?["](.*)`)
+
+// Helper function to get the byte array of source data json files.
+// This is partially a wrapper around os.ReadFile, but it also does a regex based
+// string replacement on the generation_time value in the source data, so that
+// we can simulate time.Now()
+func getDataSourceBytesWithGenerationTime(path string, timestamp string) ([]byte, error) {
+	bytes, err := os.ReadFile(path)
+	if err != nil {
+		return bytes, err
+	}
+	bytesToString := string(bytes)
+	bytesToString = generationTimestampRegex.ReplaceAllString(bytesToString, fmt.Sprintf("$1%s$2", timestamp))
+	return []byte(bytesToString), nil
+}
+
+// func TestTimestampTestReplacement(t *testing.T) bool {
+// 	example, _ := getDataSourceBytesWithGenerationTime("./test_data/LWX_hazByCounty.json", timeNowString)
+// 	return true
+// }
+
 func TestGenericFetchMethods(t *testing.T) {
-	exampleLegendBytes, err := os.ReadFile("./test_data/LWX_legend.json")
+	exampleLegendBytes, err := getDataSourceBytesWithGenerationTime("./test_data/LWX_legend.json", timeNowString)
 	if err != nil {
 		t.Errorf("Error opening test wfo legend: %s", err)
 	}
-	exampleChickletBytes, err := os.ReadFile("./test_data/LWX_chicklet.json")
+	exampleChickletBytes, err := getDataSourceBytesWithGenerationTime("./test_data/LWX_chicklet.json", timeNowString)
 	if err != nil {
 		t.Errorf("Error opening test wfo chicklet: %s", err)
 	}
-	exampleGHWOBytes, err := os.ReadFile("./test_data/LWX_hazByCounty.json")
+	exampleGHWOBytes, err := getDataSourceBytesWithGenerationTime("./test_data/LWX_hazByCounty.json", timeNowString)
 	if err != nil {
 		t.Errorf("Error opening test hazByCounty: %s", err)
 	}
@@ -184,11 +215,11 @@ func TestGenericFetchMethods(t *testing.T) {
 }
 
 func TestStateFetchMethods(t *testing.T) {
-	exampleChickletBytes, err := os.ReadFile("./test_data/LWX_chickletMaryland.json")
+	exampleChickletBytes, err := getDataSourceBytesWithGenerationTime("./test_data/LWX_chickletMaryland.json", timeNowString)
 	if err != nil {
 		t.Errorf("Error opening test state chicklet: %s", err)
 	}
-	exampleLegendBytes, err := os.ReadFile("./test_data/LWX_legendMaryland.json")
+	exampleLegendBytes, err := getDataSourceBytesWithGenerationTime("./test_data/LWX_legendMaryland.json", timeNowString)
 	if err != nil {
 		t.Errorf("Error openint test state legend: %s", err)
 	}
@@ -330,11 +361,11 @@ func TestStateFetchMethods(t *testing.T) {
 
 func TestFetchState(t *testing.T) {
 	var ctx = context.TODO()
-	exampleChickletBytes, err := os.ReadFile("./test_data/LWX_chickletMaryland.json")
+	exampleChickletBytes, err := getDataSourceBytesWithGenerationTime("./test_data/LWX_chickletMaryland.json", timeNowString)
 	if err != nil {
 		t.Errorf("Error opening test state chicklet: %s", err)
 	}
-	exampleLegendBytes, err := os.ReadFile("./test_data/LWX_legendMaryland.json")
+	exampleLegendBytes, err := getDataSourceBytesWithGenerationTime("./test_data/LWX_legendMaryland.json", timeNowString)
 	if err != nil {
 		t.Errorf("Error openint test state legend: %s", err)
 	}
@@ -438,24 +469,24 @@ func TestFetchState(t *testing.T) {
 func TestFetchWFO(t *testing.T) {
 	var ctx = context.TODO()
 
-	exampleLegendBytes, err := os.ReadFile("./test_data/LWX_legend.json")
+	exampleLegendBytes, err := getDataSourceBytesWithGenerationTime("./test_data/LWX_legend.json", timeNowString)
 	if err != nil {
 		t.Errorf("Error opening test wfo legend: %s", err)
 	}
-	exampleChickletBytes, err := os.ReadFile("./test_data/LWX_chicklet.json")
+	exampleChickletBytes, err := getDataSourceBytesWithGenerationTime("./test_data/LWX_chicklet.json", timeNowString)
 	if err != nil {
 		t.Errorf("Error opening test wfo chicklet: %s", err)
 	}
-	exampleGHWOBytes, err := os.ReadFile("./test_data/LWX_hazByCounty.json")
+	exampleGHWOBytes, err := getDataSourceBytesWithGenerationTime("./test_data/LWX_hazByCounty.json", timeNowString)
 	if err != nil {
 		t.Errorf("Error opening test hazByCounty: %s", err)
 	}
 
-	exampleStateChickletBytes, err := os.ReadFile("./test_data/LWX_chickletMaryland.json")
+	exampleStateChickletBytes, err := getDataSourceBytesWithGenerationTime("./test_data/LWX_chickletMaryland.json", timeNowString)
 	if err != nil {
 		t.Errorf("Error opening test state chicklet: %s", err)
 	}
-	exampleStateLegendBytes, err := os.ReadFile("./test_data/LWX_legendMaryland.json")
+	exampleStateLegendBytes, err := getDataSourceBytesWithGenerationTime("./test_data/LWX_legendMaryland.json", timeNowString)
 	if err != nil {
 		t.Errorf("Error openint test state legend: %s", err)
 	}
@@ -574,6 +605,350 @@ func TestFetchWFO(t *testing.T) {
 			resultStr, _ := json.MarshalIndent(result, "", "  ")
 			expectedStr, _ := json.MarshalIndent(expected, "", "  ")
 			t.Errorf("Expected %s to equal %s", resultStr, expectedStr)
+		}
+	})
+}
+
+func TestFetchStalenessErrors(t *testing.T) {
+	var ctx = context.TODO()
+
+	exampleLegendBytes, err := getDataSourceBytesWithGenerationTime("./test_data/LWX_legend.json", timeNowString)
+	if err != nil {
+		t.Errorf("Error opening test wfo legend: %s", err)
+	}
+	exampleChickletBytes, err := getDataSourceBytesWithGenerationTime("./test_data/LWX_chicklet.json", timeNowString)
+	if err != nil {
+		t.Errorf("Error opening test wfo chicklet: %s", err)
+	}
+	exampleGHWOBytes, err := getDataSourceBytesWithGenerationTime("./test_data/LWX_hazByCounty.json", timeNowString)
+	if err != nil {
+		t.Errorf("Error opening test hazByCounty: %s", err)
+	}
+
+	exampleStateChickletBytes, err := getDataSourceBytesWithGenerationTime("./test_data/LWX_chickletMaryland.json", timeNowString)
+	if err != nil {
+		t.Errorf("Error opening test state chicklet: %s", err)
+	}
+	exampleStateLegendBytes, err := getDataSourceBytesWithGenerationTime("./test_data/LWX_legendMaryland.json", timeNowString)
+	if err != nil {
+		t.Errorf("Error openint test state legend: %s", err)
+	}
+
+	var exampleLegend, exampleStateLegend *SourceLegend
+	var exampleChicklet, exampleStateChicklet *SourceChicklet
+	var exampleGHWO *SourceGHWOData
+	_ = json.Unmarshal(exampleLegendBytes, &exampleLegend)
+	_ = json.Unmarshal(exampleChickletBytes, &exampleChicklet)
+	_ = json.Unmarshal(exampleGHWOBytes, &exampleGHWO)
+	_ = json.Unmarshal(exampleStateChickletBytes, &exampleStateChicklet)
+	_ = json.Unmarshal(exampleStateLegendBytes, &exampleStateLegend)
+
+	t.Run("A stale hazByCounty file results in an error", func(t *testing.T) {
+		// First, we need to update the bytes for the hazByCounty file
+		// to have a stale timestamp
+		staleTimestamp := `2026-07-16T15:07:07-04:00`
+		staleWrappedTimestamp := fmt.Sprintf(`"%s"`, staleTimestamp)
+		staleTime, err := time.Parse(time.RFC3339, staleTimestamp)
+		if err != nil {
+			t.Errorf("Could not parse timestamp: %s: %s", staleTimestamp, err.Error())
+		}
+		exampleGHWOBytes, err := getDataSourceBytesWithGenerationTime("./test_data/LWX_hazByCounty.json", staleWrappedTimestamp)
+		if err != nil {
+			t.Errorf("Error opening test hazByCounty: %s", err)
+		}
+
+		// Create the server that will respond with all the corresponding bytes
+		server := httptest.NewServer(http.HandlerFunc(func(writer http.ResponseWriter, req *http.Request) {
+			if strings.HasSuffix(req.URL.Path, "chicklet.json") {
+				writer.Write(exampleChickletBytes)
+			} else if strings.HasSuffix(req.URL.Path, "legend.json") {
+				writer.Write(exampleLegendBytes)
+			} else if strings.HasSuffix(req.URL.Path, "hazByCounty.json") {
+				writer.Write(exampleGHWOBytes)
+			} else if strings.HasSuffix(req.URL.Path, "chickletMaryland.json") {
+				writer.Write(exampleStateChickletBytes)
+			} else if strings.HasSuffix(req.URL.Path, "legendMaryland.json") {
+				writer.Write(exampleStateLegendBytes)
+			} else {
+				writer.WriteHeader(404)
+				return
+			}
+		}))
+
+		t.Setenv("GHWO_BASE_URL", server.URL)
+		defer server.Close()
+
+		_, errors := FetchWFO(ctx, "LWX")
+
+		expectedErrorMessage := fmt.Sprintf(
+			"Source GHWO data is stale: more than %d hours old (%s)",
+			staleness,
+			staleTime,
+		)
+
+		if len(errors) != 1 {
+			t.Errorf(
+				"Expected FetchWFO to have %d errors, but got %d:\n\t%s",
+				1,
+				len(errors),
+				errors,
+			)
+		}
+
+		if errors[0].Error() != expectedErrorMessage {
+			t.Errorf(
+				"Expected single error messages to be equal:\n\t%s\n\t%s",
+				expectedErrorMessage,
+				errors[0].Error(),
+			)
+		}
+	})
+
+	t.Run("A stale legend file results in an error", func(t *testing.T) {
+		// First, we need to update the bytes for the chicklet file
+		// to have a stale timestamp
+		staleTimestamp := `2026-07-16T15:07:07-04:00`
+		staleWrappedTimestamp := fmt.Sprintf(`"%s"`, staleTimestamp)
+		staleTime, err := time.Parse(time.RFC3339, staleTimestamp)
+		if err != nil {
+			t.Errorf("Could not parse timestamp: %s: %s", staleTimestamp, err.Error())
+		}
+		exampleLegendBytes, err := getDataSourceBytesWithGenerationTime("./test_data/LWX_legend.json", staleWrappedTimestamp)
+		if err != nil {
+			t.Errorf("Error opening test legend: %s", err)
+		}
+
+		// Create the server that will respond with all the corresponding bytes
+		server := httptest.NewServer(http.HandlerFunc(func(writer http.ResponseWriter, req *http.Request) {
+			if strings.HasSuffix(req.URL.Path, "chicklet.json") {
+				writer.Write(exampleChickletBytes)
+			} else if strings.HasSuffix(req.URL.Path, "legend.json") {
+				writer.Write(exampleLegendBytes)
+			} else if strings.HasSuffix(req.URL.Path, "hazByCounty.json") {
+				writer.Write(exampleGHWOBytes)
+			} else if strings.HasSuffix(req.URL.Path, "chickletMaryland.json") {
+				writer.Write(exampleStateChickletBytes)
+			} else if strings.HasSuffix(req.URL.Path, "legendMaryland.json") {
+				writer.Write(exampleStateLegendBytes)
+			} else {
+				writer.WriteHeader(404)
+				return
+			}
+		}))
+
+		t.Setenv("GHWO_BASE_URL", server.URL)
+		defer server.Close()
+
+		_, errors := FetchWFO(ctx, "LWX")
+
+		expectedErrorMessage := fmt.Sprintf(
+			"Source Legend data is stale: more than %d hours old (%s)",
+			staleness,
+			staleTime,
+		)
+
+		if len(errors) != 1 {
+			t.Errorf(
+				"Expected FetchWFO to have %d errors, but got %d:\n\t%s",
+				1,
+				len(errors),
+				errors,
+			)
+		}
+
+		if errors[0].Error() != expectedErrorMessage {
+			t.Errorf(
+				"Expected single error messages to be equal:\n\t%s\n\t%s",
+				expectedErrorMessage,
+				errors[0].Error(),
+			)
+		}
+	})
+
+	t.Run("A stale chicklet file results in an error", func(t *testing.T) {
+		// First, we need to update the bytes for the chicklet file
+		// to have a stale timestamp
+		staleTimestamp := `2026-07-16T15:07:07-04:00`
+		staleWrappedTimestamp := fmt.Sprintf(`"%s"`, staleTimestamp)
+		staleTime, err := time.Parse(time.RFC3339, staleTimestamp)
+		if err != nil {
+			t.Errorf("Could not parse timestamp: %s: %s", staleTimestamp, err.Error())
+		}
+		exampleChickletBytes, err := getDataSourceBytesWithGenerationTime("./test_data/LWX_chicklet.json", staleWrappedTimestamp)
+		if err != nil {
+			t.Errorf("Error opening test chicklet: %s", err)
+		}
+
+		// Create the server that will respond with all the corresponding bytes
+		server := httptest.NewServer(http.HandlerFunc(func(writer http.ResponseWriter, req *http.Request) {
+			if strings.HasSuffix(req.URL.Path, "chicklet.json") {
+				writer.Write(exampleChickletBytes)
+			} else if strings.HasSuffix(req.URL.Path, "legend.json") {
+				writer.Write(exampleLegendBytes)
+			} else if strings.HasSuffix(req.URL.Path, "hazByCounty.json") {
+				writer.Write(exampleGHWOBytes)
+			} else if strings.HasSuffix(req.URL.Path, "chickletMaryland.json") {
+				writer.Write(exampleStateChickletBytes)
+			} else if strings.HasSuffix(req.URL.Path, "legendMaryland.json") {
+				writer.Write(exampleStateLegendBytes)
+			} else {
+				writer.WriteHeader(404)
+				return
+			}
+		}))
+
+		t.Setenv("GHWO_BASE_URL", server.URL)
+		defer server.Close()
+
+		_, errors := FetchWFO(ctx, "LWX")
+
+		expectedErrorMessage := fmt.Sprintf(
+			"Source Chicklet data is stale: more than %d hours old (%s)",
+			staleness,
+			staleTime,
+		)
+
+		if len(errors) != 1 {
+			t.Errorf(
+				"Expected FetchWFO to have %d errors, but got %d:\n\t%s",
+				1,
+				len(errors),
+				errors,
+			)
+		}
+
+		if errors[0].Error() != expectedErrorMessage {
+			t.Errorf(
+				"Expected single error messages to be equal:\n\t%s\n\t%s",
+				expectedErrorMessage,
+				errors[0].Error(),
+			)
+		}
+	})
+
+	t.Run("A stale state chicklet file results in an error", func(t *testing.T) {
+		// First, we need to update the bytes for the state chicklet file
+		// to have a stale timestamp
+		staleTimestamp := `2026-07-16T15:07:07-04:00`
+		staleWrappedTimestamp := fmt.Sprintf(`"%s"`, staleTimestamp)
+		staleTime, err := time.Parse(time.RFC3339, staleTimestamp)
+		if err != nil {
+			t.Errorf("Could not parse timestamp: %s: %s", staleTimestamp, err.Error())
+		}
+		exampleStateChickletBytes, err := getDataSourceBytesWithGenerationTime("./test_data/LWX_chickletMaryland.json", staleWrappedTimestamp)
+		if err != nil {
+			t.Errorf("Error opening test state chicklet: %s", err)
+		}
+
+		// Create the server that will respond with all the corresponding bytes
+		server := httptest.NewServer(http.HandlerFunc(func(writer http.ResponseWriter, req *http.Request) {
+			if strings.HasSuffix(req.URL.Path, "chicklet.json") {
+				writer.Write(exampleChickletBytes)
+			} else if strings.HasSuffix(req.URL.Path, "legend.json") {
+				writer.Write(exampleLegendBytes)
+			} else if strings.HasSuffix(req.URL.Path, "hazByCounty.json") {
+				writer.Write(exampleGHWOBytes)
+			} else if strings.HasSuffix(req.URL.Path, "chickletMaryland.json") {
+				writer.Write(exampleStateChickletBytes)
+			} else if strings.HasSuffix(req.URL.Path, "legendMaryland.json") {
+				writer.Write(exampleStateLegendBytes)
+			} else {
+				writer.WriteHeader(404)
+				return
+			}
+		}))
+
+		t.Setenv("GHWO_BASE_URL", server.URL)
+		defer server.Close()
+
+		result, errors := FetchWFO(ctx, "LWX")
+
+		expectedErrorMessage := fmt.Sprintf(
+			"Source State Chicklet data is stale: more than %d hours old (%s)",
+			staleness,
+			staleTime,
+		)
+
+		stateResult := result.States["MD"]
+
+		if len(stateResult.Errors) != 1 {
+			t.Errorf(
+				"Expected FetchWFO to have %d errors, but got %d:\n\t%s",
+				1,
+				len(errors),
+				errors,
+			)
+		}
+
+		if stateResult.Errors[0].Error() != expectedErrorMessage {
+			t.Errorf(
+				"Expected single error messages to be equal:\n\t%s\n\t%s",
+				expectedErrorMessage,
+				errors[0].Error(),
+			)
+		}
+	})
+
+	t.Run("A stale state legend file results in an error", func(t *testing.T) {
+		// First, we need to update the bytes for the state legend file
+		// to have a stale timestamp
+		staleTimestamp := `2026-07-16T15:07:07-04:00`
+		staleWrappedTimestamp := fmt.Sprintf(`"%s"`, staleTimestamp)
+		staleTime, err := time.Parse(time.RFC3339, staleTimestamp)
+		if err != nil {
+			t.Errorf("Could not parse timestamp: %s: %s", staleTimestamp, err.Error())
+		}
+		exampleStateLegendBytes, err := getDataSourceBytesWithGenerationTime("./test_data/LWX_legendMaryland.json", staleWrappedTimestamp)
+		if err != nil {
+			t.Errorf("Error opening test state legend: %s", err)
+		}
+
+		// Create the server that will respond with all the corresponding bytes
+		server := httptest.NewServer(http.HandlerFunc(func(writer http.ResponseWriter, req *http.Request) {
+			if strings.HasSuffix(req.URL.Path, "chicklet.json") {
+				writer.Write(exampleChickletBytes)
+			} else if strings.HasSuffix(req.URL.Path, "legend.json") {
+				writer.Write(exampleLegendBytes)
+			} else if strings.HasSuffix(req.URL.Path, "hazByCounty.json") {
+				writer.Write(exampleGHWOBytes)
+			} else if strings.HasSuffix(req.URL.Path, "chickletMaryland.json") {
+				writer.Write(exampleStateChickletBytes)
+			} else if strings.HasSuffix(req.URL.Path, "legendMaryland.json") {
+				writer.Write(exampleStateLegendBytes)
+			} else {
+				writer.WriteHeader(404)
+				return
+			}
+		}))
+
+		t.Setenv("GHWO_BASE_URL", server.URL)
+		defer server.Close()
+
+		result, errors := FetchWFO(ctx, "LWX")
+
+		expectedErrorMessage := fmt.Sprintf(
+			"Source State Legend data is stale: more than %d hours old (%s)",
+			staleness,
+			staleTime,
+		)
+
+		stateResult := result.States["MD"]
+
+		if len(stateResult.Errors) != 1 {
+			t.Errorf(
+				"Expected FetchWFO to have %d errors, but got %d:\n\t%s",
+				1,
+				len(errors),
+				errors,
+			)
+		}
+
+		if stateResult.Errors[0].Error() != expectedErrorMessage {
+			t.Errorf(
+				"Expected single error messages to be equal:\n\t%s\n\t%s",
+				expectedErrorMessage,
+				errors[0].Error(),
+			)
 		}
 	})
 }

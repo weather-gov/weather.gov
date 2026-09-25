@@ -5,35 +5,32 @@ import (
 	"encoding/json"
 	"net/http"
 	"net/http/httptest"
-	"os"
 	"reflect"
 	"slices"
 	"strings"
 	"sync"
 	"testing"
-	//	"time"
-	//	"sync"
 )
 
 func TestExtractManager(t *testing.T) {
-	exampleLegendBytes, err := os.ReadFile("./test_data/LWX_legend.json")
+	exampleLegendBytes, err := getDataSourceBytesWithGenerationTime("./test_data/LWX_legend.json", timeNowString)
 	if err != nil {
 		t.Errorf("Error opening test wfo legend: %s", err)
 	}
-	exampleChickletBytes, err := os.ReadFile("./test_data/LWX_chicklet.json")
+	exampleChickletBytes, err := getDataSourceBytesWithGenerationTime("./test_data/LWX_chicklet.json", timeNowString)
 	if err != nil {
 		t.Errorf("Error opening test wfo chicklet: %s", err)
 	}
-	exampleGHWOBytes, err := os.ReadFile("./test_data/LWX_hazByCounty.json")
+	exampleGHWOBytes, err := getDataSourceBytesWithGenerationTime("./test_data/LWX_hazByCounty.json", timeNowString)
 	if err != nil {
 		t.Errorf("Error opening test hazByCounty: %s", err)
 	}
 
-	exampleStateChickletBytes, err := os.ReadFile("./test_data/LWX_chickletMaryland.json")
+	exampleStateChickletBytes, err := getDataSourceBytesWithGenerationTime("./test_data/LWX_chickletMaryland.json", timeNowString)
 	if err != nil {
 		t.Errorf("Error opening test state chicklet: %s", err)
 	}
-	exampleStateLegendBytes, err := os.ReadFile("./test_data/LWX_legendMaryland.json")
+	exampleStateLegendBytes, err := getDataSourceBytesWithGenerationTime("./test_data/LWX_legendMaryland.json", timeNowString)
 	if err != nil {
 		t.Errorf("Error openint test state legend: %s", err)
 	}
@@ -312,30 +309,30 @@ func TestExtractManager(t *testing.T) {
 }
 
 func TestTransformManagers(t *testing.T) {
-	exampleLegendBytes, err := os.ReadFile("./test_data/LWX_legend.json")
+	exampleLegendBytes, err := getDataSourceBytesWithGenerationTime("./test_data/LWX_legend.json", timeNowString)
 	if err != nil {
 		t.Errorf("Error opening test wfo legend: %s", err)
 	}
-	exampleChickletBytes, err := os.ReadFile("./test_data/LWX_chicklet.json")
+	exampleChickletBytes, err := getDataSourceBytesWithGenerationTime("./test_data/LWX_chicklet.json", timeNowString)
 	if err != nil {
 		t.Errorf("Error opening test wfo chicklet: %s", err)
 	}
-	exampleGHWOBytes, err := os.ReadFile("./test_data/LWX_hazByCounty.json")
+	exampleGHWOBytes, err := getDataSourceBytesWithGenerationTime("./test_data/LWX_hazByCounty.json", timeNowString)
 	if err != nil {
 		t.Errorf("Error opening test hazByCounty: %s", err)
 	}
 
-	exampleStateChickletBytes, err := os.ReadFile("./test_data/LWX_chickletMaryland.json")
+	exampleStateChickletBytes, err := getDataSourceBytesWithGenerationTime("./test_data/LWX_chickletMaryland.json", timeNowString)
 	if err != nil {
 		t.Errorf("Error opening test state chicklet: %s", err)
 	}
-	exampleStateLegendBytes, err := os.ReadFile("./test_data/LWX_legendMaryland.json")
+	exampleStateLegendBytes, err := getDataSourceBytesWithGenerationTime("./test_data/LWX_legendMaryland.json", timeNowString)
 	if err != nil {
 		t.Errorf("Error openint test state legend: %s", err)
 	}
 
 	// A single county output example that we can test against
-	exampleCountyOutputBytes, err := os.ReadFile("./test_data/county_51013.json")
+	exampleCountyOutputBytes, err := getDataSourceBytesWithGenerationTime("./test_data/county_51013.json", timeNowString)
 	if err != nil {
 		t.Errorf("Error opening the example county chicklet: %s", err)
 	}
@@ -535,30 +532,30 @@ func TestTransformManagers(t *testing.T) {
 }
 
 func TestManagerIntegration(t *testing.T) {
-	exampleLegendBytes, err := os.ReadFile("./test_data/LWX_legend.json")
+	exampleLegendBytes, err := getDataSourceBytesWithGenerationTime("./test_data/LWX_legend.json", timeNowString)
 	if err != nil {
 		t.Errorf("Error opening test wfo legend: %s", err)
 	}
-	exampleChickletBytes, err := os.ReadFile("./test_data/LWX_chicklet.json")
+	exampleChickletBytes, err := getDataSourceBytesWithGenerationTime("./test_data/LWX_chicklet.json", timeNowString)
 	if err != nil {
 		t.Errorf("Error opening test wfo chicklet: %s", err)
 	}
-	exampleGHWOBytes, err := os.ReadFile("./test_data/LWX_hazByCounty.json")
+	exampleGHWOBytes, err := getDataSourceBytesWithGenerationTime("./test_data/LWX_hazByCounty.json", timeNowString)
 	if err != nil {
 		t.Errorf("Error opening test hazByCounty: %s", err)
 	}
 
-	exampleStateChickletBytes, err := os.ReadFile("./test_data/LWX_chickletMaryland.json")
+	exampleStateChickletBytes, err := getDataSourceBytesWithGenerationTime("./test_data/LWX_chickletMaryland.json", timeNowString)
 	if err != nil {
 		t.Errorf("Error opening test state chicklet: %s", err)
 	}
-	exampleStateLegendBytes, err := os.ReadFile("./test_data/LWX_legendMaryland.json")
+	exampleStateLegendBytes, err := getDataSourceBytesWithGenerationTime("./test_data/LWX_legendMaryland.json", timeNowString)
 	if err != nil {
 		t.Errorf("Error openint test state legend: %s", err)
 	}
 
 	// A single county output example that we can test against
-	exampleCountyOutputBytes, err := os.ReadFile("./test_data/county_51013.json")
+	exampleCountyOutputBytes, err := getDataSourceBytesWithGenerationTime("./test_data/county_51013.json", timeNowString)
 	if err != nil {
 		t.Errorf("Error opening the example county chicklet: %s", err)
 	}

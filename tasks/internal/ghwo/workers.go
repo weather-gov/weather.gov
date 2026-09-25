@@ -390,13 +390,28 @@ func (manager *TransformLocalityManager) RunWorkers(ctx context.Context) {
 							continue
 						}
 
-						output := ProcessCounty(
+						output, err := ProcessCounty(
 							locality.GHWOData.WFO,
 							locality.Code,
 							&countyData,
 							locality.Legend,
 							locality.Chicklet,
 						)
+
+						if err != nil {
+							countyErr := NewGHWOErrorForCounty(
+								locality.Code,
+								locality.GHWOData.WFO,
+								[]error{err},
+							)
+							select {
+							case <-ctx.Done():
+								return
+							case manager.ErrorChan <- countyErr:
+							}
+							continue
+						}
+
 						select {
 						case <-ctx.Done():
 							return
@@ -424,26 +439,55 @@ func (manager *TransformLocalityManager) RunWorkers(ctx context.Context) {
 						// If either the legend or the chicklet for the stateData is
 						// missing, we process the state _without_ the details
 						// (ie, we only process a composite)
-						var output *Output
 						if locality.Legend == nil || locality.Chicklet == nil {
-							output = ProcessStateWithoutDetails(
+							output, err := ProcessStateWithoutDetails(
 								locality.GHWOData.WFO,
 								locality.Code,
 								&stateData,
 							)
+
+							if err != nil {
+								stateErr := NewGHWOErrorForState(
+									locality.Code,
+									locality.GHWOData.WFO,
+									[]error{err},
+								)
+								select {
+								case <-ctx.Done():
+									return
+								case manager.ErrorChan <- stateErr:
+								}
+								continue
+							}
+
 							select {
 							case <-ctx.Done():
 								return
 							case manager.Output <- output:
 							}
 						} else {
-							output = ProcessStateWithDetails(
+							output, err := ProcessStateWithDetails(
 								locality.GHWOData.WFO,
 								locality.Code,
 								&stateData,
 								locality.Legend,
 								locality.Chicklet,
 							)
+
+							if err != nil {
+								stateErr := NewGHWOErrorForState(
+									locality.Code,
+									locality.GHWOData.WFO,
+									[]error{err},
+								)
+								select {
+								case <-ctx.Done():
+									return
+								case manager.ErrorChan <- stateErr:
+								}
+								continue
+							}
+
 							select {
 							case <-ctx.Done():
 								return
