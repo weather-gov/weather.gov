@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"slices"
+	"time"
 )
 
 /* General type aliases */
@@ -129,7 +130,7 @@ type SourceLegendHazard struct {
 * www.weather.gov/source/lwx/ghwo/legend.json
  */
 type SourceLegend struct {
-	GenerationTime   string               `json:"generation_time,omitempty"`
+	GenerationTime   time.Time            `json:"generation_time,omitempty"`
 	GenerationTimeLt string               `json:"generation_time_LT,omitempty"`
 	GhwoVersion      string               `json:"ghwo_version,omitempty"`
 	Hazards          []SourceLegendHazard `json:"hazards"`
@@ -206,7 +207,7 @@ type SourceChickletHazard struct {
 * https://www.weather.gov/source/lwx/ghwo/chicklet.json
  */
 type SourceChicklet struct {
-	GenerationTime   string                 `json:"generation_time,omitempty"`
+	GenerationTime   time.Time              `json:"generation_time,omitempty"`
 	GenerationTimeLt string                 `json:"generation_time_LT,omitempty"`
 	GhwoVersion      string                 `json:"ghwo_version,omitempty"`
 	Hazards          []SourceChickletHazard `json:"hazards,omitempty"`
@@ -378,7 +379,7 @@ type ChickletLookup map[RiskTypeKey]SourceChickletHazard
 type SourceGHWOData struct {
 	WFO            string
 	Counties       SourceGHWOLocalities `json:"counties"`
-	GenerationTime string               `json:"generation_time,omitempty"`
+	GenerationTime time.Time            `json:"generation_time,omitempty"`
 	States         SourceGHWOLocalities `json:"states"`
 }
 

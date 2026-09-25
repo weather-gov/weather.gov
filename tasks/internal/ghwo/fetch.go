@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"strings"
 	"tasks/internal"
+	"time"
 )
 
 // Constants representing the different ghwo source
@@ -19,6 +20,10 @@ const (
 	LegendResource
 	ChickletResource
 )
+
+// A constant representing the number of hours
+// after which we consider GHWO data to be 'stale'
+const staleness = 48
 
 var logger = internal.GetJSONLogger("ghwo")
 
@@ -250,6 +255,20 @@ func (d *StateFetch) fetch(ctx context.Context, ch chan *StateFetch) {
 }
 
 /**
+* Determine whether or not a given GenerationTime
+* as parsed from incoming GHWO data files data is "stale".
+* "Stale" in this context means older than STALENESS hours,
+* based on the GeneratedTime field.
+ */
+func isStale(sourceData time.Time) bool {
+	elapsed := time.Since(sourceData).Hours()
+	if elapsed > staleness {
+		return true
+	}
+	return false
+}
+
+/**
 * Handles the requesting of all constituent requests needed to get GHWO  data
 * at the WFO level.
 * This includes subsequent requests for all state level data for each state, should
@@ -354,6 +373,17 @@ func responseBytesToStructs(fetchData *GenericFetch, result *FetchResult) {
 		}
 		result.GHWOData = &dataStruct
 		result.GHWOData.WFO = fetchData.WFO
+		if isStale(result.GHWOData.GenerationTime) {
+			result.Errors = append(
+				result.Errors,
+				fmt.Errorf(
+					"Source GHWO data is stale: more than %d hours old (%s)",
+					staleness,
+					result.GHWOData.GenerationTime,
+				),
+			)
+			return
+		}
 	case LegendResource:
 		dataStruct := SourceLegend{}
 		err := json.Unmarshal(fetchData.ResponseBytes, &dataStruct)
@@ -362,6 +392,17 @@ func responseBytesToStructs(fetchData *GenericFetch, result *FetchResult) {
 			return
 		}
 		result.Legend = &dataStruct
+		if isStale(result.Legend.GenerationTime) {
+			result.Errors = append(
+				result.Errors,
+				fmt.Errorf(
+					"Source Legend data is stale: more than %d hours old (%s)",
+					staleness,
+					result.Legend.GenerationTime,
+				),
+			)
+			return
+		}
 	case ChickletResource:
 		dataStruct := SourceChicklet{}
 		err := json.Unmarshal(fetchData.ResponseBytes, &dataStruct)
@@ -370,6 +411,17 @@ func responseBytesToStructs(fetchData *GenericFetch, result *FetchResult) {
 			return
 		}
 		result.Chicklet = &dataStruct
+		if isStale(result.Chicklet.GenerationTime) {
+			result.Errors = append(
+				result.Errors,
+				fmt.Errorf(
+					"Source Chicklet data is stale: more than %d hours old (%s)",
+					staleness,
+					result.Chicklet.GenerationTime,
+				),
+			)
+			return
+		}
 	default:
 		return
 	}
@@ -448,6 +500,18 @@ func responseBytesToStateStructs(fetchData *StateFetch, result *StateFetchResult
 				return
 			}
 			result.Legend = &dataStruct
+
+			if isStale(result.Legend.GenerationTime) {
+				result.Errors = append(
+					result.Errors,
+					fmt.Errorf(
+						"Source State Legend data is stale: more than %d hours old (%s)",
+						staleness,
+						result.Legend.GenerationTime,
+					),
+				)
+				return
+			}
 		}
 	case ChickletResource:
 		// Only try to parse out the bytes if we received
@@ -461,6 +525,18 @@ func responseBytesToStateStructs(fetchData *StateFetch, result *StateFetchResult
 				return
 			}
 			result.Chicklet = &dataStruct
+
+			if isStale(result.Chicklet.GenerationTime) {
+				result.Errors = append(
+					result.Errors,
+					fmt.Errorf(
+						"Source State Chicklet data is stale: more than %d hours old (%s)",
+						staleness,
+						result.Chicklet.GenerationTime,
+					),
+				)
+				return
+			}
 		}
 	default:
 		return

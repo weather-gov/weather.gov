@@ -1294,7 +1294,7 @@ func TestProcessCounty(t *testing.T) {
 			t.Errorf("No county data found for 51013")
 			return
 		}
-		actual := ProcessCounty(
+		actual, err := ProcessCounty(
 			"lwx",
 			"51013",
 			&countyData,
@@ -1403,7 +1403,7 @@ func TestProcessState(t *testing.T) {
 			t.Error("No state data found for MD")
 			return
 		}
-		actual := ProcessStateWithDetails(
+		actual, err := ProcessStateWithDetails(
 			"lwx",
 			"MD",
 			&stateData,
@@ -1447,7 +1447,7 @@ func TestProcessState(t *testing.T) {
 			t.Errorf("No state data found for MD")
 			return
 		}
-		actual := ProcessStateWithoutDetails(
+		actual, err := ProcessStateWithoutDetails(
 			"lwx",
 			"MD",
 			&stateData,
