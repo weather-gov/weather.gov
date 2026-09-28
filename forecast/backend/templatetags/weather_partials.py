@@ -396,7 +396,14 @@ def render_non_critical_error_component(
 
 
 @register.inclusion_tag("errors/partials/500-error-sub-page-component.html")
-def render_critical_component_error(component_name=None, *, error_code=None, for_state=False):
+def render_critical_component_error(
+        component_name=None,
+        *,
+        error_code=None,
+        for_state=False,
+        heading_level=2,
+        margin_top=3
+):
     """Render the critical component sub-page (for tabbed pages)."""
     headline = "error.500.generic.headline.01"
 
@@ -404,4 +411,10 @@ def render_critical_component_error(component_name=None, *, error_code=None, for
     if component_name:
         headline = f"error.500.{component_name}.headline.01"
 
-    return {"headline": headline, "error_code": error_code, "for_state": for_state}
+    return {
+        "headline": headline,
+        "error_code": error_code,
+        "for_state": for_state,
+        "heading_level": heading_level,
+        "margin_top": margin_top
+    }

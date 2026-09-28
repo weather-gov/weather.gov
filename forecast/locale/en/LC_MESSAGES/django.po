@@ -281,6 +281,18 @@ msgstr "There was an error loading the daily forecast."
 msgid "forecast.errors.loading.01"
 msgstr "There was an error loading the forecast."
 
+msgid "error.500.point-alerts-tab.headline.01"
+msgstr "Alerts data not available"
+
+msgid "error.500.point-today-tab.headline.01"
+msgstr "Today's forecast data not available"
+
+msgid "error.500.point-seven-day-tab.headline.01"
+msgstr "7-day forecast data not available"
+
+msgid "point-forecast.tab-errors.generic-header.01"
+msgstr "Error"
+
 msgid "forecast.errors.not-found.01"
 msgstr "This area doesn't have forecast data. Please try searching for a different location."
 
@@ -1348,6 +1360,8 @@ msgstr "Page Not Available"
 
 msgid "error.500.alerts.headline.01"
 msgstr "Alerts Data Not Available"
+
+
 
 msgid "error.500.risks.headline.01"
 msgstr "Seven-day Weather Risk Overview Not Available"

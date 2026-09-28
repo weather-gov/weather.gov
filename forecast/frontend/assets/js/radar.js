@@ -104,6 +104,9 @@ const setupRadar = () => {
   }
 
   const container = document.querySelector("wx-radar");
+  if (!container) {
+    return;
+  }
 
   updateRadarTimestamps(container);
 

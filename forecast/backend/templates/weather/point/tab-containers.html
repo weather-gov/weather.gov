@@ -11,12 +11,13 @@
 --   in normal full page mode. These containers should be alert in single page mode
 --   and organizing things this way simpifies the template dependencies.
 {% endcomment %}
-<div class="bg-base-lightest padding-top-3 padding-bottom-8 flex-1 display-flex flex-column">
+<div id="wx-point-forecast-tab-containers" class="bg-base-lightest padding-top-3 padding-bottom-8 flex-1 display-flex flex-column">
   {# Alerts Tab Container #}
   <div class="wx-tab-container wx-focus-offset-205 flex-1"
        {% if use_htmx %}
        hx-get="{% url 'point_forecast_alerts' lat=point.point.latitude lon=point.point.longitude %}"
        hx-swap="innerHTML"
+       hx-error-target=".wx-point-forecast-tab-error"
        {% endif %}
        id="alerts"
        role="tabpanel"
@@ -31,6 +32,11 @@
       <div class="width-full display-flex flex-column flex-align-center margin-top-4">
         {% include 'weather/partials/wx-loading-indicator.html' with text=_("loader.loading-text.alerts-tab.01") %}
       </div>
+
+      {# Template for errors. Will be cloned if HTMX requests error out #}
+      <template class="wx-point-forecast-tab-error">
+        {% render_critical_component_error component_name="point-alerts-tab"  margin_top=0 %}
+      </template>
     {% endif %}
   </div>
 
@@ -39,6 +45,7 @@
        {% if use_htmx %}
        hx-get="{% url 'point_forecast_today'  lat=point.point.latitude lon=point.point.longitude %}"
        hx-swap="innerHTML"
+       hx-error-target=".wx-point-forecast-tab-error"
        {% endif %}
        id="today"
        role="tabpanel"
@@ -53,6 +60,11 @@
       <div class="width-full display-flex flex-column flex-align-center margin-top-4">
         {% include 'weather/partials/wx-loading-indicator.html' with text=_("loader.loading-text.today-tab.01") %}
       </div>
+
+      {# Template for errors. Will be cloned if HTMX requests error out #}
+      <template class="wx-point-forecast-tab-error">
+        {% render_critical_component_error component_name="point-today-tab"  margin_top=0 %}
+      </template>
     {% endif %}
   </div>
 
@@ -61,6 +73,7 @@
     {% if use_htmx %}
       hx-get="{% url 'point_forecast_seven_day' lat=point.point.latitude lon=point.point.longitude %}"
     hx-swap="innerHTML"
+    hx-error-target=".wx-point-forecast-tab-error"
     {% endif %}
     class="wx-tab-container wx-focus-offset-205 flex-1"
     id="daily"
@@ -76,6 +89,11 @@
       <div class="width-full display-flex flex-column flex-align-center margin-top-4">
         {% include 'weather/partials/wx-loading-indicator.html' with text=_("loader.loading-text.7day-tab.01") %}
       </div>
+
+      {# Template for errors. Will be cloned if HTMX requests error out #}
+      <template class="wx-point-forecast-tab-error">
+        {% render_critical_component_error component_name="point-seven-day-tab" margin_top=0 %}
+      </template>
     {% endif %}
   </div>
-</div> 
+</div>
