@@ -5,6 +5,7 @@ from wagtail import hooks
 from wagtail.admin.menu import MenuItem
 from wagtail.admin.panels import FieldPanel
 from wagtail.admin.viewsets.base import ViewSet
+from wagtail.images.permissions import permission_policy as img_permission_policy
 from wagtail.snippets.models import register_snippet
 from wagtail.snippets.views.snippets import SnippetViewSet
 
@@ -23,6 +24,18 @@ from .wagtail_custom_media.views import (
 )
 
 
+class ImagesPermissionMenuItem(MenuItem):
+    """Menu item shown only if user has any permission for images."""
+
+    def is_shown(self, request):
+        """Whether the menu item should be shown based on permisson check."""
+        # Expands upon the wagtail base is_shown.
+        # https://github.com/wagtail/wagtail/blob/stable/7.4.x/wagtail/admin/menu.py#L30.
+        # Note: In future major release (8.x) wagtail.images.permissions permission_policy
+        #       is deprecated and to be replaced with
+        #       wagtail.permissions.policy_registry.get_by_type(get_image_model())
+        return img_permission_policy.user_has_any_permission(request.user, ["add", "delete", "choose"])
+
 @hooks.register("register_admin_viewset")
 def register_image_tree_viewset():
     """Register the viewset."""
@@ -31,9 +44,10 @@ def register_image_tree_viewset():
 
 # The Images default menu item order is 300
 @hooks.register("register_admin_menu_item")
+
 def register_image_tree_menu_item():
     """Register the image tree menu item."""
-    return MenuItem(
+    return ImagesPermissionMenuItem(
         "Image Tree",
         "/cms/image-tree/",  # Point directly to your custom viewset URL route
         icon_name="folder-open-inverse",
