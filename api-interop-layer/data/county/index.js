@@ -91,7 +91,11 @@ export const getCountyData = async (fips) => {
             )
           ) AS shape,
           ST_AsGeoJSON(
-            ST_Envelope(shape)
+            -- A shape straddling the antimeridian gets its eastern parts shifted west of -180 so the box stays in one piece
+            CASE WHEN ST_XMin(shape) < -150 AND ST_XMax(shape) > 150
+              THEN ST_Translate(ST_Envelope(ST_ShiftLongitude(shape)), -360, 0)
+              ELSE ST_Envelope(shape)
+            END
           ) as bounds,
           (SELECT name FROM weathergov_geo_states a WHERE a.state=b.st) as statename,
           ARRAY(SELECT cwas.wfo as wfo  FROM weathergov_geo_cwas cwas
