@@ -1,0 +1,14 @@
+{% comment %}
+-- Template purpose
+--  Display the inner tab content for the maps tab
+{% endcomment %}
+<div class="grid-container tablet:padding-x-2 desktop:padding-x-4 padding-x-0">
+  <div class="grid-col">
+    <div class="wx-radar-wrapper position-relative">
+      {% radar place=point.place.fullName point=point.point timezone=point.place.timezone large_map="true" heading_level="h2" heading_class="text-normal text-primary-darker margin-top-0 padding-x-2 tablet:padding-x-0 margin-bottom-2" %}
+    </div>
+    <div class="wx-satellite-wrapper margin-top-4 grid-col-12 tablet-lg:grid-col-9 desktop:grid-col-8">
+      {% include "weather/partials/satellite.html" with point=point %}
+    </div>
+  </div>
+</div>

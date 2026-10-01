@@ -90,7 +90,7 @@
   }
 }
 
-@include at-media("desktop") {
+@include at-media("tablet-lg") {
   .wx-radar-container.wx-small-map {
     aspect-ratio: 1/1 !important;
 

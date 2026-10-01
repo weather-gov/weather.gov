@@ -85,7 +85,9 @@ const updateRadarTimestamps = async (container) => {
       });
       const endFormatter = new Intl.DateTimeFormat("en-US", formatOptions);
 
-      const label = document.getElementById("wx-radar-timestamp-label");
+      const label = container
+        .closest("[wx-outer-radar-container]")
+        ?.querySelector("#wx-radar-timestamp-label");
       if (label) {
         label.innerText = `${startFormatter.format(start)} – ${endFormatter.format(end)}`;
       }
@@ -96,14 +98,21 @@ const updateRadarTimestamps = async (container) => {
 };
 
 const setupRadar = () => {
+  // Point pages may contain a radar in both Today and Maps. Only initialize
+  // the one in the visible tab; the other may not have arrived yet via HTMX.
+  const activeTab = document.querySelector(
+    "#point-page-tabbed-nav .wx-tab-container[data-selected]",
+  );
+  const scope = activeTab || document;
+
   // If radar has already been initialized on the container
   // element, return and do nothing else.
-  const existingRadar = document.querySelector(".cmi-radar-container");
+  const existingRadar = scope.querySelector(".cmi-radar-container");
   if (existingRadar) {
     return;
   }
 
-  const container = document.querySelector("wx-radar");
+  const container = scope.querySelector("wx-radar");
   if (!container) {
     return;
   }
@@ -175,22 +184,27 @@ const setupRadar = () => {
       "AAPTxy8BH1VEsoebNVZXo8HurNPcJD0FIYgRqKcG6xxTBL9nh-VFBFPksbJUeCAaOBmIl7l_u3FU4qHnugzOvbnCvb7RMvR4FD_D4AhbAn2hMpcV-vKc8Oz6Kb0itTkdvSjaBCv5EHG20BLTk7jV0VSlPq_N9FhOT2bn2z510HsHPTf4N2TkszfZwmZgzRYHS06-OFp40ixlJ2vLLRK8a_L_ojVp3FXtRCXPNFWXFKQzYdiNzx12uaMvJ_riiEvC7vfrAT1_JWn0gzIT",
   };
 
-  window.app = window.cmiRadar.createApp("#wx-radar-container", options);
+  const target = activeTab
+    ? `#${activeTab.id} #wx-radar-container`
+    : "#wx-radar-container";
+  window.app = window.cmiRadar.createApp(target, options);
 
   // update the radar external link.
-  const link = document.querySelector("#radar-point-link");
-  link.href = `https://radar.weather.gov/?settings=${options.settings.bookmark}`;
+  const link = scope.querySelector("#radar-point-link");
+  if (link) {
+    link.href = `https://radar.weather.gov/?settings=${options.settings.bookmark}`;
+  }
 
   [".cmi-radar-container .menu", ".cmi-radar-menu-agendas"].forEach(
     (selector) => {
-      const element = document.querySelector(selector);
+      const element = scope.querySelector(selector);
       if (element) {
         element.remove();
       }
     },
   );
 
-  const expandButton = document.querySelector("button.wx-radar-expand");
+  const expandButton = scope.querySelector("button.wx-radar-expand");
   if (expandButton) {
     expandButton.addEventListener("click", toggleMapExpand);
 
@@ -213,29 +227,29 @@ const setupRadar = () => {
 };
 
 const scriptEl = document.querySelector("[data-wx-radar-cmi]");
-const currentTabSelected = document.querySelector("#today[data-selected]");
+const currentTabSelected = document.querySelector(
+  "#today[data-selected], #maps[data-selected]",
+);
 const radarEnabled = document.querySelector("#radar-enable");
 
-// If the page loads with the current tab selected
-// then we try to load the radar.
-// If the page loads with the radar-enable id, then
-// we load the radar anyway since it is desired.
-// If the page loads with some other tab selected,
-// than we bind a listener for the tab-switched event.
-if (currentTabSelected && window.cmiRadar) {
-  setupRadar();
-} else if (currentTabSelected || radarEnabled) {
-  scriptEl.addEventListener("load", () => {
+const trySetupRadar = () => {
+  if (window.cmiRadar) {
     setupRadar();
-  });
-} else {
-  document.addEventListener("wx:tab-switched", (event) => {
-    if (window.cmiRadar && event.detail.tabId === "today") {
-      setupRadar();
-    } else if (event.detail.tabId === "today") {
-      scriptEl.addEventListener("load", () => {
-        setupRadar();
-      });
-    }
-  });
+  }
+};
+
+if (currentTabSelected || radarEnabled) {
+  trySetupRadar();
 }
+
+scriptEl?.addEventListener("load", trySetupRadar);
+document.addEventListener("wx:tab-switched", (event) => {
+  if (event.detail.tabId === "today" || event.detail.tabId === "maps") {
+    trySetupRadar();
+  }
+});
+document.addEventListener("wx:tab-content-loaded", (event) => {
+  if (event.detail.tabId === "today" || event.detail.tabId === "maps") {
+    trySetupRadar();
+  }
+});

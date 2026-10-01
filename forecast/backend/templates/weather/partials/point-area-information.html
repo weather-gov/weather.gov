@@ -1,0 +1,49 @@
+{% comment %}
+-- Point Location Area Information
+--
+-- This appears at the bottom of all point forecast tabs and consolidates
+-- links to information about the point's area, including the local WFO, 
+-- AFD links, and relevant county and state links.
+-- Expected variables:
+--    point: the point location data, including wfo, and place information etc.
+-- Used by: point/tab-containers.html
+{% endcomment %}
+<div class="bg-primary-lightest margin-top-4 margin-bottom-0 padding-bottom-3 border-top-05 border-primary-light area-information-section">
+  <div class="grid-container">
+    <div class="margin-top-1">
+      <h2 class="text-normal text-primary-darker margin-top-3 margin-bottom-2">
+        <span class="margin-right-0 mobile-lg:margin-right-2 desktop:margin-right-0">
+          {% trans "forecast.heading.area-information.01" %}
+        </span>
+      </h2>
+      <div class="grid-row margin-bottom-3">
+        <ul class="font-body-md usa-list usa-list--unstyled grid-col-12 area-information-links">
+          {% if point.wfo %}
+            {# AFD Link #}
+            <li>
+              <a class="usa-link line-height-sans-4"
+                 href="{% url "afd_by_office" wfo=point.wfo.code %}">{% trans "forecast.link.area-forecast-discussion.01" %}</a>
+            </li>
+            <li>
+              {# Office Link #}
+              <a class="usa-link line-height-sans-4"
+                 href="{% url "office" wfo=point.wfo.code %}">{% trans_with_args "forecast.area-information.wfo-label.01" wfo_name=point.wfo.name %}</a>
+            </li>
+          {% endif %}
+          {% if point.place.countyfips %}
+            <li>
+              <a class="usa-link line-height-sans-4"
+                 href="{% url "county_overview" countyfips=point.place.countyfips %}">{{ point.place.county }} County</a>
+            </li>
+          {% endif %}
+          {% if point.place.state %}
+            <li>
+              <a class="usa-link line-height-sans-4"
+                 href="{% url "state_overview" state=point.place.state %}">{{ point.place.statename }} State</a>
+            </li>
+          {% endif %}
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>

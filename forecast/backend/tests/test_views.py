@@ -206,6 +206,78 @@ class TestViews(TestCase):
         self.assertEqual(response.status_code, 302)
         self.assertEqual(response.url, "/forecast/point/1.235/9.877/")
 
+    @override_settings(POINT_FORECAST_HTMX=False)
+    @mock.patch("backend.views.point.interop.get_point_forecast")
+    def test_point_location_maps(self, mock_get_point_forecast):
+        """Maps page receives the full point and its location metadata."""
+        mock_get_point_forecast.return_value = {
+            "grid": {"wfo": "TST", "type": "land"},
+            "place": {
+                "fullName": "Test City, NJ",
+                "timezone": "America/New_York",
+                "county": "Test County",
+                "countyFIPS": "34001",
+                "stateName": "New Jersey",
+                "state": "NJ",
+            },
+            "forecast": {"days": []},
+        }
+
+        response = self.client.get("/forecast/point/11.1/22.2/maps/")
+
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "weather/point/maps-tab-content.html")
+        mock_get_point_forecast.assert_called_once_with(11.1, 22.2)
+        point = response.context["point"]
+        self.assertEqual(point["point"], {"latitude": 11.1, "longitude": 22.2})
+        self.assertEqual(point["place"]["fullName"], "Test City, NJ")
+        self.assertEqual(point["place"]["timezone"], "America/New_York")
+        self.assertEqual(point["forecast"], {"days": []})
+        self.assertEqual(point["wfo"], self.wfo)
+        self.assertFalse(point["isAlaska"])
+        self.assertEqual(point["wfo"].code, "TST")
+        self.assertEqual(point["wfo"].name, "Test WFO")
+        self.assertEqual(point["place"]["county"], "Test County")
+        self.assertEqual(point["place"]["countyFIPS"], "34001")
+        self.assertEqual(point["place"]["stateName"], "New Jersey")
+        self.assertEqual(point["place"]["state"], "NJ")
+        self.assertContains(response, 'wfo="tst"')
+        self.assertContains(response, "wx-radar-container position-relative wx-large-map")
+
+    @override_settings(
+        POINT_FORECAST_HTMX=True,
+        STORAGES={
+            "default": {"BACKEND": "django.core.files.storage.FileSystemStorage"},
+            "staticfiles": {"BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage"},
+        },
+    )
+    @mock.patch("backend.views.point.interop.get_point_forecast")
+    def test_point_location_maps_htmx(self, mock_get_point_forecast):
+        """HTMX requests return only the maps tab; normal requests get its page."""
+        mock_get_point_forecast.return_value = {
+            "grid": {"wfo": "TST", "type": "land"},
+            "place": {"fullName": "Test City, NJ", "timezone": "America/New_York"},
+        }
+        url = "/forecast/point/11.1/22.2/maps/"
+
+        page_response = self.client.get(url)
+        self.assertTemplateUsed(page_response, "weather/point/maps-with-htmx.html")
+        self.assertEqual(page_response.context["point"]["wfo"].code, "TST")
+        self.assertNotIn("countyFIPS", page_response.context["point"]["place"])
+
+        partial_response = self.client.get(url, headers={"HX-Request": "true"})
+        self.assertEqual(partial_response.status_code, 200)
+        self.assertContains(partial_response, 'wfo="tst"')
+        self.assertContains(partial_response, "wx-radar")
+        self.assertContains(partial_response, "wx-radar-container position-relative wx-large-map")
+        self.assertNotContains(partial_response, "<html")
+
+    def test_point_location_maps_truncate(self):
+        """Maps URLs use the same decimal redirect as the other point tabs."""
+        response = self.client.get("/forecast/point/1.23456/9.87654/maps/")
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.url, "/forecast/point/1.235/9.877/")
+
 
     @override_settings(POINT_FORECAST_HTMX=False)
     @mock.patch("backend.views.point.interop.get_point_forecast")
@@ -778,7 +850,7 @@ class TestViews(TestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "weather/point/tab-containers.html")
-        self.assertTemplateUsed(response, "weather/partials/wx-loading-indicator.html", count=2)
+        self.assertTemplateUsed(response, "weather/partials/wx-loading-indicator.html", count=3)
 
     @override_settings(POINT_FORECAST_HTMX=True)
     @mock.patch("backend.views.point.interop.get_point_forecast")
@@ -795,7 +867,7 @@ class TestViews(TestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "weather/point/tab-containers.html")
-        self.assertTemplateUsed(response, "weather/partials/wx-loading-indicator.html", count=2)
+        self.assertTemplateUsed(response, "weather/partials/wx-loading-indicator.html", count=3)
 
     @override_settings(POINT_FORECAST_HTMX=True)
     @mock.patch("backend.views.point.interop.get_point_forecast")
@@ -812,4 +884,21 @@ class TestViews(TestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "weather/point/tab-containers.html")
-        self.assertTemplateUsed(response, "weather/partials/wx-loading-indicator.html", count=2)
+        self.assertTemplateUsed(response, "weather/partials/wx-loading-indicator.html", count=3)
+
+    @override_settings(POINT_FORECAST_HTMX=True)
+    @mock.patch("backend.views.point.interop.get_point_forecast")
+    def test_point_location_maps_htmx_with_indicator(self, mock_get_point_forecast):
+        """Test that loading indicators are used for the other tabs."""
+        mock_get_point_forecast.return_value = {
+            "grid": {"wfo": "TST", "type": "land", "marineType": None },
+            "place": {"timezone": "America/New_York"},
+            "weatherstory": [self.weather_story],
+            "alerts": { "error": False, "items": [{}]},
+        }
+
+        response = self.client.get("/forecast/point/11.1/22.2/maps/")
+
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "weather/point/tab-containers.html")
+        self.assertTemplateUsed(response, "weather/partials/wx-loading-indicator.html", count=3)

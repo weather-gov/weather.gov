@@ -144,6 +144,12 @@ def point_location_alerts(request, lat, lon):
     if "status" in point and point["status"] == HTTPStatus.NOT_FOUND:
         raise Http404(point)
 
+    if "grid" in point and "wfo" in point["grid"]:
+        code = point["grid"]["wfo"]
+        wfo = WFO.objects.get(code=WFO.normalize_code(code))
+        point["wfo"] = wfo
+        point["isAlaska"] = wfo.code.lower() in ["afc", "afg", "ajk"]
+
     # If a marine point, check if coastal is allowed, else block all marine
     if "grid" in point and "type" in point["grid"] and point["grid"]["type"] == "marine":
         if not (allow_coastal and point["grid"].get("marineType") == "coastal"):
@@ -382,6 +388,91 @@ def point_location_seven_day(request, lat, lon): # noqa: C901
     return render(
         request,
         "weather/point/seven-day.html",
+        {
+            **context,
+        },
+    )
+
+@cache_control(max_age=120, smax_age=120, public=True)
+@decimal_redirect
+@vary_on_headers("HX-Request")
+def point_location_maps(request, lat, lon):
+    """Render radar and satellite for a point location."""
+    use_htmx = should_use_htmx_for_point(request)
+    allow_coastal = settings.MARINE_COASTAL_EXPERIMENTAL
+
+    point = interop.get_point_forecast(lat, lon)
+    fullname = point.get("place", {}).get("fullName", None)
+
+    # Check if there was an error retrieving alerts from the cache/background process
+    alerts_error = point.get("alerts", {}).get("metadata", {}).get("error", False)
+
+    context = {
+        "point": point,
+        "alerts_error": alerts_error,
+        "title_trans_args": {"fullName": fullname},
+        "use_htmx": use_htmx,
+    }
+
+    if point.get("status") == HTTPStatus.NOT_FOUND:
+        raise Http404(point)
+
+
+    if point.get("grid", {}).get("type") == "marine":
+        if not (allow_coastal and point["grid"].get("marineType") == "coastal"):
+            return render(request, "errors/404/marine-point.html", context, status=404)
+
+    # If there is not latitude and longitude data in the returned
+    # point dict, we need to add it from the url params
+    if "point" not in point:
+        point["point"] = {"latitude": lat, "longitude": lon}
+    elif "latitude" not in point["point"] or "longitude" not in point["point"]:
+        point["point"]["latitude"] = lat
+        point["point"]["longitude"] = lon
+
+    # Get the local timezone for the current point place
+    # If there was an error retrieving the place API endpoint,
+    # we set to None
+    # NOTE: If we permanently remove generated timestamps
+    # from the weather stories, we can safely remove this timezone
+    # code, which is only used for that purpose currently
+    if "place" in point and "timezone" in point["place"]:
+        localtz = ZoneInfo(point["place"]["timezone"])
+    else:
+        localtz = None
+
+    if "grid" in point and "wfo" in point["grid"] and localtz:
+        code = point["grid"]["wfo"]
+        wfo = WFO.objects.get(code=WFO.normalize_code(code))
+        point["wfo"] = wfo
+        point["isAlaska"] = wfo.code.lower() in ["afc", "afg", "ajk"]
+
+
+    if is_htmx_request(request):
+        # In this case, only render the partial markup
+        # needed for the tab's content
+        markup = render_to_string(
+            "weather/point/maps-tab-content.html",
+            {
+                "use_htmx": True,
+                **context,
+            })
+        return HttpResponse(markup, content_type="text/html")
+
+    if use_htmx:
+        # Render the template that has the "htmx-enabled"
+        # version of the page
+        return render(
+            request,
+            "weather/point/maps-with-htmx.html",
+            {
+                **context,
+            }
+        )
+
+    return render(
+        request,
+        "weather/point/maps.html",
         {
             **context,
         },

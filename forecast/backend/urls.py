@@ -81,6 +81,7 @@ urlpatterns = [
         point.point_location_seven_day,
         name="point_forecast_seven_day"
     ),
+    path("forecast/point/<float:lat>/<float:lon>/maps/", point.point_location_maps, name="point_forecast_maps"),
     path("place/<statecode:state>/<placename:place>/", point.place_forecast, name="place_forecast"),
     path("health/", index.health, name="health"),
     path("llms.txt", TemplateView.as_view(template_name="llms.txt", content_type="text/plain")),

@@ -159,18 +159,23 @@ class SatelliteVideo extends HTMLElement {
     this.content?.classList.add("display-none");
     this.error?.classList.remove("display-none");
 
-    // Hide the outer satellite container (shadow box) and timestamp container
-    const outerContainer = document.querySelector(
+    // The error message is a sibling of the video, not a child of it.
+    // Scope updates to this satellite so another point tab is unaffected.
+    const satellite = this.closest("[wx-outer-radar-container]");
+    const outerContainer = satellite?.querySelector(
       "[wx-outer-satellite-container]",
     );
-    const timeContainer = document.querySelector("#satellite-time-container");
+    const timeContainer = satellite?.querySelector("#satellite-time-container");
     outerContainer?.classList.add("display-none");
     timeContainer?.classList.add("display-none");
 
-    const outerError = document.querySelector(
-      "[wx-outer-radar-container] > [data-wx-satellite-error]",
-    );
+    const outerError = satellite?.querySelector("[data-wx-satellite-error]");
     outerError?.classList.remove("display-none");
+
+    // Maps normally limits the satellite to eight or nine grid columns.
+    // An error message needs the full width instead.
+    const mapsWrapper = this.closest("#maps .wx-satellite-wrapper");
+    mapsWrapper?.classList.remove("tablet-lg:grid-col-9", "desktop:grid-col-8");
   }
 
   disconnectedCallback() {

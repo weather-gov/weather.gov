@@ -272,6 +272,12 @@ msgstr "Daily Forecast"
 msgid "forecast.heading.today-forecast.01"
 msgstr "Today's Forecast"
 
+msgid "forecast.heading.area-information.01"
+msgstr "Area Information"
+
+msgid "forecast.area-information.wfo-label.01"
+msgstr "NWS {wfo_name} Forecast Office"
+
 msgid "forecast.errors.current-conditions.01"
 msgstr "There was an error loading the current conditions."
 
@@ -290,6 +296,9 @@ msgstr "Today's forecast data not available"
 msgid "error.500.point-seven-day-tab.headline.01"
 msgstr "7-day forecast data not available"
 
+msgid "error.500.point-maps-tab.headline.01"
+msgstr "Radar and satellite data not available"
+
 msgid "point-forecast.tab-errors.generic-header.01"
 msgstr "Error"
 
@@ -304,6 +313,9 @@ msgstr "Alerts"
 
 msgid "forecast.labels.seven-days.01"
 msgstr "7 Days"
+
+msgid "forecast.labels.maps.01"
+msgstr "Maps"
 
 msgid "forecast.labels.weather-info.01"
 msgstr "Weather information sections"
@@ -874,6 +886,11 @@ msgstr "%(fullName)s Forecast"
 msgid "site.meta.titles.point_forecast_seven_day"
 msgstr "%(fullName)s Forecast"
 msgid "site.meta.description.point_forecast_seven_day"
+msgstr "%(fullName)s Forecast"
+
+msgid "site.meta.titles.point_forecast_maps"
+msgstr "%(fullName)s Forecast"
+msgid "site.meta.description.point_forecast_maps"
 msgstr "%(fullName)s Forecast"
 
 msgid "site.meta.titles.place_forecast"

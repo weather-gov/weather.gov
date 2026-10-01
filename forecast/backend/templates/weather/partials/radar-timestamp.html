@@ -7,8 +7,8 @@
      class="grid-container font-family-mono text-base-dark font-mono-xs margin-bottom-1 padding-left-2 tablet:padding-left-0"
      wx-auto-update="radar">
   <div class="grid-row">
-    <div class="grid-col-auto desktop:grid-col-12 margin-right-1 desktop:margin-right-0 text-uppercase">
-      {% trans "radar.time-shown.label.01" %}<span class="desktop:display-none">:</span>
+    <div class="grid-col-12 tablet:grid-col-auto margin-right-1 text-uppercase">
+      {% trans "radar.time-shown.label.01" %}<span class="display-none tablet:display-inline">:</span>
     </div>
     <div class="grid-col-auto" id="wx-radar-timestamp-label">
       {# JS will inject text here #}
