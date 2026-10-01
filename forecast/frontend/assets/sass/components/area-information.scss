@@ -1,0 +1,19 @@
+@use "uswds-core" as *;
+
+// Area information section
+.area-information-section {
+  @include u-font-family("sans");
+
+  .area-information-links {
+    column-gap: units(2);
+
+    li {
+      break-inside: avoid-column;
+      margin-bottom: units(2);
+    }
+
+    @include at-media("tablet") {
+      column-count: 2;
+    }
+  }
+}

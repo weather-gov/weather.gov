@@ -25,6 +25,7 @@
   <!-- Prefetch for other tab pages -->
   <link rel="prefetch" href="{% url 'point_forecast_seven_day' lat=point.point.latitude lon=point.point.longitude %}" />
   <link rel="prefetch" href="{% url 'point_forecast_today' lat=point.point.latitude lon=point.point.longitude %}" />
+  <link rel="prefetch" href="{% url 'point_forecast_maps' lat=point.point.latitude lon=point.point.longitude %}" />
   <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}" />
   <link rel="stylesheet"
         type="text/css"

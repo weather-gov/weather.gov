@@ -15,6 +15,11 @@ document.addEventListener("DOMContentLoaded", () => {
       if (response.ok) {
         const markup = await response.text();
         swapEl[method] = markup;
+        document.dispatchEvent(
+          new CustomEvent("wx:tab-content-loaded", {
+            detail: { tabId: swapEl.id },
+          }),
+        );
       } else if (errorTargetSelector) {
         // We have encountered some kind of error.
         // Find the error template element on the page and

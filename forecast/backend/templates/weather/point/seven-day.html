@@ -19,6 +19,7 @@
   <!-- Prefetch for other tab pages -->
   <link rel="prefetch" href="{% url 'point_forecast_alerts' lat=point.point.latitude lon=point.point.longitude %}" />
   <link rel="prefetch" href="{% url 'point_forecast_today' lat=point.point.latitude lon=point.point.longitude %}" />
+  <link rel="prefetch" href="{% url 'point_forecast_maps' lat=point.point.latitude lon=point.point.longitude %}" />
 {% endblock %}
 
 {% block page_content %}

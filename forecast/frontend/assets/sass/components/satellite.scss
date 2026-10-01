@@ -6,14 +6,10 @@
   height: auto !important;
   width: 100% !important;
   overflow: hidden;
+}
 
-  @include at-media("tablet") {
-    aspect-ratio: 4/3 !important;
-  }
-
-  @include at-media("desktop") {
-    aspect-ratio: 1/1 !important;
-  }
+[wx-outer-satellite-container] {
+  max-width: 600px !important;
 }
 
 wx-satellite-video {
@@ -26,14 +22,17 @@ wx-satellite-video {
 }
 
 [data-wx-satellite-loading],
-[data-wx-satellite-error],
-[data-wx-satellite-content] {
+[data-wx-satellite-error] {
   width: 100%;
+  margin: auto;
 }
 
-[data-wx-satellite-loading],
-[data-wx-satellite-error] {
-  margin: auto;
+[data-wx-satellite-content] {
+  width: 100%;
+
+  // ensure controls are always visible
+  position: absolute;
+  bottom: 0;
 }
 
 .missing-timestamp {
@@ -41,14 +40,5 @@ wx-satellite-video {
 
   @include at-media("desktop") {
     margin-top: 3.5rem;
-  }
-
-  [data-wx-satellite-content] {
-    @include at-media("tablet") {
-      // Keep controls visible
-      // Only an issue at the tablet 4/3 aspect ratio
-      position: absolute;
-      bottom: 0;
-    }
   }
 }

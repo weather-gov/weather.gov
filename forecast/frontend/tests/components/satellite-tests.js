@@ -46,9 +46,9 @@ describe("SatelliteVideo Component", () => {
         json: async () => ({
           meta: {
             satellite: "GOES-West",
-            observation_time: "2026-03-20T12:00:00Z"
-          }
-        })
+            observation_time: "2026-03-20T12:00:00Z",
+          },
+        }),
       });
 
       const el = createComponent();
@@ -56,7 +56,11 @@ describe("SatelliteVideo Component", () => {
 
       const video = el.querySelector("video");
       expect(video.src).to.contain("GOES18-WFO1-GEOCOLOR-600x600.mp4");
-      expect(el.querySelector("[data-wx-satellite-loading]").classList.contains("display-none")).to.be.true;
+      expect(
+        el
+          .querySelector("[data-wx-satellite-loading]")
+          .classList.contains("display-none"),
+      ).to.be.true;
     });
 
     it("correctly calculates the 8-hour time range tags", async () => {
@@ -65,34 +69,38 @@ describe("SatelliteVideo Component", () => {
         json: async () => ({
           meta: {
             satellite: "GOES-West",
-            observation_time: "2026-03-20T12:00:00Z" // Noon UTC
-          }
-        })
+            observation_time: "2026-03-20T12:00:00Z", // Noon UTC
+          },
+        }),
       });
 
       const el = createComponent();
       await wait(50);
 
       const times = el.querySelectorAll("time");
-      expect(times[1].getAttribute("datetime")).to.equal("2026-03-20T12:00:00.000Z");
-      expect(times[0].getAttribute("datetime")).to.equal("2026-03-20T04:00:00.000Z");
+      expect(times[1].getAttribute("datetime")).to.equal(
+        "2026-03-20T12:00:00.000Z",
+      );
+      expect(times[0].getAttribute("datetime")).to.equal(
+        "2026-03-20T04:00:00.000Z",
+      );
     });
   });
-describe("Timezone handling", () => {
-  it("converts UTC to the specified timezone correctly (Eastern Time)", async () => {
-    // 12:00 PM UTC on March 20 is 8:00 AM EDT (UTC-4).
-    // Note: This assertion is date-specific to account for Daylight Savings.
-    global.fetch.resolves({
-      ok: true,
-      json: async () => ({
-        meta: {
-          satellite: "GOES-West",
-          observation_time: "2026-03-20T12:00:00Z"
-        }
-      })
-    });
+  describe("Timezone handling", () => {
+    it("converts UTC to the specified timezone correctly (Eastern Time)", async () => {
+      // 12:00 PM UTC on March 20 is 8:00 AM EDT (UTC-4).
+      // Note: This assertion is date-specific to account for Daylight Savings.
+      global.fetch.resolves({
+        ok: true,
+        json: async () => ({
+          meta: {
+            satellite: "GOES-West",
+            observation_time: "2026-03-20T12:00:00Z",
+          },
+        }),
+      });
 
-    document.body.innerHTML = `
+      document.body.innerHTML = `
       <div data-wx-satellite-times></div>
       <wx-satellite-video wfo="okx" timezone="America/New_York">
         <div data-wx-satellite-loading></div>
@@ -100,30 +108,30 @@ describe("Timezone handling", () => {
       </wx-satellite-video>
     `;
 
-    await wait(50);
+      await wait(50);
 
-    const timeContainer = document.querySelector("[data-wx-satellite-times]");
-    expect(timeContainer.textContent).to.contain("8:00 AM");
-    expect(timeContainer.textContent).to.contain("12:00 AM");
-  });
+      const timeContainer = document.querySelector("[data-wx-satellite-times]");
+      expect(timeContainer.textContent).to.contain("8:00 AM");
+      expect(timeContainer.textContent).to.contain("12:00 AM");
+    });
 
-it("includes the day of the week when the range spans multiple days in the target timezone", async () => {
-  // 03:00 AM UTC on the 21st is 11:00 PM EDT on the 20th.
-  // The start time (8 hours prior) is 3:00 PM EDT on the 20th.
-  // In UTC, these are different days (20th vs 21st).
-  // In EDT, these are the SAME day (Friday the 20th).
-  // We want to ensure it does NOT show the day name twice if they are the same day in the target timezone.
-  global.fetch.resolves({
-    ok: true,
-    json: async () => ({
-      meta: {
-        satellite: "GOES-West",
-        observation_time: "2026-03-21T03:00:00Z"
-      }
-    })
-  });
+    it("includes the day of the week when the range spans multiple days in the target timezone", async () => {
+      // 03:00 AM UTC on the 21st is 11:00 PM EDT on the 20th.
+      // The start time (8 hours prior) is 3:00 PM EDT on the 20th.
+      // In UTC, these are different days (20th vs 21st).
+      // In EDT, these are the SAME day (Friday the 20th).
+      // We want to ensure it does NOT show the day name twice if they are the same day in the target timezone.
+      global.fetch.resolves({
+        ok: true,
+        json: async () => ({
+          meta: {
+            satellite: "GOES-West",
+            observation_time: "2026-03-21T03:00:00Z",
+          },
+        }),
+      });
 
-  document.body.innerHTML = `
+      document.body.innerHTML = `
     <div data-wx-satellite-times></div>
     <wx-satellite-video wfo="okx" timezone="America/New_York">
       <div data-wx-satellite-loading></div>
@@ -131,15 +139,14 @@ it("includes the day of the week when the range spans multiple days in the targe
     </wx-satellite-video>
   `;
 
-  await wait(50);
+      await wait(50);
 
-  const timeContainer = document.querySelector("[data-wx-satellite-times]");
-  // Should show the day only once at the start: "Friday, 3:00 PM – 11:00 PM"
-  // (Checking that "Saturday" or a second "Friday" is NOT present)
-  expect(timeContainer.textContent).to.contain("Friday");
-  expect(timeContainer.textContent).to.not.contain("Saturday");
-});
-
+      const timeContainer = document.querySelector("[data-wx-satellite-times]");
+      // Should show the day only once at the start: "Friday, 3:00 PM – 11:00 PM"
+      // (Checking that "Saturday" or a second "Friday" is NOT present)
+      expect(timeContainer.textContent).to.contain("Friday");
+      expect(timeContainer.textContent).to.not.contain("Saturday");
+    });
   });
 
   describe("Error handling", () => {
@@ -150,8 +157,104 @@ it("includes the day of the week when the range spans multiple days in the targe
       const el = createComponent();
       await wait(50);
 
-      expect(el.querySelector("[data-wx-satellite-error]").classList.contains("display-none")).to.be.false;
+      expect(
+        el
+          .querySelector("[data-wx-satellite-error]")
+          .classList.contains("display-none"),
+      ).to.be.false;
       expect(console.error.called).to.be.true;
+    });
+
+    const tabMarkup = (id, widthClass) => `
+      <div id="${id}">
+        <div class="wx-satellite-wrapper grid-col-12 ${widthClass}">
+          <div wx-outer-radar-container>
+            <div id="satellite-time-container"></div>
+            <div data-wx-satellite-error class="display-none">Satellite unavailable</div>
+            <div wx-outer-satellite-container>
+              <wx-satellite-video wfo="tst" timezone="America/Chicago">
+                <div data-wx-satellite-loading></div>
+                <div data-wx-satellite-content class="display-none"><video></video></div>
+              </wx-satellite-video>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+
+    it("expands only the Maps satellite on error, leaving Today untouched", async () => {
+      global.fetch.onFirstCall().resolves({
+        ok: true,
+        json: async () => ({
+          meta: {
+            satellite: "GOES-West",
+            observation_time: "2026-03-20T12:00:00Z",
+          },
+        }),
+      });
+      global.fetch.onSecondCall().resolves({ ok: false });
+      document.body.innerHTML =
+        tabMarkup("today", "desktop:grid-col-6") +
+        tabMarkup("maps", "tablet-lg:grid-col-9 desktop:grid-col-8");
+
+      await wait(50);
+
+      const mapsWrapper = document.querySelector("#maps .wx-satellite-wrapper");
+      const todayWrapper = document.querySelector(
+        "#today .wx-satellite-wrapper",
+      );
+      expect(mapsWrapper.classList.contains("grid-col-12")).to.be.true;
+      expect(mapsWrapper.classList.contains("tablet-lg:grid-col-9")).to.be
+        .false;
+      expect(mapsWrapper.classList.contains("desktop:grid-col-8")).to.be.false;
+      expect(
+        mapsWrapper
+          .querySelector("[data-wx-satellite-error]")
+          .classList.contains("display-none"),
+      ).to.be.false;
+      expect(
+        mapsWrapper
+          .querySelector("[wx-outer-satellite-container]")
+          .classList.contains("display-none"),
+      ).to.be.true;
+      expect(todayWrapper.classList.contains("desktop:grid-col-6")).to.be.true;
+      expect(
+        todayWrapper
+          .querySelector("[data-wx-satellite-error]")
+          .classList.contains("display-none"),
+      ).to.be.true;
+      expect(
+        todayWrapper
+          .querySelector("[wx-outer-satellite-container]")
+          .classList.contains("display-none"),
+      ).to.be.false;
+    });
+
+    it("keeps the narrow Maps grid classes when metadata succeeds", async () => {
+      global.fetch.resolves({
+        ok: true,
+        json: async () => ({
+          meta: {
+            satellite: "GOES-West",
+            observation_time: "2026-03-20T12:00:00Z",
+          },
+        }),
+      });
+      document.body.innerHTML = tabMarkup(
+        "maps",
+        "tablet-lg:grid-col-9 desktop:grid-col-8",
+      );
+
+      await wait(50);
+
+      const wrapper = document.querySelector("#maps .wx-satellite-wrapper");
+      expect(wrapper.classList.contains("tablet-lg:grid-col-9")).to.be.true;
+      expect(wrapper.classList.contains("desktop:grid-col-8")).to.be.true;
+      expect(
+        wrapper
+          .querySelector("[data-wx-satellite-error]")
+          .classList.contains("display-none"),
+      ).to.be.true;
     });
   });
 
@@ -163,17 +266,20 @@ it("includes the day of the week when the range spans multiple days in the targe
       global.fetch.resolves({
         ok: true,
         json: async () => ({
-          meta: { satellite: "GOES-West", observation_time: "2026-03-20T12:00:00Z" }
-        })
+          meta: {
+            satellite: "GOES-West",
+            observation_time: "2026-03-20T12:00:00Z",
+          },
+        }),
       });
 
       const el = createComponent();
-      
+
       await clock.tickAsync(50);
 
       const video = el.querySelector("video");
       video.play = sandbox.stub().resolves();
-      
+
       video.dispatchEvent(new Event("play"));
       video.dispatchEvent(new Event("ended"));
 
