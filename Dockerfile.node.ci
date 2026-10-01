@@ -3,7 +3,7 @@
 # generic node docker image so we can run anything node-related
 FROM node:24
 
-RUN mkdir -p /app /app/api-interop-layer /app/api-proxy /app/spatial-data
+RUN mkdir -p /app /app/api-interop-layer /app/api-proxy
 
 WORKDIR /app
 
@@ -28,12 +28,8 @@ COPY ./api-interop-layer/package.json /app/api-interop-layer/
 COPY ./api-interop-layer/package-lock.json /app/api-interop-layer/
 COPY ./api-proxy/package.json /app/api-proxy/
 COPY ./api-proxy/package-lock.json /app/api-proxy/
-COPY ./spatial-data/package.json /app/spatial-data/
-COPY ./spatial-data/package-lock.json /app/spatial-data/
 
 WORKDIR /app
-RUN npm ci --dev
-WORKDIR /app/spatial-data
 RUN npm ci --dev
 WORKDIR /app/api-interop-layer
 RUN npm ci --dev

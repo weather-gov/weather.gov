@@ -1,5 +1,4 @@
-const ESRI_API_KEY =
-  "AAPK1dd93729edc54e84ade1ea5dc0f4f9d3EPexfd5qirlO3QtHGBj5JQL7iUYHQOb4yLjfKEYFLcyN9PlMd87lMjjv8D3DxDsQ";
+import { createBaseMap, shiftAleutians } from "./map.js";
 
 const ICON_URLS = {
   warning: "/public/images/weather/wx_alerticon_circle_warning.svg",
@@ -46,15 +45,6 @@ const styles = {
   },
 };
 
-/** Hide the alert map and show the non-critical map error in its place. */
-export const showMapError = (elementId) => {
-  document
-    .getElementById("wx-alert-map-error")
-    .classList.remove("display-none");
-  document.getElementById(elementId).closest("wx-alert-map").style.display =
-    "none";
-};
-
 /** Render an outline plus clustered, day-filtered alerts on the Esri basemap. */
 export const createAlertMap = ({
   elementId,
@@ -72,24 +62,13 @@ export const createAlertMap = ({
 
   const activeLayers = () => layersByDay[curDayIndex] ?? [];
 
-  const map = L.map(elementId, {
+  shiftAleutians(outline, alerts);
+
+  const map = createBaseMap(elementId, {
     zoomDelta: 1,
     zoomSnap: 0.5,
     maxZoom,
-  }).setView([0, 0], 0);
-
-  // Leaflet is managed by a Ukrainian team. The default attribution they put on
-  // maps includes a Ukrainian flag to show their national pride. But as an
-  // official website of the US Government, that might not be appropriate for
-  // us, so we remove the flag.
-  map.attributionControl.setPrefix(
-    "<a href='https://leafletjs.com' title='A JavaScript library for interactive maps'>Leaflet</a>",
-  );
-
-  // Add Esri Basemap
-  L.esri.Vector.vectorBasemapLayer("arcgis/streets", {
-    apiKey: ESRI_API_KEY,
-  }).addTo(map);
+  });
 
   /** A custom expand/shrink button for the map container. */
   const ExpandControl = L.Control.extend({

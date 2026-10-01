@@ -7,6 +7,19 @@
     min-width: 100%;
   }
 
+  .wx-wfo-map-container {
+    width: 100%;
+    position: relative;
+
+    // Same ratio as the 1200x800 images this map replaced
+    aspect-ratio: 3 / 2;
+
+    #wx-wfo-map {
+      height: 100%;
+      width: 100%;
+    }
+  }
+
   .address {
     margin-top: 0;
   }

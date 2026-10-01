@@ -211,20 +211,6 @@ services:
       - /app/node_modules
     profiles: ["utility"]
 
-  spatial:
-    build:
-      context: ./spatial-data
-      dockerfile: Dockerfile.spatial.dev
-    networks:
-      - weather.gov
-    links:
-      - database
-    environment:
-      DB_HOST: database
-    volumes:
-      - ./spatial-data/:/app
-      - /app/node_modules
-
   playwright:
     build:
       dockerfile: Dockerfile.playwright

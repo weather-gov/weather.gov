@@ -6,6 +6,24 @@
 {% endcomment %}
 {% block head_js %}
   <script src="{% static 'js/office.html.js' %}" type="module"></script>
+  {{ shape|json_script:"wfo-shape" }}
+  <script id="wfo-metadata" type="application/json">
+    {
+      "wfo": "{{ office.code }}",
+      "isBinary": {{ is_binary|yesno:"true,false" }}
+    }
+  </script>
+{% endblock %}
+{% block page_end_js %}
+  {% include "weather/scripts/leaflet.html" %}
+  {% if is_binary %}
+    {% include "weather/scripts/geobuf.html" %}
+  {% endif %}
+{% endblock %}
+{% block page_head_css %}
+  <link rel="stylesheet"
+        type="text/css"
+        href="{% static 'css/leaflet.css' %}" />
 {% endblock %}
 {% block page_content %}
   <div class="wx-wfo-info margin-bottom-10">
@@ -34,13 +52,7 @@
           </div>
         {% endif %}
         <div class="grid-col-12{% if office.about %} tablet:grid-col-8{% endif %}">
-          <figure class="margin-0">
-            <img src="{% static 'images/wfos/'|add:office.code|add:'.png' %}" alt="">
-            <figcaption class="font-sans-xs">
-              {% trans_with_args "wfo-info.caption.coverage-area-map.01" wfo=office.name %}
-              <p class="usa-sr-only">{% trans_with_args "wfo-info.caption+aria.coverage-area-map.01" counties=counties %}</p>
-            </figcaption>
-          </figure>
+          {% include "weather/partials/wfo-map.html" %}
         </div>
       </div>
       <div class="grid-row margin-top-4">

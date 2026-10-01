@@ -8,6 +8,7 @@ import spatial.models as spatial
 from backend import models
 from backend.exceptions import Http429
 from backend.util import disable_logging_for_quieter_tests
+from backend.views.county import GEOMETRY_BINARY_THRESHOLD
 
 
 class TestViews(TestCase):
@@ -678,6 +679,32 @@ class TestViews(TestCase):
         )  # use a pre-existing WFO so that the image can be found
         self.assertTemplateUsed(response, "weather/office/overview.html")
         self.assertEqual(response.context["office"], models.WFO.objects.get(code="HUN"))
+
+    @mock.patch("backend.views.offices.get_cwa_shape")
+    def test_office_keeps_small_shape_inline(self, mock_get_cwa_shape):
+        """Test that a CWA shape under the threshold stays inline in the page."""
+        shape = {"type": "Polygon", "coordinates": [[[0, 0], [1, 0], [1, 1], [0, 1], [0, 0]]]}
+        mock_get_cwa_shape.return_value = shape
+
+        response = self.client.get(reverse("office", kwargs={"wfo": "TST"}))
+
+        self.assertFalse(response.context["is_binary"])
+        self.assertEqual(response.context["shape"], shape)
+        self.assertNotContains(response, "geobuf@3.0.1")
+
+    @mock.patch("backend.views.offices.get_cwa_shape")
+    def test_office_strips_large_shape(self, mock_get_cwa_shape):
+        """Test that a CWA shape over the threshold is stripped so the map pulls it from the pbf endpoint."""
+        mock_get_cwa_shape.return_value = {
+            "type": "Polygon",
+            "coordinates": [[[0.0, 0.0]] * GEOMETRY_BINARY_THRESHOLD],
+        }
+
+        response = self.client.get(reverse("office", kwargs={"wfo": "TST"}))
+
+        self.assertTrue(response.context["is_binary"])
+        self.assertIsNone(response.context["shape"])
+        self.assertContains(response, "geobuf@3.0.1")
 
     def test_afd_index_with_wfo_changed(self):
         """Tests getting the AFD index where the WFO changed."""
