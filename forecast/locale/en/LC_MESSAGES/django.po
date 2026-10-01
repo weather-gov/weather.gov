@@ -515,6 +515,9 @@ msgstr "Loading alerts..."
 msgid "loader.loading-text.today-tab.01"
 msgstr "Loading today's forecast..."
 
+msgid "loader.loading-text.maps-tab.01"
+msgstr "Loading maps..."
+
 msgid "location-search.labels.enter-city-zip.01"
 msgstr "Enter city or zip code"
 
