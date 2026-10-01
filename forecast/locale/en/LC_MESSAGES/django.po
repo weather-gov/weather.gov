@@ -1249,6 +1249,18 @@ msgstr "Island"
 msgid "spatial.county-like.name.island.02"
 msgstr "Islands"
 
+msgid "spatial.county-like.name.atoll.01"
+msgstr "Atoll"
+
+msgid "spatial.county-like.name.atoll.02"
+msgstr "Atolls"
+
+msgid "spatial.county-like.name.state.01"
+msgstr "State"
+
+msgid "spatial.county-like.name.state.02"
+msgstr "States"
+
 msgid "spatial.county-like.with-subdivision.label.01"
 msgstr "{name} {subdivision}, {state}"
 
