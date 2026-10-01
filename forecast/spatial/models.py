@@ -97,10 +97,13 @@ class WeatherStates(models.Model):
 
         subdivision_mapping = {
             "AK": "spatial.county-like.name.census-area",
+            "FM": "spatial.county-like.name.municipality",
             "GU": "spatial.county-like.name.village",
             "LA": "spatial.county-like.name.parish",
+            "MH": "spatial.county-like.name.atoll",
             "MP": "spatial.county-like.name.municipality",
             "PR": "spatial.county-like.name.municipality",
+            "PW": "spatial.county-like.name.state",
             "VI": "spatial.county-like.name.island",
         }
 
@@ -175,14 +178,20 @@ class WeatherCounties(models.Model):
             "AK": _("spatial.county-like.name.census-area.01"),
             # American Samoa FIPS area name are fully-qualified.
             "AS": None,
+            # In Micronesia, county-likes are called municipalities.
+            "FM": _("spatial.county-like.name.municipality.01"),
             # In Guam, county-likes are called villages.
             "GU": _("spatial.county-like.name.village.01"),
             # In Louisiana, county-likes are called parishes.
             "LA": _("spatial.county-like.name.parish.01"),
+            # In the Marshall Islands, county-likes are called atolls.
+            "MH": _("spatial.county-like.name.atoll.01"),
             # In the Northern Mariana Islands and Puerto Rico, county-likes are
             # called municipalities.
             "MP": _("spatial.county-like.name.municipality.01"),
             "PR": _("spatial.county-like.name.municipality.01"),
+            # In Palau, county-likes are called states.
+            "PW": _("spatial.county-like.name.state.01"),
             # In the US Virgin Islands, FIPS areas refer to islands.
             "VI": _("spatial.county-like.name.island.01"),
         }

@@ -10,6 +10,7 @@ from tqdm import tqdm
 from spatial.management.commands._spatial_util import (
     COUNTY_FIPS_TO_PRIMARY_WFO_MAP,
     SHAPE_TZ_TO_IANA,
+    STATE_TO_IANA_TZ_OVERRIDE,
     US_CODES,
     cache_path,
     get_shapefile,
@@ -242,7 +243,7 @@ def load_counties(force=False):
             dst=timezone == timezone.upper(),
             # The shapefile timezones are 1- or 2-digit codes, but we want
             # the IANA timezones instead, so grab those.
-            timezone=SHAPE_TZ_TO_IANA[timezone[:1].upper()],
+            timezone=STATE_TO_IANA_TZ_OVERRIDE.get(feature.get("STATE"), SHAPE_TZ_TO_IANA[timezone[:1].upper()]),
             shape=GEOSGeometry(feature.geom.json),
         )
 

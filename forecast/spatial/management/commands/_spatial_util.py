@@ -40,6 +40,11 @@ SHAPE_TZ_TO_IANA = {
     "F": "Pacific/Kosrae",
 }
 
+STATE_TO_IANA_TZ_OVERRIDE = {
+    "PW": "Pacific/Palau",  # Palau
+    "MH": "Pacific/Majuro",  # Marshall Islands
+}
+
 COUNTY_FIPS_TO_PRIMARY_WFO_MAP = {
     "23025": "GYX",
     "36011": "BUF",
