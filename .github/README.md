@@ -69,9 +69,6 @@ This overview will likely become outdated, but it may help to orient you to the 
 │
 ├── scripts
 │   └── Various shell scripts to do helpful things
-├── spatial-data
-│   └── A Node.js utility app for generating WFO maps
-│
 ├── terraform
 │   └── This is the code for managing our infrastructure and deploying the site
 │

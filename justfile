@@ -118,7 +118,6 @@ format-js *files:
       -v "{{justfile_directory()}}/api-interop-layer":"/app/api-interop-layer" \
       -v "{{justfile_directory()}}/api-proxy":"/app/api-proxy" \
       -v "{{justfile_directory()}}/tests":"/app/tests" \
-      -v "{{justfile_directory()}}/spatial-data":"/app/spatial-data" \
       -v "{{justfile_directory()}}/forecast/frontend":"/app/forecast/frontend" \
       -v "{{justfile_directory()}}/.gitlab-ci.yml":"/app/.gitlab-ci.yml" \
       -v "{{justfile_directory()}}/.gitlab":"/app/.gitlab" \
@@ -132,7 +131,6 @@ format-js *files:
       -v "{{justfile_directory()}}/api-interop-layer":"/app/api-interop-layer" \
       -v "{{justfile_directory()}}/api-proxy":"/app/api-proxy" \
       -v "{{justfile_directory()}}/tests":"/app/tests" \
-      -v "{{justfile_directory()}}/spatial-data":"/app/spatial-data" \
       -v "{{justfile_directory()}}/forecast/frontend":"/app/forecast/frontend" \
       -v "{{justfile_directory()}}/playwright.config.js":"/app/playwright.config.js" \
       -v "{{justfile_directory()}}/eslint.config.js":"/app/eslint.config.js" \
@@ -195,7 +193,6 @@ lint-js *files:
     -v "{{justfile_directory()}}/api-interop-layer":"/app/api-interop-layer" \
     -v "{{justfile_directory()}}/api-proxy":"/app/api-proxy" \
     -v "{{justfile_directory()}}/tests":"/app/tests" \
-    -v "{{justfile_directory()}}/spatial-data":"/app/spatial-data" \
     -v "{{justfile_directory()}}/forecast/frontend":"/app/forecast/frontend" \
     -v "{{justfile_directory()}}/playwright.config.js":"/app/playwright.config.js" \
     node \

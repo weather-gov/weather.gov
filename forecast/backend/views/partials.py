@@ -17,6 +17,7 @@ from backend.util import (
     process_state_alerts,
     sort_multipolygon_by_area,
 )
+from backend.views.offices import get_cwa_shape
 from backend.views.risk import process_ghwo_data
 from risk_data.util import get_risk_data_for_county, get_risk_data_for_state
 from spatial.models import WeatherAlertsCache, WeatherCounties, WeatherStates
@@ -121,6 +122,15 @@ def wx_county_alerts_pbf(_, countyfips):
         features.append(alert_feature(alert["shape_simplified"], {"id": alert_id}))
 
     return geobuf_response({"type": "FeatureCollection", "features": features})
+
+
+@never_cache
+def wx_cwa_boundary_pbf(_, wfo):
+    """Return Geobuf-encoded boundaries for the given forecast office's CWA."""
+    shape = get_cwa_shape(wfo.upper())
+    if shape is None:
+        raise Http404()
+    return geobuf_response(shape)
 
 
 def wx_select_state_counties(_request, state_fips):

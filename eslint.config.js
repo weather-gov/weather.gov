@@ -105,7 +105,6 @@ module.exports = defineConfig([
     files: [
       "api-interop-layer/**/*.js",
       "tests/**/*.js",
-      "spatial-data/**/*.js",
       "web/**/tests/**/*.js",
       "**/playwright.config.js",
       "forecast/frontend/**/*.js",

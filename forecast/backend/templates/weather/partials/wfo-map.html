@@ -1,0 +1,14 @@
+{% comment %}
+-- Template purpose: Display a map of the coverage area for a weather forecast office.
+-- Used by: office/overview.html
+{% endcomment %}
+<figure class="margin-0">
+  <div id="wx-alert-map-error" class="display-none">{% render_non_critical_error_component component_name="map" %}</div>
+  <wx-wfo-map class="display-block wx-wfo-map-container wx-isolation-isolate">
+  <div id="wx-wfo-map" class="height-full"></div>
+  </wx-wfo-map>
+  <figcaption class="font-sans-xs">
+    {% trans_with_args "wfo-info.caption.coverage-area-map.01" wfo=office.name %}
+    <p class="usa-sr-only">{% trans_with_args "wfo-info.caption+aria.coverage-area-map.01" counties=counties %}</p>
+  </figcaption>
+</figure>

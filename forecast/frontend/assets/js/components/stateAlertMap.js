@@ -1,5 +1,6 @@
-import { createAlertMap, showMapError } from "./alertMap.js";
+import { createAlertMap } from "./alertMap.js";
 import { decodeGeobuf, fetchGeobuf } from "./geobuf.js";
+import { showMapError } from "./map.js";
 import { checkForLeaflet } from "./util.js";
 
 /**
@@ -17,37 +18,6 @@ const geobufRequests = Promise.all([
   fetchGeobuf(`/wx/state/${meta.stateCode}/`),
   fetchGeobuf(`/wx/state/${meta.stateCode}/alerts`),
 ]);
-
-/** Move the Aleutians west of -180 so Alaska draws as one piece. */
-const shiftAleutians = (boundary, alerts) => {
-  const wrapPoint = (coord) => {
-    let lng = coord[0];
-    if (lng > 0) lng -= 360; // Shift Aleutians to -180...-190 range
-    return [lng, coord[1]];
-  };
-
-  // Define the recursion to handle Polygon vs MultiPolygon coordinates
-  const transformCoords = (coords) => {
-    if (typeof coords[0] === "number") {
-      return wrapPoint(coords);
-    }
-    return coords.map(transformCoords);
-  };
-
-  // Process Boundary (it's a Geometry object)
-  if (boundary.coordinates) {
-    boundary.coordinates = transformCoords(boundary.coordinates);
-  }
-
-  // Process Alerts (it's a FeatureCollection)
-  alerts.features.forEach((feature) => {
-    if (feature.geometry && feature.geometry.coordinates) {
-      feature.geometry.coordinates = transformCoords(
-        feature.geometry.coordinates,
-      );
-    }
-  });
-};
 
 /** HTML shown inside a popup when clicking on an alert icon on the map. */
 const getPopupHTML = (eventSlug, eventName, countiesCount) => {
@@ -102,10 +72,6 @@ const setupStateMap = async () => {
     const [boundaryBuf, alertsBuf] = await geobufRequests;
     const boundary = decodeGeobuf(boundaryBuf);
     const alerts = decodeGeobuf(alertsBuf);
-
-    if (meta.stateCode === "AK") {
-      shiftAleutians(boundary, alerts);
-    }
 
     createAlertMap({
       elementId: MAP_ID,

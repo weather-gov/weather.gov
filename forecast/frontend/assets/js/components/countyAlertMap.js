@@ -1,5 +1,6 @@
-import { createAlertMap, showMapError } from "./alertMap.js";
+import { createAlertMap } from "./alertMap.js";
 import { decodeGeobuf, fetchGeobuf } from "./geobuf.js";
+import { showMapError } from "./map.js";
 import { checkForLeaflet } from "./util.js";
 
 const MAP_ID = "wx_county_alert_map";
