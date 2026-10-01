@@ -78,6 +78,8 @@ class TestNOAABackendAuth(TestCase):
         # Now we authenticate the request
         new_user = authenticate(request, saml_auth=saml_auth)
         self.assertIsNotNone(new_user)
+        self.assertTrue(new_user.has_perm("wagtailadmin.access_admin"))
+        self.assertFalse(new_user.has_perm("wagtailcore.add_page"))
 
     @override_settings(SAML_CREATES_NEW_USERS=False)
     def test_response_creates_new_user_setting_off(self, init_saml_auth):

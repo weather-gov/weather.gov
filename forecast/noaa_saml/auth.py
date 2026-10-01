@@ -76,8 +76,8 @@ class NOAABackend(BaseBackend):
                 # should be a list of size 1
                 new_user = NOAAUser.objects.create(username=saml_attributes["uid"][0], email=saml_attributes["mail"][0])
                 new_user.is_staff = True
-                editors_group = Group.objects.get(name="Editors")
-                new_user.groups.add(editors_group)
+                viewers_group = Group.objects.get(name="Viewers")
+                new_user.groups.add(viewers_group)
                 new_user.save()
                 return new_user
 
