@@ -9,6 +9,9 @@ from backend.util.state import get_analysis_data_for_state, get_wfo_data_for_sta
 from risk_data.util import get_risk_data_for_state
 from spatial.models import WeatherAlertsCache, WeatherCounties, WeatherStates
 
+# Extent edges past this longitude on both sides mean the shape wraps the antimeridian
+ANTIMERIDIAN_LON = 150
+
 
 @cache_control(public=True, max_age=3600)
 def index(request):
@@ -170,16 +173,18 @@ def state_radar(request, state):
     state = get_object_or_404(WeatherStates, state=state.upper())
 
     lon_min, lat_min, lon_max, lat_max = state.shape.extent
+    # A shape straddling the antimeridian gets its eastern parts shifted west of -180 so the box stays in one piece
+    if lon_min < -ANTIMERIDIAN_LON and lon_max > ANTIMERIDIAN_LON:
+        extents = [part.extent for part in state.shape]
+        lon_min = min(e[0] - 360 if e[0] > 0 else e[0] for e in extents)
+        lon_max = max(e[2] - 360 if e[2] > 0 else e[2] for e in extents)
+
     bounds = [
         (lat_min, lon_min),
         (lat_min, lon_max),
         (lat_max, lon_max),
         (lat_max, lon_min),
     ]
-    # Alaska crosses the antemeridian: this frames the state, albeit imperfectly
-    if state.state == "AK":
-        bounds[1] = (lat_min, 0)
-        bounds[2] = (lat_max, 0)
 
     return render(
         request,
