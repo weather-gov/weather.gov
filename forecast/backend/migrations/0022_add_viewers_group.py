@@ -2,7 +2,8 @@
 
 from django.db import migrations
 
-def create_viewers_group(apps, _):
+
+def create_viewers_group(apps, _):  # noqa: D103
     Group = apps.get_model("auth", "Group")
     Permission = apps.get_model("auth", "Permission")
 
@@ -11,15 +12,15 @@ def create_viewers_group(apps, _):
         content_type__app_label="wagtailadmin", codename="access_admin")
     viewers_group.permissions.add(viewers_perm)
 
-def remove_viewers_group(apps):
+def remove_viewers_group(apps):  # noqa: D103
     Group = apps.get_model("auth", "Group")
     viewers_group = Group.objects.get(name="Viewers")
     viewers_group.delete()
 
-class Migration(migrations.Migration):
+class Migration(migrations.Migration):  # noqa: D101
 
     dependencies = [
-        ('backend', '0021_alter_genericpage_meta_description_and_more'),
+        ("backend", "0021_alter_genericpage_meta_description_and_more"),
     ]
 
     operations = [
