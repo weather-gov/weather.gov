@@ -24,7 +24,7 @@
     {% include 'weather/partials/place-banner.html' with place=point.place %}
     {% if point.alerts.items|length > 0 %}
       <div class="bg-primary-darker padding-bottom-105">
-        <div class="grid-container margin-top-0">
+        <div class="grid-container margin-top-0 padding-x-0 tablet:padding-x-2 desktop:padding-x-4">
           {% include "weather/partials/alert-summary.html" with alerts=point.alerts.items is_alerts_page=True lat=point.point.latitude lon=point.point.longitude %}
         </div>
       </div>
