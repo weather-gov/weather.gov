@@ -37,12 +37,18 @@
   }
 }
 
-@include at-media("desktop") {
+@include at-media("tablet-lg") {
   .wx-weather-story-wrapper {
     grid-template-areas:
-      "a b b"
-      "c b b";
+      "a a c"
+      "b b b";
     grid-auto-columns: 1fr;
     column-gap: units(4);
   }
+
+  // .wx-weather-story-wrapper {
+  //     > *:first-child {
+  //         border-right: 1px solid color("accent-cool-darker");
+  //     }
+  // }
 }

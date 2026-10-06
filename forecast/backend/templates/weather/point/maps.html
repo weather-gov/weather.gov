@@ -31,6 +31,7 @@
         href="{% url 'point_forecast_today' lat=point.point.latitude lon=point.point.longitude %}" />
   <link rel="prefetch"
         href="{% url 'point_forecast_seven_day' lat=point.point.latitude lon=point.point.longitude %}" />
+  <link rel="prefetch" href="{% url 'point_forecast_analysis' lat=point.point.latitude lon=point.point.longitude %}" />
   <link rel="stylesheet"
         type="text/css"
         href="{% static 'css/leaflet.css' %}" />

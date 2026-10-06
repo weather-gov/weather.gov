@@ -40,6 +40,14 @@
             aria-controls="maps"
             data-url="{% url 'point_forecast_maps' lat=point.point.latitude lon=point.point.longitude %}"
             {% if selected == "maps" %}data-selected="true"{% endif %}>{{ "forecast.labels.maps.01" | t }}</button>
+    <button role="tab"
+            id="analysis-tab-button"
+            href="{% url 'point_forecast_analysis' lat=point.point.latitude lon=point.point.longitude %}"
+            class="tab-button"
+            data-tab-name="analysis"
+            data-url="{% url 'point_forecast_analysis' lat=point.point.latitude lon=point.point.longitude %}"
+            aria-controls="analysis"
+            {% if selected == "analysis" %}data-selected="true"{% endif %}>{{ "forecast.labels.analysis.01" | t }}</button>
   {% else %}
     {% if point.alerts.items|length > 0 %}
       <a role="tab"
@@ -71,5 +79,12 @@
        data-tab-name="maps"
        aria-controls="maps"
        {% if selected == "maps" %}data-selected="true"{% endif %}>{{ "forecast.labels.maps.01" | t }}</a>
+    <a role="tab"
+       id="analysis-tab-button"
+       href="{% url 'point_forecast_analysis' lat=point.point.latitude lon=point.point.longitude %}"
+       class="tab-button"
+       data-tab-name="analysis"
+       aria-controls="analysis"
+       {% if selected == "analysis" %}data-selected="true"{% endif %}>{{ "forecast.labels.analysis.01" | t }}</a>
   {% endif %}
 </div>

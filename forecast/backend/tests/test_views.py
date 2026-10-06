@@ -115,10 +115,10 @@ class TestViews(TestCase):
              "place": {"timezone": "America/New_York"},
              "point": {"latitude": 11.1, "longitude": 22.2},
              "isAlaska": False,
+             "weatherstory": [self.weather_story],
             },
         )
 
-        self.assertEqual(response.context["weather_story"], self.weather_story)
 
     @override_settings(POINT_FORECAST_HTMX=True)
     @mock.patch("backend.views.point.interop.get_point_forecast")
@@ -142,10 +142,9 @@ class TestViews(TestCase):
              "place": {"timezone": "America/New_York"},
              "point": {"latitude": 11.1, "longitude": 22.2},
              "isAlaska": False,
+             "weatherstory": [self.weather_story],
             },
         )
-
-        self.assertEqual(response.context["weather_story"], self.weather_story)
 
     @override_settings(POINT_FORECAST_HTMX=False)
     @mock.patch("backend.views.point.interop.get_point_forecast")
@@ -169,10 +168,9 @@ class TestViews(TestCase):
              "place": {"timezone": "America/Los_Angeles"},
              "point": {"latitude": 11.1, "longitude": 22.2},
              "isAlaska": True,
+             "weatherstory": [self.weather_story],
             },
         )
-
-        self.assertEqual(response.context["weather_story"], self.weather_story)
 
     @override_settings(POINT_FORECAST_HTMX=True)
     @mock.patch("backend.views.point.interop.get_point_forecast")
@@ -196,10 +194,9 @@ class TestViews(TestCase):
              "place": {"timezone": "America/Los_Angeles"},
              "point": {"latitude": 11.1, "longitude": 22.2},
              "isAlaska": True,
+             "weatherstory": [self.weather_story],
             },
         )
-
-        self.assertEqual(response.context["weather_story"], self.weather_story)
 
     def test_point_location_truncate(self):
         """Test the point location view where lat/lon needs to be truncated."""
@@ -302,6 +299,7 @@ class TestViews(TestCase):
              "place": {"timezone": "America/New_York"},
              "point": {"latitude": 11.1, "longitude": 22.2},
              "isAlaska": False,
+             "weatherstory": [self.weather_story],
             },
         )
 
@@ -327,73 +325,9 @@ class TestViews(TestCase):
              "place": {"timezone": "America/New_York"},
              "point": {"latitude": 11.1, "longitude": 22.2},
              "isAlaska": False,
+             "weatherstory": [self.weather_story],
             },
         )
-
-    @mock.patch("backend.views.point.interop.get_point_forecast")
-    def test_point_location_no_weather_story(self, mock_get_point_forecast):
-        """Test the point location view where there's no weather story available."""
-        mock_get_point_forecast.return_value = {
-            "grid": {"wfo": "TST", "type": "land", "marineType": None},
-            "place": {"timezone": "America/New_York"},
-            "weatherstory": [],
-        }
-
-        response = self.client.get("/forecast/point/11.1/22.2", follow=True)
-
-        mock_get_point_forecast.assert_called_with(11.1, 22.2)
-        self.assertEqual(mock_get_point_forecast.call_count, 2)
-
-        self.assertEqual(
-            response.context["point"],
-            {"grid": {"wfo": "TST", "type": "land", "marineType": None},
-             "wfo": self.wfo,
-             "place": {"timezone": "America/New_York"},
-             "point": {"latitude": 11.1, "longitude": 22.2},
-             "isAlaska": False,
-            },
-        )
-        expected = {"is_empty": True, "officeId": "TST", "wfo_name": "Test WFO", "wfo_url": "/about/offices/TST/"}
-        self.assertEqual(response.context["weather_story"], expected)
-        self.assertTemplateUsed("weather/partials/point-weather-storys.html")
-
-    @mock.patch("backend.views.point.interop.get_point_forecast")
-    def test_point_location_ok_weather_story(self, mock_get_point_forecast):
-        """Test the point location renders with OK weather story."""
-        weather_story = {
-            "id": "7ccab810-706b-401c-8757-71f656e56270",
-            "officeId": "TST",
-            "startTime": "2026-01-01T12:00:00+00:00",
-            "endTime": "2027-01-01T12:00:00+00:00",
-            "updateTime": "2026-01-10T12:00:00+00:00",
-            "title": "Testing the test",
-            "description": "This is a triumph. I'm making a note here: huge success",
-            "altText": "Alternative to text? Pictures!",
-            "priority": False,
-            "order": 1,
-            "image": "/public/images/wfos/TST.png",
-        }
-        mock_get_point_forecast.return_value = {
-            "grid": {"wfo": "TST", "type": "land", "marineType": None},
-            "place": {"timezone": "America/New_York"},
-            "weatherstory": [weather_story],
-        }
-
-        response = self.client.get("/forecast/point/11.1/22.2", follow=True)
-
-        mock_get_point_forecast.assert_called_with(11.1, 22.2)
-        self.assertEqual(mock_get_point_forecast.call_count, 2)
-        self.assertEqual(
-            response.context["point"],
-            {"grid": {"wfo": "TST", "type": "land", "marineType": None},
-             "wfo": self.wfo,
-             "place": {"timezone": "America/New_York"},
-             "point": {"latitude": 11.1, "longitude": 22.2},
-             "isAlaska": False,
-            },
-        )
-        self.assertEqual(response.context["weather_story"], weather_story)
-        self.assertTemplateUsed("weather/partials/point-weather-story.html")
 
     @disable_logging_for_quieter_tests
     def test_point_location_with_lat_too_high(self):
@@ -667,10 +601,10 @@ class TestViews(TestCase):
              "point": {"latitude": 30.543, "longitude": 30.123},
              "place": {"timezone": "America/New_York"},
              "isAlaska": False,
+             "weatherstory": [self.weather_story],
             },
         )
 
-        self.assertEqual(response.context["weather_story"], self.weather_story)
 
     def test_office_specific(self):
         """Test the specific-office view."""
@@ -877,7 +811,7 @@ class TestViews(TestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "weather/point/tab-containers.html")
-        self.assertTemplateUsed(response, "weather/partials/wx-loading-indicator.html", count=3)
+        self.assertTemplateUsed(response, "weather/partials/wx-loading-indicator.html", count=4)
 
     @override_settings(POINT_FORECAST_HTMX=True)
     @mock.patch("backend.views.point.interop.get_point_forecast")
@@ -894,7 +828,7 @@ class TestViews(TestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "weather/point/tab-containers.html")
-        self.assertTemplateUsed(response, "weather/partials/wx-loading-indicator.html", count=3)
+        self.assertTemplateUsed(response, "weather/partials/wx-loading-indicator.html", count=4)
 
     @override_settings(POINT_FORECAST_HTMX=True)
     @mock.patch("backend.views.point.interop.get_point_forecast")
@@ -911,7 +845,7 @@ class TestViews(TestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "weather/point/tab-containers.html")
-        self.assertTemplateUsed(response, "weather/partials/wx-loading-indicator.html", count=3)
+        self.assertTemplateUsed(response, "weather/partials/wx-loading-indicator.html", count=4)
 
     @override_settings(POINT_FORECAST_HTMX=True)
     @mock.patch("backend.views.point.interop.get_point_forecast")
@@ -928,4 +862,96 @@ class TestViews(TestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "weather/point/tab-containers.html")
-        self.assertTemplateUsed(response, "weather/partials/wx-loading-indicator.html", count=3)
+        self.assertTemplateUsed(response, "weather/partials/wx-loading-indicator.html", count=4)
+
+
+    @override_settings(POINT_FORECAST_HTMX=True)
+    @mock.patch("backend.views.point.interop.get_point_forecast")
+    def test_point_location_analysis_htmx_with_indicator(self, mock_get_point_forecast):
+        """Test that loading indicators are used for the other tabs."""
+        mock_get_point_forecast.return_value = {
+            "grid": {"wfo": "TST", "type": "land", "marineType": None },
+            "place": {"timezone": "America/New_York", "countyfips": "12347"},
+            "weatherstory": [self.weather_story],
+            "alerts": { "error": False, "items": [{}]},
+        }
+
+        response = self.client.get("/forecast/point/11.1/22.2/analysis/")
+
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "weather/point/tab-containers.html")
+        self.assertTemplateUsed(response, "weather/partials/wx-loading-indicator.html", count=4)
+
+
+    @mock.patch("backend.views.point.interop.get_point_forecast")
+    def test_point_location_analysis_ok_weather_story(self, mock_get_point_forecast):
+        """Test the point location renders with OK weather story."""
+        weather_story = {
+            "id": "7ccab810-706b-401c-8757-71f656e56270",
+            "officeId": "TST",
+            "startTime": "2026-01-01T12:00:00+00:00",
+            "endTime": "2027-01-01T12:00:00+00:00",
+            "updateTime": "2026-01-10T12:00:00+00:00",
+            "title": "Testing the test",
+            "description": "This is a triumph. I'm making a note here: huge success",
+            "altText": "Alternative to text? Pictures!",
+            "priority": False,
+            "order": 1,
+            "image": "/public/images/wfos/TST.png",
+        }
+        mock_get_point_forecast.return_value = {
+            "grid": {"wfo": "TST", "type": "land", "marineType": None},
+            "place": {"timezone": "America/New_York", "countyfips": "12347"},
+            "weatherstory": [weather_story],
+        }
+
+        response = self.client.get("/forecast/point/11.1/22.2/analysis/")
+
+        mock_get_point_forecast.assert_called_with(11.1, 22.2)
+        self.assertEqual(mock_get_point_forecast.call_count, 1)
+        self.assertEqual(
+            response.context["point"],
+            {"grid": {"wfo": "TST", "type": "land", "marineType": None},
+             "wfo": self.wfo,
+             "place": {
+                 "timezone": "America/New_York",
+                 "countyfips": "12347",
+                 "countyFullName": "Lower left County, None",
+             },
+             "point": {"latitude": 11.1, "longitude": 22.2},
+             "isAlaska": False,
+            },
+        )
+        self.assertEqual(response.context["weather_story"], weather_story)
+        self.assertTemplateUsed("weather/partials/point-weather-story.html")
+
+    @mock.patch("backend.views.point.interop.get_point_forecast")
+    def test_point_location_analysis_no_weather_story(self, mock_get_point_forecast):
+        """Test the point location view where there's no weather story available."""
+        mock_get_point_forecast.return_value = {
+            "grid": {"wfo": "TST", "type": "land", "marineType": None},
+            "place": {"timezone": "America/New_York", "countyfips": "12347"},
+            "weatherstory": [],
+        }
+
+        response = self.client.get("/forecast/point/11.1/22.2/analysis/")
+
+        mock_get_point_forecast.assert_called_with(11.1, 22.2)
+        self.assertEqual(mock_get_point_forecast.call_count, 1)
+
+        self.assertEqual(
+            response.context["point"],
+            {"grid": {"wfo": "TST", "type": "land", "marineType": None},
+             "wfo": self.wfo,
+             "place": {
+                 "timezone": "America/New_York",
+                 "countyfips": "12347",
+                 "countyFullName": "Lower left County, None",
+             },
+             "point": {"latitude": 11.1, "longitude": 22.2},
+             "isAlaska": False,
+            },
+        )
+        expected = {"is_empty": True, "officeId": "TST", "wfo_name": "Test WFO", "wfo_url": "/about/offices/TST/"}
+        self.assertEqual(response.context["weather_story"], expected)
+        self.assertTemplateUsed("weather/partials/point-weather-storys.html")
