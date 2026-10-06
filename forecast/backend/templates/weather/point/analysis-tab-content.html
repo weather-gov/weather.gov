@@ -1,0 +1,9 @@
+{% comment %}
+-- Template purpose
+--  Display the inner tab content for the analysis tab
+--  for the point forecast pages
+{% endcomment %}
+
+{% if weather_story %}
+  {% include 'weather/partials/point-weather-story.html' %}
+{% endif %}

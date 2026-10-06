@@ -316,6 +316,8 @@ msgstr "7 Days"
 
 msgid "forecast.labels.maps.01"
 msgstr "Maps"
+msgid "forecast.labels.analysis.01"
+msgstr "Analysis"
 
 msgid "forecast.labels.weather-info.01"
 msgstr "Weather information sections"
@@ -517,6 +519,9 @@ msgstr "Loading today's forecast..."
 
 msgid "loader.loading-text.maps-tab.01"
 msgstr "Loading maps..."
+
+msgid "loader.loading-text.analysis-tab.01"
+msgstr "Loading analysis..."
 
 msgid "location-search.labels.enter-city-zip.01"
 msgstr "Enter city or zip code"

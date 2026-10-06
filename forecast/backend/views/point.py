@@ -14,7 +14,7 @@ from backend import interop
 from backend.models import WFO
 from backend.util import get_weather_story_from_point_data, get_wfo_from_afd
 from backend.util.point import is_htmx_request, should_use_htmx_for_point
-from spatial.models import WeatherPlace
+from spatial.models import WeatherCounties, WeatherPlace
 
 from ._helpers import get_redirect_for_afd_queries
 
@@ -252,21 +252,11 @@ def point_location_today(request, lat, lon): # noqa: C901
     else:
         localtz = None
 
-    weather_story = {}
     if "grid" in point and "wfo" in point["grid"] and localtz:
         code = point["grid"]["wfo"]
         wfo = WFO.objects.get(code=WFO.normalize_code(code))
         point["wfo"] = wfo
         point["isAlaska"] = wfo.code.lower() in ["afc", "afg", "ajk"]
-
-        # Pull the weather story data out of the point interop response
-        # and format the timestamps / handle errors as needed.
-        weather_story = get_weather_story_from_point_data(point, wfo, localtz)
-
-        # Remove the reference to the raw weatherstory data from
-        # the point dictionary. We will pull this out a level in the render
-        # call below, into its own top level key/variable
-        del point["weatherstory"]
 
     if "update" in request.GET:
         return render(
@@ -279,7 +269,6 @@ def point_location_today(request, lat, lon): # noqa: C901
         # In this case, only render the partial needed
         # for the tab content
         markup = render_to_string("weather/point/today-tab-content.html", {
-            "weather_story": weather_story,
             **context,
         })
         return HttpResponse(markup, content_type="text/html")
@@ -291,7 +280,6 @@ def point_location_today(request, lat, lon): # noqa: C901
             request,
             "weather/point/today-with-htmx.html",
             {
-                "weather_story": weather_story,
                 **context,
             }
         )
@@ -301,7 +289,6 @@ def point_location_today(request, lat, lon): # noqa: C901
         "weather/point/today.html",
         {
             **context,
-            "weather_story": weather_story,
         },
     )
 
@@ -477,6 +464,111 @@ def point_location_maps(request, lat, lon):
             **context,
         },
     )
+
+@cache_control(max_age=120, smax_age=120, public=True)
+@decimal_redirect
+@vary_on_headers("HX-Request")
+def point_location_analysis(request, lat, lon): # noqa: C901
+    """Render the analysis tab page for the points location."""
+    use_htmx = should_use_htmx_for_point(request)
+    allow_coastal = settings.MARINE_COASTAL_EXPERIMENTAL
+
+    point = interop.get_point_forecast(lat, lon)
+    fullname = point.get("place", {}).get("fullName", None)
+
+    # Check if there was an error retrieving alerts from the cache/background process
+    alerts_error = point.get("alerts", {}).get("metadata", {}).get("error", False)
+
+    context = {
+        "point": point,
+        "alerts_error": alerts_error,
+        "title_trans_args": {"fullName": fullname},
+        "use_htmx": use_htmx,
+    }
+
+    if "status" in point and point["status"] == HTTPStatus.NOT_FOUND:
+        raise Http404(point)
+
+    # If a marine point, check if coastal is allowed, else block all marine
+    if "grid" in point and "type" in point["grid"] and point["grid"]["type"] == "marine":
+        if not (allow_coastal and point["grid"].get("marineType") == "coastal"):
+            return render(request, "errors/404/marine-point.html", context, status=404)
+
+    # If there is not latitude and longitude data in the returned
+    # point dict, we need to add it from the url params
+    if "point" not in point:
+        point["point"] = {"latitude": lat, "longitude": lon}
+    elif "latitude" not in point["point"] or "longitude" not in point["point"]:
+        point["point"]["latitude"] = lat
+        point["point"]["longitude"] = lon
+
+    # Get the local timezone for the current point place
+    # If there was an error retrieving the place API endpoint,
+    # we set to None
+    # NOTE: If we permanently remove generated timestamps
+    # from the weather stories, we can safely remove this timezone
+    # code, which is only used for that purpose currently
+    if "place" in point and "timezone" in point["place"]:
+        localtz = ZoneInfo(point["place"]["timezone"])
+    else:
+        localtz = None
+
+    # Get the full county information, including the
+    # name of the subdivision type
+    county_info = WeatherCounties.objects.filter(countyfips=point["place"]["countyfips"]).first()
+    if county_info:
+        point["place"]["countyFullName"] = county_info.label
+
+    weather_story = {}
+    if "grid" in point and "wfo" in point["grid"] and localtz:
+        code = point["grid"]["wfo"]
+        wfo = WFO.objects.get(code=WFO.normalize_code(code))
+        point["wfo"] = wfo
+        point["isAlaska"] = wfo.code.lower() in ["afc", "afg", "ajk"]
+
+        # Pull the weather story data out of the point interop response
+        # and format the timestamps / handle errors as needed.
+        weather_story = get_weather_story_from_point_data(point, wfo, localtz)
+
+        # Remove the reference to the raw weatherstory data from
+        # the point dictionary. We will pull this out a level in the render
+        # call below, into its own top level key/variable
+        del point["weatherstory"]
+
+    if is_htmx_request(request):
+        # In this case, only render the partial markup
+        # needed for the tab's content
+        markup = render_to_string(
+            "weather/point/analysis-tab-content.html",
+            {
+                "use_htmx": True,
+                "forecast": context["point"]["forecast"],
+                "weather_story": weather_story,
+                **context,
+            })
+        return HttpResponse(markup, content_type="text/html")
+
+    if use_htmx:
+        # Render the template that has the "htmx-enabled"
+        # version of the page
+        return render(
+            request,
+            "weather/point/analysis-with-htmx.html",
+            {
+                "weather_story": weather_story,
+                **context,
+            }
+        )
+
+    return render(
+        request,
+        "weather/point/analysis.html",
+        {
+            "weather_story": weather_story,
+            **context,
+        },
+    )
+
 
 @cache_control(max_age=120, smax_age=120, public=True)
 def place_forecast(request, state, place):

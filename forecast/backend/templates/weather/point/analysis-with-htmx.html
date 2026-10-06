@@ -1,26 +1,23 @@
 {% extends "weather/page.html" %}
 {% comment %}
 -- Template purpose:
---   This page displays the detailed 7 day forecast at the user's
---   point location.
--- Url: https://beta.weather.gov/forecast/point/43.156/-77.613/7-day/
+--   This page tells people the weather story and provides AFD and county
+--   page links for the given point location.
+--   NOTE: This is the "htmx enabled" version of the template, which should
+--   only be rendered when we are in htmx mode.
+--   It does _not_ serve the actual htmx content.
+-- Url: https://beta.weather.gov/forecast/point/43.156/-77.613/analysis/
 {% endcomment %}
-
 {% block head_js %}
-  <script src="{% static 'js/third-party/chartjs@4.5.1.js' %}"></script>
-  <script src="{% static 'js/third-party/chartjs-plugin-datalabels@2.2.0.js' %}"></script>
+  {% include 'weather/point/htmx-page-head-js.html' %}
 {% endblock %}
 
 {% block page_end_js %}
-  <script type="module" src="{% static 'js/point.seven-day.html.js' %}"></script>
+  {% include 'weather/point/htmx-page-end-js.html' %}
 {% endblock %}
 
 {% block page_head_css %}
-  <!-- Prefetch for other tab pages -->
-  <link rel="prefetch" href="{% url 'point_forecast_alerts' lat=point.point.latitude lon=point.point.longitude %}" />
-  <link rel="prefetch" href="{% url 'point_forecast_today' lat=point.point.latitude lon=point.point.longitude %}" />
-  <link rel="prefetch" href="{% url 'point_forecast_maps' lat=point.point.latitude lon=point.point.longitude %}" />
-  <link rel="prefetch" href="{% url 'point_forecast_analysis' lat=point.point.latitude lon=point.point.longitude %}" />
+  {% include 'weather/point/htmx-page-head-css.html' %}
 {% endblock %}
 
 {% block page_content %}
@@ -33,20 +30,21 @@
         </div>
       </div>
     {% endif %}
+
     <wx-tabbed-nav class="flex-1 display-flex flex-column position-relative" id="point-page-tabbed-nav">
       <div id="tablist-label" class="usa-sr-only">{{ "forecast.labels.weather-info.01" | t }}</div>
       <div class="position-sticky top-0 bg-white border-base-light border-top-0 border-bottom-2px margin-y-0">
         <div class="grid-container padding-x-0">
 
-          {# Include the tab buttons (or links, depending on htmx mode) #}
-          {% include 'weather/point/tabs.html' with selected="daily" %}
+          {# Include the alert tab buttons (or links, depending on htmx mode) #}
+          {% include 'weather/point/tabs.html' with selected="analysis" %}
         </div>
       </div>
 
-      {# Include the tab containers, with the daily/seven-day container populated #}
-      {% include 'weather/point/tab-containers.html' with tab_name="daily" %}
+      {# Include the tab containers and populate contents for today  #}
+      {% include 'weather/point/tab-containers.html' with tab_name="analysis" %}
     </wx-tabbed-nav>
-
+    
     <!-- Saved locations section-->
     {% include 'weather/partials/saved-locations-section.html' with type="point" mode="dark" heading="saved-locations.heading.section-main.01" %}
   </div>
