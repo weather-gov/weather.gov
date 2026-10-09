@@ -32,8 +32,14 @@ const clickHandler = (event) => {
   );
 };
 
-Array.from(
-  document.querySelectorAll(".wx-daily-forecast-quick-toggle"),
-).forEach((element) => {
-  element.addEventListener("click", clickHandler);
-});
+const initializeQuickToggles = () => {
+  document
+    .querySelectorAll(".wx-daily-forecast-quick-toggle")
+    .forEach((element) => {
+      // Reusing the same handler means addEventListener ignores duplicates.
+      element.addEventListener("click", clickHandler);
+    });
+};
+
+initializeQuickToggles();
+document.addEventListener("wx:tab-content-loaded", initializeQuickToggles);

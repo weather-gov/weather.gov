@@ -39,6 +39,7 @@ export class WeatherChartElement extends HTMLElement {
     // Bound methods
     this.drawChart = this.drawChart.bind(this);
     this.setupScrollButtons = this.setupScrollButtons.bind(this);
+    this.updateScrollButtons = this.updateScrollButtons.bind(this);
     this.handleScrollRightClick = this.handleScrollRightClick.bind(this);
     this.handleScrollLeftClick = this.handleScrollLeftClick.bind(this);
     this.scroll = this.scroll.bind(this);
@@ -50,6 +51,16 @@ export class WeatherChartElement extends HTMLElement {
     this.setupScrollButtons();
   }
 
+  disconnectedCallback() {
+    this._scrollResizeObserver?.disconnect();
+    this._scrollButtons
+      ?.querySelector('[data-direction="right"]')
+      .removeEventListener("click", this.handleScrollRightClick);
+    this._scrollButtons
+      ?.querySelector('[data-direction="left"]')
+      .removeEventListener("click", this.handleScrollLeftClick);
+  }
+
   /**
    * Search for scroll buttons in the closest common
    * ancestor to this element. If there are buttons, bind
@@ -58,6 +69,9 @@ export class WeatherChartElement extends HTMLElement {
    */
   setupScrollButtons() {
     const wrapper = this.closest(".wx-chart-wrapper");
+    if (!wrapper) {
+      return;
+    }
     const left = wrapper.querySelector(
       '.wx-scroll-button[data-direction="left"]',
     );
@@ -70,6 +84,30 @@ export class WeatherChartElement extends HTMLElement {
 
     right.addEventListener("click", this.handleScrollRightClick);
     left.addEventListener("click", this.handleScrollLeftClick);
+
+    this._scrollButtons = wrapper.querySelector(".wx-chart-scroll-controls");
+    if (!this._scrollButtons) {
+      return;
+    }
+
+    this._scrollResizeObserver = new ResizeObserver(this.updateScrollButtons);
+    this._scrollResizeObserver.observe(this);
+    const inner = this.querySelector(".wx-chart-inner");
+    if (inner) {
+      this._scrollResizeObserver.observe(inner);
+    }
+    this.updateScrollButtons();
+  }
+
+  /** Hide the entire controls row when all chart data fits in view. */
+  updateScrollButtons() {
+    if (!this._scrollButtons) {
+      return;
+    }
+    const needsScrolling =
+      this.clientWidth > 0 && this.scrollWidth > this.clientWidth;
+    this._scrollButtons.classList.toggle("display-none", !needsScrolling);
+    this._scrollButtons.classList.toggle("display-flex", needsScrolling);
   }
 
   /**

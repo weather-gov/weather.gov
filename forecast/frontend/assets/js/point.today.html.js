@@ -7,8 +7,8 @@
 import "./page.html.js";
 
 import "./localizeTimestamps.js";
-import "./radar.js";
 import "./components/saved-locations-button.js";
-import "./components/Satellite.js";
 import "./components/Accordion.js";
 import "./charts/hourly-temperature.js";
+import "./charts/hourly-pops.js";
+import "./charts/hourly-wind.js";

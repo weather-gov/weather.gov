@@ -5,12 +5,12 @@
 <div class="grid-container tablet:padding-x-2 desktop:padding-x-4 padding-x-0">
   <div class="grid-row desktop__wx-grid-gap-lg">
     {% if point.observed %}
-      <div class="desktop:grid-col-4 display-flex flex-column">
+      <div class="desktop:grid-col-12 display-flex flex-column">
         {% include "weather/partials/observations.html" with obs=point.observed %}
       </div>
     {% endif %}
     {% if point.forecast %}
-      <div class="desktop:grid-col-8 display-flex flex-column">
+      <div class="desktop:grid-col-12 display-flex flex-column">
         {% if point.forecast.days|length == 0 %}
           {% include 'weather/partials/uswds-alert.html' with level="error" body="forecast.errors.loading.01"|t %}
         {% else %}

@@ -96,7 +96,7 @@ class DailyForecast extends HTMLElement {
           state.quickForecastItem?.id,
         );
         if (quickForecastItem) {
-          quickForecastItem.click();
+          this.selectDay(quickForecastItem);
           firstItemSelected = true;
         }
 
@@ -127,7 +127,7 @@ class DailyForecast extends HTMLElement {
     // We should probably be setting this state by default from the
     // template side TODO
     if (!firstItemSelected) {
-      this.querySelector(".wx-quick-forecast-item:first-child").click();
+      this.selectDay(this.querySelector(".wx-quick-forecast-item:first-child"));
     }
   }
 
@@ -281,26 +281,37 @@ class DailyForecast extends HTMLElement {
    */
   tabClickHandler(event) {
     event.preventDefault();
-    if (event.target.getAttribute("aria-selected") !== "true") {
-      Array.from(this.querySelectorAll(".wx-quick-forecast-item")).forEach(
-        (item) => item.setAttribute("aria-selected", "false"),
-      );
-      event.target.setAttribute("aria-selected", "true");
+    this.selectDay(event.currentTarget);
+  }
+
+  /**
+   * Select a day without clicking its anchor or changing the URL.
+   * Match links to panels by order, since mobile links have no aria-controls.
+   */
+  selectDay(quickForecastItem) {
+    const items = Array.from(this.querySelectorAll(".wx-quick-forecast-item"));
+    const panels = Array.from(
+      this.querySelectorAll(".wx-daily-forecast-list-item-inner"),
+    );
+    const correspondingPanel = panels[items.indexOf(quickForecastItem)];
+    if (!correspondingPanel) {
+      return;
+    }
+
+    if (quickForecastItem.getAttribute("aria-selected") !== "true") {
+      items.forEach((item) => item.setAttribute("aria-selected", "false"));
+      quickForecastItem.setAttribute("aria-selected", "true");
 
       // Update panel data attributes, used for showing/hiding
       // the tabs
-      Array.from(
-        this.forecastList.querySelectorAll(
-          ".wx-daily-forecast-list-item-inner",
-        ),
-      ).forEach((item) => item.setAttribute("data-tabpanel-active", "false"));
-      const correspondingPanelId = event.target.getAttribute("aria-controls");
-      const correspondingPanel = document.getElementById(correspondingPanelId);
+      panels.forEach((item) =>
+        item.setAttribute("data-tabpanel-active", "false"),
+      );
       correspondingPanel.setAttribute("data-tabpanel-active", "true");
 
       // Serialize the change in state, for tab-page views
       if (this.getAttribute("cache") === "true") {
-        const id = event.target.id;
+        const id = quickForecastItem.id;
         this.setCachedStateItem("quickForecastItem", { id });
       }
     }

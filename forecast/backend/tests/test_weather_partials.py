@@ -312,6 +312,10 @@ class TestWeatherPartials(TestCase):
                 "times": "hour list",
                 "temps": "some degrees",
                 "feelsLike": "other degrees",
+                "pops": "precipitation percentages",
+                "windSpeeds": "wind speeds",
+                "windGusts": "wind gusts",
+                "windDirections": "wind directions",
             },
         }
         actual = weather_partials.daily_summary_list_item(day=day, lat=11.1, lon=22.2)
@@ -325,6 +329,10 @@ class TestWeatherPartials(TestCase):
                 "times": "hour list",
                 "temps": "some degrees",
                 "feelsLike": "other degrees",
+                "pops": "precipitation percentages",
+                "windSpeeds": "wind speeds",
+                "windGusts": "wind gusts",
+                "windDirections": "wind directions",
                 "lat": 11.1,
                 "lon": 22.2,
             },
