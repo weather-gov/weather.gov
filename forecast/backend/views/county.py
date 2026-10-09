@@ -130,7 +130,7 @@ def county_overview(request, countyfips=None, county_slug=None):  # noqa: C901
     # with the county. This seems to manifest in the data
     # as multiple CWAS, each corresponding to a different WFO
     # (in cases where the county has multiple WFOs)
-    wfo_codes = [wfo for wfo in county_data["county"]["wfos"]]
+    wfo_codes = list(dict.fromkeys(WFO.normalize_code(wfo) for wfo in county_data["county"]["wfos"]))
     relevant_wfos = WFO.objects.filter(code__in=wfo_codes)
     briefings = get_briefings_from_county_data(county_data, relevant_wfos, localtz)
 
