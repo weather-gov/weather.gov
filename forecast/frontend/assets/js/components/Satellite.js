@@ -6,6 +6,7 @@ class SatelliteVideo extends HTMLElement {
     this.handlePlay = this.handlePlay.bind(this);
     this.handlePause = this.handlePause.bind(this);
     this.handleEnded = this.handleEnded.bind(this);
+    this.handleError = this.handleError.bind(this);
   }
 
   #state = {
@@ -25,7 +26,10 @@ class SatelliteVideo extends HTMLElement {
     const isAlaska = this.getAttribute("isAlaska") === "True";
     const timezone = this.getAttribute("timezone");
 
-    if (!wfo || this.#state.failed) return;
+    if (!wfo || this.#state.failed) {
+      this.renderError();
+      return;
+    }
 
     try {
       // If Alaska, use the sector satellite view
@@ -148,6 +152,7 @@ class SatelliteVideo extends HTMLElement {
       this.video.addEventListener("play", this.handlePlay);
       this.video.addEventListener("pause", this.handlePause);
       this.video.addEventListener("ended", this.handleEnded);
+      this.video.addEventListener("error", this.handleError);
     }
 
     this.loader?.classList.add("display-none");
@@ -183,7 +188,13 @@ class SatelliteVideo extends HTMLElement {
       this.video.removeEventListener("play", this.handlePlay);
       this.video.removeEventListener("pause", this.handlePause);
       this.video.removeEventListener("ended", this.handleEnded);
+      this.video.removeEventListener("error", this.handleError);
     }
+  }
+
+  handleError() {
+    this.#state.failed = true;
+    this.renderError();
   }
 
   handlePlay() {

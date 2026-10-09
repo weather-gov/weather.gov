@@ -86,10 +86,13 @@ class WFO(ClusterableModel):
 
     @staticmethod
     def normalize_code(code):
-        """Return the WFO code normalized for Alaska edge cases."""
+        """Return the WFO code with forecast domains mapped to their parent office."""
         anchorage_alternates = ["ALU", "AER"]
+        guam_alternates = ["PQW", "PQE"]
         if code.upper() in anchorage_alternates:
             return "AFC"
+        if code.upper() in guam_alternates:
+            return "GUM"
         return code.upper()
 
     @property
