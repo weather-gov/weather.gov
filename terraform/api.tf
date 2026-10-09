@@ -50,7 +50,7 @@ resource "cloudfoundry_app" "interop" {
     GHWO_URL                    = var.ghwo_url
     API_KEY                     = var.api_key
     OPTIMIZE_MEMORY             = true
-    DISABLE_REDIS               = var.cf_space_name == "test"
+    DISABLE_REDIS               = var.cf_space_name == "test" || var.cf_space_name == "staging"
     PROXY_STANDALONE            = var.cf_space_name == "test"
     INTERNAL_GRIDPOINT_LOOKUP   = var.internal_gridpoint_lookup
     MARINE_COASTAL_EXPERIMENTAL = var.marine_coastal_experimental
