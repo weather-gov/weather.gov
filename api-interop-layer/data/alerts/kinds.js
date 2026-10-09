@@ -157,7 +157,7 @@ const alertTypes = new Map([
     "storm surge warning",
     {
       level: ALERT_LEVEL.WARNING,
-      kind: ALERT_KIND.MARINE,
+      kind: ALERT_KIND.LAND,
       priority: 16384,
     },
   ],
@@ -445,7 +445,7 @@ const alertTypes = new Map([
     "storm surge watch",
     {
       level: ALERT_LEVEL.WATCH,
-      kind: ALERT_KIND.MARINE,
+      kind: ALERT_KIND.LAND,
       priority: 53248,
     },
   ],
