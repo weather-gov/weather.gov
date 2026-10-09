@@ -431,12 +431,14 @@ class TestCountyViews(TestCase):
         """Test the overview view."""
         response = self.client.get(reverse("county_overview", kwargs={"countyfips": "99999"}))
         self.assertEqual(response.status_code, 404)
+        self.assertTemplateUsed(response, "errors/404/county-error.html")
 
     @disable_logging_for_quieter_tests
     def test_name_state_overview_404(self):
         """Test the overview view with county name, state."""
         response = self.client.get(reverse("county_state_overview", kwargs={"county_slug": "abc-xy"}))
         self.assertEqual(response.status_code, 404)
+        self.assertTemplateUsed(response, "errors/404/county-error.html")
 
     @disable_logging_for_quieter_tests
     @mock.patch("backend.interop.get_county_data")
