@@ -1398,8 +1398,6 @@ msgstr "Page Not Available"
 msgid "error.500.alerts.headline.01"
 msgstr "Alerts Data Not Available"
 
-
-
 msgid "error.500.risks.headline.01"
 msgstr "Seven-day Weather Risk Overview Not Available"
 
@@ -1423,6 +1421,12 @@ msgstr "404: The requested page was not found."
 
 msgid "error.404.deprecated-path.h1.01"
 msgstr "404: Page not found."
+
+msgid "error.404.county.headline.01"
+msgstr "County Not Found"
+
+msgid "error.404.county.message.01"
+msgstr "Please <a href=\"https://beta.weather.gov/forecast/county/\" class=\"usa-link\">search for your county</a> again."
 
 msgid "error.404.deprecated-path.message.01"
 msgstr "You're trying to visit an outdated URL. Please visit <a href='/' class='usa-link'>beta.weather.gov</a> and search for your location again. We're sorry for the inconvenience."

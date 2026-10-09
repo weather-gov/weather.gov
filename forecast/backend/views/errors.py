@@ -17,6 +17,17 @@ def handle_404(request, exception=None):
     """Handle 404 errors."""
     context = {}
 
+    # If the incoming path is one of the county routes,
+    # we will display a custom 404 template for those
+    # pages.
+    if request.path.startswith("/forecast/county"):
+        return render(
+            request,
+            "errors/404/county-error.html",
+            context=context,
+            status=404,
+        )
+
     # If there were arguments passed into the 404 exception, there might be
     # information in there that helps us deliver a more targeted error page.
     if exception and len(exception.args) > 0:
