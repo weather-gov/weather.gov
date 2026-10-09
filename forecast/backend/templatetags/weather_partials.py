@@ -174,9 +174,12 @@ def daily_summary_list_item(**kwargs):
         "times": day["hourly"]["times"],
         "temps": day["hourly"]["temps"],
         "feelsLike": day["hourly"]["feelsLike"],
+        "pops": day["hourly"]["pops"],
+        "windSpeeds": day["hourly"]["windSpeeds"],
+        "windGusts": day["hourly"]["windGusts"],
+        "windDirections": day["hourly"]["windDirections"],
         "lat": kwargs.get("lat", None),
         "lon": kwargs.get("lon", None),
-
     }
 
 

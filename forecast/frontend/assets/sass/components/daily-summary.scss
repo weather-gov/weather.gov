@@ -35,17 +35,38 @@
   }
 }
 
-@include at-media("desktop") {
-  .wx-daily-forecast-summary-area--overnight,
+@include at-media("tablet") {
   .wx-daily-forecast-summary-area--other {
     margin-bottom: units(1);
 
     @include grid-col(6);
   }
 
+  .wx-daily-forecast-summary-area--overnight {
+    margin-bottom: units(2);
+    padding-bottom: units(2);
+    border-bottom: 1px solid color("base-lighter");
+  }
+
   .wx-daily-forecast-summary-area--daytime {
     margin-bottom: units(1);
+    border-right: 1px solid color("base-lighter");
 
     @include grid-col(6);
+  }
+}
+
+@include at-media("tablet-lg") {
+  .wx-daily-forecast-summary-periods--with-overnight {
+    > .wx-daily-forecast-summary-area {
+      margin-bottom: units(1);
+
+      @include grid-col(4);
+    }
+
+    .wx-daily-forecast-summary-area--overnight {
+      border-bottom: 0;
+      border-right: 1px solid color("base-lighter");
+    }
   }
 }

@@ -109,6 +109,8 @@ class HourlyWindChart extends WeatherChartElement {
   }
 
   getConfig() {
+    const hideYAxis = this.dataset.hideYAxis === "true";
+
     return {
       type: "line",
       plugins: [
@@ -158,6 +160,7 @@ class HourlyWindChart extends WeatherChartElement {
                 }
                 return styles.colors.baseLightest;
               }),
+              display: !hideYAxis,
             },
           },
           y: {
@@ -172,6 +175,7 @@ class HourlyWindChart extends WeatherChartElement {
               maxTicksLimit: 6,
               callback: (v) => `${v} mph`,
             },
+            display: !hideYAxis,
           },
         },
       },

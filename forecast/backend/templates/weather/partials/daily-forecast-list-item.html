@@ -70,6 +70,9 @@
                       {% trans_with_args "daily-forecast.text.chance-precip.02" percent=period.data.probabilityOfPrecipitation.hourlyMax %}
                     </p>
                   {% endif %}
+                  {% if period.data.narrativeText %}
+                    <p class="daily-short-forecast font-body-xs margin-top-2px margin-bottom-0">{{ period.data.narrativeText }}</p>
+                  {% endif %}
                 </div>
               </div>
             </div>

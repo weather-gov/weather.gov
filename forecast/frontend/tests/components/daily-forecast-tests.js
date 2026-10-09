@@ -18,7 +18,7 @@ before(async () => {
   // This component uses the window.matchMedia capability
   // so we need to stub it out
   window.matchMedia = stub();
-  window.matchMedia.returns(document.createElement("div"));
+  window.matchMedia.returns({ matches: true, addEventListener: stub() });
 });
 
 describe("DailyForecast.js component tests", () => {
@@ -113,7 +113,7 @@ describe("DailyForecast.js component tests", () => {
 
       component.loadCachedState();
 
-      expect(firstItem.click.callCount).to.equal(1);
+      expect(firstItem.click.callCount).to.equal(0);
       expect(firstItem.getAttribute("aria-selected")).to.equal("true");
     });
 
@@ -233,6 +233,97 @@ describe("DailyForecast.js component tests", () => {
 
     afterEach(() => {
       sandbox.restore();
+    });
+  });
+
+  describe("Initialization without anchor navigation", () => {
+    const markup = `<wx-daily-forecast cache="true">
+      <nav class="wx-quick-forecast">
+        <a class="wx-quick-forecast-item" href="#day1" id="day1-link"><span>Today</span></a>
+        <a class="wx-quick-forecast-item" href="#day2" id="day2-link"><span>Tomorrow</span></a>
+      </nav>
+      <ol class="wx-forecast-list">
+        <li><div class="wx-daily-forecast-list-item-inner" id="day1-inner"></div></li>
+        <li><div class="wx-daily-forecast-list-item-inner" id="day2-inner"></div></li>
+      </ol>
+    </wx-daily-forecast>`;
+
+    afterEach(() => {
+      document.body.innerHTML = "";
+      sandbox.restore();
+      window.matchMedia.returns({ matches: true, addEventListener: stub() });
+    });
+
+    for (const desktop of [true, false]) {
+      for (const cached of [true, false]) {
+        it(`selects the ${cached ? "cached" : "first"} day on ${desktop ? "desktop" : "mobile"} without clicking an anchor`, () => {
+          window.matchMedia.returns({
+            matches: desktop,
+            addEventListener: stub(),
+          });
+          const container = document.createElement("div");
+          container.innerHTML = markup;
+          const component = container.querySelector("wx-daily-forecast");
+          const links = Array.from(component.querySelectorAll("a"));
+          const clicks = links.map((link) => sandbox.spy(link, "click"));
+          sandbox
+            .stub(component, "getCachedState")
+            .returns(
+              cached ? { quickForecastItem: { id: "day2-link" } } : null,
+            );
+          sandbox.stub(component, "setCachedStateItem");
+          const initialUrl = window.location.href;
+
+          document.body.replaceChildren(component);
+
+          const selectedIndex = cached ? 1 : 0;
+          links.forEach((link, index) => {
+            expect(clicks[index].callCount).to.equal(0);
+            expect(link.getAttribute("aria-selected")).to.equal(
+              String(index === selectedIndex),
+            );
+            expect(
+              component
+                .querySelector(`#day${index + 1}-inner`)
+                .getAttribute("data-tabpanel-active"),
+            ).to.equal(String(index === selectedIndex));
+          });
+          expect(window.location.href).to.equal(initialUrl);
+
+          // A mobile selection must still be active after resizing to desktop.
+          component.desktopQuery.matches = true;
+          component.handleDesktopMediaChange();
+          expect(links[selectedIndex].getAttribute("aria-selected")).to.equal(
+            "true",
+          );
+          expect(
+            component
+              .querySelector(`#day${selectedIndex + 1}-inner`)
+              .getAttribute("data-tabpanel-active"),
+          ).to.equal("true");
+          expect(window.location.href).to.equal(initialUrl);
+        });
+      }
+    }
+
+    it("selects the clicked day when a desktop link's child is clicked", () => {
+      document.body.innerHTML = markup;
+      const component = document.querySelector("wx-daily-forecast");
+      const link = component.querySelector("#day2-link");
+      const event = new window.MouseEvent("click", {
+        bubbles: true,
+        cancelable: true,
+      });
+
+      link.querySelector("span").dispatchEvent(event);
+
+      expect(event.defaultPrevented).to.equal(true);
+      expect(link.getAttribute("aria-selected")).to.equal("true");
+      expect(
+        component
+          .querySelector("#day2-inner")
+          .getAttribute("data-tabpanel-active"),
+      ).to.equal("true");
     });
   });
 });

@@ -21,6 +21,7 @@ class HourlyPopsChart extends WeatherChartElement {
   }
 
   getConfig() {
+    const hideYAxis = this.dataset.hideYAxis === "true";
     return {
       type: "bar",
 
@@ -49,7 +50,7 @@ class HourlyPopsChart extends WeatherChartElement {
               maxRotation: 0,
               color: styles.colors.base,
             },
-            grid: { display: false },
+            grid: { display: !hideYAxis },
           },
           y: {
             min: 0,
@@ -60,6 +61,7 @@ class HourlyPopsChart extends WeatherChartElement {
               maxTicksLimit: 6,
               callback: (v) => `${v}%`,
             },
+            display: !hideYAxis,
           },
         },
         layout: {

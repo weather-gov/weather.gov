@@ -91,6 +91,7 @@ export default (data, { timezone }) => {
       data: convertProperties({
         icon: parseAPIIcon(period.icon),
         description: sentenceCase(period.shortForecast),
+        narrativeText: period.detailedForecast,
         temperature: {
           unitCode: "wmoUnit:degF",
           value: period.temperature,
