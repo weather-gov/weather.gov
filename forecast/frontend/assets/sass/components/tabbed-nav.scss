@@ -75,6 +75,50 @@ wx-tabbed-nav {
   z-index: var(--point-page-tablist-area-z-index);
 }
 
+#point-page-tabbed-nav[data-tabs-scroll-left] > div.position-sticky::before,
+#point-page-tabbed-nav[data-tabs-scroll-right] > div.position-sticky::after {
+  content: "";
+  position: absolute;
+  z-index: calc(var(--point-page-tablist-area-z-index) + 1);
+  top: 0;
+  height: 100%;
+  width: units(2);
+  pointer-events: none;
+  background-repeat: no-repeat;
+}
+
+#point-page-tabbed-nav[data-tabs-scroll-left] > div.position-sticky {
+  &::before {
+    left: 0;
+    background-size: 100%;
+    background-image: linear-gradient(90deg, rgba(0 0 0 / 20%), transparent);
+  }
+}
+
+#point-page-tabbed-nav[data-tabs-scroll-right] > div.position-sticky {
+  &::after {
+    right: 0;
+    background-size: 100%;
+    background-image: linear-gradient(270deg, rgba(0 0 0 / 20%), transparent);
+  }
+}
+
+#point-page-tablist {
+  overflow-x: auto;
+  flex-wrap: nowrap;
+
+  // Keep the selected tab's negative bottom margin inside the scroll area.
+  padding-bottom: 2px;
+
+  .tab-button {
+    flex-shrink: 0;
+  }
+}
+
+.point-tab-button {
+  min-width: 88px;
+}
+
 #state-page-tabbed-nav > div.position-sticky {
   z-index: var(--point-page-tablist-area-z-index);
 }

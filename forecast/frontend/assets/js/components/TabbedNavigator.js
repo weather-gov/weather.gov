@@ -9,9 +9,25 @@ class TabbedNavigator extends HTMLElement {
     this.switchToTab = this.switchToTab.bind(this);
     this.scrollToAccordion = this.scrollToAccordion.bind(this);
     this.navigateAlertAnchor = this.navigateAlertAnchor.bind(this);
+    this.updateTabScrollState = this.updateTabScrollState.bind(this);
   }
 
   connectedCallback() {
+    const pointTablist = this.querySelector("#point-page-tablist");
+    if (pointTablist) {
+      // Capture scroll events because they do not bubble.
+      this.addEventListener("scroll", this.updateTabScrollState, true);
+      this.tablistResizeObserver = new ResizeObserver(
+        this.updateTabScrollState,
+      );
+      this.tablistResizeObserver.observe(this);
+      this.tablistResizeObserver.observe(pointTablist);
+      pointTablist.querySelectorAll(".tab-button").forEach((tab) => {
+        this.tablistResizeObserver.observe(tab);
+      });
+      this.updateTabScrollState();
+    }
+
     // If no tabs are selected by default, then select the first one
     const selected = Array.from(
       this.querySelectorAll(".tab-button[data-selected]"),
@@ -40,11 +56,29 @@ class TabbedNavigator extends HTMLElement {
   }
 
   disconnectedCallback() {
+    this.tablistResizeObserver?.disconnect();
+    this.removeEventListener("scroll", this.updateTabScrollState, true);
+
     // Remove any event listeners
     Array.from(this.querySelectorAll("button.tab-button")).forEach((button) => {
       button.removeEventListener("click", this.handleTabButtonClick);
       button.removeEventListener("keydown", this.handleTabListKeydown);
     });
+  }
+
+  updateTabScrollState() {
+    const tablist = this.querySelector("#point-page-tablist");
+    const maxScroll = tablist ? tablist.scrollWidth - tablist.clientWidth : 0;
+    this.toggleAttribute("data-tabs-overflow", maxScroll > 0);
+    this.toggleAttribute(
+      "data-tabs-scroll-left",
+      maxScroll > 0 && tablist.scrollLeft > 0,
+    );
+    // Allow for fractional scroll positions at the right edge.
+    this.toggleAttribute(
+      "data-tabs-scroll-right",
+      maxScroll > 0 && maxScroll - tablist.scrollLeft > 1,
+    );
   }
 
   navigateWithInitialHash() {
