@@ -11,12 +11,13 @@ const prefersReducedMotion = window.matchMedia?.(
 let scrollBracket = 0;
 let bottomY = 0;
 let hideThreshold = window.innerHeight * 1.75;
-let minScrollThreshold = window.innerHeight * 1.5;
+// Show after scrolling up a 1/5 of a viewport.
+let minScrollThreshold = window.innerHeight * 0.2;
 let protectedArea = false;
 
 window.addEventListener("resize", () => {
   hideThreshold = window.innerHeight * 1.75;
-  minScrollThreshold = window.innerHeight * 1.5;
+  minScrollThreshold = window.innerHeight * 0.2;
 });
 
 window.addEventListener(
