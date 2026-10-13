@@ -1,5 +1,5 @@
 export default (observation) => {
-  if (observation.error) {
+  if (!observation || observation.error) {
     return false;
   }
 

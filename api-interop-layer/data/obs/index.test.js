@@ -666,4 +666,44 @@ describe("observations module", () => {
 
     expect(obs).to.eql(expected);
   });
+
+  it("uses the pacific station list for PQW/PQE grids", async () => {
+    connectionPool.request
+      .withArgs(sinon.match({ path: `/stations/PTRO/observations?limit=50` }))
+      .resolves({
+        statusCode: 200,
+        headers: { "content-type": "application/json" },
+        body: {
+          text: sandbox.stub().resolves(
+            JSON.stringify({
+              features: [
+                {
+                  properties: {
+                    timestamp: new Date().toISOString(),
+                    temperature: { value: 28, unitCode: "wmoUnit:degC" },
+                  },
+                },
+              ],
+            }),
+          ),
+          dump: sandbox.stub().resolves(),
+        },
+      });
+
+    global.test.database.query
+      .withArgs(sinon.match(/unnest/))
+      .resolves({ rows: [{ idx: 1 }] });
+
+    const expected = { degC: 28, degF: 82 };
+
+    const obs = await getObservations(
+      {
+        grid: { wfo: "PQW", x: 1, y: 1 },
+        point: { latitude: 7.341, longitude: 134.479 },
+      },
+      global.test.database,
+    );
+
+    expect(obs.data.temperature).to.eql(expected);
+  });
 });
