@@ -6,6 +6,7 @@ class TabbedNavigator extends HTMLElement {
     this.handleAlertAnchorClick = this.handleAlertAnchorClick.bind(this);
     this.handleDescendantClick = this.handleDescendantClick.bind(this);
     this.handleTabButtonClick = this.handleTabButtonClick.bind(this);
+    this.handlePopState = this.handlePopState.bind(this);
     this.switchToTab = this.switchToTab.bind(this);
     this.scrollToAccordion = this.scrollToAccordion.bind(this);
     this.navigateAlertAnchor = this.navigateAlertAnchor.bind(this);
@@ -47,6 +48,7 @@ class TabbedNavigator extends HTMLElement {
     // Intercept click events on Alert spans that are in tab
     // containers controlled by this component
     this.addEventListener("click", this.handleDescendantClick);
+    window.addEventListener("popstate", this.handlePopState);
 
     // Add needed event listeners
     Array.from(this.querySelectorAll("button.tab-button")).forEach((button) => {
@@ -58,6 +60,7 @@ class TabbedNavigator extends HTMLElement {
   disconnectedCallback() {
     this.tablistResizeObserver?.disconnect();
     this.removeEventListener("scroll", this.updateTabScrollState, true);
+    window.removeEventListener("popstate", this.handlePopState);
 
     // Remove any event listeners
     Array.from(this.querySelectorAll("button.tab-button")).forEach((button) => {
@@ -151,10 +154,26 @@ class TabbedNavigator extends HTMLElement {
   }
 
   handleTabButtonClick(event) {
-    this.switchToTab(event.target.dataset.tabName);
+    const tabButton = event.currentTarget;
+    this.switchToTab(tabButton.dataset.tabName);
     // Since this was an actual click, update the hash
-    // of the site to the tab button's id
-    window.history.replaceState(null, null, `${event.target.dataset.url}`);
+    // of the site to the tab button's id and push it into the browser history
+    window.history.pushState(null, null, tabButton.dataset.url);
+  }
+
+  handlePopState() {
+    const currentPath = window.location.pathname;
+    const matchingTab = Array.from(
+      this.querySelectorAll(".tab-button[data-url]"),
+    ).find((tabButton) => {
+      const tabUrl = new URL(tabButton.dataset.url, window.location.origin);
+      return tabUrl.pathname === currentPath;
+    });
+
+    if (matchingTab) {
+      this.switchToTab(matchingTab.dataset.tabName);
+      matchingTab.focus({ preventScroll: true });
+    }
   }
 
   /**
@@ -199,7 +218,7 @@ class TabbedNavigator extends HTMLElement {
   }
 
   handleAlertAnchorClick(event) {
-    event.prevendDefault();
+    event.preventDefault();
     this.navigateAlertAnchor(event.currentTarget);
   }
 
