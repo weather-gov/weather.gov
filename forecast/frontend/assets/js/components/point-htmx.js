@@ -20,6 +20,7 @@ document.addEventListener("DOMContentLoaded", () => {
             detail: { tabId: swapEl.id },
           }),
         );
+        return;
       } else if (errorTargetSelector) {
         // We have encountered some kind of error.
         // Find the error template element on the page and
@@ -30,6 +31,14 @@ document.addEventListener("DOMContentLoaded", () => {
           swapEl[method] = errorTarget.innerHTML;
         }
       }
+
+      // If we get here, the response wasn't ok or there was an error.
+      // Let's dispatch that as an event for the time being
+      document.dispatchEvent(
+        new CustomEvent("wx:tab-content-error", {
+          detail: { tabId: swapEl.id, status: response.status },
+        }),
+      );
     },
   );
 });
