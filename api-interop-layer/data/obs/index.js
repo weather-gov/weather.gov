@@ -7,6 +7,12 @@ import { parseAPIIcon } from "../../util/icon.js";
 import { logger } from "../../util/monitoring/index.js";
 import isObservationValid from "./valid.js";
 import {
+  PACIFIC_STATION_OBSERVATIONS,
+  PACIFIC_STATION_WFOS,
+  fetchNearestStations,
+  newestValidObservation,
+} from "./pacificStations.js";
+import {
   updateStoreUrl,
   API_TIMINGS_METADATA,
 } from "../../util/performance.js";
@@ -59,12 +65,12 @@ const fetchStations = async (wfo, x, y) => {
   }
 };
 
-const urlFromStation = (station) => {
-  return `/stations/${station.properties.stationIdentifier}/observations?limit=1`;
+const urlFromStation = (station, { limit = 1 } = {}) => {
+  return `/stations/${station.properties.stationIdentifier}/observations?limit=${limit}`;
 };
 
-const fetchObservation = async (station) => {
-  const url = urlFromStation(station);
+const fetchObservation = async (station, options = {}) => {
+  const url = urlFromStation(station, options);
 
   const foundInCache = await getFromRedis(url);
   if (foundInCache) {
@@ -82,12 +88,20 @@ const fetchObservation = async (station) => {
       return { error: true, message: "No valid observations found." };
     }
 
+    const observation = options.maxAge
+      ? newestValidObservation(data.features, options.maxAge)
+      : data.features[0].properties;
+
+    if (!observation) {
+      return { error: true, message: "No valid observations found." };
+    }
+
     // Attempt to cache the result according to the
     // TTL given by the header
     const ttl = parseTTLFromHeaders(headers, DEFAULT_OBSERVATIONS_CACHE_TTL);
-    await saveToRedis(url, data.features[0].properties, ttl);
+    await saveToRedis(url, observation, ttl);
 
-    return data.features[0].properties;
+    return observation;
   } catch (e) {
     observationsLogger.error(
       { err: e, station: station.properties.stationIdentifier },
@@ -108,7 +122,12 @@ export default async (
   { grid: { wfo, x, y }, point: { latitude, longitude } },
   db,
 ) => {
-  const stations = await fetchStations(wfo, x, y);
+  const isPacific = PACIFIC_STATION_WFOS.includes(wfo);
+  const obsOptions = isPacific ? PACIFIC_STATION_OBSERVATIONS : {};
+
+  const stations = isPacific
+    ? await fetchNearestStations({ latitude, longitude }, db)
+    : await fetchStations(wfo, x, y);
 
   if (stations.error) {
     observationsLogger.warn(
@@ -128,9 +147,11 @@ export default async (
 
   let station = stations.shift();
 
-  const others = stations.map((station) => fetchObservation(station));
+  const others = stations.map((station) =>
+    fetchObservation(station, obsOptions),
+  );
 
-  let observation = await fetchObservation(station);
+  let observation = await fetchObservation(station, obsOptions);
 
   if (!isObservationValid(observation)) {
     observationsLogger.warn(
@@ -139,7 +160,7 @@ export default async (
     );
 
     if (API_TIMINGS_METADATA) {
-      updateStoreUrl(urlFromStation(station), (entry) => {
+      updateStoreUrl(urlFromStation(station, obsOptions), (entry) => {
         if (entry) {
           entry.awaited = true;
           entry.obsIndex = 0;
@@ -189,7 +210,7 @@ export default async (
     }
   } else {
     if (API_TIMINGS_METADATA) {
-      updateStoreUrl(urlFromStation(station), (timingData) => {
+      updateStoreUrl(urlFromStation(station, obsOptions), (timingData) => {
         if (timingData) {
           timingData.awaited = true;
           ((timingData.obsIndex = 0), (timingData.validObs = true));
