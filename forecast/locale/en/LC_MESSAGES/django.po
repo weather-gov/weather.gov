@@ -901,11 +901,6 @@ msgstr "%(fullName)s Forecast"
 msgid "site.meta.description.point_forecast_maps"
 msgstr "%(fullName)s Forecast"
 
-msgid "site.meta.titles.place_forecast"
-msgstr "%(fullName)s Forecast"
-msgid "site.meta.description.place_forecast"
-msgstr "%(fullName)s Forecast"
-
 msgid "site.meta.titles.office"
 msgstr "%(wfo)s Weather Forecasting Office"
 msgid "site.meta.description.office"
@@ -984,6 +979,11 @@ msgstr "View and download all available National Weather Service area forecast d
 msgid "site.meta.titles.deprecated_office"
 msgstr "Error: Page Not Found"
 msgid "site.meta.description.deprecated_office"
+msgstr "Visit beta.weather.gov for the latest NWS forecast for your area."
+
+msgid "site.meta.titles.deprecated_place"
+msgstr "Error: Page Not Found"
+msgid "site.meta.description.deprecated_place"
 msgstr "Visit beta.weather.gov for the latest NWS forecast for your area."
 
 msgid "site.meta.titles.deprecated_point"
