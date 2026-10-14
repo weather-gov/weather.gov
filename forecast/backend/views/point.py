@@ -14,7 +14,7 @@ from backend import interop
 from backend.models import WFO
 from backend.util import get_weather_story_from_point_data, get_wfo_from_afd
 from backend.util.point import is_htmx_request, should_use_htmx_for_point
-from spatial.models import WeatherCounties, WeatherPlace
+from spatial.models import WeatherCounties
 
 from ._helpers import get_redirect_for_afd_queries
 
@@ -568,49 +568,6 @@ def point_location_analysis(request, lat, lon): # noqa: C901
             **context,
         },
     )
-
-
-@cache_control(max_age=120, smax_age=120, public=True)
-def place_forecast(request, state, place):
-    """Render the forecast for a given state and place name."""
-    # De-normalize the place name. For the purposes of clean URLs, we
-    # replace spaces with underscores and slahes with commas in place names.
-    # There are no places with underscores or commas in their names as of
-    # the time of this comment. We need the de-normalized name in order to
-    # our query.
-    denormalized_place = place.replace("_", " ").replace(",", "/")
-
-    known_place = WeatherPlace.objects.filter(
-        state__iexact=state,
-        name__iexact=denormalized_place,
-    ).first()
-
-    # If this is a place we know about...
-    if known_place is not None:
-        # If the requested place name has a space or slash in it, then we need
-        # to redirect them to a normalized URL.
-        normalize_redirect = " " in place or "/" in place
-
-        # If the input name is not normalized, or if the input state or name
-        # do not exactly match the known place, redirect to the normalized URL
-        do_redirect = normalize_redirect or known_place.state != state or known_place.name != denormalized_place
-
-        if do_redirect:
-            # Get the expected place name from the model so the capitalization
-            # and whatnot are correct, then normalized. And keep the state from
-            # the model.
-            place = known_place.name.replace(" ", "_").replace("/", ",")
-            return redirect(f"/place/{known_place.state}/{place}/")
-
-        # If we don't need to redirect, then just show them their forecast based
-        # on the location of the place. Round lat and lon to 3 decimal places first.
-        lat = float(f"{known_place.point.y:.3f}")
-        lon = float(f"{known_place.point.x:.3f}")
-
-        return point_location(request, lat, lon)
-
-    # If it's not a place we know, 404.
-    raise Http404()
 
 
 def afd_index(request):

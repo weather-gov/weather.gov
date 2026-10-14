@@ -85,7 +85,6 @@ urlpatterns = [
     path("forecast/point/<float:lat>/<float:lon>/maps/", point.point_location_maps, name="point_forecast_maps"),
     path("forecast/point/<float:lat>/<float:lon>/analysis/",
          point.point_location_analysis, name="point_forecast_analysis"),
-    path("place/<statecode:state>/<placename:place>/", point.place_forecast, name="place_forecast"),
     path("health/", index.health, name="health"),
     path("llms.txt", TemplateView.as_view(template_name="llms.txt", content_type="text/plain")),
     path("robots.txt", TemplateView.as_view(template_name="robots.txt", content_type="text/plain")),
@@ -93,6 +92,7 @@ urlpatterns = [
     path("offices/<wfocode:wfo>/", errors.deprecated_office, name="deprecated_office"),
     path("point/<float:lat>/<float:lon>/", errors.deprecated_path, name="deprecated_point"),
     path("county<path:rest>", errors.deprecated_path, name="deprecated_county_pages"),
+    path("place/<statecode:state>/<placename:place>/", errors.deprecated_path, name="deprecated_place"),
     # Internal rerouting from location search
     path(
         "wx/location-search/county/<float:lat>/<float:lon>/",

@@ -551,61 +551,6 @@ class TestViews(TestCase):
             response = self.client.get("/forecast/point/11.1/22.2", follow=True)
             self.assertTemplateNotUsed(response, "errors/404/marine-point.html")
 
-    @disable_logging_for_quieter_tests
-    def test_place_unknown(self):
-        """Test the place location view with an unknown place."""
-        response = self.client.get("/place/NJ/Not_Hoboken/")
-        self.assertEqual(response.status_code, 404)
-
-    @mock.patch("backend.views.point.interop.get_point_forecast")
-    def test_place_redirect_state(self, mock_get_point_forecast):
-        """Test the place location view where the state needs redirection."""
-        mock_get_point_forecast.return_value = {
-            "grid": {"wfo": "TST", "type": "land", "marineType": None},
-            "place": {"timezone": "America/New_York"},
-            "weatherstory": [],
-        }
-        response = self.client.get("/place/nj/Hoboken/")
-        self.assertRedirects(response, "/place/NJ/Hoboken/", target_status_code=302)
-
-    @mock.patch("backend.views.point.interop.get_point_forecast")
-    def test_place_redirect_place(self, mock_get_point_forecast):
-        """Test the place location view where the place name needs redirection."""
-        mock_get_point_forecast.return_value = {
-            "grid": {"wfo": "TST", "type": "land", "marineType": None},
-            "place": {"timezone": "America/New_York"},
-            "weatherstory": [],
-        }
-        response = self.client.get("/place/NY/New York/")
-        self.assertRedirects(response, "/place/NY/New_York/", target_status_code=302)
-
-    @mock.patch("backend.views.point.interop.get_point_forecast")
-    def test_place(self, mock_get_point_forecast):
-        """Test the place location view where the place name needs redirection."""
-        mock_get_point_forecast.return_value = {
-            "grid": {"wfo": "TST", "type": "land", "marineType": None},
-            "place": {"timezone": "America/New_York"},
-            "point": {"latitude": 30.543, "longitude": 30.123},
-            "weatherstory": [self.weather_story],
-        }
-        response = self.client.get("/place/NJ/Hoboken/", follow=True)
-
-        # These values should come from the WeatherPlace model. The lat/lon
-        # from the place should be truncated to 3 decimal places.
-        mock_get_point_forecast.assert_called_with(30.543, 30.123)
-
-        self.assertEqual(
-            response.context["point"],
-            {"grid": {"wfo": "TST", "type": "land", "marineType": None},
-             "wfo": self.wfo,
-             "point": {"latitude": 30.543, "longitude": 30.123},
-             "place": {"timezone": "America/New_York"},
-             "isAlaska": False,
-             "weatherstory": [self.weather_story],
-            },
-        )
-
-
     def test_office_specific(self):
         """Test the specific-office view."""
         response = self.client.get(

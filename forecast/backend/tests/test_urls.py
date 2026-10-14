@@ -87,14 +87,14 @@ class TestUrls(TestCase):
         self.assertEqual(resolver.kwargs, {"lat": -82.537, "lon": 42.535})
         self.assertEqual(back, "/point/40.235/34.532/")
 
-    def test_place(self):
-        """Test place forecast."""
+    def test_deprecated_place(self):
+        """Test deprecated place forecast."""
         resolver = resolve("/place/XX/Of_Mind/")
         back = reverse(
-            "place_forecast",
+            "deprecated_place",
             kwargs={"state": "FF", "place": "Anywhere"},
         )
-        self.assertEqual(resolver.func, point.place_forecast)
+        self.assertEqual(resolver.func, errors.deprecated_path)
         self.assertEqual(resolver.kwargs, {"state": "XX", "place": "Of_Mind"})
         self.assertEqual(back, "/place/FF/Anywhere/")
 
