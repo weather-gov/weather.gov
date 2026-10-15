@@ -1,8 +1,11 @@
 package ghwo
 
-import "fmt"
+import (
+	"fmt"
+	"time"
+)
 
-func ProcessCounty(wfoCode string, fipsCode LocalityCode, county *SourceGHWOLocality, legend OutputSummaryLegend, chicklet ChickletLookup) (*Output, error) {
+func ProcessCounty(wfoCode string, fipsCode LocalityCode, county *SourceGHWOLocality, legend OutputSummaryLegend, chicklet ChickletLookup, generationTime time.Time) (*Output, error) {
 	days, noRisks := county.GetRiskDays(legend)
 
 	// If the days array is empty, we don't have any risk
@@ -13,12 +16,13 @@ func ProcessCounty(wfoCode string, fipsCode LocalityCode, county *SourceGHWOLoca
 
 	// Initialize the resullting struct
 	var output = &Output{
-		IsState:  false,
-		IsCounty: true,
-		Fips:     fipsCode,
-		Days:     days,
-		NoRisks:  noRisks,
-		WFO:      wfoCode,
+		IsState:        false,
+		IsCounty:       true,
+		Fips:           fipsCode,
+		Days:           days,
+		NoRisks:        noRisks,
+		WFO:            wfoCode,
+		GenerationTime: generationTime,
 	}
 
 	// Add the risks to the output
@@ -32,7 +36,7 @@ func ProcessCounty(wfoCode string, fipsCode LocalityCode, county *SourceGHWOLoca
 	return output, nil
 }
 
-func ProcessStateWithDetails(wfoCode string, stateCode LocalityCode, state *SourceGHWOLocality, legend OutputSummaryLegend, chicklet ChickletLookup) (*Output, error) {
+func ProcessStateWithDetails(wfoCode string, stateCode LocalityCode, state *SourceGHWOLocality, legend OutputSummaryLegend, chicklet ChickletLookup, generationTime time.Time) (*Output, error) {
 	// Note: we assume the state specific legend
 	// and chicklet are already processed and handed off to this function
 
@@ -52,6 +56,7 @@ func ProcessStateWithDetails(wfoCode string, stateCode LocalityCode, state *Sour
 		Days:            days,
 		NoRisks:         noRisks,
 		HasDetailedGHWO: true,
+		GenerationTime:  generationTime,
 	}
 
 	result.AddTopLevelRisksAndLegend(
@@ -66,7 +71,7 @@ func ProcessStateWithDetails(wfoCode string, stateCode LocalityCode, state *Sour
 	return result, nil
 }
 
-func ProcessStateWithoutDetails(wfoCode string, stateCode LocalityCode, state *SourceGHWOLocality) (*Output, error) {
+func ProcessStateWithoutDetails(wfoCode string, stateCode LocalityCode, state *SourceGHWOLocality, generationTime time.Time) (*Output, error) {
 	// If we call this function, i tmeans that there was no state-specific
 	// chicklet or legend data available, and therefore we cannot
 	// process detailed GHWO data for the state.
@@ -88,6 +93,7 @@ func ProcessStateWithoutDetails(wfoCode string, stateCode LocalityCode, state *S
 		Days:            days,
 		NoRisks:         noRisks,
 		HasDetailedGHWO: false,
+		GenerationTime:  generationTime,
 	}
 
 	result.ProcessComposite()

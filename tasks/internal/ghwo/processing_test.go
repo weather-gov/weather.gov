@@ -6,6 +6,7 @@ import (
 	"reflect"
 	"slices"
 	"testing"
+	"time"
 )
 
 var testProcessedLegendJson = `
@@ -1300,6 +1301,7 @@ func TestProcessCounty(t *testing.T) {
 			&countyData,
 			legend.ProcessOutputLegend(),
 			chicklet.GetRiskToHazardLookup(),
+			hazByCounty.GenerationTime,
 		)
 
 		// We need to sort the NoRisks slice, otherwise
@@ -1409,6 +1411,7 @@ func TestProcessState(t *testing.T) {
 			&stateData,
 			legend.ProcessOutputLegend(),
 			chicklet.GetRiskToHazardLookup(),
+			time.Time{},
 		)
 
 		// We need to sort the NoRisks slice, otherwise
@@ -1451,6 +1454,7 @@ func TestProcessState(t *testing.T) {
 			"lwx",
 			"MD",
 			&stateData,
+			time.Time{},
 		)
 
 		// We need to sort the NoRisks slice, otherwise
