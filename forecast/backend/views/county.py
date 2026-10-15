@@ -11,6 +11,7 @@ from backend import interop
 from backend.models import WFO
 from backend.util import (
     get_briefings_from_county_data,
+    get_local_timezone,
     get_weather_stories_from_county_data,
     process_county_alerts,
     sort_multipolygon_by_area,
@@ -124,7 +125,9 @@ def county_overview(request, countyfips=None, county_slug=None):  # noqa: C901
                 alert["geometry"] = sort_multipolygon_by_area(alert["geometry"])
 
     # Fixup risk overview timestamps to local
-    risk_overview_timestamps_to_dates(county_data.get("riskOverview", False), localtz)
+    risk_overview_timestamps_to_dates(
+        county_data.get("riskOverview", False), get_local_timezone(county.timezone, county.dst)
+    )
 
     # Get a list of WFO codes that are associated
     # with the county. This seems to manifest in the data

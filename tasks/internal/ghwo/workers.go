@@ -396,6 +396,7 @@ func (manager *TransformLocalityManager) RunWorkers(ctx context.Context) {
 							&countyData,
 							locality.Legend,
 							locality.Chicklet,
+							locality.GHWOData.GenerationTime,
 						)
 
 						if err != nil {
@@ -444,6 +445,7 @@ func (manager *TransformLocalityManager) RunWorkers(ctx context.Context) {
 								locality.GHWOData.WFO,
 								locality.Code,
 								&stateData,
+								locality.GHWOData.GenerationTime,
 							)
 
 							if err != nil {
@@ -472,6 +474,7 @@ func (manager *TransformLocalityManager) RunWorkers(ctx context.Context) {
 								&stateData,
 								locality.Legend,
 								locality.Chicklet,
+								locality.GHWOData.GenerationTime,
 							)
 
 							if err != nil {

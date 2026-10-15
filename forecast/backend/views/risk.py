@@ -1,5 +1,3 @@
-from zoneinfo import ZoneInfo
-
 from django.http import Http404
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
@@ -10,6 +8,7 @@ from backend.util import (
     get_basis_for_ghwo_risk,
     get_counties_combo_box_list,
     get_ghwo_daily_images,
+    get_local_timezone,
     get_states_combo_box_list,
 )
 from backend.util.county import risk_overview_timestamps_to_dates
@@ -69,9 +68,7 @@ def risk_details_by_state(request, state_code):
     """Render the risk overview for a given state."""
     state = get_object_or_404(WeatherStates, state=state_code)
 
-    localtz = ZoneInfo("UTC")
-    if state.timezone:
-        localtz = ZoneInfo(state.timezone)
+    localtz = get_local_timezone(state.timezone, state.counties.filter(dst=True).exists())
 
     # Get all of the states, for use in the combobox dropdown
     states = get_states_combo_box_list(state.state)
@@ -98,14 +95,12 @@ def risk_details_by_county(request, county_fips):
     """Render the risk overview for a specific county."""
     county = get_object_or_404(
         WeatherCounties.objects.select_related("state", "primarywfo").only(
-            "countyname", "st", "countyfips", "state__state", "primarywfo__wfo"
+            "countyname", "st", "countyfips", "timezone", "dst", "state__state", "primarywfo__wfo"
         ),
         countyfips=county_fips,
     )
 
-    localtz = ZoneInfo("UTC")
-    if county.timezone:
-        localtz = ZoneInfo(county.timezone)
+    localtz = get_local_timezone(county.timezone, county.dst)
 
     # Get all of the states, for use in the combobox dropdown.
     states = get_states_combo_box_list(county.state.state)

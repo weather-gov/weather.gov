@@ -241,6 +241,14 @@ def mark_safer(value, transformer=None, **kwargs):
     return mark_safe(cleaned)  # noqa: S308
 
 
+def get_local_timezone(timezone, dst):
+    """Return the ZoneInfo for a county or state, using America/Phoenix for AZ."""
+    # AZ is stored as America/Denver with dst=false
+    if timezone == "America/Denver" and dst is False:
+        return ZoneInfo("America/Phoenix")
+    return ZoneInfo(timezone or "UTC")
+
+
 def timestamps_to_datetime_in_dict(dictionary, keys, timezoneinfo):
     """
     Modify a dict containing string ISO timestamps to be datetime objects.
