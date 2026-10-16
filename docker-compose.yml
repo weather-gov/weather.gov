@@ -66,6 +66,7 @@ services:
       MARINE_COASTAL_EXPERIMENTAL: false
       # Whether to use HTMX for point forecast pages
       POINT_FORECAST_HTMX: true
+      POINT_FORECAST_HTMX_A_B: true
     networks:
       - weather.gov
     depends_on:
