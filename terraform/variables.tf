@@ -226,3 +226,15 @@ variable "ghwo_err_worker_num" {
   default     = 100
   description = "The number of ErrorManager workers to run during the GHWO task"
 }
+
+variable "point_forecast_htmx" {
+  type        = bool
+  default     = false
+  description = "Whether or not to use htmx on point forecast pages."
+}
+
+variable "point_forecast_htmx_a_b" {
+  type        = bool
+  default     = false
+  description = "Whether or not to enable A/B tests of HTMX mode on point forecast pages. Supersedes point_forecast_htmx."
+}
