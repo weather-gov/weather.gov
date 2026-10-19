@@ -18,10 +18,6 @@ describe("Point forecast › 7 Days tab", () => {
     await page.goto(services.webApp("/forecast/point/34.749/-92.275/#daily"), {
       waitUntil: "load",
     });
-    const djdt = page.getByRole("link", { name: "Hide »" });
-    if (await djdt.isVisible()) {
-      await djdt.tap(); // tap to hide the overlay on dev
-    }
   });
 
   describe("When navigating between days project (on mobile)", () => {

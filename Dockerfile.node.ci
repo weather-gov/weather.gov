@@ -35,3 +35,5 @@ WORKDIR /app/api-interop-layer
 RUN npm ci --dev
 WORKDIR /app/api-proxy
 RUN npm ci --dev
+
+WORKDIR /app

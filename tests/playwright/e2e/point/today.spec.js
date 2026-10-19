@@ -15,10 +15,6 @@ describe("Point forecast › Today tab", () => {
     await page.goto(services.webApp("/forecast/point/34.749/-92.275/today"), {
       waitUntil: "load",
     });
-    const djdt = page.getByRole("link", { name: "Hide »" });
-    if (await djdt.isVisible()) {
-      await djdt.click(); // click to hide the overlay on dev
-    }
   });
 
   describe("When viewing today's forecast", () => {
