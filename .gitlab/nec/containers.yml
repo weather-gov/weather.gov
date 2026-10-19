@@ -254,4 +254,4 @@ push-tasks-wpcprob-image-to-ecr:
 # for playwright, build a new image every time we run through the Gitlab UI
 gather-playwright-dependencies:
   rules:
-    - !reference [.on_manual_playwright_ci]
+    - !reference [.on_manual_playwright_build]

@@ -46,9 +46,9 @@
 .on_manual_golang_ci:
   - if: $CI_PIPELINE_SOURCE == "web" && $RUN_GOLANG_CI == "true"
 
-# run playwright tests
-.on_manual_playwright_ci:
-  - if: $CI_PIPELINE_SOURCE == "web" && $RUN_PLAYWRIGHT_CI == "true"
+# build playwright image
+.on_manual_playwright_build:
+  - if: $CI_PIPELINE_SOURCE == "web" && $BUILD_PLAYWRIGHT == "true"
 
 # on bootstrapping nec (dev only)
 .on_manual_nec_bootstrap:

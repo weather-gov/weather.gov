@@ -26,10 +26,10 @@ spec:
       type: boolean
       default: true
       description: "Run golang tests in the selected branch using config from that branch."
-    run-playwright-ci:
+    build-playwright:
       type: boolean
       default: false
-      description: "Run playwright end-to-end and accessibility tests in the selected branch using config from that branch."
+      description: "Build playwright image."
 ---
 stages:
   - gather # gather the 3rd party dependencies and push images of them to the registry
@@ -52,7 +52,7 @@ variables:
   RUN_JS_CI: "$[[ inputs.run-js-ci ]]"
   RUN_DJANGO_CI: "$[[ inputs.run-django-ci ]]"
   RUN_GOLANG_CI: "$[[ inputs.run-golang-ci ]]"
-  RUN_PLAYWRIGHT_CI: "$[[ inputs.run-playwright-ci ]]"
+  BUILD_PLAYWRIGHT: "$[[ inputs.build-playwright ]]"
   DEPLOY_TO_ENVIRONMENT: "$[[ inputs.deploy-to-environment ]]"
   CONFIRM_BETA_DEPLOY: "$[[ inputs.confirm-beta-deploy ]]"
   CONFIRM_NEC_DEPLOY: "$[[ inputs.confirm-nec-deploy ]]"
@@ -251,37 +251,6 @@ compute-dependency-tags:
   artifacts:
     reports:
       dotenv: deps.env
-
-.playwright:
-  stage: test
-  needs:
-    - job: compute-dependency-tags
-    - job: gather-playwright-dependencies
-      optional: true
-  image: $CI_REGISTRY_IMAGE/playwright:$PW_TAG
-  variables:
-    DEPLOYED_URL: https://weathergov-test.app.cloud.gov
-    API_URL: https://api-proxy-weathergov-test.app.cloud.gov/
-    WEB_URL: $DEPLOYED_URL
-  rules:
-    - !reference [.on_manual_playwright_ci]
-
-# run end-to-end tests against the deployed environment
-playwright-e2e:
-  extends: [.playwright]
-  parallel: 3
-  script:
-    - ln -s /app/node_modules/ .
-    - echo Attempting to run end-to-end tests against $DEPLOYED_URL
-    - npx playwright test e2e_$CI_NODE_INDEX
-
-# run accessibility tests against the deployed environment
-playwright-a11y:
-  extends: [.playwright]
-  script:
-    - ln -s /app/node_modules/ .
-    - echo Attempting to run a11y tests against $DEPLOYED_URL
-    - CI=true npx playwright test a11y
 
 bundle-js:
   stage: build

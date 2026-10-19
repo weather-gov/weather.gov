@@ -13,13 +13,14 @@ describe("Point forecast › 7 Days tab", () => {
   });
 
   beforeEach(async ({ page }) => {
-    await page.goto(services.webApp("/forecast/point/34.749/-92.275/#daily"), {
-      waitUntil: "load",
+    await page.goto(services.webApp("/forecast/point/34.749/-92.275/7-day/"), {
+      waitUntil: "domcontentloaded",
     });
-    const djdt = page.getByRole("link", { name: "Hide »" });
-    if (await djdt.isVisible()) {
-      await djdt.click(); // click to hide the overlay on dev
-    }
+
+    // wait on tab nav instead of the entire page
+    await page
+      .getByRole("tablist", { name: "daily forecast tab navigation" })
+      .waitFor();
   });
 
   describe("When navigating between days (on desktop)", () => {
