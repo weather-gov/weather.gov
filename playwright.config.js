@@ -31,7 +31,7 @@ const config = {
           // is specified by the last argument.
           {
             open: "never",
-            outputFolder: `/reports/${process.argv.slice(-1).pop()}`,
+            outputFolder: `/reports/${process.argv.slice(-1).pop()}-results`,
           },
         ],
       ],

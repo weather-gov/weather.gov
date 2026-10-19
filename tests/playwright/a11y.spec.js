@@ -6,23 +6,23 @@ const pages = [
   { name: "front page", path: "/" },
   {
     name: "location page with alerts (alerts tab)",
-    path: "/forecast/point/33.521/-86.812/#alerts",
+    path: "/forecast/point/33.521/-86.812/alerts/",
   },
   {
     name: "location page with alerts (today tab)",
-    path: "/forecast/point/33.521/-86.812/#today",
+    path: "/forecast/point/33.521/-86.812/today/",
   },
   {
     name: "location page with alerts (daily tab)",
-    path: "/forecast/point/33.521/-86.812/#daily",
+    path: "/forecast/point/33.521/-86.812/7-day/",
   },
   {
     name: "location page without alerts (today tab)",
-    path: "/forecast/point/35.198/-111.651/#today",
+    path: "/forecast/point/35.198/-111.651/today/",
   },
   {
     name: "location page without alerts (daily tab)",
-    path: "/forecast/point/35.198/-111.651/#daily",
+    path: "/forecast/point/35.198/-111.651/7-day/",
   },
   {
     name: "county page - coconino county, az",
@@ -81,7 +81,7 @@ for (const { name, path } of pages) {
         },
       );
 
-      expect(accessibilityScanResults.violations).toEqual([]);
+      await expect(accessibilityScanResults.violations).toEqual([]);
     });
   });
 }
