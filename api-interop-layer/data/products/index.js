@@ -7,6 +7,42 @@ import { getFromRedis, saveToRedis } from "../../redis.js";
 
 const productLogger = logger.child({ subsystem: "product" });
 
+// Latest product of a type for a location
+export const getLatestProduct = async (type, location) => {
+  const productKey = `/products/types/${type}/locations/${location}/latest`;
+
+  try {
+    const foundInCache = await getFromRedis(productKey);
+    if (foundInCache) {
+      return foundInCache;
+    }
+
+    const [productData, cacheControl] = await requestJSONWithHeaders(
+      connectionPool,
+      productKey,
+    );
+
+    const product = {
+      issuanceTime: productData.issuanceTime,
+      productText: productData.productText,
+    };
+
+    const ttl = parseTTLFromHeaders(cacheControl, 120);
+    await saveToRedis(productKey, product, ttl);
+    return product;
+  } catch (err) {
+    productLogger.error(
+      { err, type, location },
+      "Error fetching latest product from API",
+    );
+
+    return {
+      error: true,
+      status: err.cause?.statusCode || err.statusCode || 500,
+    };
+  }
+};
+
 export default async (id) => {
   const productKey = `/products/${id}`;
 

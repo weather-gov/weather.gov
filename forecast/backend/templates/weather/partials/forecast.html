@@ -5,7 +5,11 @@
 {% endcomment %}
 <h2 class="usa-sr-only">{% trans "forecast.heading.daily-forecast.01" %}</h2>
 <div class="wx-daily-forecast-block">
-  {% if forecast.error %}
+  {% if forecast.noForecast %}
+    <div class="grid-container padding-x-0 padding-y-2 grid-col-12 tablet-lg:grid-offset-2 tablet-lg:grid-col-8">
+      {% include 'weather/partials/uswds-alert.html' with level="info" body="forecast.errors.no-forecast.01"|t %}
+    </div>
+  {% elif forecast.error %}
     {% with base_msg="forecast.errors.daily.01"|t %}
       <div class="grid-container padding-x-0 padding-y-2 grid-col-12 tablet-lg:grid-offset-2 tablet-lg:grid-col-8">
         {% if forecast.message %}

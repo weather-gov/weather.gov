@@ -7,6 +7,7 @@ import { alignAlertsToDaily } from "./alerts/utils.js";
 import getDbConnection from "./db.js";
 import { ForecastGridCache } from "./forecast/cache.js";
 import getForecast from "./forecast/index.js";
+import getPfmForecast from "./forecast/pfm.js";
 import getObservations from "./obs/index.js";
 import { getPointData } from "./points.js";
 import getProductById from "./products/index.js";
@@ -83,10 +84,13 @@ const getDataForPoint = async (lat, lon) => {
       weatherstory: ws,
       wpcProb: wpc,
     } = await Promise.all([
-      getForecast({ grid, place }),
+      // Zone-resolved grids have no gridpoint, so forecast from PFM and skip WPC
+      grid.zone
+        ? getPfmForecast({ grid, place })
+        : getForecast({ grid, place }),
       getObservations({ grid, point }, dbConnection),
       getWeatherStory(grid.wfo),
-      getWpcProbPrecip(grid),
+      grid.zone ? { error: true } : getWpcProbPrecip(grid),
     ]).then(([forecastData, obsData, weatherStoryData, wpcProbData]) => {
       // The forecast endpoint returns extra information about the grid. Why? I
       // dunno. But anyway, let's put it with the other grid info and remove it

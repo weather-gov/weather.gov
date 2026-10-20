@@ -133,7 +133,12 @@ const fetchDailyPromise = async (url, place) => {
   }
 };
 
-export const assignHoursToDays = (dayData, hours, dayToStartAndEndMap) => {
+export const assignHoursToDays = (
+  dayData,
+  hours,
+  dayToStartAndEndMap,
+  { nonHourly = false } = {},
+) => {
   let dayIndex = 0;
   let hourIndex = 0;
 
@@ -143,7 +148,11 @@ export const assignHoursToDays = (dayData, hours, dayToStartAndEndMap) => {
   while (hourIndex < hours.length && dayIndex < dayData.days.length) {
     const day = dayData.days[dayIndex];
 
-    if (dayIndex === 0) {
+    if (nonHourly) {
+      // Steps can't be counted off 25 to a day, so take the ones inside the day, 6am at both ends
+      const { start, end } = dayToStartAndEndMap.get(day);
+      day.hours = hours.filter(({ time }) => time >= start && time <= end);
+    } else if (dayIndex === 0) {
       // If we're on the first day, we need to first figure out how many hours
       // the day consists of. The first day is the current time until 6am the
       // next day. All subsequent days are 24 hours (6am-6am).
@@ -195,7 +204,7 @@ export const assignHoursToDays = (dayData, hours, dayToStartAndEndMap) => {
 
     // Pull out PoP values from the hourly for
     // the daily periods and the overall day
-    updateMaxPop(day);
+    updateMaxPop(day, { nonHourly });
 
     // Now move on to the next day.
     dayIndex += 1;
@@ -207,7 +216,7 @@ export const assignHoursToDays = (dayData, hours, dayToStartAndEndMap) => {
  * for a given day/period from the formatted hourly
  * forecast for the day.
  */
-export const updateMaxPop = (day) => {
+export const updateMaxPop = (day, { nonHourly = false } = {}) => {
   // We set the probability of precip for each daily period
   // to be the highest percentage taken from the _hourly_ data
   // that is between the start and end times for the period
@@ -217,6 +226,10 @@ export const updateMaxPop = (day) => {
     const dayEnd = new Date(period.end);
     const relevantHours = day.hours.filter((hour) => {
       const start = new Date(hour.time);
+      // Steps land on period edges and carry the next window's PoP, so the end step belongs to the next period
+      if (nonHourly) {
+        return dayStart <= start && dayEnd > start;
+      }
       return dayStart <= start && dayEnd >= start;
     });
     const pops = relevantHours.map((hour) => {
@@ -235,10 +248,16 @@ export const updateMaxPop = (day) => {
   day.maxPop = Math.max(...maxPopsForDay);
 };
 
+const GRIDPOINT_SOURCE = {
+  gridpoint: fetchGridpointPromise,
+  daily: fetchDailyPromise,
+  hourly: fetchHourlyPromise,
+};
+
 /**
  * Fetches and formats the main forecast object
  */
-export default async ({ grid, place }) => {
+export default async ({ grid, place }, source = GRIDPOINT_SOURCE) => {
   const hours = new Map();
   const isMarine = grid?.type === "marine";
   // The hours map is passed into the gridpoint and hourly data processors so
@@ -249,21 +268,21 @@ export default async ({ grid, place }) => {
   // We pass the place object along to all of them so they can access the
   // timezone and coerce the times provided to us into forecast-local times.
   const gridpointUrl = `/gridpoints/${grid.wfo}/${grid.x},${grid.y}`;
-  const gridpointPromise = fetchGridpointPromise(gridpointUrl, place, hours);
+  const gridpointPromise = source.gridpoint(gridpointUrl, place, hours);
 
   // There is not a distinct daily forecast for marine data, so if we're in a
   // marine location, just resolve an empty object. We'll populate it manually.
   const dailyUrl = `/gridpoints/${grid.wfo}/${grid.x},${grid.y}/forecast`;
   const dailyPromise = isMarine
     ? Promise.resolve({})
-    : fetchDailyPromise(dailyUrl, place);
+    : source.daily(dailyUrl, place);
 
   // Similarly, there is no distinct hourly forecast data. We only have the
   // gridpoint forecast, which is already hourly.
   const hourlyUrl = `/gridpoints/${grid.wfo}/${grid.x},${grid.y}/forecast/hourly`;
   const hourlyPromise = isMarine
     ? Promise.resolve(false)
-    : fetchHourlyPromise(hourlyUrl, hours);
+    : source.hourly(hourlyUrl, hours);
 
   // We don't capture the results of the hourly processing function because it
   // doesn't return anything. All of its work gets put into the hours map.
@@ -370,7 +389,7 @@ export default async ({ grid, place }) => {
     }
   }
 
-  assignHoursToDays(dailyData, orderedHours, dayStartAndEnd);
+  assignHoursToDays(dailyData, orderedHours, dayStartAndEnd, source);
 
   // At this point, QPF has been shuffled into the daily forecast object, so
   // we can remove it from the grid. It's not really a grid property anyway.

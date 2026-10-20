@@ -1,0 +1,36 @@
+PFM <: Product {
+  product = header awipsLine blankLine* textLine+ blankLine+ block+ end
+
+  // Everything up to $$ or a cut-off end, matched as a segment separately so a bad one only loses its zones
+  block = (~"$$" any)+ (blockEnd | end)
+  blockEnd = "$$" eol blankLine*
+
+  awipsLine = "PFM" alnum+ eol
+
+  // UGC, location name, coordinates, issuance time, then the 3 hourly and 6 hourly tables
+  segment = ugcLine textLine coordinates textLine blankLine* table+ "$$" eol blankLine*
+  coordinates = decimal ("N" | "S") " " decimal ("E" | "W") " ELEV. " "-"? digit+ " FT" eol
+
+  table = dateRow localRow utcRow blankLine* row+ blankLine*
+
+  // PM issuances open with a bare date, WED 10/14/26 otherwise
+  dateRow = "DATE" (" "+ dateToken)+ eol
+  dateToken = weekday | mmddyy
+  weekday = "MON" | "TUE" | "WED" | "THU" | "FRI" | "SAT" | "SUN"
+  mmddyy = digit digit "/" digit digit "/" digit digit
+
+  // The GMT row is really local time
+  localRow = "GMT " interval hours
+  utcRow = "UTC " interval hours
+  interval = "3HRLY" | "6HRLY"
+  hours = (" "+ hour)+ eol
+  hour = digit digit
+
+  // Right-aligned cells, 3 digit values can touch their neighbor like 99100
+  row = ~"DATE" label (" "+ cell)* eol
+  label = labelWord (" " labelWord)*
+  labelWord = (upper | digit | "/")+
+  cell = decimal | alnum+
+
+  decimal = digit* "." digit+
+}

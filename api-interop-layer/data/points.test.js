@@ -421,4 +421,34 @@ describe("point method", () => {
 
     expect(connectionPool.request.called).to.be.true;
   });
+
+  describe("in the Pacific zone extent", () => {
+    const zoneQuery = sinon.match(/wfo = ANY/);
+    const gridpointQuery = sinon.match(/weathergov_geo_gridpoints/);
+
+    it("returns the forecast zone without an internal or API lookup", async () => {
+      db.query.withArgs(zoneQuery).resolves({
+        rows: [{ zone: "PWZ004", wfo: "PQW" }],
+      });
+
+      const actual = await points(7.341, 134.479);
+
+      expect(actual.grid).to.include({
+        wfo: "PQW",
+        zone: "PWZ004",
+        source: "zone",
+      });
+      expect(db.query.calledWith(gridpointQuery)).to.be.false;
+      expect(connectionPool.request.called).to.be.false;
+    });
+
+    it("falls back to the internal lookup when no zone is found", async () => {
+      db.query.withArgs(zoneQuery).resolves({ rows: [] });
+
+      await points(7.341, 134.479);
+
+      expect(db.query.calledWith(zoneQuery)).to.be.true;
+      expect(db.query.calledWith(gridpointQuery)).to.be.true;
+    });
+  });
 });

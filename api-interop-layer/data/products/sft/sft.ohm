@@ -1,0 +1,33 @@
+SFT <: Product {
+  product = header awipsLine ugcLine blankLine* textLine+ blankLine* legend? blankLine* columns blankLine* group+ "$$" eol blankLine* end
+
+  awipsLine = "SFT" alnum+ eol
+
+  // ROWS INCLUDE... and its indented key lines
+  legend = "ROWS INCLUDE..." eol (~fcstRow " "+ textLine)*
+
+  columns = fcstRow dayRow dateRow
+  fcstRow = (" "+ "FCST")+ eol
+  dayRow = (" "+ dayName)+ eol
+  dateRow = (" "+ date)+ eol
+  dayName = "TODAY" | "TONIGHT" | "MON" | "TUE" | "WED" | "THU" | "FRI" | "SAT" | "SUN"
+  date = month " " digit digit
+  month = "JAN" | "FEB" | "MAR" | "APR" | "MAY" | "JUN" | "JUL" | "AUG" | "SEP" | "OCT" | "NOV" | "DEC"
+
+  // ...REPUBLIC OF PALAU... then its locations
+  group = "..." groupName "..." eol blankLine* entryBlock+
+  groupName = (~"..." ~"\n" any)+
+
+  // Indented lines up to a blank, matched as an entry separately so a bad one only loses its zone
+  entryBlock = (" "+ textLine)+ blankLine*
+
+  // Name, daytime words, low/high, night/day PoP
+  entry = " "+ locationName eol wordRow pairRow pairRow blankLine*
+  locationName = (~eol any)+
+  wordRow = (" "+ word)+ eol
+  word = upper+
+  pairRow = (" "+ pair)+ eol
+  pair = value? "/" value?
+  value = "MM" | number
+  number = "-"? digit+
+}

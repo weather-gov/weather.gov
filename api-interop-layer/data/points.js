@@ -6,6 +6,10 @@ import connectionPool from "./connectionPool.js";
 import openDatabase from "./db.js";
 import { saveToRedis, getFromRedis } from "../redis.js";
 import astronomicalData from "./astronomical.js";
+import {
+  getPacificZoneGridData,
+  isInPacificZoneExtent,
+} from "./pacificZones.js";
 
 const pointLogger = logger.child({ subsystem: "point" });
 
@@ -173,7 +177,11 @@ export const getPointData = async (lat, lon) => {
   pointLogger.trace(point, "place");
 
   let grid = false;
-  if (USE_INTERNAL_LOOKUP) {
+  if (isInPacificZoneExtent(latitude, longitude)) {
+    grid = await getPacificZoneGridData(latitude, longitude);
+  }
+
+  if (!grid && USE_INTERNAL_LOOKUP) {
     grid = await getInternalGridData(latitude, longitude);
   }
 
@@ -219,7 +227,7 @@ export const getPointData = async (lat, lon) => {
   // query.
   const [place] = await Promise.all([placePromise, marineTypePromise]);
 
-  if (USE_INTERNAL_LOOKUP && place) {
+  if ((USE_INTERNAL_LOOKUP || grid.zone) && place) {
     // because we are skipping the points API call, astronomical data is not
     // available. in that case, let's add it back in via suncalc.
     point.astronomicalData = astronomicalData(
