@@ -22,6 +22,10 @@ terraform-plan-nec-infra-dev:
   variables:
     ROLE_NAME: $NEC_ROLE_NAME
     ACCOUNT_ID: $NEC_ACCOUNT_ID
+    TF_VAR_container_registry: $NEC_ECR_URL
+    TF_VAR_image_tag: $CI_COMMIT_SHORT_SHA
+    TF_VAR_task_order: $NEC_TASK_ORDER
+    TF_VAR_gitlab_repo: $GITLAB_REPO
   # needs:
   #   - job: terraform-apply-nec-bootstrap-dev
   #     optional: true
@@ -32,6 +36,10 @@ terraform-apply-nec-infra-dev:
   variables:
     ROLE_NAME: $NEC_ROLE_NAME
     ACCOUNT_ID: $NEC_ACCOUNT_ID
+    TF_VAR_container_registry: $NEC_ECR_URL
+    TF_VAR_image_tag: $CI_COMMIT_SHORT_SHA
+    TF_VAR_task_order: $NEC_TASK_ORDER
+    TF_VAR_gitlab_repo: $GITLAB_REPO
   needs:
     - job: terraform-plan-nec-infra-dev
       artifacts: true

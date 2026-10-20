@@ -248,6 +248,10 @@ gitlab-sast:
 lint-docker:
     git ls-files | grep -i dockerfile | xargs hadolint
 
+[group("code quality")]
+validate-terraform:
+    terraform -chdir=terraform-aws/envs/dev/ validate
+
 # Run goimports on the files in the tasks directory
 [group("code quality")]
 go-imports:

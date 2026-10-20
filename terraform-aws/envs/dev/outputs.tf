@@ -27,3 +27,13 @@ output "rds_port" {
   value       = aws_db_instance.main.port
   description = "Port the database listens on."
 }
+
+output "task_security_group_id" {
+  value       = aws_security_group.tasks.id
+  description = "task security group ID"
+}
+
+output "private_subnet_ids" {
+  value       = data.aws_subnets.private.ids
+  description = "subnet IDs"
+}
