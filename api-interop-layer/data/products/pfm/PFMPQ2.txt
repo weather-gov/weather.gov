@@ -1,0 +1,60 @@
+
+000
+FOPQ52 PGUM 131830
+PFMPQ2
+
+POINT FORECAST MATRICES
+NATIONAL WEATHER SERVICE TIYAN GU
+425 AM CHST WED OCT 14 2026
+
+PWZ003-140600-
+PALAU INTERNATIONAL AIRPORT-AIRAI PW
+07.37N 134.55E ELEV. 177 FT
+425 AM CHST WED OCT 14 2026
+
+DATE             WED 10/14/26            THU 10/15/26            FRI 10/16/26
+GMT 3HRLY     03 06 09 12 15 18 21 00 03 06 09 12 15 18 21 00 03 06 09 12 15 18
+UTC 3HRLY     17 20 23 02 05 08 11 14 17 20 23 02 05 08 11 14 17 20 23 02 05 08
+
+MAX/MIN                      86          78          86          78          86
+TEMP             78 81 85 86 84 82 80 79 78 81 85 86 84 82 80 79 78 81 85 86 84
+DEWPT            76 76 75 75 75 76 76 76 76 76 76 76 76 76 76 76 76 76 75 75 76
+RH               94 85 72 70 74 82 88 91 94 85 75 72 77 82 88 91 94 85 72 70 77
+WIND DIR          W  W  W  W  W  W  W  W  W  W  W  W  W  W  W  W  W  W  W  W  W
+WIND SPD          6  8  8  9  8  5  4  4  4  4  6  6  6  4  4  3  5  5  6  6  6
+CLOUDS           B1 B1 B1 B1 B1 B1 B1 B1 B1 B1 B1 B1 B1 B1 B1 B1 B1 B1 B1 B1 B1
+POP 12HR                     30          30          30          30          30
+QPF 12HR                   0.10        0.21        0.36        0.22        0.19
+RAIN SHWRS        C  C  C  C  C  C  C  C  C  C  C  C  C  C  C  C  C  C  C  C  C
+HEAT INDEX          88 94 95 93 90 86       88 95 95 93 90 86       88 94 95 93
+MAX HEAT               94    95    92    84    95    95    92    84    94    95
+
+
+DATE               SAT 10/17/26  SUN 10/18/26  MON 10/19/26  TUE 10/20/26
+GMT 6HRLY     00   06 12 18 00   06 12 18 00   06 12 18 00   06 12 18
+UTC 6HRLY     14   20 02 08 14   20 02 08 14   20 02 08 14   20 02 08
+
+MIN/MAX            78    88      78    87      78    88      78    87
+TEMP          80   78 87 86 81   78 86 85 81   78 87 86 81   78 86 86
+DEWPT         76   76 76 76 77   77 77 77 77   77 77 77 78   78 77 77
+PWIND DIR           W     W       W     W       W     W       W    SW
+WIND CHAR          LT    LT      GN    GN      GN    GN      BZ    BZ
+AVG CLOUDS    B1   B1 SC SC SC   SC SC SC SC   SC SC SC SC   SC B1 B1
+POP 12HR           30    20      20    20      20    20      20    20
+RAIN SHWRS     C    C  S  S  S    S  S  S  S    S  S  S  S    S  S  S
+
+$$
+FMZ037-023-140600-
+YAP INTERNATIONAL AIRPORT-YAP FM
+09.48N 138.08E ELEV. 91 FT
+425 AM CHST WED OCT 14 2026
+
+DATE             WED 10/14/26            THU 10/15/26            FRI 10/16/26
+GMT 3HRLY     03 06 09 12 15 18 21 00 03 06 09 12 15 18 21 00 03 06 09 12 15 18
+UTC 3HRLY     17 20 23 02 05 08 11 14 17 20 23 02 05 08 11 14 17 20 23 02 05 08
+
+MAX/MIN                      86          78          86          78          86
+TEMP             78 81 85 86 84 82 80 79 78 81 85 86 84 82 80 79 78 81 85 86 84
+POP 12HR                     50          30          30          20          20
+
+$$

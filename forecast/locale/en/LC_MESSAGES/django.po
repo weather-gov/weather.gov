@@ -287,6 +287,9 @@ msgstr "There was an error loading the daily forecast."
 msgid "forecast.errors.loading.01"
 msgstr "There was an error loading the forecast."
 
+msgid "forecast.errors.no-forecast.01"
+msgstr "No forecast is available for this location."
+
 msgid "error.500.point-alerts-tab.headline.01"
 msgstr "Alerts data not available"
 

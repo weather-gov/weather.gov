@@ -1,0 +1,18 @@
+Product {
+  // 000 then the WMO line like FPPQ62 PGUM 131830, with an optional CCA/RRA/AAA suffix
+  header = blankLine* "000" eol wmoLine
+  wmoLine = upper upper upper upper digit digit " " upper upper upper upper " " digit6 (" " upper upper upper)? eol
+
+  // PWZ004-FMZ037-023-140700- and FMZ001>003-..., long lists wrap after a dash
+  ugcLine = prefixedZone ugcDash (ugcZone ugcDash)* digit6 "-" eol
+  prefixedZone = upper upper ("Z" | "C") zoneRange
+  ugcZone = prefixedZone | zoneRange
+  zoneRange = zoneNumber (">" zoneNumber)?
+  zoneNumber = digit digit digit
+  ugcDash = "-" "\n"?
+
+  textLine = (~"\n" any)+ eol
+  blankLine = " "* "\n"
+  eol = " "* ("\n" | end)
+  digit6 = digit digit digit digit digit digit
+}

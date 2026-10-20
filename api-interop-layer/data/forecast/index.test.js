@@ -2,7 +2,7 @@ import sinon from "sinon";
 import { expect } from "chai";
 import dayjs from "../../util/day.js";
 import quibble from "quibble";
-import { assignHoursToDays } from "./index.js";
+import { assignHoursToDays, updateMaxPop } from "./index.js";
 
 const place = {
   timezone: "America/Los_Angeles",
@@ -230,6 +230,81 @@ describe("Forecast index", () => {
           "05-2",
           "06-2",
         ]);
+      });
+
+      it("takes non-hourly steps inside the day, including both ends", () => {
+        const days = { days: [{ periods: [] }] };
+
+        const startEndMap = new Map([
+          [
+            days.days[0],
+            {
+              start: new Date("2026-10-14T21:00:00Z"),
+              end: new Date("2026-10-15T21:00:00Z"),
+            },
+          ],
+        ]);
+
+        const hours = [
+          { time: new Date("2026-10-14T09:00:00Z") },
+          { time: new Date("2026-10-14T21:00:00Z") },
+          { time: new Date("2026-10-15T09:00:00Z") },
+          { time: new Date("2026-10-15T21:00:00Z") },
+          { time: new Date("2026-10-16T09:00:00Z") },
+        ];
+
+        assignHoursToDays(days, hours, startEndMap, { nonHourly: true });
+
+        expect(days.days[0].hours).to.eql([hours[1], hours[2], hours[3]]);
+      });
+    });
+
+    describe("updates max PoP", () => {
+      const period = (start, end) => ({
+        start,
+        end,
+        data: { probabilityOfPrecipitation: {} },
+      });
+
+      const day = () => ({
+        periods: [
+          period("2026-10-14T21:00:00Z", "2026-10-15T09:00:00Z"),
+          period("2026-10-15T09:00:00Z", "2026-10-15T21:00:00Z"),
+        ],
+        hours: [
+          ["2026-10-14T21:00:00Z", 20],
+          ["2026-10-15T03:00:00Z", 20],
+          ["2026-10-15T09:00:00Z", 60],
+          ["2026-10-15T15:00:00Z", 60],
+        ].map(([time, percent]) => ({
+          time,
+          probabilityOfPrecipitation: { percent },
+        })),
+      });
+
+      it("counts the step on a period's end in that period for hourly data", () => {
+        const hourly = day();
+
+        updateMaxPop(hourly);
+
+        expect(
+          hourly.periods.map(
+            ({ data }) => data.probabilityOfPrecipitation.hourlyMax,
+          ),
+        ).to.eql([60, 60]);
+      });
+
+      it("leaves the step on a period's end to the next period for non-hourly data", () => {
+        const nonHourly = day();
+
+        updateMaxPop(nonHourly, { nonHourly: true });
+
+        expect(
+          nonHourly.periods.map(
+            ({ data }) => data.probabilityOfPrecipitation.hourlyMax,
+          ),
+        ).to.eql([20, 60]);
+        expect(nonHourly.maxPop).to.equal(60);
       });
     });
 
