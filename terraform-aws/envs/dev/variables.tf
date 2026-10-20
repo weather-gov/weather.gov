@@ -40,3 +40,29 @@ variable "database_username" {
   default     = "weathergov"
   description = "Database username. The password is generated and rotated by AWS Secrets Manager."
 }
+
+variable "container_registry" {
+  type        = string
+  description = "ECR registry (required)"
+}
+
+variable "image_tag" {
+  type        = string
+  description = "Image tag SHA1 hash (required)"
+}
+
+variable "task_order" {
+  type        = string
+  description = "NOAA task order (required)"
+}
+
+variable "gitlab_repo" {
+  type        = string
+  description = "Gitlab repository URL (required)"
+}
+
+variable "log_retention_days" {
+  type        = number
+  default     = 30
+  description = "CloudWatch Logs retention for task log groups."
+}
