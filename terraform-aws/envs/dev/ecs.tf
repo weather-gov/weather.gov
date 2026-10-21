@@ -30,8 +30,27 @@ resource "aws_ecs_task_definition" "ghwo" {
         { "name" : "DB_HOST", "value" : aws_db_instance.main.address },
         { "name" : "DB_PORT", "value" : tostring(aws_db_instance.main.port) },
         { "name" : "DB_NAME", "value" : aws_db_instance.main.db_name },
-        { "name" : "DB_USERNAME", "value" : aws_db_instance.main.username },
       ]
+
+      secrets = [
+        {
+          name      = "DB_USERNAME"
+          valueFrom = "${aws_db_instance.main.master_user_secret[0].secret_arn}:username::"
+        },
+        {
+          name      = "DB_PASSWORD"
+          valueFrom = "${aws_db_instance.main.master_user_secret[0].secret_arn}:password::"
+        },
+      ]
+
+      logConfiguration = {
+        logDriver = "awslogs"
+        options = {
+          "awslogs-group"         = aws_cloudwatch_log_group.ghwo.name
+          "awslogs-region"        = var.region
+          "awslogs-stream-prefix" = "ghwo"
+        }
+      }
     }
   ])
 

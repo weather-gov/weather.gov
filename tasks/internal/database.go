@@ -3,6 +3,8 @@ package internal
 import (
 	"context"
 	"fmt"
+	"net"
+	"net/url"
 	"os"
 
 	"github.com/jackc/pgx/v5"
@@ -33,14 +35,19 @@ func GetDatabaseCredentials() (DatabaseCredentials, error) {
 func NewDBPool(ctx context.Context) (*pgxpool.Pool, error) {
 	connString := os.Getenv("DATABASE_URL")
 	if connString == "" {
-		connString = fmt.Sprintf(
-			"postgres://%s:%s@%s:%s/%s",
-			envOrDefault("DB_USERNAME", "drupal"),
-			envOrDefault("DB_PASSWORD", "drupal"),
-			envOrDefault("DB_HOST", "database"),
-			envOrDefault("DB_PORT", "5432"),
-			envOrDefault("DB_NAME", "weathergov"),
-		)
+		u := url.URL{
+			Scheme: "postgres",
+			User: url.UserPassword(
+				envOrDefault("DB_USERNAME", "drupal"),
+				envOrDefault("DB_PASSWORD", "drupal"),
+			),
+			Host: net.JoinHostPort(
+				envOrDefault("DB_HOST", "database"),
+				envOrDefault("DB_PORT", "5432"),
+			),
+			Path: "/" + envOrDefault("DB_NAME", "weathergov"),
+		}
+		connString = u.String()
 	}
 
 	pool, err := pgxpool.New(ctx, connString)
