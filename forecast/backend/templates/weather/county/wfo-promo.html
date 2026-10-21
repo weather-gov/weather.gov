@@ -3,16 +3,15 @@
 --   Display information about a weather forecast office (WFO).
 -- Used by: county/overview.html
 {% endcomment %}
-<div class="padding-x-2 tablet:padding-x-0 margin-top-3">
-  <h2 class="text-normal text-primary-darker margin-bottom-2">{{ "county.heading.wfo-promo.01" | t}}</h2>
+<div class="padding-x-0">
   {% if data.primary_wfo %}
-    <a href="{{ data.primary_wfo.url }}" class="usa-link">
+    <a href="{{ data.primary_wfo.url }}" class="usa-link line-height-sans-4">
       {% trans_with_args "county.wfo-promo.wfo-label.01" wfo_name=data.primary_wfo.name %}
     </a>
     {% if data.primary_wfo.phone %}
-      <address class="font-mono-xs margin-top-1">
+      <address class="font-mono-xs margin-top-05">
         <span class="text-uppercase text-bold">{{ "county.wfo-promo.labels.phone.01" | t}}:</span>
-        <a class="usa-link" href="tel:{{ data.primary_wfo.phone }}">{{ data.primary_wfo.phone }}</a>
+        <span>{{ data.primary_wfo.phone }}</span>
       </address>
     {% endif %}
   {% else %}

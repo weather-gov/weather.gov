@@ -1156,11 +1156,20 @@ msgstr "Download {office} briefing [pdf]"
 msgid "county.briefing.no-briefing.01"
 msgstr "No recent briefing available"
 
+msgid "county.area-resources.heading.01"
+msgstr "Related area resources"
+
+msgid "county.area-resources.state-link.01"
+msgstr "State view for {state_name}"
+
+msgid "county.area-resources.counties-link.01"
+msgstr "Other counties in {state_name}"
+
 msgid "county.forecast-link.heading.01"
 msgstr "Find a Forecast"
 
 msgid "county.wfo-promo.wfo-label.01"
-msgstr "{wfo_name} Forecast Office"
+msgstr "NWS {wfo_name} Forecast Office"
 
 msgid "county.wfo-promo.labels.phone.01"
 msgstr "Phone"

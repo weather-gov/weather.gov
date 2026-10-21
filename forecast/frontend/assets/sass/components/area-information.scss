@@ -4,7 +4,13 @@
 .area-information-section {
   @include u-font-family("sans");
 
-  .area-information-links {
+  .area-information-links--county {
+    li {
+      margin-bottom: units(2);
+    }
+  }
+
+  .area-information-links--point {
     column-gap: units(2);
 
     li {
