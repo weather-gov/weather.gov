@@ -21,6 +21,20 @@ def compute_severity(risk_entry):
     return sum(day["category"] for day in risk_entry["days"])
 
 
+def get_first_non_zero_risk_day(ghwo_data):
+    """
+    Mark the first non zero level risk day as first.
+
+    This is used to set the first active chicklet button
+    in the interactive risk details table.
+    """
+    for risk in ghwo_data["risks"].values():
+        for day in risk["days"]:
+            if day["category"] > 0:
+                day["is_first"] = True
+                return
+
+
 def process_ghwo_data(ghwo_data, localtz):  # noqa: C901
     """Add timestamps and additional processing for GHWO data."""
     if "error" not in ghwo_data:
@@ -46,13 +60,8 @@ def process_ghwo_data(ghwo_data, localtz):  # noqa: C901
 
             # Pick the first non-zero value and mark it as first. This one
             # will be highlighted on page load.
-            for risk in ghwo_data["risks"].values():
-                for day in risk["days"]:
-                    if day["category"] > 0:
-                        day["is_first"] = True
-                        break
-                    continue
-                    break
+            get_first_non_zero_risk_day(ghwo_data)
+
             # Add any image urls to the list of images to prefetch
             ghwo_data["prefetch_images"] = get_ghwo_daily_images(ghwo_data)
 
