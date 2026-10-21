@@ -21,7 +21,7 @@
   {% if is_binary %}
     {% include "weather/scripts/geobuf.html" %}
   {% endif %}
-  <script src="{% static 'js/cmi-radar.54fb0324.js' %}"
+  <script src="{% static 'js/cmi-radar.729b966f.js' %}"
           nonce="{{ request.csp_nonce }}"
           data-wx-radar-cmi="true"
           defer></script>
@@ -38,7 +38,7 @@
         href="{% static 'css/MarkerCluster.Default@1.4.1.css' %}" />
   <link rel="stylesheet"
         type="text/css"
-        href="{% static 'css/radar/cmi-radar.54fb0324.css' %}" />
+        href="{% static 'css/radar/cmi-radar.729b966f.css' %}" />
 {% endblock %}
 {% block page_content %}
   <div class="bg-primary-dark">
