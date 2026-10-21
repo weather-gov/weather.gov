@@ -1,10 +1,3 @@
-resource "random_password" "db_master" {
-  length  = 32
-  special = true
-  # Exclude characters that could cause issues in connection strings
-  override_special = "!#$%&*()-_=+[]{}<>:?"
-}
-
 resource "aws_db_subnet_group" "main" {
   name        = "weathergov-${var.env}-private"
   description = "Private subnets for weathergov-${var.env}"
@@ -54,9 +47,7 @@ resource "aws_db_instance" "main" {
   # multi AZ by default
   multi_az = true
 
-  # use terraform state instead.
-  # manage_master_user_password = true
-  password = random_password.db_master.result
+  manage_master_user_password = true
   # encrypt by default
   storage_encrypted = true
   # this RDS is not accessible from outside

@@ -38,3 +38,25 @@ resource "aws_iam_role_policy_attachment" "ecs_execution" {
   role       = aws_iam_role.ecs_execution.name
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
 }
+
+data "aws_iam_policy_document" "ecs_execution_secrets" {
+  statement {
+    sid     = "ReadRdsManagedMasterSecret"
+    actions = ["secretsmanager:GetSecretValue"]
+    resources = [
+      "arn:aws:secretsmanager:${var.region}:${data.aws_caller_identity.current.account_id}:secret:rds!db-*",
+    ]
+  }
+
+  statement {
+    sid       = "DecryptViaSecretsManager"
+    actions   = ["kms:Decrypt"]
+    resources = ["arn:aws:kms:${var.region}:${data.aws_caller_identity.current.account_id}:key/*"]
+  }
+}
+
+resource "aws_iam_role_policy" "ecs_execution_secrets" {
+  name   = "weathergov-${var.env}-ecs-execution-secrets"
+  role   = aws_iam_role.ecs_execution.id
+  policy = data.aws_iam_policy_document.ecs_execution_secrets.json
+}
