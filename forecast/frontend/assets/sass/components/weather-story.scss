@@ -5,24 +5,26 @@
  * API setup in order to facilitate the reordering and
  * display of the story image when at the desktop size
  */
-.wx-weather-story-wrapper {
+.wx-weather-story-wrapper,
+.wx-weather-story-wrapper--point,
+.wx-weather-story-wrapper--county {
   display: grid;
   grid-template-areas:
     "a"
     "b"
     "c";
-}
 
-.wx-weather-story-wrapper > *:first-child {
-  grid-area: a;
-}
+  > *:first-child {
+    grid-area: a;
+  }
 
-.wx-weather-story-wrapper > *:nth-child(2) {
-  grid-area: b;
-}
+  > *:nth-child(2) {
+    grid-area: b;
+  }
 
-.wx-weather-story-wrapper > :last-child {
-  grid-area: c;
+  > :last-child {
+    grid-area: c;
+  }
 }
 
 .wx-weather-story-block-section {
@@ -38,6 +40,7 @@
 }
 
 @include at-media("tablet-lg") {
+  .wx-weather-story-wrapper--point,
   .wx-weather-story-wrapper {
     grid-template-areas:
       "a a c"
@@ -45,10 +48,14 @@
     grid-auto-columns: 1fr;
     column-gap: units(4);
   }
+}
 
-  // .wx-weather-story-wrapper {
-  //     > *:first-child {
-  //         border-right: 1px solid color("accent-cool-darker");
-  //     }
-  // }
+@include at-media("desktop") {
+  .wx-weather-story-wrapper--county {
+    grid-template-areas:
+      "a b b"
+      "c b b";
+    grid-auto-columns: 1fr;
+    column-gap: units(4);
+  }
 }

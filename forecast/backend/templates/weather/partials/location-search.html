@@ -6,25 +6,24 @@
 -- Used by: county/overview.html
 {% endcomment %}
 <div class="wx-location-search">
-  <div class="grid-container">
-    <div class="grid-row">
       <form class="usa-form grid-col-12  maxw-tablet-lg"
             data-location-search
             method="get">
-        <div class="display-flex flex-align-end">
-          <label class="usa-label" for="scb__input">{{ "location-search.labels.enter-city-zip.01" | t }}</label>
-          <div class="margin-x-1">|</div>
-          <div>
+          <div class="display-block tablet:display-flex flex-align-center margin-bottom-105">
+            <label class="usa-label" for="scb__input">{{ "location-search.labels.enter-city-zip.01" | t }}</label>
+            <div class="margin-x-105 display-none tablet:display-block font-sans-md text-base-light">|</div>
             <button type="button"
                     id="scb__use_location_button"
                     class="weathergov-use-browser-location usa-button usa-button--unstyled">
-              {{ 'location-search.labels.use-location.01' | t }}
+              <div class="display-flex flex-align-center margin-top-1 tablet:margin-top-0">
+                <svg class="usa-icon height-2 width-2 margin-right-05 text-top" alt="">
+                  <use xlink:href="{% static 'images/uswds/sprite.svg' %}#my_location"></use>
+                </svg>
+                {{ 'location-search.labels.use-location.01' | t }}
+              </div>
             </button>
           </div>
-        </div>
-        <div class="grid-row">
-          <div class="tablet:grid-col-6">
-            <wx-combobox id="scb" tabindex="0" class="margin-top-1 tablet:margin-bottom-3 tablet:margin-right-105">
+          <wx-combobox id="scb" tabindex="0" class="margin-top-1 desktop:margin-bottom-2 tablet:margin-right-105">
             <input id="scb__input"
                    type="text"
                    autocomplete="off"
@@ -55,15 +54,9 @@
             <ul role="group" class="data-results">
             </ul>
             </wx-location-listbox>
-            </wx-combobox>
-          </div>
-          <div class="font-sans-md text-primary-dark tablet:grid-col-6 margin-top-105 margin-bottom-105">
-            <div class="grid-col">
+          </wx-combobox>
+          <div class="font-sans-md text-primary-dark margin-y-105">
               {% include 'weather/partials/wx-search-loading-indicator.html' with for_these="scb__listbox scb__use_location_button" %}
-            </div>
           </div>
-        </div>
       </form>
-    </div>
-  </div>
 </div>
