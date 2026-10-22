@@ -61,8 +61,62 @@ variable "gitlab_repo" {
   description = "Gitlab repository URL (required)"
 }
 
-variable "log_retention_days" {
-  type        = number
-  default     = 30
-  description = "CloudWatch Logs retention for task log groups."
+variable "tasks" {
+  description = "ECR scheduled task definitions."
+
+  type = map(object({
+    cpu         = number
+    memory      = number
+    environment = optional(map(string), {})
+  }))
+
+  default = {
+    # Every 30m.
+    ghwo = {
+      cpu    = 256
+      memory = 1024
+      environment = {
+        TIMEOUT        = "600" # 10m
+        E_WORKER_NUM   = "10"
+        T_WORKER_NUM   = "6"
+        TL_WORKER_NUM  = "6"
+        ERR_WORKER_NUM = "10"
+      }
+    }
+
+    # Every 30m.
+    gridcache = {
+      cpu    = 256
+      memory = 1024
+    }
+
+    # Every 60m, offset :10.
+    wpcprob = {
+      cpu    = 1024
+      memory = 4096
+    }
+  }
+}
+
+variable "services" {
+  description = "ECR service definitions."
+
+  type = map(object({
+    cpu           = number
+    memory        = number
+    desired_count = optional(number, 0)
+    environment   = optional(map(string), {})
+
+    # special case alerts, since it's not weathergov-<env>-alerts but rather
+    # weathergov-<env>-tasks-alerts.
+    repository = optional(string)
+  }))
+
+  default = {
+    alerts = {
+      cpu        = 256
+      memory     = 512
+      repository = "tasks-alerts"
+    }
+  }
 }
