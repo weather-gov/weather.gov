@@ -1,3 +1,23 @@
+locals {
+  # every ECR task or service requires the same database settings.
+  task_db_environment = [
+    { name = "DB_HOST", value = aws_db_instance.main.address },
+    { name = "DB_PORT", value = tostring(aws_db_instance.main.port) },
+    { name = "DB_NAME", value = aws_db_instance.main.db_name },
+  ]
+
+  task_db_secrets = [
+    {
+      name      = "DB_USERNAME"
+      valueFrom = "${aws_db_instance.main.master_user_secret[0].secret_arn}:username::"
+    },
+    {
+      name      = "DB_PASSWORD"
+      valueFrom = "${aws_db_instance.main.master_user_secret[0].secret_arn}:password::"
+    },
+  ]
+}
+
 resource "aws_ecs_cluster" "main" {
   name = "weathergov-${var.env}"
 
@@ -6,49 +26,37 @@ resource "aws_ecs_cluster" "main" {
   }
 }
 
-resource "aws_ecs_task_definition" "ghwo" {
-  family                   = "weathergov-${var.env}-ghwo"
+// for each ECR scheduled task (ghwo, gridcache, wpcprob).
+resource "aws_ecs_task_definition" "tasks" {
+  for_each = var.tasks
+
+  family                   = "weathergov-${var.env}-${each.key}"
   requires_compatibilities = ["FARGATE"]
   network_mode             = "awsvpc"
 
-  # start on the smallest tier. TODO: make this configurable
-  cpu    = 256
-  memory = 1024
+  cpu    = each.value.cpu
+  memory = each.value.memory
 
   container_definitions = jsonencode([
     {
-      name      = "ghwo"
-      image     = "${var.container_registry}/weathergov-${var.env}-tasks-ghwo:${var.image_tag}"
+      name      = each.key
+      image     = "${var.container_registry}/weathergov-${var.env}-tasks-${each.key}:${var.image_tag}"
       essential = true
 
-      environment = [
-        { "name" : "TIMEOUT", "value" : "600" }, # 10m
-        { "name" : "E_WORKER_NUM", "value" : "10" },
-        { "name" : "T_WORKER_NUM", "value" : "6" },
-        { "name" : "TL_WORKER_NUM", "value" : "6" },
-        { "name" : "ERR_WORKER_NUM", "value" : "10" },
-        { "name" : "DB_HOST", "value" : aws_db_instance.main.address },
-        { "name" : "DB_PORT", "value" : tostring(aws_db_instance.main.port) },
-        { "name" : "DB_NAME", "value" : aws_db_instance.main.db_name },
-      ]
+      # NB: map iteration is lexically ordered so its the same order every time
+      environment = concat(
+        [for name, value in each.value.environment : { name = name, value = value }],
+        local.task_db_environment,
+      )
 
-      secrets = [
-        {
-          name      = "DB_USERNAME"
-          valueFrom = "${aws_db_instance.main.master_user_secret[0].secret_arn}:username::"
-        },
-        {
-          name      = "DB_PASSWORD"
-          valueFrom = "${aws_db_instance.main.master_user_secret[0].secret_arn}:password::"
-        },
-      ]
+      secrets = local.task_db_secrets
 
       logConfiguration = {
         logDriver = "awslogs"
         options = {
-          "awslogs-group"         = aws_cloudwatch_log_group.ghwo.name
+          "awslogs-group"         = aws_cloudwatch_log_group.workloads[each.key].name
           "awslogs-region"        = var.region
-          "awslogs-stream-prefix" = "ghwo"
+          "awslogs-stream-prefix" = each.key
         }
       }
     }
@@ -59,6 +67,74 @@ resource "aws_ecs_task_definition" "ghwo" {
   runtime_platform {
     operating_system_family = "LINUX"
     cpu_architecture        = "X86_64"
+  }
+
+  tags = {
+    "noaa:subcomponent" = "applicationserver"
+  }
+}
+
+// for each ECR service (alerts, django, interop).
+resource "aws_ecs_task_definition" "services" {
+  for_each = var.services
+
+  family                   = "weathergov-${var.env}-${each.key}"
+  requires_compatibilities = ["FARGATE"]
+  network_mode             = "awsvpc"
+
+  cpu    = each.value.cpu
+  memory = each.value.memory
+
+  container_definitions = jsonencode([
+    {
+      name      = each.key
+      image     = "${var.container_registry}/weathergov-${var.env}-${coalesce(each.value.repository, each.key)}:${var.image_tag}"
+      essential = true
+
+      # NB: map iteration is lexically ordered so its the same value every time
+      environment = concat(
+        [for name, value in each.value.environment : { name = name, value = value }],
+        local.task_db_environment,
+      )
+
+      secrets = local.task_db_secrets
+
+      logConfiguration = {
+        logDriver = "awslogs"
+        options = {
+          "awslogs-group"         = aws_cloudwatch_log_group.workloads[each.key].name
+          "awslogs-region"        = var.region
+          "awslogs-stream-prefix" = each.key
+        }
+      }
+    }
+  ])
+
+  execution_role_arn = aws_iam_role.ecs_execution.arn
+
+  runtime_platform {
+    operating_system_family = "LINUX"
+    cpu_architecture        = "X86_64"
+  }
+
+  tags = {
+    "noaa:subcomponent" = "applicationserver"
+  }
+}
+
+resource "aws_ecs_service" "services" {
+  for_each = var.services
+
+  name            = "weathergov-${var.env}-${each.key}"
+  cluster         = aws_ecs_cluster.main.id
+  task_definition = aws_ecs_task_definition.services[each.key].arn
+  desired_count   = each.value.desired_count
+  launch_type     = "FARGATE"
+
+  network_configuration {
+    subnets          = data.aws_subnets.private.ids
+    security_groups  = [aws_security_group.tasks.id]
+    assign_public_ip = false
   }
 
   tags = {
