@@ -224,6 +224,27 @@ const setupRadar = () => {
       updateRadarTimestamps(container);
     }
   });
+
+  // When the radar auto-refreshes and gets new frames, we
+  // need to update the timestamps. Hook into the cmi-radar's
+  // events for when new frames come in, then call the timestamp
+  // update function.
+  window.app.$store.watch(
+    () => window.app.$store.getters.animationFramesRaw,
+    (newFrames) => {
+      // If frames is an array, the frames have loaded even if invalid or empty
+      if (Array.isArray(newFrames)) {
+        if (newFrames.length > 0) {
+          // Then we have received new radar frames
+          // So let's update the timestamps
+          updateRadarTimestamps(container);
+        } else {
+          console.warn("RADAR-FRAMES-LISTENER: Invalid frames received");
+        }
+      }
+    },
+    { immediate: true },
+  );
 };
 
 const scriptEl = document.querySelector("[data-wx-radar-cmi]");
