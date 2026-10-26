@@ -1,0 +1,18 @@
+{% extends "weather/page.html" %}
+{% comment %}
+-- Template purpose:
+--   Display marine coastal search and list views
+{% endcomment %}
+{% block head_js %}
+  {% comment %} Place holder for coastal js {% endcomment %}
+{% endblock %}
+{% block page_content %}
+  <div class="grid-container">
+    <div class="grid-row">
+      <div class="grid-col-12">
+        <h1 class="font-sans-2xl text-primary-dark text-normal">{{"coastal.heading.index.01"|t}}</h1>
+        <p>{{"coastal.heading.coming.01"|t}}</p>
+      </div>
+    </div>
+  </div>
+{% endblock %}

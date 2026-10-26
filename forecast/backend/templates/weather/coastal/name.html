@@ -1,0 +1,14 @@
+{% comment %}
+-- Template purpose:
+--   Display a banner with the name of a coastal zone.
+-- Used by: coastal/alerts.html
+            coastal/risks.html
+            coastal/conditions.html
+{% endcomment %}
+<div class="bg-primary-dark">
+  <div class="grid-container">
+    <div class="grid-row flex-no-wrap">
+      <h1 class="text-white font-heading-xl tablet:flex-1">{{ zone_name }}</h1>
+    </div>
+  </div>
+</div>

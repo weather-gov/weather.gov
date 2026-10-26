@@ -81,3 +81,17 @@ class PlaceNameConverter:
     def to_url(self, value):
         """Return as string."""
         return value
+
+
+class ZoneIdConverter:
+    """Utility class to find and convert zone ids in URLs."""
+
+    regex = "[A-Za-z]{2}[CcZz]\\d{3}"
+
+    def to_python(self, value):
+        """Return as string."""
+        return value
+
+    def to_url(self, value):
+        """Return as string."""
+        return value

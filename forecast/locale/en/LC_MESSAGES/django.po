@@ -979,6 +979,31 @@ msgstr "%(state)s Analysis"
 msgid "site.meta.description.state_analysis"
 msgstr "View and download all available National Weather Service area forecast discussions and severe weather briefings for %(state)s."
 
+msgid "site.meta.titles.coastal_index"
+msgstr "Coastal Zone Forecast"
+msgid "site.meta.description.coastal_index"
+msgstr "Search for any coastal zone in the U.S. to learn more about its active weather hazards and observations from the National Weather Service."
+
+msgid "site.meta.titles.coastal_overview"
+msgstr "%(zone)s Forecast"
+msgid "site.meta.description.coastal_overview"
+msgstr "View local weather forecasts and observations for %(zone)s from the National Weather Service."
+
+msgid "site.meta.titles.coastal_alerts"
+msgstr "%(zone)s Alerts"
+msgid "site.meta.description.coastal_alerts"
+msgstr "Learn more about any active weather alerts and warnings for %(zone)s from the National Weather Service."
+
+msgid "site.meta.titles.coastal_forecast"
+msgstr "%(zone)s Forecast"
+msgid "site.meta.description.coastal_forecast"
+msgstr "View local weather forecasts and observations for %(zone)s from the National Weather Service."
+
+msgid "site.meta.titles.coastal_conditions"
+msgstr "%(zone)s Conditions"
+msgid "site.meta.description.coastal_conditions"
+msgstr "View local weather conditions for %(zone)s from the National Weather Service."
+
 msgid "site.meta.titles.deprecated_office"
 msgstr "Error: Page Not Found"
 msgid "site.meta.description.deprecated_office"
@@ -1355,6 +1380,30 @@ msgstr "{count} of {total} {subdivision}"
 
 msgid "spatial.status.see-list.01"
 msgstr "See List of {subdivision}"
+
+msgid "coastal.heading.index.01"
+msgstr "Find Coastal Zone Forecast"
+
+msgid "coastal.heading.coming.01"
+msgstr "Coastal zone forecast coming soon."
+
+msgid "coastal.label.alerts.01"
+msgstr "Alerts"
+
+msgid "coastal.label.forecast.01"
+msgstr "Forecast"
+
+msgid "coastal.label.conditions.01"
+msgstr "Conditions"
+
+msgid "coastal.heading.alerts.01"
+msgstr "Alerts"
+
+msgid "coastal.heading.forecast.01"
+msgstr "Forecast"
+
+msgid "coastal.heading.conditions.01"
+msgstr "Conditions"
 
 msgid "error.non-critical.01"
 msgstr "There was an error loading {component}. Please wait a moment and try refreshing the page."
