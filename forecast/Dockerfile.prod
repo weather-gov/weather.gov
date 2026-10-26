@@ -18,7 +18,8 @@ ARG BASE_TAG=24.04-20260728
 # to be installed.
 
 # NB: ECR golden images are not ready. use stock ubuntu as a workaround.
-FROM ubuntu:24.04 AS geo-base
+# hadolint ignore=DL3029
+FROM --platform=linux/amd64 ubuntu:24.04 AS geo-base
 ## FROM ${BASE_REGISTRY}/golden-base-ubuntu:${BASE_TAG} AS geo-base
 
 # per documentation for the golden image builder: "You are uid 1001. Add USER 0
