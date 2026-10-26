@@ -1,0 +1,37 @@
+{% extends "weather/page.html" %}
+{% comment %}
+-- Template purpose:
+--   Display marine coastal zone forecast
+-- Url: https://beta.weather.gov/forecast/marine/coastal/ANZ500/forecast/
+{% endcomment %}
+{% block head_js %}
+  {% comment %} Place holder for any needed coastal js {% endcomment %}
+{% endblock %}
+
+{% block page_end_js %}
+  <script type="module" src="{% static 'js/coastal/alerts.html.js' %}"></script>
+{% endblock %}
+
+{% block page_head_css %}
+  <!-- Prefetch for other tab pages -->
+  <link rel="prefetch" href="{% url 'coastal_alerts' zone_id=zone_id %}" />
+  <link rel="prefetch" href="{% url 'coastal_forecast' zone_id=zone_id %}" />
+  <link rel="prefetch" href="{% url 'coastal_conditions' zone_id=zone_id %}" />
+{% endblock %}
+
+{% block page_content %}
+  <div class="height-full">
+    {% include 'weather/coastal/name.html' with zone_name=zone.name zone_id=zone_id %}
+    <wx-tabbed-nav class="flex-1 display-flex flex-column position-relative flex-1" id="coastal-page-tabbed-nav">
+        {% include "weather/coastal/tabs.html" with url_name=request.resolver_match.url_name %}
+    </wx-tabbed-nav>
+    <div class="grid-container">
+      <div class="grid-row">
+        <div class="grid-col-12">
+          <h2 class="font-sans-2xl text-primary-dark text-normal">{{"coastal.heading.forecast.01"|t}}</h2>
+          <p>{{"coastal.heading.coming.01"|t}}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

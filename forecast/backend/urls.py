@@ -4,7 +4,7 @@ from django.views.generic.base import RedirectView, TemplateView
 from wagtail.admin import urls as wagtailadmin_urls
 from wagtail.documents import urls as wagtaildocs_urls
 
-from backend.views import county, errors, index, location_search, offices, partials, point, risk, state
+from backend.views import coastal, county, errors, index, location_search, offices, partials, point, risk, state
 from backend.views.cms_logout import cms_logout
 
 from .url_converters import (
@@ -14,6 +14,7 @@ from .url_converters import (
     PlaceNameConverter,
     StateCodeConverter,
     WFOConverter,
+    ZoneIdConverter,
 )
 
 register_converter(FloatConverter, "float")
@@ -22,6 +23,7 @@ register_converter(AFDIdentifierConverter, "afdid")
 register_converter(FIPSConverter, "fips")
 register_converter(StateCodeConverter, "statecode")
 register_converter(PlaceNameConverter, "placename")
+register_converter(ZoneIdConverter, "zoneid")
 
 # Page titles are in django.po with keys like "site.meta.titles.<url_name>".
 # These are parsed by the set_title_and_description templatetag.
@@ -39,6 +41,14 @@ urlpatterns = [
     path("tools/afd/", point.afd_index, name="afd_index"),
     path("tools/afd/<wfocode:wfo>/", point.afd_by_office, name="afd_by_office"),
     path("tools/afd/<wfocode:wfo>/<afdid:afd_id>/", point.afd_by_office_and_id, name="afd_by_office_and_id"),
+    # Marine landing (redirect to coastal for now)
+    path("forecast/marine/", RedirectView.as_view(url="coastal")),
+    # Marine Coastal pages
+    path("forecast/marine/coastal/", coastal.index, name="coastal_index"),
+    path("forecast/marine/coastal/<zoneid:zone_id>/", coastal.coastal_alerts, name="coastal_overview"),
+    path("forecast/marine/coastal/<zoneid:zone_id>/alerts/", coastal.coastal_alerts, name="coastal_alerts"),
+    path("forecast/marine/coastal/<zoneid:zone_id>/forecast/", coastal.coastal_forecast, name="coastal_forecast"),
+    path("forecast/marine/coastal/<zoneid:zone_id>/conditions/", coastal.coastal_conditions, name="coastal_conditions"),
     # County pages
     path("forecast/county/", county.index, name="county_index"),
     re_path(r"forecast/county/(?P<county_slug>[\w|-]+-\w+)/$", county.county_overview, name="county_state_overview"),
