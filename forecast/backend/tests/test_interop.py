@@ -409,7 +409,7 @@ class TestInteropInterface(TestCase):
     @responses.activate
     @mock.patch("backend.interop._")
     def test_point_forecast_wpc_prob_east_west(self, mock_gettext_lazy):
-        """Tests that East and West points reading the same 05z run each get the 12z windows on their own dates."""
+        """Tests that points across time zones reading the same 05z run each get the 12z windows on their own dates."""
         mock_gettext_lazy.side_effect = lambda key: key
         os.environ["INTEROP_URL"] = "https://interop"
         rain = {"range": {"high": {"amount": 1.25, "chance": 0.1}}, "probabilities": []}
@@ -427,7 +427,7 @@ class TestInteropInterface(TestCase):
                 ("2009-01-04T12:00:00Z", "2009-01-05T12:00:00Z"),
             ]
         ]
-        # At 05z it's already Jan 2 in New York but still Jan 1 in Los Angeles
+        # At 05z it's already Jan 2 in New York and San Juan but still Jan 1 in Los Angeles, Alaska and Hawaii
         cases = [
             (
                 "America/New_York",
@@ -437,6 +437,26 @@ class TestInteropInterface(TestCase):
             (
                 "America/Los_Angeles",
                 ["2009-01-01T08:00:00Z", "2009-01-02T08:00:00Z", "2009-01-03T08:00:00Z", "2009-01-04T08:00:00Z"],
+                [0, 1, 2],
+            ),
+            (
+                "America/Puerto_Rico",
+                ["2009-01-02T04:00:00Z", "2009-01-03T04:00:00Z", "2009-01-04T04:00:00Z", "2009-01-05T04:00:00Z"],
+                [1, 2, 3],
+            ),
+            (
+                "America/Anchorage",
+                ["2009-01-01T09:00:00Z", "2009-01-02T09:00:00Z", "2009-01-03T09:00:00Z", "2009-01-04T09:00:00Z"],
+                [0, 1, 2],
+            ),
+            (
+                "America/Adak",
+                ["2009-01-01T10:00:00Z", "2009-01-02T10:00:00Z", "2009-01-03T10:00:00Z", "2009-01-04T10:00:00Z"],
+                [0, 1, 2],
+            ),
+            (
+                "Pacific/Honolulu",
+                ["2009-01-01T10:00:00Z", "2009-01-02T10:00:00Z", "2009-01-03T10:00:00Z", "2009-01-04T10:00:00Z"],
                 [0, 1, 2],
             ),
         ]

@@ -22,10 +22,10 @@ type decodeBuffers struct {
 	grid []float32
 }
 
-func newDecodeBuffers() *decodeBuffers {
+func newDecodeBuffers(nx, ny int) *decodeBuffers {
 	return &decodeBuffers{
-		raw:  make([]byte, gridNX*gridNY*4+ieeeRecordOverhead),
-		grid: make([]float32, gridNX*gridNY),
+		raw:  make([]byte, nx*ny*4+ieeeRecordOverhead),
+		grid: make([]float32, nx*ny),
 	}
 }
 
@@ -66,7 +66,7 @@ func readInto(path string, buf []byte) ([]byte, error) {
 	}
 	// A short file is a truncated dump, a long one is a grid that isn't WPC's
 	if info.Size() != int64(len(buf)) {
-		return nil, fmt.Errorf("unexpected output size %d, expected %d (grid %dx%d)", info.Size(), len(buf), gridNX, gridNY)
+		return nil, fmt.Errorf("unexpected output size %d, expected %d", info.Size(), len(buf))
 	}
 	if _, err := io.ReadFull(f, buf); err != nil {
 		return nil, err
@@ -76,8 +76,8 @@ func readInto(path string, buf []byte) ([]byte, error) {
 
 func parseGrid(data []byte, grid []float32) error {
 	recordLen := binary.BigEndian.Uint32(data[:4])
-	if recordLen != uint32(gridNX*gridNY*4) {
-		return fmt.Errorf("unexpected record length %d, expected %d", recordLen, gridNX*gridNY*4)
+	if recordLen != uint32(len(grid)*4) {
+		return fmt.Errorf("unexpected record length %d, expected %d", recordLen, len(grid)*4)
 	}
 
 	for i := range grid {
@@ -100,16 +100,16 @@ func valueAtCell(grid []float32, cell int32) (float32, bool) {
 }
 
 // Decode every (variable, period, band), one grid live at a time, and store each variable once
-func DecodeAndStoreVariables(ctx context.Context, logger *slog.Logger, wgrib2Bin, destDir, cycle string, fhours []string, bands []Band, gridpoints []Gridpoint, store func(string, *VariableMatrix) error) error {
+func DecodeAndStoreVariables(ctx context.Context, logger *slog.Logger, wgrib2Bin, destDir string, region Region, cycle string, fhours []string, bands []Band, gridpoints []Gridpoint, store func(string, *VariableMatrix) error) error {
 	buf := newMatrixBuffer(bands, len(fhours), len(gridpoints))
-	bufs := newDecodeBuffers()
+	bufs := newDecodeBuffers(region.NX, region.NY)
 	decoded := 0
 
 	for _, group := range groupByVariable(bands) {
 		matrix := matrixFor(buf, group, len(fhours), len(gridpoints))
 		for periodIdx, fhour := range fhours {
 			for bandIdx, b := range group {
-				path := filepath.Join(destDir, bandFilename(b, cycle, fhour))
+				path := filepath.Join(destDir, bandFilename(region.Name, b, cycle, fhour))
 				grid, err := DecodeGrid(ctx, wgrib2Bin, path, bufs)
 				// Disk falls back as the run proceeds rather than holding all 156 files at once
 				os.Remove(path)

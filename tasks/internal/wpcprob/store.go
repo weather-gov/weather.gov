@@ -20,6 +20,12 @@ var (
 	createScratchSQL   = fmt.Sprintf(`CREATE TABLE IF NOT EXISTS %s (wfo text, x integer, y integer, value real[])`, internal.DBSanitize(scratchTable))
 	truncateScratchSQL = fmt.Sprintf(`TRUNCATE %s`, internal.DBSanitize(scratchTable))
 	dropScratchSQL     = fmt.Sprintf(`DROP TABLE IF EXISTS %s`, internal.DBSanitize(scratchTable))
+	// id stays out since the staging and live sequences overlap
+	carryForwardSQL = fmt.Sprintf(`
+		INSERT INTO %[1]s (wfo, x, y, cycle, valid_times, rain_data, snow_data, freezing_rain_data, updated_at)
+		SELECT wfo, x, y, cycle, valid_times, rain_data, snow_data, freezing_rain_data, updated_at FROM %[2]s
+		ON CONFLICT (wfo, x, y) DO NOTHING
+	`, internal.DBSanitize(swapTables.StagingName), internal.DBSanitize(targetTable))
 )
 
 // The column varies by variable, so this one can't be built once up front
@@ -32,22 +38,35 @@ func storeVariableSQL(variable string) string {
 	`, internal.DBSanitize(swapTables.StagingName), internal.DBSanitize(dataColumn(variable)), internal.DBSanitize(scratchTable))
 }
 
-// Create a fresh staging table and seed it with one identity row per gridpoint
-func CreateStaging(ctx context.Context, pool *pgxpool.Pool, gridpoints []Gridpoint, wfos []string, cycle time.Time, validTimes []time.Time) error {
+// Create a fresh, empty staging table that every region seeds into
+func CreateStaging(ctx context.Context, pool *pgxpool.Pool) error {
 	if err := swapTables.CreateStagingTable(ctx, pool); err != nil {
 		return fmt.Errorf("creating staging table: %w", err)
 	}
+	return nil
+}
 
+// Add one identity row per gridpoint to the staging table CreateStaging made
+func SeedStaging(ctx context.Context, tx pgx.Tx, gridpoints []Gridpoint, wfos []string, cycle time.Time, validTimes []time.Time) error {
 	now := time.Now()
 	columns := []string{"wfo", "x", "y", "cycle", "valid_times", "updated_at"}
 	source := pgx.CopyFromSlice(len(gridpoints), func(i int) ([]any, error) {
 		gp := gridpoints[i]
 		return []any{wfos[gp.WFO], int(gp.X), int(gp.Y), cycle, validTimes, now}, nil
 	})
-	if _, err := pool.CopyFrom(ctx, pgx.Identifier{swapTables.StagingName}, columns, source); err != nil {
+	if _, err := tx.CopyFrom(ctx, pgx.Identifier{swapTables.StagingName}, columns, source); err != nil {
 		return fmt.Errorf("seeding staging table: %w", err)
 	}
 	return nil
+}
+
+// Fill every gridpoint that got no fresh rows this run with the live table's last rows
+func CarryForward(ctx context.Context, pool *pgxpool.Pool) (int64, error) {
+	tag, err := pool.Exec(ctx, carryForwardSQL)
+	if err != nil {
+		return 0, fmt.Errorf("carrying forward live rows: %w", err)
+	}
+	return tag.RowsAffected(), nil
 }
 
 func dataColumn(variable string) string {
@@ -55,12 +74,12 @@ func dataColumn(variable string) string {
 }
 
 // Copy one variable's decoded arrays into a scratch table, then write them into staging in one pass
-func StoreVariable(ctx context.Context, pool *pgxpool.Pool, variable string, matrix *VariableMatrix, gridpoints []Gridpoint, wfos []string) error {
+func StoreVariable(ctx context.Context, tx pgx.Tx, variable string, matrix *VariableMatrix, gridpoints []Gridpoint, wfos []string) error {
 	// Reused and truncated per variable rather than recreated, and never holds more than one variable's rows at a time
-	if _, err := pool.Exec(ctx, createScratchSQL); err != nil {
+	if _, err := tx.Exec(ctx, createScratchSQL); err != nil {
 		return fmt.Errorf("creating scratch table: %w", err)
 	}
-	if _, err := pool.Exec(ctx, truncateScratchSQL); err != nil {
+	if _, err := tx.Exec(ctx, truncateScratchSQL); err != nil {
 		return fmt.Errorf("truncating scratch table: %w", err)
 	}
 
@@ -69,11 +88,11 @@ func StoreVariable(ctx context.Context, pool *pgxpool.Pool, variable string, mat
 		// A nil slice writes NULL, which is what an all-zero variable is worth
 		return []any{wfos[gp.WFO], int(gp.X), int(gp.Y), matrix.point(i)}, nil
 	})
-	if _, err := pool.CopyFrom(ctx, pgx.Identifier{scratchTable}, []string{"wfo", "x", "y", "value"}, source); err != nil {
+	if _, err := tx.CopyFrom(ctx, pgx.Identifier{scratchTable}, []string{"wfo", "x", "y", "value"}, source); err != nil {
 		return fmt.Errorf("copying %s values into scratch table: %w", variable, err)
 	}
 
-	if _, err := pool.Exec(ctx, storeVariableSQL(variable)); err != nil {
+	if _, err := tx.Exec(ctx, storeVariableSQL(variable)); err != nil {
 		return fmt.Errorf("writing %s into staging table: %w", variable, err)
 	}
 	return nil
