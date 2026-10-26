@@ -84,7 +84,7 @@ func TestParseGrid_WrongRecordLength(t *testing.T) {
 
 // readInto should reject a dump that isn't exactly one full grid, which is what a truncated file looks like
 func TestReadInto_WrongSize(t *testing.T) {
-	bufs := newDecodeBuffers()
+	bufs := newDecodeBuffers(gridNX, gridNY)
 	dir := t.TempDir()
 
 	for _, tc := range []struct {

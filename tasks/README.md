@@ -51,13 +51,13 @@ The Graphical Hazardous Weather Outlook (GHWO, also known as Risks Overview) pro
 This program, which runs every 30m, will fetch all GHWO data from all the WFOs that we know about, process the information into a structure that we find useful, and save these records into our database.
 
 ### WPC Probabilistic Precipitation ###
-Runs hourly at 10 past. Downloads NOAA WPC's probabilistic precipitation/snow/freezing-rain GRIB2 products, maps each grid cell to an NDFD `(wfo, x, y)` gridpoint, and loads the results into `weathergov_wpc_prob_precip`.
+Runs hourly at 10 past. Downloads NOAA WPC's probabilistic precipitation/snow/freezing-rain GRIB2 products for CONUS, Alaska, Hawaii and Puerto Rico, maps each grid cell to an NDFD `(wfo, x, y)` gridpoint, and loads the results into `weathergov_wpc_prob_precip`.
 
-- Pulls three consecutive 24-hour windows per cycle, one per rendered forecast day. `valid_times` holds the end of each window, and the three `real[]` columns hold every band for every period end to end. `BandList()` fixes that layout, and interop reads it back positionally.
-- 52 bands per period across the three variables, so 156 files per run. A file WPC does not serve leaves NaN in its slots and the row still stores. Only a run that decodes nothing aborts before the swap.
+- Pulls three consecutive 24-hour windows per cycle, one per rendered forecast day. `valid_times` holds the end of each window, and the three `real[]` columns hold every band for every period end to end. `BandList` fixes that layout, and interop reads it back positionally.
+- 52 bands per period across the three variables, so 156 files per run. A file WPC does not serve leaves NaN in its slots and the row still stores. Each region stages in its own transaction, so a region that fails keeps last hour's rows and the rest still publish. Only a run where every region fails aborts before the swap.
 - Code layout: `cmd/wpcprob/main.go` just orchestrates the steps. The actual GRIB decoding, projection math, and DB logic live in `internal/wpcprob`.
 - Database: connects via `internal.NewDBPool`, which reads `DATABASE_URL` if set, otherwise builds one from `DB_HOST` / `DB_PORT` / `DB_NAME` / `DB_USERNAME` / `DB_PASSWORD`, defaulting to the local docker-compose values if none are set.
-- Environment: `WPCPROB_TIMEOUT` caps the run in whole seconds, default 6 minutes against a measured 4m45s. `MEMORY_LIMIT` is read from cloud.gov to set the Go soft memory limit.
+- Environment: `WPCPROB_TIMEOUT` caps the run in whole seconds, default 30 minutes against a measured 5m30s with all four regions. `MEMORY_LIMIT` is read from cloud.gov to set the Go soft memory limit.
 - Running it locally: `just go-run-wpcprob` builds the standalone `wpcprob-tasks` image and runs the program with `-latest`, which takes the newest published cycle. Without that flag the program waits for the current hour's cycle, which WPC does not publish until roughly 11 past, so a manual run would otherwise poll for 90 seconds and fail.
 - Do not run it by hand while the cron may fire. Two concurrent runs drop each other's staging and scratch tables, which is also why `WPCPROB_TIMEOUT` defaults well inside the hour.
 

@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"math"
 	"strings"
+
+	"github.com/wroge/wgs84/v2"
 )
 
 // One grib2 file to download, plus how to read the numbers inside it
@@ -86,10 +88,92 @@ var wpcVariables = []wpcVariable{
 
 var percentiles = []string{"05", "10", "25", "50", "75", "90", "95"}
 
-// Order here is the stored array layout, which interop reads back positionally
-func BandList() []Band {
-	var bands []Band
+// HI and PR publish rain alone
+var rainOnly = []wpcVariable{variableNamed("rain")}
+
+func variableNamed(name string) wpcVariable {
 	for _, v := range wpcVariables {
+		if v.Name == name {
+			return v
+		}
+	}
+	panic("no wpcVariable named " + name)
+}
+
+// One WPC feed, its grid, and the CWAs whose gridpoints it covers
+type Region struct {
+	Name      string // WPC's directory and file name code
+	NX, NY    int
+	DxM, DyM  float64
+	Lat1Deg   float64 // latitude of grid cell (col 1, row 1)
+	Lon1Deg   float64 // longitude of grid cell (col 1, row 1)
+	CRS       wgs84.CoordinateReferenceSystem
+	CWAs      []string // empty picks gridpoints by grid bounds instead
+	Variables []wpcVariable
+}
+
+var CONUS = Region{
+	Name:      "co",
+	NX:        gridNX,
+	NY:        gridNY,
+	DxM:       gridDxM,
+	DyM:       gridDyM,
+	Lat1Deg:   gridLat1Deg,
+	Lon1Deg:   gridLon1Deg,
+	CRS:       wpcLCC,
+	Variables: wpcVariables,
+}
+
+// OCONUS grid values are read off wgrib2 <file> -d 1 -grid on each region's WPC files
+var Alaska = Region{
+	// polar stereographic (1649 x 1105) lat1 40.530101 lon1 181.429 latD 60 lonV 210 dx 2976 m
+	Name:      "ak",
+	NX:        1649,
+	NY:        1105,
+	DxM:       2976,
+	DyM:       2976,
+	Lat1Deg:   40.530101,
+	Lon1Deg:   -178.571,
+	CRS:       wpcCRS(polarStereographic{Lonf: -150, Latts: 60}),
+	CWAs:      []string{"AFG", "AJK", "AER", "ALU"},
+	Variables: wpcVariables,
+}
+
+var Hawaii = Region{
+	// Mercator (321 x 225) LatD 20 lat1 18.072699 lon 198.474999 to 206.130999, no dx so 2500 m is that span / 320 at LatD 20
+	Name:      "hi",
+	NX:        321,
+	NY:        225,
+	DxM:       webMercatorSpacing(2500, 20),
+	DyM:       webMercatorSpacing(2500, 20),
+	Lat1Deg:   18.072699,
+	Lon1Deg:   -161.525001,
+	CRS:       wpcCRS(wgs84.WebMercator{}),
+	CWAs:      []string{"HFO"},
+	Variables: rainOnly,
+}
+
+var PuertoRico = Region{
+	// Mercator (339 x 225) LatD 20 lat1 16.977485 lon 291.972167 to 296.0156, no dx so 1250 m is that span / 338 at LatD 20
+	Name:      "pr",
+	NX:        339,
+	NY:        225,
+	DxM:       webMercatorSpacing(1250, 20),
+	DyM:       webMercatorSpacing(1250, 20),
+	Lat1Deg:   16.977485,
+	Lon1Deg:   -68.027833,
+	CRS:       wpcCRS(wgs84.WebMercator{}),
+	CWAs:      []string{"SJU"},
+	Variables: rainOnly,
+}
+
+// Run after CONUS, smallest first so a slow AK can't starve HI and PR
+var OCONUSRegions = []Region{Hawaii, PuertoRico, Alaska}
+
+// Order here is the stored array layout, which interop reads back positionally
+func BandList(variables []wpcVariable) []Band {
+	var bands []Band
+	for _, v := range variables {
 		bands = append(bands, Band{
 			FileFragment: v.Ptype + "24i",
 			Variable:     v.Name,
@@ -129,13 +213,13 @@ func thresholdKey(th string) string {
 	return strings.Replace(th, "p", ".", 1)
 }
 
-func bandFilename(b Band, cycle, fhour string) string {
-	return fmt.Sprintf("ndfd_co_%s_%sf%s.grib2", b.FileFragment, cycle, fhour)
+func bandFilename(region string, b Band, cycle, fhour string) string {
+	return fmt.Sprintf("ndfd_%s_%s_%sf%s.grib2", region, b.FileFragment, cycle, fhour)
 }
 
 // An NDFD gridpoint paired with the flat offset of the WPC grid cell it falls in
 type Gridpoint struct {
-	Cell int32 // (row-1)*gridNX + (col-1)
+	Cell int32 // (row-1)*Region.NX + (col-1)
 	X, Y int16 // NDFD grid tops out at 613 x 478
 	WFO  uint8 // index into the WFO table LoadGridpoints returns, 123 today
 }

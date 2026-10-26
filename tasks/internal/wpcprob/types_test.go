@@ -68,7 +68,7 @@ func TestMatrixPointEmpty(t *testing.T) {
 // The shared buffer must not leak the previous variable's values into the next one
 func TestMatrixBufferReuse(t *testing.T) {
 	const points, periods = 2, 3
-	buf := newMatrixBuffer(BandList(), periods, points)
+	buf := newMatrixBuffer(BandList(wpcVariables), periods, points)
 
 	wide := matrixFor(buf, testBands(19), periods, points)
 	for periodIdx := range periods {
@@ -87,18 +87,18 @@ func TestMatrixBufferReuse(t *testing.T) {
 func TestNewMatrixBufferSizedForWidest(t *testing.T) {
 	const points, periods = 4, 3
 	widest := 0
-	for _, group := range groupByVariable(BandList()) {
+	for _, group := range groupByVariable(BandList(wpcVariables)) {
 		widest = max(widest, len(group))
 	}
 
-	if got := len(newMatrixBuffer(BandList(), periods, points)); got != points*periods*widest {
+	if got := len(newMatrixBuffer(BandList(wpcVariables), periods, points)); got != points*periods*widest {
 		t.Errorf("expected a buffer of %d, got %d", points*periods*widest, got)
 	}
 }
 
 // The stored array layout is positional, so the JS side breaks silently if this order ever moves
 func TestBandListLayout(t *testing.T) {
-	groups := groupByVariable(BandList())
+	groups := groupByVariable(BandList(wpcVariables))
 	if len(groups) != len(wpcVariables) {
 		t.Fatalf("expected %d variable groups, got %d", len(wpcVariables), len(groups))
 	}

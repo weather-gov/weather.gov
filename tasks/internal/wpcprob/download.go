@@ -16,7 +16,7 @@ import (
 	"time"
 )
 
-var wpcBaseURL = "https://ftp-wpc.ncep.noaa.gov/prob_precip_portal/co"
+var wpcBaseURL = "https://ftp-wpc.ncep.noaa.gov/prob_precip_portal"
 
 // Length of the window each file accumulates over, ending at the file's forecast hour
 const accumulationHours = 24
@@ -31,9 +31,18 @@ var fhourRe = regexp.MustCompile(`f(\d{3})\.grib2`)
 // WPC names each cycle by its UTC run hour, like 2026091016
 const CycleLayout = "2006010215"
 
+// Each region keeps its own latest_cycle.txt and cycle directories under its code
+func regionURL(region string) string {
+	return wpcBaseURL + "/" + region
+}
+
+func cycleDirURL(region, cycle string) string {
+	return fmt.Sprintf("%s/ppp_%s_24hr_%s/", regionURL(region), region, cycle)
+}
+
 // Read the most recently published cycle from WPC's latest_cycle.txt
-func fetchLatestCycle(ctx context.Context, client *http.Client) (string, error) {
-	body, err := httpGet(ctx, client, wpcBaseURL+"/latest_cycle.txt")
+func fetchLatestCycle(ctx context.Context, client *http.Client, region string) (string, error) {
+	body, err := httpGet(ctx, client, regionURL(region)+"/latest_cycle.txt")
 	if err != nil {
 		return "", err
 	}
@@ -45,8 +54,8 @@ func fetchLatestCycle(ctx context.Context, client *http.Client) (string, error) 
 }
 
 // List the cycle's directory and return every forecast hour it publishes, ascending
-func publishedFHours(ctx context.Context, client *http.Client, cycle string) ([]string, error) {
-	dirURL := fmt.Sprintf("%s/ppp_co_24hr_%s/", wpcBaseURL, cycle)
+func publishedFHours(ctx context.Context, client *http.Client, region, cycle string) ([]string, error) {
+	dirURL := cycleDirURL(region, cycle)
 	body, err := httpGet(ctx, client, dirURL)
 	if err != nil {
 		return nil, err
@@ -116,7 +125,7 @@ func largestAtMost(hours []int, want int) int {
 const AnyCycle = ""
 
 // Poll WPC with backoff until expectedCycle is published
-func WaitForCycle(ctx context.Context, client *http.Client, expectedCycle string) (cycle string, fhours []string, err error) {
+func WaitForCycle(ctx context.Context, client *http.Client, region Region, expectedCycle string) (cycle string, fhours []string, err error) {
 	// Capped at 90 s so a late publish leaves the rest of the run inside its deadline
 	delays := []time.Duration{0, 30 * time.Second, 60 * time.Second}
 	var lastErr error
@@ -128,7 +137,7 @@ func WaitForCycle(ctx context.Context, client *http.Client, expectedCycle string
 				return "", nil, ctx.Err()
 			}
 		}
-		latest, err := fetchLatestCycle(ctx, client)
+		latest, err := fetchLatestCycle(ctx, client, region.Name)
 		if err != nil {
 			lastErr = err
 			continue
@@ -137,7 +146,7 @@ func WaitForCycle(ctx context.Context, client *http.Client, expectedCycle string
 			lastErr = fmt.Errorf("latest cycle %s not yet >= expected %s", latest, expectedCycle)
 			continue
 		}
-		published, err := publishedFHours(ctx, client, latest)
+		published, err := publishedFHours(ctx, client, region.Name, latest)
 		if err != nil {
 			lastErr = err
 			continue
@@ -158,7 +167,7 @@ type download struct {
 }
 
 // Fetch every band for every forecast hour, reporting the files WPC did not serve
-func DownloadBands(ctx context.Context, client *http.Client, cycle string, fhours []string, destDir string, bands []Band) ([]string, error) {
+func DownloadBands(ctx context.Context, client *http.Client, region Region, cycle string, fhours []string, destDir string, bands []Band) ([]string, error) {
 	queue := make(chan download)
 	go func() {
 		defer close(queue)
@@ -191,8 +200,8 @@ func DownloadBands(ctx context.Context, client *http.Client, cycle string, fhour
 				}
 			}()
 			for d := range queue {
-				filename := bandFilename(d.band, cycle, d.fhour)
-				url := fmt.Sprintf("%s/ppp_co_24hr_%s/%s", wpcBaseURL, cycle, filename)
+				filename := bandFilename(region.Name, d.band, cycle, d.fhour)
+				url := cycleDirURL(region.Name, cycle) + filename
 				err := fetchWithRetry(ctx, client, url, filepath.Join(destDir, filename))
 				mu.Lock()
 				if err != nil {

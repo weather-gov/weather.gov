@@ -65,7 +65,7 @@ func TestPublishedFHours(t *testing.T) {
 	defer srv.Close()
 	wpcBaseURL = srv.URL
 
-	got, err := publishedFHours(context.Background(), srv.Client(), "2026090318")
+	got, err := publishedFHours(context.Background(), srv.Client(), CONUS.Name, "2026090318")
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
@@ -73,7 +73,7 @@ func TestPublishedFHours(t *testing.T) {
 		t.Errorf("expected [024 048], got %v", got)
 	}
 
-	if _, err := publishedFHours(context.Background(), srv.Client(), "empty"); err == nil {
+	if _, err := publishedFHours(context.Background(), srv.Client(), CONUS.Name, "empty"); err == nil {
 		t.Error("expected an error for a listing with no forecast-hour files")
 	}
 }
@@ -97,7 +97,7 @@ func TestDownloadBands_SkipsUnpublished(t *testing.T) {
 	}
 	fhours := []string{"024", "048"}
 
-	missing, err := DownloadBands(context.Background(), srv.Client(), "2026090318", fhours, t.TempDir(), bands)
+	missing, err := DownloadBands(context.Background(), srv.Client(), CONUS, "2026090318", fhours, t.TempDir(), bands)
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
@@ -120,7 +120,7 @@ func TestDownloadBands_NothingPublished(t *testing.T) {
 	defer srv.Close()
 	wpcBaseURL = srv.URL
 
-	if _, err := DownloadBands(context.Background(), srv.Client(), "2026090318", []string{"024"}, t.TempDir(), BandList()); err == nil {
+	if _, err := DownloadBands(context.Background(), srv.Client(), CONUS, "2026090318", []string{"024"}, t.TempDir(), BandList(wpcVariables)); err == nil {
 		t.Error("expected an error when nothing is published")
 	}
 }
@@ -144,7 +144,7 @@ func TestDownloadBands_RetriesThenMisses(t *testing.T) {
 		{FileFragment: "pp24ip0p10", Variable: "rain", Kind: KindPercentileInches, Key: "10"},
 	}
 
-	missing, err := DownloadBands(context.Background(), srv.Client(), "2026090318", []string{"024"}, t.TempDir(), bands)
+	missing, err := DownloadBands(context.Background(), srv.Client(), CONUS, "2026090318", []string{"024"}, t.TempDir(), bands)
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
