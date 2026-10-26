@@ -5,12 +5,14 @@ from wagtail import hooks
 from wagtail.admin.menu import MenuItem
 from wagtail.admin.panels import FieldPanel
 from wagtail.admin.viewsets.base import ViewSet
+from wagtail.admin.viewsets.model import ModelViewSet
 from wagtail.images.permissions import permission_policy as img_permission_policy
 from wagtail.snippets.models import register_snippet
 from wagtail.snippets.views.snippets import SnippetViewSet
 
 from .models import (
     WFO,
+    Bundle,
     DynamicSafetyInformation,
     HazardousWeatherOutlookLevels,
     HazardousWeatherOutlookMetadata,
@@ -183,6 +185,21 @@ class HazardousWeatherOutlookMetadataLevelsSnippet(SnippetViewSet):
 
     panels = [FieldPanel("label"), FieldPanel("description")]
 
+
+class BundleViewSet(ModelViewSet):
+    """ModelViewSet for displaying Bundles."""
+
+    model = Bundle
+    menu_icon = "folder"
+    menu_label = "Bundles"
+    add_to_admin_menu = True
+    list_display = ("name",)
+    search_fields = ("name",)
+
+@hooks.register("register_admin_viewset")
+def register_bundle_viewset():
+    """Register the viewset for displaying bundles."""
+    return BundleViewSet("bundles")
 
 register_snippet(WFOAdminSnippet)
 register_snippet(RegionAdminSnippet)
