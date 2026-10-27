@@ -147,7 +147,7 @@ format-python *files:
   else
     target="{{files}}"
   fi
-  docker compose exec web python -m ruff format $target
+  docker compose exec web python -m ruff --config pyproject.toml format $target
 
 # Format stylesheets
 [group("code quality")]
@@ -207,7 +207,7 @@ lint-python *files:
   else
     target="{{files}}"
   fi
-  docker compose exec web python -m ruff check --fix $target
+  docker compose exec web python -m ruff --config pyproject.toml check --fix $target
 
 # Lint Sass stylesheets
 [group("code quality")]
