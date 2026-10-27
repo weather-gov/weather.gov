@@ -48,10 +48,10 @@ msgid "afd.heading.forecast-discussion.01"
 msgstr "Forecast Discussion"
 
 msgid "afd.label.forecast-office.01"
-msgstr "Forecast Office:"
+msgstr "Select Forecast Office"
 
 msgid "afd.label.versions.01"
-msgstr "Versions for {wfo_name}:"
+msgstr "Select AFD Version"
 
 msgid "afd.table-header.chance-precip.01"
 msgstr "Chance of Precipitation"
@@ -1208,10 +1208,10 @@ msgstr "This area doesn't have daily risk summary data. Please try searching for
 msgid "ghwo.summary.error.loading.01"
 msgstr "There was an error loading the daily risk summary data. Please try again in a moment."
 msgid "county-index.labels.state-filter.01"
-msgstr "Select a state or territory"
+msgstr "Select a State or Territory"
 
 msgid "county-index.labels.county-filter.01"
-msgstr "Filter by county name"
+msgstr "Filter by County Name"
 
 msgid "county-index.headers.county-view.01"
 msgstr "County view"
