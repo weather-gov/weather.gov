@@ -57,10 +57,11 @@ func main() {
 
 	// Get the list of WFOs
 	wfos, err := ghwo.GetWFOsFromDatabase(ctx, dbPool)
-	if err != nil {
+	if err != nil || len(wfos) == 0 {
 		logger.Error("Could not retrieve WFOs", "error", err)
 		os.Exit(-1)
 	}
+	logger.Warn("Processing WFOs", "number", len(wfos))
 
 	pipeline := ghwo.NewPipeline(dbPool)
 

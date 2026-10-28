@@ -49,6 +49,14 @@ data "aws_iam_policy_document" "ecs_execution_secrets" {
   }
 
   statement {
+    sid     = "ReadServiceSecrets"
+    actions = ["secretsmanager:GetSecretValue"]
+    resources = [
+      "arn:aws:secretsmanager:${var.region}:${data.aws_caller_identity.current.account_id}:secret:weathergov-${var.env}-*",
+    ]
+  }
+
+  statement {
     sid       = "DecryptViaSecretsManager"
     actions   = ["kms:Decrypt"]
     resources = ["arn:aws:kms:${var.region}:${data.aws_caller_identity.current.account_id}:key/*"]
