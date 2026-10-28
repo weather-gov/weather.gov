@@ -352,6 +352,35 @@ init: && migrate load-spatial django-restart
   docker compose up -d
   sleep 15
 
+# MiniStack setup for dev AWS services, VPC & bucket creation, etc.
+# Initializes the local stack, prepares the databases, and loads initial data.
+[group("dev environment management")]
+ministack: && migrate load-spatial django-restart
+  # Brings up the MiniStack container and applies the local Terraform bootstrap configuration.
+  docker compose -f "{{justfile_directory()}}/docker-compose.yml" -f "{{justfile_directory()}}/docker-compose.ministack.yml" up -d ministack
+  sleep 5
+  cd "{{justfile_directory()}}/terraform-aws/bootstrap-local" && terraform init -backend=false && terraform apply -auto-approve
+  sleep 5
+  just ministack-terraform apply -auto-approve
+  sleep 5
+  # After initial terraform bootstrapping, init the rest of our containers and services.
+  docker compose -f "{{justfile_directory()}}/docker-compose.yml" -f "{{justfile_directory()}}/docker-compose.ministack.yml" up -d
+  sleep 15
+
+# Use symlinked dev resources with the MiniStack-only override file to spin up local environment.
+[group("dev environment management")]
+[script]
+ministack-terraform *args="plan":
+  set -eu
+  cd "{{justfile_directory()}}/terraform-aws/envs/local"
+  export AWS_ENDPOINT_URL="http://localhost:4566"
+  export AWS_ACCESS_KEY_ID="mock_key"
+  export AWS_SECRET_ACCESS_KEY="mock_secret"
+  unset AWS_PROFILE AWS_DEFAULT_PROFILE
+  export TF_DATA_DIR="$PWD/.terraform"
+  terraform init -reconfigure -input=false -backend-config=backend-ministack.hcl
+  terraform {{args}}
+
 # Starts a PlantUML server container listening on localhost:8180
 [group("dev environment management")]
 plantuml:
@@ -377,6 +406,17 @@ alias scorched-earth := controlled-burn
 # Does what zap does, plus destroys spatial data and docker images
 [group("dev environment management")]
 controlled-burn: && init
+  docker compose down -v --rmi all
+
+# Destroys all containers, databases, and volumes and starts over fresh and clean with MiniStack
+[group("dev environment management")]
+ministack-zap: && ministack
+  docker compose down -v
+
+alias ministack-cb := ministack-controlled-burn
+# Does what ministack-zap does, plus destroys spatial data and docker images
+[group("dev environment management")]
+ministack-controlled-burn: && ministack
   docker compose down -v --rmi all
 
 # Load spatial data; pass "clean" for clean load
