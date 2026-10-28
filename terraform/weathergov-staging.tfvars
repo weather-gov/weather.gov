@@ -25,3 +25,4 @@ rds_plan_name               = "large-gp-psql-redundant"
 internal_gridpoint_lookup   = true
 marine_coastal_experimental = false
 tasks_alerts_interop        = false
+aws_rum_app_id              = "c9bd3cd2-c4e6-4089-82a2-569a7264df27"

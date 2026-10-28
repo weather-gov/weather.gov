@@ -10,6 +10,8 @@ from backend.models import HazardGuideIndexPage, RoadmapPage
 GIT_SHA_HASH = os.getenv("GIT_SHA_HASH")
 TIMING_CONTEXT = ContextVar("timings", default=None)
 
+AWS_RUM_APP_ID = os.getenv("AWS_RUM_APP_ID")
+
 def route_info(request):
     """Return a dict of extra info that will be available to all templates."""
     # The 404 handler does not have a resolver_match.
@@ -48,3 +50,9 @@ def global_navigation(request):  # noqa: ARG001
         "hazard_guide_index": hazard_guide_index,
         "roadmap_page": roadmap_page,
     }
+
+def aws_rum_settings(request): # noqa: ARG001
+    """Return information needed for AWS RUM javascript."""
+    if AWS_RUM_APP_ID:
+        return { "aws_rum_app_id": AWS_RUM_APP_ID }
+    return { "aws_rum_app_id": None }

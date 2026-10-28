@@ -57,6 +57,7 @@ resource "cloudfoundry_app" "app" {
     MARINE_COASTAL_EXPERIMENTAL = var.marine_coastal_experimental
     POINT_FORECAST_HTMX = var.point_forecast_htmx
     POINT_FORECAST_HTMX_A_B = var.point_forecast_htmx_a_b
+    AWS_RUM_APP_ID = var.aws_rum_app_id
   }
 
   service_bindings = [

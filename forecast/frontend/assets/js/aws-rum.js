@@ -1,6 +1,22 @@
+/**
+ * Pull the application ID from a specific meta tag, if the tag is there.
+ * If it is not present, the given environment is not set up for using RUM.
+ */
+const getRUMApplicationId = () => {
+  const tag = document.querySelector(`meta[data-name="aws-rum-app-id"]`);
+  if (!tag || !tag.getAttribute("content")) {
+    console.warn(`No valid RUM application id found in markup.`);
+    return null;
+  }
+  return tag.getAttribute("content");
+};
+
+/**
+ * General configuration for our environment(s)
+ */
 const config = {
   sessionSampleRate: 1.0,
-  identityPoolId: "us-east-1:41d5720b-94ad-45e5-b216-4e8d6c8e28b8",
+  identityPoolId: "us-east-1:d53843c8-350a-4c14-a929-8c0b2844cf62",
   endpoint: "https://dataplane.rum.us-east-1.amazonaws.com",
   telemetries: ["performance", "errors", "http"],
   allowCookies: true,
@@ -8,35 +24,39 @@ const config = {
   signing: true, // If you have a public resource policy and wish to send unsigned requests please set this to false
   disableAutoPageView: true,
 };
-const APPLICATION_ID = "43e31d84-e535-442f-a822-ec499fd2ffc5";
-const APPLICATION_VERSION = "1.0.0";
-const APPLICATION_REGION = "us-east-1";
-(function (n, i, v, r, s, c, x, z) {
-  /* eslint-disable-next-line no-param-reassign */
-  x = window.AwsRumClient = {
+
+/**
+ * Extracted version of the anonymous function in snippet used for creating
+ * the RUM client and attaching it to the window as a global.
+ */
+const createAwsRumClient = (name, id, version, region, scriptSrc, config) => {
+  window.AwsRumClient = {
     q: [],
-    n: n,
-    i: i,
-    v: v,
-    r: r,
-    c: c,
+    n: name,
+    i: id,
+    v: version,
+    r: region,
+    c: config,
   };
-  window[n] = function (c, p) {
-    x.q.push({ c: c, p: p });
+
+  window[name] = function (config, p) {
+    window.AwsRumClient.q.push({ c: config, p });
   };
-  /* eslint-disable-next-line no-param-reassign */
-  z = document.createElement("script");
-  z.async = true;
-  z.src = s;
-  document.head.insertBefore(z, document.getElementsByTagName("script")[0]);
-})(
-  "cwr",
-  APPLICATION_ID,
-  APPLICATION_VERSION,
-  APPLICATION_REGION,
-  "https://client.rum.us-east-1.amazonaws.com/1.x/cwr.js",
-  config,
-);
+
+  const scriptTag = document.createElement("script");
+  scriptTag.async = true;
+  scriptTag.src = scriptSrc;
+  document.head.insertBefore(
+    scriptTag,
+    document.getElementsByTagName("script")[0],
+  );
+};
+
+/**
+ * Helper function for determining page groups based on the
+ * provided path. Used for giving stable labels to different kinds
+ * of URLs.
+ */
 const pageGroups = (path) => {
   const match = path.match(
     /^\/(forecast\/county|forecast\/state|cms|forecast\/point|place)/,
@@ -79,8 +99,14 @@ const getPointForecastPageName = (path) => {
   return match[1];
 };
 
-// set up a IIFE so we capture a page group if applicable
-(function () {
+/**
+ * Sets up the various page views and custom events
+ * that we want to record.
+ * This function should be run after the RUM client is
+ * successfully initialized, as it expects there to be a
+ * global (window) function named 'cwr'
+ */
+const setupRecording = () => {
   // Add event listeners for TabbedNavigator interactions.
   // If we are using HTMX, we will also want to add listeners
   // for when the tab content loads
@@ -94,7 +120,7 @@ const getPointForecastPageName = (path) => {
       usingHTMX: isUsingHTMX(),
       tabId: event.detail.tabId,
     };
-    cwr("recordEvent", { type: "tabbed_nav_click", data: rumEventData });
+    window.cwr("recordEvent", { type: "tabbed_nav_click", data: rumEventData });
   });
 
   // When tab contents have loaded behind the scenes
@@ -106,7 +132,10 @@ const getPointForecastPageName = (path) => {
       usingHTMX: isUsingHTMX(),
       tabId: event.detail.tabId,
     };
-    cwr("recordEvent", { type: "tab_content_loaded", data: rumEventData });
+    window.cwr("recordEvent", {
+      type: "tab_content_loaded",
+      data: rumEventData,
+    });
   });
 
   // When there was an error loading tab contents in the background
@@ -119,7 +148,10 @@ const getPointForecastPageName = (path) => {
       tabId: event.detail.tabId,
       errorCode: event.detail.status,
     };
-    cwr("recordEvent", { type: "tab_content_error", data: rumEventData });
+    window.cwr("recordEvent", {
+      type: "tab_content_error",
+      data: rumEventData,
+    });
   });
 
   const pathname = window.location.pathname;
@@ -127,9 +159,9 @@ const getPointForecastPageName = (path) => {
 
   // Record the general pageview
   if (pageGroup) {
-    cwr("recordPageView", { pageId: pathname, pageTags: [pageGroup] });
+    window.cwr("recordPageView", { pageId: pathname, pageTags: [pageGroup] });
   } else {
-    cwr("recordPageView", { pageId: pathname });
+    window.cwr("recordPageView", { pageId: pathname });
   }
 
   // Next, record pageview information for the point forecast pages,
@@ -138,5 +170,35 @@ const getPointForecastPageName = (path) => {
   if (isUsingHTMX()) {
     pointPageTags.push("using-htmx");
   }
-  cwr("recordPageView", { pageId: pathname, pageTags: pointPageTags });
+  window.cwr("recordPageView", { pageId: pathname, pageTags: pointPageTags });
+};
+
+/**
+ * Initialize the RUM client if there is a valid application id,
+ * then set up the kinds of page views and custom events
+ * we want to record.
+ * Note that an invalid or missing application id will return early
+ */
+(function () {
+  // If there is not a valid application id, immediately
+  // return to prevent initialization of RUM.
+  const APPLICATION_ID = getRUMApplicationId();
+  if (!APPLICATION_ID) {
+    return;
+  }
+  const APPLICATION_VERSION = "1.0.0";
+  const APPLICATION_REGION = "us-east-1";
+
+  // Initialize the RUM client on the window
+  createAwsRumClient(
+    "cwr",
+    APPLICATION_ID,
+    APPLICATION_VERSION,
+    APPLICATION_REGION,
+    "https://client.rum.us-east-1.amazonaws.com/1.x/cwr.js",
+    config,
+  );
+
+  // Set up the page views and custom events for recording
+  setupRecording();
 })();

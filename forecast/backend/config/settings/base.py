@@ -136,6 +136,7 @@ TEMPLATES = [
                 "backend.context_processors.route_info",
                 "backend.context_processors.git_info",
                 "backend.context_processors.global_navigation",
+                "backend.context_processors.aws_rum_settings",
             ],
             "builtins": [
                 "django.templatetags.i18n",

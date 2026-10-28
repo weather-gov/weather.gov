@@ -238,3 +238,9 @@ variable "point_forecast_htmx_a_b" {
   default     = false
   description = "Whether or not to enable A/B tests of HTMX mode on point forecast pages. Supersedes point_forecast_htmx."
 }
+
+variable "aws_rum_app_id" {
+  type        = string
+  default     = ""
+  description = "Application ID to use for AWS RUM"
+}
