@@ -35,6 +35,79 @@ describe("Saved locations tests", () => {
     sandbox.restore();
   });
 
+  describe("URL normalization", () => {
+    const baseUrl = "/forecast/point/23/45";
+    const tabs = ["/alerts", "/today", "/7-day", "/maps", "/analysis"];
+    const cases = tabs.flatMap((tab) => [
+      { url: `${baseUrl}${tab}`, expected: baseUrl },
+    ]);
+    cases.push(
+      { url: baseUrl, expected: baseUrl },
+      { url: `${baseUrl}/unknown/`, expected: `${baseUrl}/unknown/` },
+      { url: `${baseUrl}/`, expected: `${baseUrl}/` },
+      { url: "other/", expected: "other/" },
+      { url: "other/today/", expected: "other" },
+      { url: `${baseUrl}/TODAY/`, expected: baseUrl },
+      {
+        url: `${baseUrl}/today/#forecast`,
+        expected: baseUrl,
+      },
+      {
+        url: `https://beta.weather.gov${baseUrl}/maps`,
+        expected: `https://beta.weather.gov${baseUrl}`,
+      },
+    );
+
+    for (const { url, expected } of cases) {
+      it(`normalizes ${url} when saving`, () => {
+        const location = { text: "Test location", url };
+        global.localStorage.getItem.returns(null);
+
+        addSavedLocation(location);
+
+        const stored = JSON.parse(
+          global.localStorage.setItem.firstCall.args[1],
+        );
+        expect(stored.hashed["test location"]).to.equal(expected);
+        expect(stored.sorted).to.deep.equal([
+          { text: location.text, url: expected },
+        ]);
+        // Storage gets a normalized copy; the caller's object stays unchanged.
+        expect(location.url).to.equal(url);
+      });
+
+      it(`normalizes legacy ${url} when reading`, () => {
+        global.localStorage.getItem.returns(
+          JSON.stringify({
+            hashed: { "test location": url },
+            sorted: [{ text: "Test location", url }],
+          }),
+        );
+
+        expect(getSavedLocations()).to.deep.equal([
+          { text: "Test location", url: expected },
+        ]);
+        expect(global.localStorage.setItem.called).to.be.false;
+
+        addSavedLocation({ text: "Another location", url: baseUrl });
+
+        const stored = JSON.parse(
+          global.localStorage.setItem.firstCall.args[1],
+        );
+        expect(stored.hashed["test location"]).to.equal(expected);
+        expect(
+          stored.sorted.find((item) => item.text === "Test location").url,
+        ).to.equal(expected);
+      });
+    }
+
+    it("returns an empty list when storage is empty", () => {
+      global.localStorage.getItem.returns(null);
+
+      expect(getSavedLocations()).to.deep.equal([]);
+    });
+  });
+
   describe("getSavedLocations", () => {
     it("returns the sorted saved locations from localStorage", () => {
       global.localStorage.getItem.returns(JSON.stringify(sampleData));

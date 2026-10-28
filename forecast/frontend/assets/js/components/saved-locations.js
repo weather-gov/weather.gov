@@ -2,6 +2,7 @@
 
 const SAVED_LOC_STORAGE = "wxgov_saved_locations";
 const RECENT_LOC_STORAGE = "wxgov_recent_locations";
+const TAB_REGEX = new RegExp("\/(?:alerts|today|7-day|maps|analysis).*", "i");
 
 /**
  * @typedef {Object} SavedLocations from local storage
@@ -16,13 +17,47 @@ const RECENT_LOC_STORAGE = "wxgov_recent_locations";
  */
 
 /**
+ * Remove a trailing forecast tab while preserving the rest of the URL.
+ * @param {string} url location URL
+ * @returns {string} location URL without a tab suffix
+ */
+function normalizeLocationUrl(url) {
+  if (typeof url !== "string") return url;
+
+  return url.replace(TAB_REGEX, "");
+}
+
+/**
+ * Normalize both URL representations in a saved-location collection.
+ * @param {SavedLocations} storage saved location collection
+ * @returns {SavedLocations} normalized collection
+ */
+function normalizeSavedLocationStorage(storage) {
+  if (storage?.hashed) {
+    storage.hashed = Object.fromEntries(
+      Object.entries(storage.hashed).map(([text, url]) => [
+        text,
+        normalizeLocationUrl(url),
+      ]),
+    );
+  }
+  if (storage?.sorted) {
+    storage.sorted = storage.sorted.map((location) => ({
+      ...location,
+      url: normalizeLocationUrl(location.url),
+    }));
+  }
+  return storage;
+}
+
+/**
  * Get JSON parsed local storage for saved locations
  * @returns {SavedLocations}
  */
 function getParsedSavedLocationStorage() {
   const storage = localStorage.getItem(SAVED_LOC_STORAGE);
   const parsedStorage = JSON.parse(storage ?? "{}");
-  return parsedStorage;
+  return normalizeSavedLocationStorage(parsedStorage);
 }
 
 /**
@@ -30,7 +65,10 @@ function getParsedSavedLocationStorage() {
  * @param {SavedLocations} newStorage saved location collection to set
  */
 function setSavedLocationStorage(newStorage) {
-  localStorage.setItem(SAVED_LOC_STORAGE, JSON.stringify(newStorage));
+  localStorage.setItem(
+    SAVED_LOC_STORAGE,
+    JSON.stringify(normalizeSavedLocationStorage(newStorage)),
+  );
 }
 
 /**
