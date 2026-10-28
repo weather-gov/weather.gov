@@ -1,0 +1,38 @@
+services:
+  ministack:
+    image: ministackorg/ministack:full
+    container_name: ministack
+    environment:
+      # - PERSIST_STATE=1
+      # - S3_PERSIST=1
+      # - RDS_PERSIST=1
+      - LOG_LEVEL=INFO
+      - LAMBDA_EXECUTOR=docker
+      - DOCKER_NETWORK=weathergov-django_weather.gov
+    ports:
+      - 4566:4566
+      - 443:443
+    volumes:
+      # - ./data/state:/tmp/ministack-state # necessary only if we persist the state
+      # - ./data/s3:/tmp/ministack-data/s3 # necessary only if we persist the S3 data
+      # - ./data/rds:/tmp/ministack-data/rds # necessary only if we persist the RDS data
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - ministack
+      # Ensure the RDS containers' target network exists before Terraform runs.
+      - weather.gov
+
+  web:
+    environment:
+      AWS_ENDPOINT_URL: http://ministack:4566
+      AWS_ACCESS_KEY_ID: mock_key
+      AWS_SECRET_ACCESS_KEY: mock_secret
+      AWS_DEFAULT_REGION: us-east-1
+    networks:
+      - ministack
+    depends_on:
+      - ministack
+
+networks:
+  ministack:
+    driver: bridge
