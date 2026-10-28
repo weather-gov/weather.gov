@@ -33,15 +33,14 @@
   line-height: 1.5;
 }
 
-.section-content * {
-  a {
-    // Make any links, no matter how nested, use the compiled USWDS classes
-    @extend .usa-link;
+// Match links anywhere under section-content, except links in resources-section.
+.section-content a:not(.resources-section a) {
+  // Make any links, no matter how nested, use the compiled USWDS classes
+  @extend .usa-link;
 
-    // Links to non-NOAA, non-NWS sites get marked external.
-    &:not([href*="noaa.gov"], [href*="weather.gov"]) {
-      @extend .usa-link--external;
-    }
+  // Links that start with http get marked external.
+  &[href^="http"] {
+    @extend .usa-link--external;
   }
 }
 

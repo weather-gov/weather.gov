@@ -74,10 +74,14 @@
                 {% endfor %}
               </div>
             {% elif section.section_type == "resources" %}
-              <div class="margin-top-0">
+              <div class="margin-top-0 resources-section">
                 {% for link in section.resource_links.all %}
                   <div class="margin-top-1">
-                    <a href="{{ link.link }}">{{ link.text }}</a>
+                    <a class="usa-link {% if link.external %}usa-link--external{% endif %}" 
+                    {% if link.external %}target="_blank" rel="noopener noreferrer"{% endif %} 
+                    href="{{ link.url }}">
+                    {{ link.text }}
+                    </a>
                   </div>
                 {% endfor %}
               </div>

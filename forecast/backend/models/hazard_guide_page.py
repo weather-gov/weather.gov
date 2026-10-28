@@ -20,10 +20,16 @@ class RelatedLink(models.Model):
         help_text="The full URL (i.e. https://www.example.com/path/to/resource/), "
         + "or the path if an internal beta.weather.gov page.",
     )
+    external = models.BooleanField(
+        "External link",
+        default=False,
+        help_text="Indicates if the link is to an external site.",
+    )
 
     panels = [
         FieldPanel("text"),
         FieldPanel("url"),
+        FieldPanel("external"),
     ]
 
     class Meta:  # noqa: D106
