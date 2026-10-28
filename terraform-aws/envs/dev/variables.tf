@@ -106,6 +106,7 @@ variable "services" {
     memory        = number
     desired_count = optional(number, 0)
     environment   = optional(map(string), {})
+    secrets       = optional(list(string), [])
 
     # special case alerts, since it's not weathergov-<env>-alerts but rather
     # weathergov-<env>-tasks-alerts.
@@ -117,6 +118,21 @@ variable "services" {
       cpu        = 256
       memory     = 512
       repository = "tasks-alerts"
+    }
+
+    interop = {
+      cpu    = 256
+      memory = 512
+    }
+
+    django = {
+      cpu     = 1024
+      memory  = 4096
+      secrets = ["DJANGO_SECRET_KEY"]
+      environment = {
+        DJANGO_SETTINGS_MODULE = "backend.config.settings.aws"
+        NEC_ADDRESS            = "http://0.0.0.0" # stub for now
+      }
     }
   }
 }

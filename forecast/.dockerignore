@@ -1,6 +1,5 @@
 .ruff_cache/
 *.pyc
-spatial/management/commands/__cache
 frontend/public
 frontend/node_modules
 Dockerfile.*

@@ -34,12 +34,9 @@ ensure_environment_variables_are_present(
     [
         "NEC_ADDRESS",
         "DJANGO_SECRET_KEY",
-        "SP_PUBLIC_KEY",
-        "SP_PRIVATE_KEY",
-        "AWS_STORAGE_BUCKET_NAME",
-        "AWS_S3_REGION_NAME",
-        "AWS_S3_ACCESS_KEY_ID",
-        "AWS_S3_SECRET_ACCESS_KEY",
+        # not supported on NEC.
+        # "SP_PUBLIC_KEY",
+        # "SP_PRIVATE_KEY",
     ],
 )
 
@@ -87,30 +84,10 @@ DATABASES = {
     },
 }
 
-# S3 for static media (whitenoise)
-
-s3_bucket = env.str("AWS_STORAGE_BUCKET_NAME")
-s3_region = env.str("AWS_S3_REGION_NAME")
-STORAGES["default"] = {  # noqa: F405 (imported from base.py)
-    "BACKEND": "storages.backends.s3.S3Storage",
-    "OPTIONS": {
-        "bucket_name": s3_bucket,
-        "region_name": s3_region,
-        "access_key": env.str("AWS_S3_ACCESS_KEY_ID"),
-        "secret_key": env.str("AWS_S3_SECRET_ACCESS_KEY"),
-        "querystring_auth": False,  # do not send AWSAccessKeyId query params since buckets are public
-    },
-}
-
-s3_image_src = f"https://{s3_bucket}.s3.{s3_region}.amazonaws.com"
-
 # add this NEC app and s3 bucket to content security policy configuration
 CONTENT_SECURITY_POLICY["DIRECTIVES"][  # noqa: F405 (imported from base.py)
     "default-src"
 ] += ALLOWED_HOSTS
-CONTENT_SECURITY_POLICY["DIRECTIVES"][  # noqa: F405 (imported from base.py)
-    "img-src"
-] += [s3_image_src]
 CONTENT_SECURITY_POLICY["DIRECTIVES"][  # noqa: F405 (imported from base.py)
     "form-action"
 ] += [

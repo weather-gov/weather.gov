@@ -97,7 +97,14 @@ resource "aws_ecs_task_definition" "services" {
         local.task_db_environment,
       )
 
-      secrets = local.task_db_secrets
+      secrets = concat(
+        local.task_db_secrets,
+        # NB: map iteration is lexically ordered so its the same order every time
+        [for name in each.value.secrets : {
+          name      = name
+          valueFrom = aws_secretsmanager_secret.service[name].arn
+        }],
+      )
 
       logConfiguration = {
         logDriver = "awslogs"
