@@ -21,7 +21,7 @@ describe("Point radar initialization", () => {
         document.querySelector(selector).innerHTML =
           '<div class="cmi-radar-container"></div>';
         return {
-          "$store": {
+          $store: {
             watch: () => {},
             getters: {
               animationFramesRaw: null,
