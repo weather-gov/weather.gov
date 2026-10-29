@@ -23,6 +23,7 @@ const config = {
   enableXRay: false,
   signing: true, // If you have a public resource policy and wish to send unsigned requests please set this to false
   disableAutoPageView: true,
+  customEvents: { enabled: true },
 };
 
 /**
