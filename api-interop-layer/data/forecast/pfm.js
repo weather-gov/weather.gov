@@ -72,6 +72,11 @@ export const toForecast = (steps, sftDays, timezone) => {
       ({ time }) => Math.abs(time - endTime) <= PERIOD_MATCH,
     );
     if (!step) {
+      // Right after issuance the first high/low closes the next period, so skip ahead to it
+      if (!periods.length && endTime < twelveHourSteps.at(-1)?.time) {
+        start = end;
+        continue;
+      }
       break;
     }
 
