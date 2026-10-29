@@ -15,6 +15,13 @@ include:
       environment: dev
       rules:
         - !reference [.on_manual_nec_deploy]
+  - component: ${CI_SERVER_FQDN}/NWS/Systems/NCO/NEC/shared-catalogs/utility/anchors@main
+    inputs:
+      stage: deploy
+      job_name: run-nec-django-migrations-dev
+      dotenv: false
+      rules:
+        - !reference [.on_manual_nec_deploy]
 
 # override rules to pass in the proper variables and tags
 terraform-plan-nec-infra-dev:
@@ -43,5 +50,19 @@ terraform-apply-nec-infra-dev:
   needs:
     - job: terraform-plan-nec-infra-dev
       artifacts: true
+  tags:
+    - nec-cloud
+
+run-nec-django-migrations-dev:
+  environment: dev
+  variables:
+    ROLE_NAME: $NEC_ROLE_NAME
+    ACCOUNT_ID: $NEC_ACCOUNT_ID
+  script:
+    - !reference [.config_assume_role]
+    - ./.gitlab/nec/scripts/django-migrations.sh
+  needs:
+    - job: terraform-apply-nec-infra-dev
+  resource_group: nec-infra-dev
   tags:
     - nec-cloud
