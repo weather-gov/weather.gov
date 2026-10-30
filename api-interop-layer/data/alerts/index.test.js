@@ -6,7 +6,6 @@ import {
   getAlertsForCountyFIPS,
   getAlertsForPoint,
   postProcessAlerts,
-  updateFromBackground,
 } from "./index.js";
 import alertKinds from "./kinds.js";
 import { AlertsCache } from "./cache.js";
@@ -66,38 +65,6 @@ describe("alert data module", () => {
         response.json.resetBehavior();
         response.json.resetHistory();
         getIntersection.callsFake(() => Promise.resolve([]));
-      });
-
-      afterEach(() => {
-        updateFromBackground({ action: "remove", hash: "test" });
-      });
-
-      it("updates metadata but does NOT update alerts if there is an error", async () => {
-        const before = await getAlertsForPoint({
-          point: { latitude: 3, longitude: 4 },
-          place: { timezone: "America/Chicago" },
-        });
-
-        updateFromBackground({ action: "error" });
-
-        const actual = await getAlertsForPoint({
-          point: { latitude: 3, longitude: 4 },
-          place: { timezone: "America/Chicago" },
-        });
-
-        expect(actual.metadata).to.eql({ ...before.metadata, error: true });
-      });
-
-      it("clears the error flag after a successful update", async () => {
-        updateFromBackground({ action: "error" });
-        updateFromBackground({ action: "remove", hash: "test" });
-
-        const actual = await getAlertsForPoint({
-          point: { latitude: 3, longitude: 4 },
-          place: { timezone: "America/Chicago" },
-        });
-
-        expect(actual.metadata.error).to.be.false;
       });
     });
 

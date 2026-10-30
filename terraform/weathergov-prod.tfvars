@@ -18,5 +18,4 @@ redis_plan_name             = "redis-3node"
 rds_plan_name               = "large-gp-psql-redundant"
 internal_gridpoint_lookup   = true
 marine_coastal_experimental = false
-tasks_alerts_interop        = false
 aws_rum_app_id              = "43e31d84-e535-442f-a822-ec499fd2ffc5"
