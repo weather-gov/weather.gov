@@ -20,6 +20,7 @@ func zoneFeature() *SourceFeature {
 			AffectedZones: []string{forecastZone, countyZone},
 			Geocode: struct {
 				SAME []string `json:"SAME"`
+				UGC  []string `json:"UGC"`
 			}{SAME: []string{"013111"}},
 		},
 	}
