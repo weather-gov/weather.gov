@@ -149,6 +149,44 @@ resource "aws_ecs_service" "services" {
   }
 }
 
+resource "aws_scheduler_schedule_group" "tasks" {
+  name = "weathergov-${var.env}-tasks"
+
+  tags = {
+    "noaa:subcomponent" = "applicationserver"
+  }
+}
+
+resource "aws_scheduler_schedule" "schedules" {
+  for_each = var.tasks
+
+  name       = "weathergov-${var.env}-${each.key}-ecs-scheduler"
+  group_name = aws_scheduler_schedule_group.tasks.name
+
+  flexible_time_window {
+    mode = "OFF"
+  }
+
+  schedule_expression = each.value.scheduler
+
+  target {
+    arn      = aws_ecs_cluster.main.arn
+    role_arn = aws_iam_role.ecs_scheduler.arn
+
+    ecs_parameters {
+      task_definition_arn = aws_ecs_task_definition.tasks[each.key].arn
+      launch_type         = "FARGATE"
+
+      # NB make sure this is the same as aws_ecs_service.services.network_configuration
+      network_configuration {
+        subnets          = data.aws_subnets.private.ids
+        security_groups  = [aws_security_group.tasks.id]
+        assign_public_ip = false
+      }
+    }
+  }
+}
+
 resource "aws_security_group" "tasks" {
   name        = "weathergov-${var.env}-ecs-tasks"
   description = "Egress for weathergov-${var.env} ECS tasks"

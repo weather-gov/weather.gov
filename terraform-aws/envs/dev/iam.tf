@@ -68,3 +68,67 @@ resource "aws_iam_role_policy" "ecs_execution_secrets" {
   role   = aws_iam_role.ecs_execution.id
   policy = data.aws_iam_policy_document.ecs_execution_secrets.json
 }
+
+data "aws_iam_policy_document" "ecs_scheduler_assume" {
+  statement {
+    actions = ["sts:AssumeRole"]
+
+    principals {
+      type        = "Service"
+      identifiers = ["scheduler.amazonaws.com"]
+    }
+
+    condition {
+      test     = "StringEquals"
+      variable = "aws:SourceAccount"
+      values   = [data.aws_caller_identity.current.account_id]
+    }
+  }
+}
+
+resource "aws_iam_role" "ecs_scheduler" {
+  name        = "weathergov-${var.env}-ecs-scheduler"
+  description = "EventBridge scheduler role for weathergov-${var.env}"
+
+  permissions_boundary = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:policy/weathergov-boundary"
+
+  assume_role_policy = data.aws_iam_policy_document.ecs_scheduler_assume.json
+
+  tags = {
+    "noaa:subcomponent" = "applicationserver"
+  }
+}
+
+data "aws_iam_policy_document" "ecs_scheduler_run_tasks" {
+  statement {
+    sid     = "RunScheduledTasks"
+    actions = ["ecs:RunTask"]
+    resources = [
+      "arn:aws:ecs:${var.region}:${data.aws_caller_identity.current.account_id}:task-definition/weathergov-${var.env}-*:*",
+    ]
+
+    condition {
+      test     = "ArnEquals"
+      variable = "ecs:cluster"
+      values   = [aws_ecs_cluster.main.arn]
+    }
+  }
+
+  statement {
+    sid       = "PassTaskExecutionRole"
+    actions   = ["iam:PassRole"]
+    resources = [aws_iam_role.ecs_execution.arn]
+
+    condition {
+      test     = "StringEquals"
+      variable = "iam:PassedToService"
+      values   = ["ecs-tasks.amazonaws.com"]
+    }
+  }
+}
+
+resource "aws_iam_role_policy" "ecs_scheduler_run_tasks" {
+  name   = "weathergov-${var.env}-ecs-scheduler-run-tasks"
+  role   = aws_iam_role.ecs_scheduler.id
+  policy = data.aws_iam_policy_document.ecs_scheduler_run_tasks.json
+}
