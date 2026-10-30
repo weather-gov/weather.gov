@@ -400,24 +400,28 @@ stop-plantuml:
 # Destroys all containers, databases, and volumes and starts over fresh and clean
 [group("dev environment management")]
 zap: && init
-  docker compose down -v
+  docker compose down -v --remove-orphans
 
 alias scorched-earth := controlled-burn
 # Does what zap does, plus destroys spatial data and docker images
 [group("dev environment management")]
 controlled-burn: && init
-  docker compose down -v --rmi all
+  docker compose down -v --rmi all --remove-orphans
 
 # Destroys all containers, databases, and volumes and starts over fresh and clean with MiniStack
 [group("dev environment management")]
 ministack-zap: && ministack
-  docker compose down -v
+  docker compose down -v --remove-orphans
 
 alias ministack-cb := ministack-controlled-burn
-# Does what ministack-zap does, plus destroys spatial data and docker images
+# Removes the full local MiniStack stack, including its Docker images and terraform state.
 [group("dev environment management")]
 ministack-controlled-burn: && ministack
-  docker compose down -v --rmi all
+  docker compose down -v --rmi all --remove-orphans
+  # Also go ahead and remove all the terraform state and cache and lock files, so it's truly a clean slate
+  rm -rf "{{justfile_directory()}}/terraform-aws/bootstrap-local/.terraform" "{{justfile_directory()}}/terraform-aws/envs/local/.terraform"
+  rm -f "{{justfile_directory()}}/terraform-aws/bootstrap-local/terraform.tfstate" "{{justfile_directory()}}/terraform-aws/bootstrap-local/terraform.tfstate.backup"
+  rm -f "{{justfile_directory()}}/terraform-aws/envs/local/.terraform.lock.hcl" "{{justfile_directory()}}/terraform-aws/bootstrap-local/.terraform.lock.hcl"
 
 # Load spatial data; pass "clean" for clean load
 [group("spatial data loading")]
