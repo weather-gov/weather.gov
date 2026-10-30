@@ -334,6 +334,8 @@ class WeatherGridPoints(models.Model):
     x = models.IntegerField()
     y = models.IntegerField()
     point = models.PointField(srid=4326, spatial_index=True)
+    is_marine = models.BooleanField(default=False)
+    is_land = models.BooleanField(default=False)
 
     class Meta:  # noqa: D106
         db_table = "weathergov_geo_gridpoints"
