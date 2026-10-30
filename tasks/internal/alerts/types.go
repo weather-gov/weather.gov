@@ -33,6 +33,7 @@ type SourceProperties struct {
 	AffectedZones []string `json:"affectedZones"`
 	Geocode       struct {
 		SAME []string `json:"SAME"`
+		UGC  []string `json:"UGC"`
 	} `json:"geocode"`
 }
 
@@ -62,6 +63,7 @@ type Alert struct {
 	Effective   string     `json:"effective"`
 	Onset       string     `json:"onset"`
 	Expires     string     `json:"expires"`
+	Zones       []string   `json:"zones,omitempty"`
 
 	// Stored as a literal null, so no omitempty
 	Ends   *string `json:"ends"`

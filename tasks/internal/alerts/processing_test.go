@@ -30,6 +30,7 @@ func landFeature() *SourceFeature {
 			Expires:     "2124-01-15T14:45:30-05:00",
 			Geocode: struct {
 				SAME []string `json:"SAME"`
+				UGC  []string `json:"UGC"`
 			}{SAME: []string{"013111", "013137", "013139"}},
 		},
 	}
@@ -158,6 +159,26 @@ func TestProcessAlert_CountiesAndStates(t *testing.T) {
 	}
 	if string(row.States) != `["13","13","13"]` {
 		t.Errorf("expected undeduplicated states, got %s", row.States)
+	}
+}
+
+func TestProcessAlert_Zones(t *testing.T) {
+	feature := landFeature()
+	feature.Props.Geocode.UGC = []string{"NYZ005", "NYZ010"}
+
+	row, _, err := processAlert(feature, testNow, nil)
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+
+	var decoded struct {
+		Zones []string `json:"zones"`
+	}
+	if err := json.Unmarshal(row.AlertJSON, &decoded); err != nil {
+		t.Fatalf("could not decode the alert: %v", err)
+	}
+	if !reflect.DeepEqual(decoded.Zones, []string{"NYZ005", "NYZ010"}) {
+		t.Errorf("expected the UGC codes as zones, got %v", decoded.Zones)
 	}
 }
 

@@ -157,6 +157,7 @@ func processAlert(feature *SourceFeature, now time.Time, knownZones map[string]b
 
 	expires := parseTimestamp(properties.Expires)
 	alert.Expires = expires.text
+	alert.Zones = properties.Geocode.UGC
 
 	var ends timestamp
 	if properties.Ends != nil {
@@ -289,6 +290,25 @@ func Update(ctx context.Context, pool *pgxpool.Pool) error {
 		return nil
 	}
 
+	superseded, outdated := supersededAirQuality(features)
+	current := make([]SourceFeature, 0, len(features))
+	for i := range features {
+		by, ok := superseded[i]
+		if !ok {
+			if zones, trim := outdated[i]; trim {
+				// Polygon alerts keep their shape since only zone shapes can be trimmed
+				logger.Info("trimmed air quality alert zones", "alertId", features[i].Props.ID, "sent", features[i].Props.Sent, "outdatedZones", zones, "hasPolygon", len(features[i].Geometry) > 0 && string(features[i].Geometry) != "null")
+				trimAffectedZones(&features[i], zones)
+			}
+			current = append(current, features[i])
+			continue
+		}
+		// Verbose on purpose, a wrongly dropped alert never reaches anyone
+		props := features[i].Props
+		logger.Info("superseded air quality alert", "alertId", props.ID, "sent", props.Sent, "zones", props.Geocode.UGC, "supersededBy", by)
+	}
+	features = current
+
 	knownZones, err := KnownZones(ctx, pool, zoneIDsFor(features))
 	if err != nil {
 		return fmt.Errorf("reading known zones: %w", err)
@@ -317,6 +337,6 @@ func Update(ctx context.Context, pool *pgxpool.Pool) error {
 		return err
 	}
 
-	logger.Info("alerts updated", "stored", stored, "failed", len(rows)-stored)
+	logger.Info("alerts updated", "stored", stored, "failed", len(rows)-stored, "superseded", len(superseded), "trimmed", len(outdated))
 	return nil
 }
