@@ -14,22 +14,21 @@
   }
 
   @if $level == 1 {
-    @return color("green-10v");
+    @return #f4f257;
   }
 
   @if $level == 2 {
-    @return color("yellow-20v");
+    @return #fa9441;
   }
 
   @if $level == 3 {
-    @return color("orange-30v");
+    @return #e52207;
   }
 
   @if $level == 4 {
-    @return color("red-50v");
+    @return #be32d0;
   }
 
-  @if $level == 5 {
-    @return color("violet-warm-50v");
-  }
+  // default
+  @return color("gray-cool-4");
 }
