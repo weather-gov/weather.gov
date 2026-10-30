@@ -83,7 +83,7 @@ const pageGroups = (path) => {
 const isUsingHTMX = () => {
   // We determine if we are using HTMX by checking that the
   // HTMX script element is on the page
-  const script = document.querySelector(`script[src*="point-htmx.js"]`);
+  const script = document.querySelector(`script[src*="point-htmx"]`);
   if (script) {
     return true;
   }
