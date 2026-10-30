@@ -54,5 +54,5 @@ This command will perform the following steps automatically, assuming it can fin
 2. Stream CSV data into the staging table
 3. Reformat columns and insert temp values unto the real gridpoints table
 4. Optimize indexing on the table
-5. Cross-reference marine zone tables and update `is_marine` and `type` columns to have correct marine values for each gridpoints
+5. Build each gridpoint's NDFD cell and flag it against the zones table. Each CWA's gridpoints are fit to a regular lattice in their grid's projection (Lambert conformal for CONUS, polar stereographic for Alaska, Mercator for Hawaii, Puerto Rico and the Pacific), and each cell is the square half a step either side of its gridpoint, so neighboring cells share edges. `is_marine` is set where the cell overlaps a `marine:coastal` or `marine:offshore` zone, and `is_land` where it overlaps a `forecast` zone. A cell straddling the coastline gets both, and a cell overlapping no zone (foreign land, Canadian lake water, open ocean) gets neither
 
