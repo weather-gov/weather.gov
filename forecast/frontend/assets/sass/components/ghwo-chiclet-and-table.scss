@@ -1,8 +1,11 @@
 /* stylelint-disable no-descending-specificity */
+@use "sass:color";
 @use "uswds-core" as *;
 @use "colors" as *;
 @forward "uswds-theme";
 @forward "uswds";
+
+$hazard-hover-lightness-adjustment: -30%;
 
 @for $level from 0 through 5 {
   .ghwo-chiclet[data-risk-level="#{$level}"] {
@@ -12,91 +15,133 @@
 }
 
 .ghwo-chiclet[data-risk-level="1"] {
+  $base-color: hazard-color(1);
+
   &:hover {
-    background-color: color("green-20v");
-    border-color: color("green-20v");
+    background-color: color.adjust(
+      $base-color,
+      $lightness: $hazard-hover-lightness-adjustment
+    );
+    border-color: color.adjust(
+      $base-color,
+      $lightness: $hazard-hover-lightness-adjustment
+    );
   }
 
   &[role="button"]:hover {
-    background-color: color("green-20v");
-    border-color: color("green-20v");
+    background-color: color.adjust(
+      $base-color,
+      $lightness: $hazard-hover-lightness-adjustment
+    );
+    border-color: color.adjust(
+      $base-color,
+      $lightness: $hazard-hover-lightness-adjustment
+    );
   }
 
   &[role="button"]:active,
   &[role="button"][aria-pressed="true"] {
-    background-color: color("green-20v");
+    background-color: color.adjust(
+      $base-color,
+      $lightness: $hazard-hover-lightness-adjustment
+    );
     border-color: color("green-50v");
   }
 }
 
 .ghwo-chiclet[data-risk-level="2"] {
+  $base-color: hazard-color(2);
+
   &:hover {
-    background-color: color("yellow-30v");
-    border-color: color("yellow-30v");
+    background-color: color.adjust(
+      $base-color,
+      $lightness: $hazard-hover-lightness-adjustment
+    );
+    border-color: color.adjust(
+      $base-color,
+      $lightness: $hazard-hover-lightness-adjustment
+    );
   }
 
   &[role="button"]:hover {
-    background-color: color("yellow-30v");
-    border-color: color("yellow-30v");
+    background-color: color.adjust(
+      $base-color,
+      $lightness: $hazard-hover-lightness-adjustment
+    );
+    border-color: color.adjust(
+      $base-color,
+      $lightness: $hazard-hover-lightness-adjustment
+    );
   }
 
   &[role="button"]:active,
   &[role="button"][aria-pressed="true"] {
-    background-color: color("yellow-30v");
+    background-color: color.adjust(
+      $base-color,
+      $lightness: $hazard-hover-lightness-adjustment
+    );
     border-color: color("yellow-50v");
   }
 }
 
 .ghwo-chiclet[data-risk-level="3"] {
+  $base-color: hazard-color(3);
+
   &:hover {
-    background-color: color("orange-40v");
-    border-color: color("orange-40v");
+    background-color: color.adjust(
+      $base-color,
+      $lightness: $hazard-hover-lightness-adjustment
+    );
+    border-color: color.adjust(
+      $base-color,
+      $lightness: $hazard-hover-lightness-adjustment
+    );
   }
 
   &[role="button"]:hover {
-    background-color: color("orange-40v");
-    border-color: color("orange-40v");
+    background-color: color.adjust(
+      $base-color,
+      $lightness: $hazard-hover-lightness-adjustment
+    );
+    border-color: color.adjust(
+      $base-color,
+      $lightness: $hazard-hover-lightness-adjustment
+    );
   }
 
   &[role="button"]:active,
   &[role="button"][aria-pressed="true"] {
-    background-color: color("orange-40v");
+    background-color: color.adjust(
+      $base-color,
+      $lightness: $hazard-hover-lightness-adjustment
+    );
     border-color: color("orange-60v");
   }
 }
 
 .ghwo-chiclet[data-risk-level="4"] {
+  $base-color: hazard-color(4);
+
   color: white;
 
   &[role="button"]:hover {
-    background-color: color("red-60v");
-    border-color: color("red-60v");
+    background-color: color.adjust(
+      $base-color,
+      $lightness: $hazard-hover-lightness-adjustment
+    );
+    border-color: color.adjust(
+      $base-color,
+      $lightness: $hazard-hover-lightness-adjustment
+    );
   }
 
   &[role="button"]:active,
   &[role="button"][aria-pressed="true"] {
-    background-color: color("red-60v");
+    background-color: color.adjust(
+      $base-color,
+      $lightness: $hazard-hover-lightness-adjustment
+    );
     border-color: color("red-80v");
-  }
-}
-
-.ghwo-chiclet[data-risk-level="5"] {
-  color: white;
-
-  &:hover {
-    background-color: color("violet-warm-70v");
-    border-color: color("violet-warm-70v");
-  }
-
-  &[role="button"]:hover {
-    background-color: color("violet-warm-70v");
-    border-color: color("violet-warm-70v");
-  }
-
-  &[role="button"]:active,
-  &[role="button"][aria-pressed="true"] {
-    background-color: color("violet-warm-70v");
-    border-color: color("violet-warm-90");
   }
 }
 
