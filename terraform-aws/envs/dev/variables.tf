@@ -67,33 +67,36 @@ variable "tasks" {
   type = map(object({
     cpu         = number
     memory      = number
+    scheduler   = string # cron(minutes hours day-of-month month day-of-week year)
     environment = optional(map(string), {})
   }))
 
   default = {
     # Every 30m.
     ghwo = {
-      cpu    = 256
-      memory = 1024
+      cpu       = 1024
+      memory    = 2048
+      scheduler = "cron(*/30 * * * ? *)"
       environment = {
-        TIMEOUT        = "600" # 10m
-        E_WORKER_NUM   = "10"
-        T_WORKER_NUM   = "6"
-        TL_WORKER_NUM  = "6"
-        ERR_WORKER_NUM = "10"
+        TIMEOUT = "600" # 10m
       }
     }
 
     # Every 30m.
     gridcache = {
-      cpu    = 256
-      memory = 1024
+      cpu       = 1024
+      memory    = 2048
+      scheduler = "cron(*/30 * * * ? *)"
     }
 
     # Every 60m, offset :10.
     wpcprob = {
-      cpu    = 1024
-      memory = 4096
+      cpu       = 1024
+      memory    = 4096
+      scheduler = "cron(10 * * * ? *)"
+      environment = {
+        WPCPROB_TIMEOUT = "1200" # 20m
+      }
     }
   }
 }
