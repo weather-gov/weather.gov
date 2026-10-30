@@ -9,10 +9,8 @@ normalization and conversion, etc.
 
 ### Alerts
 
-The alerts module fetches all active alerts as soon as the interop layer starts
-and then every 30 seconds thereafter. This background process handles fetching,
-parsing, and normalizing all the alerts. It also transparently handles errors
-with the goal of always presenting alerts if we're able.
+The alerts task fetches all active alerts in a 30 second loop and makes alerts
+available via database queries.
 
 Flow diagram of how alerts are updated:
 
