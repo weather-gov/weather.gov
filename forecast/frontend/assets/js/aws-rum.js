@@ -156,22 +156,37 @@ const setupRecording = () => {
   });
 
   const pathname = window.location.pathname;
-  const pageGroup = pageGroups(pathname);
+  const pageTags = [];
 
-  // Record the general pageview
-  if (pageGroup) {
-    window.cwr("recordPageView", { pageId: pathname, pageTags: [pageGroup] });
+  // Get the initial "page name" tag.
+  // This will be the type of page, ie
+  // 'forecast', 'county', 'state' or the literal
+  // url in all other cases
+  const pageTypeTag = pageGroups(pathname);
+  if (pageTypeTag) {
+    pageTags.push(pageTypeTag);
+  }
+
+  // Next, check to see if this is a point forecast page or
+  // not. If so, add the 'point-forecast' tag, as well as the
+  // specific tab page name tag for point forecasts
+  const pointForecastTabPageName = getPointForecastPageName(pathname);
+  if (pointForecastTabPageName) {
+    pageTags.push("point-forecast", pointForecastTabPageName);
+  }
+
+  // If we are in 'HTMX' mode, lets add that as a tag
+  // as well
+  if (isUsingHTMX()) {
+    pageTags.push("using-htmx");
+  }
+
+  // Finally, record the pageView
+  if (pageTags.length) {
+    window.cwr("recordPageView", { pageId: pathname, pageTags });
   } else {
     window.cwr("recordPageView", { pageId: pathname });
   }
-
-  // Next, record pageview information for the point forecast pages,
-  // tagging them as need with the HTMX state
-  const pointPageTags = ["point-forecast", getPointForecastPageName(pathname)];
-  if (isUsingHTMX()) {
-    pointPageTags.push("using-htmx");
-  }
-  window.cwr("recordPageView", { pageId: pathname, pageTags: pointPageTags });
 };
 
 /**
