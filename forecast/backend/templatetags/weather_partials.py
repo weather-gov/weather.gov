@@ -163,7 +163,7 @@ def daily_forecast_list_item(**kwargs):
 
 @register.inclusion_tag("weather/partials/daily-summary-list-item.html")
 def daily_summary_list_item(**kwargs):
-    """Render a daily summary list item for a given day."""
+    """Render a daily summary for a given day."""
     day = kwargs["day"]
 
     return {

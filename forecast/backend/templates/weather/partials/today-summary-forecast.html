@@ -11,10 +11,10 @@
       {{ "forecast.heading.today-forecast.01" | t }}
     </h2>
     <div class="flex-auto bg-white shadow-1 padding-y-2">
-      <ol class="usa-list--unstyled">
+      <div>
         {# Attempt to render the period(s) associated with the current day #}
         {% daily_summary_list_item day=forecast.days.0 lat=point.point.latitude lon=point.point.longitude %}
-      </ol>
+      </div>
       {% if astronomical_data.isNull %}
         {# render the no data available content #}
         <div class="wx-sunrise-sunset-container margin-top-3 padding-x-2">

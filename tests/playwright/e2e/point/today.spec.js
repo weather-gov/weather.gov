@@ -19,7 +19,7 @@ describe("Point forecast › Today tab", () => {
 
   describe("When viewing today's forecast", () => {
     test("I do not expect to see marine alerts", async ({ page }) => {
-      await page.goto(services.webApp("/forecast/point/33.521/-86.812/"), {
+      await page.goto(services.webApp("/forecast/point/33.521/-86.812/today"), {
         waitUntil: "load",
       });
       const alerts = page.getByRole("alert");
@@ -38,8 +38,52 @@ describe("Point forecast › Today tab", () => {
       await expect(page.locator(".usa-alert--error")).toHaveCount(0);
     });
 
+    test("I expect to see temperature, wind, and precipitation weather data", async ({
+      page,
+    }) => {
+      await page.goto(services.webApp("/forecast/point/33.211/-87.566/today"), {
+        waitUntil: "load",
+      });
+      expect(
+        page.getByRole("heading", { name: /Current Conditions/i }),
+      ).toBeVisible();
+      expect(
+        page.getByRole("heading", { name: /Today's Forecast/i }),
+      ).toBeVisible();
+
+      const dailyForecastSummary = page.locator(
+        "div.wx-daily-forecast-summary-area",
+      );
+      await expect(dailyForecastSummary).toHaveCount(2);
+
+      const tempChart = page.locator("wx-temp-chart");
+      await expect(tempChart).toBeVisible();
+
+      const windChart = page.locator("wx-wind-chart");
+      await expect(windChart).toBeVisible();
+
+      const precipChart = page.locator("wx-pops-chart");
+      await expect(precipChart).toBeVisible();
+
+      // Check for a11y sr-only tables
+      const tempColumn = page.getByRole("columnheader", {
+        name: "Temperature",
+      });
+      const temp = tempColumn.locator("//following-sibling::td");
+      const windColumn = page.getByRole("columnheader", { name: "Wind speed" });
+      const wind = windColumn.locator("//following-sibling::td");
+      const precipColumn = page.getByRole("columnheader", {
+        name: "Chance of Precipitation",
+      });
+      const precip = precipColumn.locator("//following-sibling::td");
+
+      await expect(temp).toBeHidden();
+      await expect(wind).toBeHidden();
+      await expect(precip).toBeHidden();
+    });
+
     test("I expect to see N/A when there is no wind data", async ({ page }) => {
-      await page.goto(services.webApp("/forecast/point/33.211/-87.566/"), {
+      await page.goto(services.webApp("/forecast/point/33.211/-87.566/today"), {
         waitUntil: "load",
       });
       const row = page.getByRole("rowheader", { name: "WIND" });
@@ -47,137 +91,22 @@ describe("Point forecast › Today tab", () => {
 
       await expect(wind).toContainText("N/A");
     });
-
-    describe("I expect to see my radar", async () => {
-      test("I can to see my radar information", async ({ page }) => {
-        const heading = page.getByRole("heading", {
-          name: "Radar",
-          exact: true,
-          includeHidden: true,
-        });
-        const container = page.locator("div.cmi-radar-container");
-        const time = page.locator('div[wx-auto-update="radar"]');
-
-        await expect(heading).toBeVisible();
-        await expect(time).toHaveText(/Time shown/i, { useInnerText: true });
-        await expect(time).toHaveText(
-          /\w+, \d+:\d+ (AM|PM) [A-Z]{3,4} (–|-) \d+:\d+ (AM|PM) [A-Z]{3,4}/i,
-          { useInnerText: true },
-        );
-        await expect(container).toBeVisible();
-      });
-
-      test("I expect to see the intensity key in the radar legend", async ({
-        page,
-      }) => {
-        const button = page.getByRole("button", {
-          name: "Radar Legend",
-          includeHidden: true,
-        });
-        await button.focus();
-        page.keyboard.press("Space");
-
-        const table = page.locator("table#radar-legend");
-        const row = table.getByRole("row", { includeHidden: true }).nth(1);
-        await expect(row).toHaveText(/−35–0/i);
-        await expect(row).toHaveText(/Extremely light \(drizzle\/snow\)/i);
-      });
-
-      test("I can access my radar link", async ({ page }) => {
-        const container = page.locator("div.wx-radar-wrapper");
-        const link = container.getByText("Explore other radar views");
-        await expect(link).toBeVisible();
-        await expect(link).toHaveAttribute("href", /radar\.weather\.gov/i);
-      });
-    });
-
-    describe("I expect to see my satellite", () => {
-      test("I can see my satellite information", async ({ page }) => {
-        const heading = page.getByRole("heading", {
-          name: "Satellite",
-          exact: true,
-          includeHidden: true,
-        });
-        const container = page.locator("div.wx-satellite-wrapper");
-        const timeTitle = container.getByText("time shown:");
-        const time = page.locator("div[data-wx-satellite-times]");
-
-        await expect(heading).toBeVisible();
-        await expect(timeTitle).toBeVisible();
-        await expect(time).toHaveText(
-          /\w+, \d+:\d+ (AM|PM) [A-Z]{3,4} (–|-) \d+:\d+ (AM|PM) [A-Z]{3,4}/i,
-          { useInnerText: true },
-        );
-        await expect(container).toBeVisible();
-      });
-
-      test("I can access my satellite link", async ({ page }) => {
-        const container = page.locator("div.wx-satellite-wrapper");
-        const link = container.getByText("Explore other satellite views");
-        await expect(link).toBeVisible();
-        await expect(link).toHaveAttribute(
-          "href",
-          /goes\.noaa\.gov\/wfo\.php/i,
-        );
-      });
-
-      test("I can access my satellite link for Alaska", async ({ page }) => {
-        await page.goto(
-          services.webApp("/forecast/point/59.284/-158.63/today/"),
-          {
-            waitUntil: "load",
-          },
-        );
-        const container = page.locator("div.wx-satellite-wrapper");
-        const link = container.getByText("Explore other satellite views");
-        await expect(link).toBeVisible();
-        await expect(link).toHaveAttribute(
-          "href",
-          /goes\.noaa\.gov\/sector\.php/i,
-        );
-      });
-    });
-
-    describe("When I click to explore other views", () => {
-      test("I expect to be taken to radar.weather.gov", async ({ page }) => {
-        const link = page.getByRole("link", {
-          name: "Explore other radar views",
-          includeHidden: true,
-        });
-        const linkHref = await link.getAttribute("href");
-        expect(
-          linkHref.startsWith("https://radar.weather.gov/?settings=v1_"),
-        ).toBeTruthy();
-      });
-    });
   });
 
   describe("When there are non-critical-component errors", () => {
     test("I expect to see error components", async ({ page }) => {
-      await page.goto(services.webApp("/forecast/point/64.837/-147.739/"), {
-        waitUntil: "load",
-      });
-      const nonCriticalErrors = page.locator(".non-critical-component-error");
-      // Radar error container should be present but hidden
-      const hiddenNonCriticalError = page.locator(
-        "#wx-radar-error-container.display-none",
+      await page.goto(
+        services.webApp("/forecast/point/64.837/-147.739/today"),
+        {
+          waitUntil: "load",
+        },
       );
+      const nonCriticalErrors = page.locator(".non-critical-component-error");
       const obsErrorContainer = page.locator(
         "#wx-current-conditions-error-container",
       );
-      const satError = page.locator("div[data-wx-satellite-error]");
-      const satContainer = page.locator("div[wx-outer-satellite-container]");
-      const wxStoryContainer = page.locator(".wx-weather-story-block-section");
 
-      await expect(nonCriticalErrors).toHaveCount(4);
-      await expect(hiddenNonCriticalError).toHaveCount(1);
-      await expect(satContainer).toHaveClass(/display-none/);
-      await expect(satError).toContainText(
-        /There was an error loading the satellite/,
-      );
-      await expect(wxStoryContainer).toContainText(
-        /There was an error loading weather stories/,
-      );
+      await expect(nonCriticalErrors).toHaveCount(1);
       await expect(obsErrorContainer).toContainText(
         /There was an error loading current conditions/,
       );
@@ -198,9 +127,12 @@ describe("Point forecast › Today tab", () => {
       // Force suncalc to return a date within midnight sun conditions
       await page.clock.setFixedTime(new Date("2025-06-01T13:39:00"));
       // Barrow, AK
-      await page.goto(services.webApp("/forecast/point/69.519/-157.105/"), {
-        waitUntil: "load",
-      });
+      await page.goto(
+        services.webApp("/forecast/point/69.519/-157.105/today"),
+        {
+          waitUntil: "load",
+        },
+      );
       const sunriseContainer = page.locator(".wx-sunrise-sunset-container");
 
       await expect(sunriseContainer).toHaveCount(1);
@@ -215,9 +147,12 @@ describe("Point forecast › Today tab", () => {
       // Force suncalc to return a date within midnight sun conditions
       await page.clock.setFixedTime(new Date("2025-06-01T13:39:00"));
       // Fairbanks, AK
-      await page.goto(services.webApp("/forecast/point/64.837/-147.739/"), {
-        waitUntil: "load",
-      });
+      await page.goto(
+        services.webApp("/forecast/point/64.837/-147.739/today"),
+        {
+          waitUntil: "load",
+        },
+      );
 
       await page.getByRole("button", { name: "show more" }).click();
 

@@ -27,7 +27,7 @@
     <div class="width-3 border-bottom-2px border-primary-dark height-0 margin-right-1">
       <div class="bg-primary-dark margin-left-1 radius-pill width-1 height-1 wx-margin-top-neg-3px"></div>
     </div>
-    {{ "hourly-table.labels.temperature.01" | t }}
+    {{ "hourly-charts.heading.temperature.01" | t }}
     <div class="margin-left-3 width-3 border-bottom-2px border-top-0 border-left-0 border-right-0 border-dotted border-primary-light height-0 margin-right-1">
       <div class="bg-primary-light margin-left-1 radius-pill width-1 height-1 wx-margin-top-neg-3px"></div>
     </div>
@@ -36,10 +36,11 @@
 </div>
 <div class="usa-sr-only">
   <table>
+    <caption>{{ "hourly-table.labels.temperature.01" | t }}</caption>
     <thead>
       <tr>
-        <th>time</th>
-        <th>temperature</th>
+        <th scope="col">{{ "hourly-table.labels.time.01" | t }}</th>
+        <th scope="col">{{ "hourly-table.labels.temperature.01" | t }}</th>
       </tr>
     </thead>
     <tbody>
@@ -72,6 +73,25 @@
       </div>
       </wx-pops-chart>
     </div>
+  </div>
+  <div class="usa-sr-only">
+    <table>
+      <caption>{{ "hourly-charts.heading.chance-precip.01" | t }}</caption>
+      <thead>
+        <tr>
+          <th scope="col">{{ "hourly-table.labels.time.01" | t }}</th>
+          <th scope="col">{{ "hourly-charts.heading.chance-precip.01" | t }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for time,pop in times|zip:pops %}
+          <tr>
+            <td>{{ time }}</td>
+            <td>{{ pop }}%</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
   </div>
   <div aria-hidden="true" class="grid-col-12 tablet:grid-col-6">
     {#  Summary Wind Chart #}
@@ -106,5 +126,43 @@
         {% trans "hourly-charts.legend.gusts.01" %}
       </div>
     </div>
+  </div>
+  <div class="usa-sr-only">
+    <table>
+      <caption>{{ "hourly-table.labels.wind-speed.01" | t }}</caption>
+      <thead>
+        <tr>
+          <th scope="col">{{ "hourly-table.labels.time.01" | t }}</th>
+          <th scope="col">{{ "hourly-table.labels.wind-speed.01" | t }}</th>
+        </tr>
+      </thead>
+      <tbody>
+      {% for wind_data,direction in times|zip:windSpeeds|zip:windGusts|zip:windDirections %}
+        {% with time=wind_data.0.0 wind=wind_data.0.1 gust=wind_data.1 %}
+          <tr>
+            <td>{{ time }}</td>
+            <td>
+                {% if wind == 0 %}
+                  <span class="usa-sr-only">{% trans "wind.labels.calm.01" %}</span>
+                {% else %}
+                  {% if direction.cardinalLong %}
+                    {% with direction_name=direction.cardinalLong|lower %}
+                      {% with message_key="wind.labels.speed-from-"|add:direction_name|add:".01" %}
+                        {% trans_with_args message_key speed=wind %}
+                      {% endwith %}
+                    {% endwith %}
+                  {% else %}
+                    {% trans_with_args "hourly-table.text.wind-speed.01" speed=wind %}
+                  {% endif %}
+                  {% if gust != None %}
+                    {% trans_with_args "hourly-table.text.gusting.01" gustSpeed=gust %}
+                  {% endif %}
+                {% endif %}
+            </td>
+          </tr>
+        {% endwith %}
+      {% endfor %}
+      </tbody>
+    </table>
   </div>
 </div>
