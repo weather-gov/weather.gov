@@ -105,22 +105,25 @@ variable "services" {
   description = "ECR service definitions."
 
   type = map(object({
-    cpu           = number
-    memory        = number
+    cpu    = number
+    memory = number
+    # special case alerts, since it's not weathergov-<env>-alerts but rather
+    # weathergov-<env>-tasks-alerts.
+    repository    = optional(string)
     desired_count = optional(number, 0)
     environment   = optional(map(string), {})
     secrets       = optional(list(string), [])
-
-    # special case alerts, since it's not weathergov-<env>-alerts but rather
-    # weathergov-<env>-tasks-alerts.
-    repository = optional(string)
   }))
 
   default = {
     alerts = {
-      cpu        = 256
-      memory     = 512
-      repository = "tasks-alerts"
+      cpu           = 256
+      memory        = 512
+      repository    = "tasks-alerts"
+      desired_count = 1
+      environment = {
+        ALERTS_ONESHOT = "false"
+      }
     }
 
     interop = {
