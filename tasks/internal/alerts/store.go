@@ -23,6 +23,7 @@ const (
 	wgs84          = 4326
 	webMercator    = 3857
 	simplifyMeters = 200
+	geoJSONDigits = 6
 )
 
 var (
@@ -76,10 +77,10 @@ func NewStore() *Store {
         SET alertjson = jsonb_set(
           alertjson,
           '{geometry}',
-          ST_AsGeoJSON(shape_simplified)::jsonb
+          ST_AsGeoJSON(shape_simplified, %d)::jsonb
         )
         WHERE shape_simplified IS NOT NULL
-      `, table),
+      `, table, geoJSONDigits),
 	}
 
 	for source, union := range unionSelects {
