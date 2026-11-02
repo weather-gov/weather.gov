@@ -13,12 +13,28 @@ const pages = [
     path: "/forecast/point/33.521/-86.812/today/",
   },
   {
+    name: "location page with alerts (analysis tab)",
+    path: "/forecast/point/33.521/-86.812/analysis/",
+  },
+  {
+    name: "location page with alerts (maps tab)",
+    path: "/forecast/point/33.521/-86.812/maps/",
+  },
+  {
     name: "location page with alerts (daily tab)",
     path: "/forecast/point/33.521/-86.812/7-day/",
   },
   {
     name: "location page without alerts (today tab)",
     path: "/forecast/point/35.198/-111.651/today/",
+  },
+  {
+    name: "location page without alerts (analysis tab)",
+    path: "/forecast/point/35.198/-111.651/analysis/",
+  },
+  {
+    name: "location page without alerts (maps tab)",
+    path: "/forecast/point/35.198/-111.651/maps/",
   },
   {
     name: "location page without alerts (daily tab)",
