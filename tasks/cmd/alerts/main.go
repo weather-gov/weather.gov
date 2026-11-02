@@ -3,7 +3,9 @@ package main
 import (
 	"context"
 	"fmt"
+	"log/slog"
 	"os"
+	"strconv"
 	"time"
 
 	"tasks/internal"
@@ -28,18 +30,44 @@ func main() {
 		}
 	}
 
-	if err := run(ctx); err != nil {
-		logger.Error("alerts failed", "error", err)
+	// determine if we want to run alerts in a loop (for NEC)
+	oneshot, err := strconv.ParseBool(os.Getenv("ALERTS_ONESHOT"))
+	if err != nil {
+		oneshot = true
+	}
+	logger.Info("alerts loop", "oneshot", oneshot)
+
+	if err := run(ctx, logger, oneshot); err != nil {
+		logger.Error("alerts run", "error", err)
 		os.Exit(1)
 	}
 }
 
-func run(ctx context.Context) error {
+func run(ctx context.Context, logger *slog.Logger, oneshot bool) error {
 	pool, err := internal.NewDBPool(ctx)
 	if err != nil {
 		return fmt.Errorf("connecting to db: %w", err)
 	}
 	defer pool.Close()
 
-	return alerts.Update(ctx, pool)
+	if oneshot {
+		return alerts.Update(ctx, pool)
+	}
+
+	ticker := time.NewTicker(60 * time.Second)
+	defer ticker.Stop()
+
+	for {
+		if alertsErr := alerts.Update(ctx, pool); alertsErr != nil {
+			logger.Error("alerts update", "error", alertsErr)
+		}
+
+		select {
+		case <-ctx.Done():
+			logger.Info("shutting down alerts loop")
+			return nil
+		case <-ticker.C:
+			// noop
+		}
+	}
 }
