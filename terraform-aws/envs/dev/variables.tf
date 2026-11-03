@@ -73,27 +73,30 @@ variable "tasks" {
 
   default = {
     # Every 30m.
+    # for dev: monday to friday, 8am to 8pm eastern.
     ghwo = {
       cpu       = 1024
       memory    = 2048
-      scheduler = "cron(*/30 * * * ? *)"
+      scheduler = "cron(*/30 8-20 * * MON-FRI *)"
       environment = {
         TIMEOUT = "600" # 10m
       }
     }
 
     # Every 30m.
+    # for dev: monday to friday, 8am to 8pm eastern.
     gridcache = {
       cpu       = 1024
       memory    = 2048
-      scheduler = "cron(*/30 * * * ? *)"
+      scheduler = "cron(*/30 8-20 * * MON-FRI *)"
     }
 
     # Every 60m, offset :10.
+    # for dev: monday to friday, 8am to 8pm eastern.
     wpcprob = {
       cpu       = 1024
       memory    = 4096
-      scheduler = "cron(10 * * * ? *)"
+      scheduler = "cron(10 8-20 * * MON-FRI *)"
       environment = {
         WPCPROB_TIMEOUT = "1200" # 20m
       }
