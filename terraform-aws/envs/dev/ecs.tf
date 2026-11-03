@@ -39,9 +39,13 @@ resource "aws_ecs_task_definition" "tasks" {
 
   container_definitions = jsonencode([
     {
-      name      = each.key
-      image     = "${var.container_registry}/weathergov-${var.env}-tasks-${each.key}:${var.image_tag}"
-      essential = true
+      name           = each.key
+      image          = "${var.container_registry}/weathergov-${var.env}-tasks-${each.key}:${var.image_tag}"
+      essential      = true
+      mountPoints    = []
+      portMappings   = []
+      systemControls = []
+      volumesFrom    = []
 
       # NB: map iteration is lexically ordered so its the same order every time
       environment = concat(
@@ -168,6 +172,7 @@ resource "aws_scheduler_schedule" "schedules" {
   }
 
   schedule_expression = each.value.scheduler
+  schedule_expression_timezone = "America/New_York"
 
   target {
     arn      = aws_ecs_cluster.main.arn
