@@ -77,7 +77,7 @@ variable "tasks" {
     ghwo = {
       cpu       = 1024
       memory    = 2048
-      scheduler = "cron(*/30 8-20 * * MON-FRI *)"
+      scheduler = "cron(*/30 8-20 ? * MON-FRI *)"
       environment = {
         TIMEOUT = "600" # 10m
       }
@@ -88,7 +88,7 @@ variable "tasks" {
     gridcache = {
       cpu       = 1024
       memory    = 2048
-      scheduler = "cron(*/30 8-20 * * MON-FRI *)"
+      scheduler = "cron(*/30 8-20 ? * MON-FRI *)"
     }
 
     # Every 60m, offset :10.
@@ -96,7 +96,7 @@ variable "tasks" {
     wpcprob = {
       cpu       = 1024
       memory    = 4096
-      scheduler = "cron(10 8-20 * * MON-FRI *)"
+      scheduler = "cron(10 8-20 ? * MON-FRI *)"
       environment = {
         WPCPROB_TIMEOUT = "1200" # 20m
       }
