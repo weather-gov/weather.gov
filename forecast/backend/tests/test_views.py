@@ -437,6 +437,7 @@ class TestViews(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "weather/point/alerts.html")
         self.assertContains(response, "alerts-tab-button")
+        self.assertContains(response, "Upper left County, None</a>")
 
     @override_settings(POINT_FORECAST_HTMX=True)
     @mock.patch("backend.views.point.interop.get_point_forecast")
@@ -900,3 +901,17 @@ class TestViews(TestCase):
         expected = {"is_empty": True, "officeId": "TST", "wfo_name": "Test WFO", "wfo_url": "/about/offices/TST/"}
         self.assertEqual(response.context["weather_story"], expected)
         self.assertTemplateUsed("weather/partials/point-weather-storys.html")
+
+    @mock.patch("backend.views.point.interop.get_point_forecast")
+    def test_point_location_analysis_no_countyfips(self, mock_get_point_forecast):
+        """Test the analysis view for a point outside every county polygon."""
+        mock_get_point_forecast.return_value = {
+            "grid": {"wfo": "TST", "type": "land", "marineType": None},
+            "place": {"timezone": "Pacific/Guam"},
+            "weatherstory": [],
+        }
+
+        response = self.client.get("/forecast/point/11.1/22.2/analysis/")
+
+        self.assertEqual(response.status_code, 200)
+        self.assertNotIn("countyFullName", response.context["point"]["place"])

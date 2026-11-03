@@ -30,16 +30,16 @@
                  href="{% url "office" wfo=point.wfo.code %}">{% trans_with_args "forecast.area-information.wfo-label.01" wfo_name=point.wfo.name %}</a>
             </li>
           {% endif %}
-          {% if point.place.countyfips %}
+          {% if point.place.countyfips and point.place.countyFullName %}
             <li>
               <a class="usa-link line-height-sans-4"
-                 href="{% url "county_overview" countyfips=point.place.countyfips %}">{{ point.place.county }} County</a>
+                 href="{% url "county_overview" countyfips=point.place.countyfips %}">{{ point.place.countyFullName }}</a>
             </li>
           {% endif %}
           {% if point.place.state %}
             <li>
               <a class="usa-link line-height-sans-4"
-                 href="{% url "state_overview" state=point.place.state %}">{{ point.place.statename }} State</a>
+                 href="{% url "state_overview" state=point.place.state %}">{% trans_with_args "county.area-resources.state-link.01" state_name=point.place.statename %}</a>
             </li>
           {% endif %}
         </ul>

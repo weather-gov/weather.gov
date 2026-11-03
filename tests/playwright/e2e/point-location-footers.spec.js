@@ -17,16 +17,18 @@ describe("Point location page area information links", () => {
 
       await expect(response.status()).toBe(200);
 
-      const countyLink = await page.getByRole("link", {
-        name: "Jefferson County",
-        exact: true,
-      });
+      // analysis tab also links the county outside the area block
+      const countyLink = await page
+        .locator(".area-information-links--point")
+        .getByRole("link", { name: "Jefferson County, AL", exact: true });
       await expect(countyLink).toHaveAttribute(
         "href",
         "/forecast/county/01073/",
       );
 
-      const stateLink = await page.getByRole("link", { name: "Alabama State" });
+      const stateLink = await page.getByRole("link", {
+        name: "State view for Alabama",
+      });
       await expect(stateLink).toHaveAttribute("href", "/forecast/state/AL/");
 
       const afdLink = await page.getByRole("link", {

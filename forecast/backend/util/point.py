@@ -4,6 +4,8 @@ from django.conf import settings
 from django.template.loader import render_to_string
 from django.utils import timezone
 
+from spatial.models import WeatherCounties
+
 HTMX_A_B_ODDS = 0.5
 
 def should_use_htmx_for_point(request): # noqa: ARG001
@@ -38,6 +40,18 @@ def should_use_htmx_for_point(request): # noqa: ARG001
 def is_htmx_request(request):
     """Return True if the incoming request was made with HTMX header(s)."""
     return request.headers.get("HX-Request") == "true"
+
+
+def add_county_label(point):
+    """Set place.countyFullName to the county-like label, e.g. Orleans Parish, LA."""
+    county_info = (
+        WeatherCounties.objects.only("countyname", "countyfips", "st")
+        .filter(countyfips=point.get("place", {}).get("countyfips"))
+        .first()
+    )
+    if county_info:
+        point["place"]["countyFullName"] = county_info.label
+
 
 def render_as_htmx(template_name, context, localtz=None):
     """Render the context fo the template with a specific timezone."""
