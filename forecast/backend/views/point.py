@@ -12,8 +12,7 @@ from django.views.decorators.vary import vary_on_headers
 from backend import interop
 from backend.models import WFO
 from backend.util import get_weather_story_from_point_data, get_wfo_from_afd
-from backend.util.point import is_htmx_request, render_as_htmx, should_use_htmx_for_point
-from spatial.models import WeatherCounties
+from backend.util.point import add_county_label, is_htmx_request, render_as_htmx, should_use_htmx_for_point
 
 from ._helpers import get_redirect_for_afd_queries
 
@@ -183,6 +182,8 @@ def point_location_alerts(request, lat, lon):
         })
         return HttpResponse(markup, content_type="text/html")
 
+    add_county_label(point)
+
     if use_htmx:
         # Render the template that has the "htmx-enabled"
         # version of the page
@@ -271,6 +272,8 @@ def point_location_today(request, lat, lon): # noqa: C901
             **context,
         }, localtz)
         return HttpResponse(markup, content_type="text/html")
+
+    add_county_label(point)
 
     if use_htmx:
         # Render the template that has the "htmx-enabled"
@@ -362,6 +365,8 @@ def point_location_seven_day(request, lat, lon): # noqa: C901
         )
         return HttpResponse(markup, content_type="text/html")
 
+    add_county_label(point)
+
     if use_htmx:
         # Render the template that has the "htmx-enabled"
         # version of the page
@@ -449,6 +454,8 @@ def point_location_maps(request, lat, lon):
         )
         return HttpResponse(markup, content_type="text/html")
 
+    add_county_label(point)
+
     if use_htmx:
         # Render the template that has the "htmx-enabled"
         # version of the page
@@ -518,9 +525,7 @@ def point_location_analysis(request, lat, lon): # noqa: C901
 
     # Get the full county information, including the
     # name of the subdivision type
-    county_info = WeatherCounties.objects.filter(countyfips=point["place"]["countyfips"]).first()
-    if county_info:
-        point["place"]["countyFullName"] = county_info.label
+    add_county_label(point)
 
     weather_story = {}
     if "grid" in point and "wfo" in point["grid"] and localtz:
