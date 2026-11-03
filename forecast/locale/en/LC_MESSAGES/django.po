@@ -904,6 +904,11 @@ msgstr "%(fullName)s Forecast"
 msgid "site.meta.description.point_forecast_maps"
 msgstr "%(fullName)s Forecast"
 
+msgid "site.meta.titles.point_forecast_analysis"
+msgstr "%(fullName)s Forecast"
+msgid "site.meta.description.point_forecast_analysis"
+msgstr "%(fullName)s Forecast"
+
 msgid "site.meta.titles.office"
 msgstr "%(wfo)s Weather Forecasting Office"
 msgid "site.meta.description.office"

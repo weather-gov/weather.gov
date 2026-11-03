@@ -25,6 +25,23 @@ class TestTemplateTagWeatherTitle(TestCase):
         )
         self.assertEqual(actual, expected)
 
+    def test_set_title_for_every_point_tab(self):
+        """Test each point tab route has a translated title."""
+        for url_name in [
+            "point_forecast_alerts",
+            "point_forecast_today",
+            "point_forecast_seven_day",
+            "point_forecast_maps",
+            "point_forecast_analysis",
+        ]:
+            with self.subTest(url_name=url_name):
+                context = {
+                    "title_trans_args": {"fullName": "Location, ST"},
+                    "request": SimpleNamespace(resolver_match=SimpleNamespace(url_name=url_name)),
+                }
+                actual = weather_title.set_title_and_description(context)
+                self.assertIn("<title>Location, ST Forecast | This Agency</title>", actual)
+
     def test_set_title_with_cms_page_name_and_seo_title(self):
         """Test with CMS authored page."""
         # Use a CMS GenericPage object here, to ensure that the code
