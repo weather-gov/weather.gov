@@ -1,6 +1,8 @@
 import random
 
 from django.conf import settings
+from django.template.loader import render_to_string
+from django.utils import timezone
 
 HTMX_A_B_ODDS = 0.5
 
@@ -36,3 +38,16 @@ def should_use_htmx_for_point(request): # noqa: ARG001
 def is_htmx_request(request):
     """Return True if the incoming request was made with HTMX header(s)."""
     return request.headers.get("HX-Request") == "true"
+
+def render_as_htmx(template_name, context, localtz=None):
+    """Render the context fo the template with a specific timezone."""
+    if localtz:
+        with timezone.override(localtz):
+            return render_to_string(
+                template_name,
+                context,
+            )
+    return render_to_string(
+        template_name,
+        context,
+    )

@@ -13,30 +13,32 @@
 {% endcomment %}
 <div id="wx-point-forecast-tab-containers"
      class="bg-base-lightest flex-1 display-flex flex-column">
-  {# Alerts Tab Container #}
-  <div class="wx-tab-container wx-focus-offset-205 flex-1 margin-top-3 margin-bottom-4"
-       {% if use_htmx %} hx-get="{% url 'point_forecast_alerts' lat=point.point.latitude lon=point.point.longitude %}" hx-swap="innerHTML" hx-error-target=".wx-point-forecast-tab-error" {% endif %}
-       id="alerts"
-       role="tabpanel"
-       aria-labelledby="alerts-tab-button"
-       {% if tab_name == "alerts" %}data-selected="true"{% endif %}
-       tabindex="0">
-    {% if tab_name == "alerts" %}
-      {% include 'weather/point/alerts-tab-content.html' with alerts=point.alerts.items %}
-    {% elif use_htmx %}
-      {# If this is not the current tab, but we are using htmx, show a loading indicator until swap happens #}
-      <div class="width-full display-flex flex-column flex-align-center margin-top-4">
-        {% include 'weather/partials/wx-loading-indicator.html' with text=_("loader.loading-text.alerts-tab.01") %}
-      </div>
-      {# Template for errors. Will be cloned if HTMX requests error out #}
-      <template class="wx-point-forecast-tab-error">
-        {% render_critical_component_error component_name="point-alerts-tab" margin_top=0 %}
-      </template>
-    {% endif %}
-  </div>
+  {% if point.alerts.items %}
+    {# Alerts Tab Container #}
+    <div class="wx-tab-container wx-focus-offset-205 flex-1 margin-top-3 margin-bottom-4"
+         {% if use_htmx and tab_name != "alerts" %} hx-get="{% url 'point_forecast_alerts' lat=point.point.latitude lon=point.point.longitude %}" hx-swap="innerHTML" hx-error-target=".wx-point-forecast-tab-error" {% endif %}
+         id="alerts"
+         role="tabpanel"
+         aria-labelledby="alerts-tab-button"
+         {% if tab_name == "alerts" %}data-selected="true"{% endif %}
+         tabindex="0">
+      {% if tab_name == "alerts" %}
+        {% include 'weather/point/alerts-tab-content.html' with alerts=point.alerts.items %}
+      {% elif use_htmx %}
+        {# If this is not the current tab, but we are using htmx, show a loading indicator until swap happens #}
+        <div class="width-full display-flex flex-column flex-align-center margin-top-4">
+          {% include 'weather/partials/wx-loading-indicator.html' with text=_("loader.loading-text.alerts-tab.01") %}
+        </div>
+        {# Template for errors. Will be cloned if HTMX requests error out #}
+        <template class="wx-point-forecast-tab-error">
+          {% render_critical_component_error component_name="point-alerts-tab" margin_top=0 %}
+        </template>
+      {% endif %}
+    </div>
+  {% endif %}
   {# Today Tab Container #}
   <div class="wx-tab-container wx-htmx-point-tab wx-focus-offset-205 flex-1 margin-top-3 margin-bottom-4"
-       {% if use_htmx %} hx-get="{% url 'point_forecast_today' lat=point.point.latitude lon=point.point.longitude %}" hx-swap="innerHTML" hx-error-target=".wx-point-forecast-tab-error" {% endif %}
+       {% if use_htmx and tab_name != "today" %} hx-get="{% url 'point_forecast_today' lat=point.point.latitude lon=point.point.longitude %}" hx-swap="innerHTML" hx-error-target=".wx-point-forecast-tab-error" {% endif %}
        id="today"
        role="tabpanel"
        aria-labelledby="current-conditions-tab-button"
@@ -57,7 +59,7 @@
   </div>
   {# 7-Day (aka 'daily') Tab Container  #}
   <div
-    {% if use_htmx %}
+    {% if use_htmx and tab_name != "daily" %}
       hx-get="{% url 'point_forecast_seven_day' lat=point.point.latitude lon=point.point.longitude %}"
     hx-swap="innerHTML" hx-error-target=".wx-point-forecast-tab-error"
     {% endif %}
@@ -84,7 +86,7 @@
 
   {# Maps (radar and satellite) Tab Container  #}
   <div
-    {% if use_htmx %}
+    {% if use_htmx and tab_name != "maps" %}
       hx-get="{% url 'point_forecast_maps' lat=point.point.latitude lon=point.point.longitude %}"
     hx-swap="innerHTML" hx-error-target=".wx-point-forecast-tab-error"
     {% endif %}
@@ -111,7 +113,7 @@
 
   {# Analysis Tab Container #}
   <div
-    {% if use_htmx %}
+    {% if use_htmx and tab_name != "analysis" %}
       hx-get="{% url 'point_forecast_analysis' lat=point.point.latitude lon=point.point.longitude %}"
     hx-swap="innerHTML"
     hx-error-target=".wx-point-forecast-tab-error"
