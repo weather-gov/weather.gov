@@ -5,7 +5,6 @@ from zoneinfo import ZoneInfo
 from django.conf import settings
 from django.http import Http404, HttpResponse
 from django.shortcuts import redirect, render
-from django.template.loader import render_to_string
 from django.urls import reverse
 from django.views.decorators.cache import cache_control
 from django.views.decorators.vary import vary_on_headers
@@ -13,7 +12,7 @@ from django.views.decorators.vary import vary_on_headers
 from backend import interop
 from backend.models import WFO
 from backend.util import get_weather_story_from_point_data, get_wfo_from_afd
-from backend.util.point import is_htmx_request, should_use_htmx_for_point
+from backend.util.point import is_htmx_request, render_as_htmx, should_use_htmx_for_point
 from spatial.models import WeatherCounties
 
 from ._helpers import get_redirect_for_afd_queries
@@ -165,7 +164,7 @@ def point_location_alerts(request, lat, lon):
 
     # If there are no alerts for this location, redirect to the today tab
     alert_items = point.get("alerts", {}).get("items", [])
-    if len(alert_items) == 0:
+    if len(alert_items) == 0 and not is_htmx_request(request):
         return redirect(
             reverse(
                 "point_forecast_today",
@@ -179,7 +178,7 @@ def point_location_alerts(request, lat, lon):
     if is_htmx_request(request):
         # In this case, we only render and return the partial
         # we need for alert tab content
-        markup = render_to_string("weather/point/alerts-tab-content.html", {
+        markup = render_as_htmx("weather/point/alerts-tab-content.html", {
             "alerts": alert_items,
         })
         return HttpResponse(markup, content_type="text/html")
@@ -268,9 +267,9 @@ def point_location_today(request, lat, lon): # noqa: C901
     if is_htmx_request(request):
         # In this case, only render the partial needed
         # for the tab content
-        markup = render_to_string("weather/point/today-tab-content.html", {
+        markup = render_as_htmx("weather/point/today-tab-content.html", {
             **context,
-        })
+        }, localtz)
         return HttpResponse(markup, content_type="text/html")
 
     if use_htmx:
@@ -352,13 +351,15 @@ def point_location_seven_day(request, lat, lon): # noqa: C901
     if is_htmx_request(request):
         # In this case, only render the partial markup
         # needed for the tab's content
-        markup = render_to_string(
+        markup = render_as_htmx(
             "weather/point/seven-day-tab-content.html",
             {
                 "use_htmx": True,
                 "forecast": context["point"]["forecast"],
                 **context,
-            })
+            },
+            localtz,
+        )
         return HttpResponse(markup, content_type="text/html")
 
     if use_htmx:
@@ -438,12 +439,14 @@ def point_location_maps(request, lat, lon):
     if is_htmx_request(request):
         # In this case, only render the partial markup
         # needed for the tab's content
-        markup = render_to_string(
+        markup = render_as_htmx(
             "weather/point/maps-tab-content.html",
             {
                 "use_htmx": True,
                 **context,
-            })
+            },
+            localtz,
+        )
         return HttpResponse(markup, content_type="text/html")
 
     if use_htmx:
@@ -538,14 +541,16 @@ def point_location_analysis(request, lat, lon): # noqa: C901
     if is_htmx_request(request):
         # In this case, only render the partial markup
         # needed for the tab's content
-        markup = render_to_string(
+        markup = render_as_htmx(
             "weather/point/analysis-tab-content.html",
             {
                 "use_htmx": True,
                 "forecast": context["point"]["forecast"],
                 "weather_story": weather_story,
                 **context,
-            })
+            },
+            localtz,
+        )
         return HttpResponse(markup, content_type="text/html")
 
     if use_htmx:
