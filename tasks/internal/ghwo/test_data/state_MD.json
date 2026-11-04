@@ -46,12 +46,6 @@
       },
       "dayNumber": 1,
       "risks": {
-        "ConvectiveWind": {
-          "category": 1,
-          "color": "#50c986",
-          "definition": "Up to 15% chance of severe wind gusts (58 mph or greater) within 25 miles of your location.",
-          "levelName": "Marginal"
-        },
         "ExcessiveRainfall": {
           "category": 0,
           "color": "#ededed",
@@ -86,12 +80,6 @@
       },
       "dayNumber": 2,
       "risks": {
-        "ConvectiveWind": {
-          "category": 0,
-          "color": "#ededed",
-          "definition": "Little to no Severe Thunderstorm Wind Risk",
-          "levelName": "None"
-        },
         "ExcessiveRainfall": {
           "category": 0,
           "color": "#ededed",
@@ -283,48 +271,6 @@
   "isCounty": false,
   "isState": true,
   "legend": {
-    "ConvectiveWind": {
-      "category": {
-        "0": {
-          "category": 0,
-          "color": "#ededed",
-          "definition": "Little to no Severe Thunderstorm Wind Risk",
-          "levelName": "None"
-        },
-        "1": {
-          "category": 1,
-          "color": "#50c986",
-          "definition": "Up to 15% chance of severe wind gusts (58 mph or greater) within 25 miles of your location.",
-          "levelName": "Marginal"
-        },
-        "2": {
-          "category": 2,
-          "color": "#ffff51",
-          "definition": "15-30% chance of severe wind gusts (58 mph or greater) within 25 miles of your location.",
-          "levelName": "Slight"
-        },
-        "3": {
-          "category": 3,
-          "color": "#ffc06c",
-          "definition": "30-45% chance of severe wind gusts (58 mph or greater) within 25 miles of your location.",
-          "levelName": "Enhanced"
-        },
-        "4": {
-          "category": 4,
-          "color": "#ff5050",
-          "definition": "45-60% chance of severe wind gusts (58 mph or greater) with a 10% or greater chance of extreme wind gusts (74 mph or greater) within 25 miles of your location.",
-          "levelName": "Moderate"
-        },
-        "5": {
-          "category": 5,
-          "color": "#ff50ff",
-          "definition": "60% or greater chance of severe wind gusts (58 mph or greater) with a 10% or greater chance of extreme wind gusts (74 mph or greater) within 25 miles of your location.",
-          "levelName": "High"
-        }
-      },
-      "name": "Thunderstorm Wind Risk",
-      "scale": 5
-    },
     "ExcessiveRainfall": {
       "category": {
         "0": {
@@ -473,75 +419,11 @@
   "noRisks": [
     "Fog Risk",
     "Frost/Freeze Risk",
-    "Hail Risk",
     "High Surf Risk",
     "Tornado Risk",
     "Wind Risk"
   ],
   "risks": {
-    "ConvectiveWind": {
-      "days": [
-        {
-          "category": 1,
-          "color": "#50c986",
-          "definition": "Up to 15% chance of severe wind gusts (58 mph or greater) within 25 miles of your location.",
-          "image": "https://www.weather.gov/images/lwx/ghwo/MarylandThunderstormWindDay1.jpg",
-          "levelName": "Marginal",
-          "timestamp": "2026-07-16T15:00:00-04:00"
-        },
-        {
-          "category": 0,
-          "color": "#ededed",
-          "definition": "Little to no Severe Thunderstorm Wind Risk",
-          "image": "https://www.weather.gov/images/lwx/ghwo/MarylandThunderstormWindDay2.jpg",
-          "levelName": "None",
-          "timestamp": "2026-07-17T08:00:00-04:00"
-        }
-      ],
-      "legend": {
-        "category": {
-          "0": {
-            "category": 0,
-            "color": "#ededed",
-            "definition": "Little to no Severe Thunderstorm Wind Risk",
-            "levelName": "None"
-          },
-          "1": {
-            "category": 1,
-            "color": "#50c986",
-            "definition": "Up to 15% chance of severe wind gusts (58 mph or greater) within 25 miles of your location.",
-            "levelName": "Marginal"
-          },
-          "2": {
-            "category": 2,
-            "color": "#ffff51",
-            "definition": "15-30% chance of severe wind gusts (58 mph or greater) within 25 miles of your location.",
-            "levelName": "Slight"
-          },
-          "3": {
-            "category": 3,
-            "color": "#ffc06c",
-            "definition": "30-45% chance of severe wind gusts (58 mph or greater) within 25 miles of your location.",
-            "levelName": "Enhanced"
-          },
-          "4": {
-            "category": 4,
-            "color": "#ff5050",
-            "definition": "45-60% chance of severe wind gusts (58 mph or greater) with a 10% or greater chance of extreme wind gusts (74 mph or greater) within 25 miles of your location.",
-            "levelName": "Moderate"
-          },
-          "5": {
-            "category": 5,
-            "color": "#ff50ff",
-            "definition": "60% or greater chance of severe wind gusts (58 mph or greater) with a 10% or greater chance of extreme wind gusts (74 mph or greater) within 25 miles of your location.",
-            "levelName": "High"
-          }
-        },
-        "name": "Thunderstorm Wind Risk",
-        "scale": 5
-      },
-      "name": "Thunderstorm Wind Risk"
-    },
     "ExcessiveRainfall": {
       "days": [
         {

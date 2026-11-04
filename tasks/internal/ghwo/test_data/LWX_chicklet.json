@@ -73,44 +73,6 @@
             "webTab": "public"
         },
         {
-            "description": "Utilizes <a href='https://www.spc.noaa.gov/products/outlook/' target='_blank'>daily forecasts</a> from the Storm Prediction Center (SPC). <a href='https://www.spc.noaa.gov/misc/about.html' target='_blank'>More info</a>",
-            "name": "Thunderstorm Wind Risk",
-            "periods": {
-                "period1": {
-                    "color": "#50c986",
-                    "date": "Thursday, July 16, 2026",
-                    "imagePath": "/images/lwx/ghwo/ThunderstormWindDay1.jpg",
-                    "validStartTime": "03:00PM"
-                },
-                "period2": {
-                    "color": "#ededed",
-                    "date": "Friday, July 17, 2026",
-                    "imagePath": "/images/lwx/ghwo/ThunderstormWindDay2.jpg",
-                    "validStartTime": "08:00AM"
-                }
-            },
-            "webTab": "public"
-        },
-        {
-            "description": "Utilizes <a href='https://www.spc.noaa.gov/products/outlook/' target='_blank'>daily forecasts</a> from the Storm Prediction Center (SPC). <a href='https://www.spc.noaa.gov/misc/about.html' target='_blank'>More info</a>",
-            "name": "Hail Risk",
-            "periods": {
-                "period1": {
-                    "color": "#ededed",
-                    "date": "Thursday, July 16, 2026",
-                    "imagePath": "/images/lwx/ghwo/HailDay1.jpg",
-                    "validStartTime": "03:00PM"
-                },
-                "period2": {
-                    "color": "#ededed",
-                    "date": "Friday, July 17, 2026",
-                    "imagePath": "/images/lwx/ghwo/HailDay2.jpg",
-                    "validStartTime": "08:00AM"
-                }
-            },
-            "webTab": "public"
-        },
-        {
             "description": "Derived from local office thunderstorm forecasts.",
             "name": "Lightning Risk",
             "periods": {
