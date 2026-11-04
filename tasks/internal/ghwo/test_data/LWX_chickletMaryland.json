@@ -72,45 +72,6 @@
             "webTab": "public"
         },
         {
-            "description": "Utilizes <a href='https://www.spc.noaa.gov/products/outlook/' target='_blank'>daily forecasts</a> from the Storm Prediction Center (SPC). <a href='https://www.spc.noaa.gov/misc/about.html' target='_blank'>More info</a>",
-            "name": "Thunderstorm Wind Risk",
-            "periods": {
-                "period1": {
-                    "color": "#ffc06c",
-                    "date": "Tuesday, July 21, 2026",
-                    "imagePath": "/images/lwx/ghwo/MarylandThunderstormWindDay1.jpg",
-                    "threatFlag": 1,
-                    "validStartTime": "09:00AM"
-                },
-                "period2": {
-                    "color": "#ffff51",
-                    "date": "Wednesday, July 22, 2026",
-                    "imagePath": "/images/lwx/ghwo/MarylandThunderstormWindDay2.jpg",
-                    "validStartTime": "08:00AM"
-                }
-            },
-            "webTab": "public"
-        },
-        {
-            "description": "Utilizes <a href='https://www.spc.noaa.gov/products/outlook/' target='_blank'>daily forecasts</a> from the Storm Prediction Center (SPC). <a href='https://www.spc.noaa.gov/misc/about.html' target='_blank'>More info</a>",
-            "name": "Hail Risk",
-            "periods": {
-                "period1": {
-                    "color": "#ffff51",
-                    "date": "Tuesday, July 21, 2026",
-                    "imagePath": "/images/lwx/ghwo/MarylandHailDay1.jpg",
-                    "validStartTime": "09:00AM"
-                },
-                "period2": {
-                    "color": "#ededed",
-                    "date": "Wednesday, July 22, 2026",
-                    "imagePath": "/images/lwx/ghwo/MarylandHailDay2.jpg",
-                    "validStartTime": "08:00AM"
-                }
-            },
-            "webTab": "public"
-        },
-        {
             "description": "Derived from local office thunderstorm forecasts.",
             "name": "Lightning Risk",
             "periods": {

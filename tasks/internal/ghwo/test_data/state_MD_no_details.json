@@ -3,9 +3,6 @@
   "days": [
     {
       "risks": {
-        "ConvectiveWind": {
-          "category": 1
-        },
         "ExcessiveRainfall": {
           "category": 0
         },
@@ -27,10 +24,7 @@
       "timestamp": "2026-07-16T15:00:00-04:00"
     },
     {
-      "risks": {
-        "ConvectiveWind": {
-          "category": 0
-        },
+      "risks": {        
         "ExcessiveRainfall": {
           "category": 0
         },
@@ -165,7 +159,6 @@
   "noRisks": [
     "Fog Risk",
     "Frost/Freeze Risk",
-    "Hail Risk",
     "High Surf Risk",
     "Tornado Risk",
     "Wind Risk"

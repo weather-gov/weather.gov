@@ -82,41 +82,43 @@ var RiskNameToImageMap = map[string]string{
 	"ConvectiveWind":     "ThunderstormWind",
 	"Frost/Freeze":       "FrostFreeze",
 	"Marine":             "MarineHazard",
-	"NonConvectiveWind":  "Wind",
 	"SevereThunderstorm": "SevereThunderstorms",
 	"FireWeatherGFDI":    "FireWxGFDI",
 }
 
-var RiskNameToKeyMap = map[string]string{
-	"Blowing Dust Risk":                  "BlowingDust",
-	"Blowing Snow":                       "BlowingSnow",
-	"Coastal Flood Risk":                 "CoastalFlood",
-	"Thunderstorm Wind Risk":             "ConvectiveWind",
-	"Excessive Rainfall Risk":            "ExcessiveRainfall",
-	"Extreme Cold Risk":                  "ExtremeCold",
-	"Extreme Heat Risk":                  "ExtremeHeat",
-	"Fire Risk":                          "ghwoFireRiskCat",
-	"Fire Weather Risk":                  "FireWeather",
-	"Fog Risk":                           "Fog",
-	"Freezing Spray Risk":                "FreezingSpray",
-	"Frost/Freeze Risk":                  "Frost/Freeze",
-	"Grassland Fire Danger Index (GFDI)": "FireWeatherGFDI",
-	"Hail Risk":                          "Hail",
-	"High Surf Risk":                     "HighSurf",
-	"Ice Accumulation Risk":              "IceAccumulation",
-	"Lakeshore Flood Risk":               "LakeshoreFlood",
-	"Lightning Risk":                     "Lightning",
-	"Marine Hazard Risk":                 "Marine",
-	"Maximum WBGT Risk":                  "MaxWBGTRisk",
-	"Wind Risk":                          "NonConvectiveWind",
-	"Rip Current Risk":                   "RipRisk",
-	"Severe Thunderstorm Risk":           "SevereThunderstorm",
-	"Snow/Sleet Risk":                    "SnowSleet",
-	"Spotter Outlook":                    "SpotterOutlook",
-	"Swim Risk":                          "SwimRisk",
-	"Tornado Risk":                       "Tornado",
-	"Waterspout Risk":                    "Waterspout",
+func createReverseMapping(m map[string]string) map[string]string {
+	out := make(map[string]string, len(m))
+	for key, val := range m {
+		out[val] = key
+	}
+	return out
 }
+
+var KeyToRiskNameMapping = map[string]string{
+	"SevereThunderstorm": "Severe Thunderstorm Risk",
+	"Tornado":            "Tornado Risk",
+	"Lightning":          "Lightning Risk",
+	"ExcessiveRainfall":  "Excessive Rainfall Risk",
+	"ExtremeHeat":        "Extreme Heat Risk",
+	"Wind":               "Wind Risk",
+	"Frost/Freeze":       "Frost/Freeze Risk",
+	"Fog":                "Fog Risk",
+	"FireWeather":        "Fire Weather Risk",
+	"ExtremeCold":        "Extreme Cold Risk",
+	"WinterStorm":        "Winter Storm Risk",
+	"CoastalFlood":       "Coastal Flood Risk",
+	"LakeshoreFlood":     "Lakeshore Flood Risk",
+	"HighSurf":           "High Surf Risk",
+	"Marine":             "Marine Hazard Risk",
+	"RipRisk":            "Rip Current Risk",
+	"SwimRisk":           "Swim Risk",
+	"FreezingSpray":      "Freezing Spray Risk",
+	"BlowingDust":        "Blowing Dust Risk",
+}
+
+// Create the reverse lookup mapping from key
+// names to full risk names
+var RiskNameToKeyMap = createReverseMapping(KeyToRiskNameMapping)
 
 // Maps the canonical 2 or 3 letter state/territory
 // abbreviates code to the name of the state as used
@@ -170,16 +172,4 @@ func GetStateDataViewName(stateCode string) string {
 		return ""
 	}
 	return name
-}
-
-// Create the reverse lookup mapping from key
-// names to full risk names
-var KeyToRiskNameMapping = createReverseMapping(RiskNameToKeyMap)
-
-func createReverseMapping(m map[string]string) map[string]string {
-	out := make(map[string]string, len(m))
-	for key, val := range m {
-		out[val] = key
-	}
-	return out
 }

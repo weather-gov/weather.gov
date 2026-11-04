@@ -13,11 +13,10 @@
         "SnowSleet": { "category": 0 },
         "ExtremeCold": { "category": 0 },
         "FireWeather": { "category": 0 },
-        "CoastalFlood": { "category": 0 },
-        "ConvectiveWind": { "category": 0 },
+        "CoastalFlood": { "category": 0 },        
         "IceAccumulation": { "category": 0 },
         "ExcessiveRainfall": { "category": 0 },
-        "NonConvectiveWind": { "category": 0 },
+        "Wind": { "category": 0 },
         "SevereThunderstorm": { "category": 0 }
       },
       "composite": { "max": 0, "scaled": 0 }
@@ -34,10 +33,9 @@
         "ExtremeCold": { "category": 0 },
         "FireWeather": { "category": 0 },
         "CoastalFlood": { "category": 0 },
-        "ConvectiveWind": { "category": 0 },
         "IceAccumulation": { "category": 0 },
         "ExcessiveRainfall": { "category": 0 },
-        "NonConvectiveWind": { "category": 0 },
+        "Wind": { "category": 0 },
         "SevereThunderstorm": { "category": 0 }
       },
       "composite": { "max": 0, "scaled": 0 }
@@ -54,7 +52,7 @@
         "CoastalFlood": { "category": 0 },
         "IceAccumulation": { "category": 0 },
         "ExcessiveRainfall": { "category": 0 },
-        "NonConvectiveWind": { "category": 0 },
+        "Wind": { "category": 0 },
         "SevereThunderstorm": { "category": 0 }
       },
       "composite": { "max": 0, "scaled": 0 }
@@ -71,7 +69,7 @@
         "CoastalFlood": { "category": 0 },
         "IceAccumulation": { "category": 0 },
         "ExcessiveRainfall": { "category": 0 },
-        "NonConvectiveWind": { "category": 0 },
+        "Wind": { "category": 0 },
         "SevereThunderstorm": { "category": 0 }
       },
       "composite": { "max": 1, "scaled": 0.2 }
@@ -86,7 +84,7 @@
         "FireWeather": { "category": 0 },
         "IceAccumulation": { "category": 0 },
         "ExcessiveRainfall": { "category": 0 },
-        "NonConvectiveWind": { "category": 0 },
+        "Wind": { "category": 0 },
         "SevereThunderstorm": { "category": 0 }
       },
       "composite": { "max": 0, "scaled": 0 }
@@ -100,7 +98,7 @@
         "ExtremeCold": { "category": 0 },
         "FireWeather": { "category": 0 },
         "IceAccumulation": { "category": 0 },
-        "NonConvectiveWind": { "category": 0 },
+        "Wind": { "category": 0 },
         "SevereThunderstorm": { "category": 0 }
       },
       "composite": { "max": 0, "scaled": 0 }
@@ -114,7 +112,7 @@
         "ExtremeCold": { "category": 0 },
         "FireWeather": { "category": 0 },
         "IceAccumulation": { "category": 0 },
-        "NonConvectiveWind": { "category": 0 },
+        "Wind": { "category": 0 },
         "SevereThunderstorm": { "category": 0 }
       },
       "composite": { "max": 0, "scaled": 0 }
@@ -377,26 +375,6 @@
         { "category": 0 }
       ]
     },
-    "ConvectiveWind": {
-      "name": "ConvectiveWind",
-      "days": [
-        {
-          "image": "https://www.weather.gov/images/okx/ghwo/ThunderstormWindDay1.jpg",
-          "category": 0,
-          "timestamp": "2025-10-27T14:00:00-04:00"
-        },
-        {
-          "image": "https://www.weather.gov/images/okx/ghwo/ThunderstormWindDay2.jpg",
-          "category": 0,
-          "timestamp": "2025-10-28T08:00:00-04:00"
-        },
-        { "category": 0 },
-        { "category": 0 },
-        { "category": 0 },
-        { "category": 0 },
-        { "category": 0 }
-      ]
-    },
     "IceAccumulation": {
       "name": "IceAccumulation",
       "days": [
@@ -469,8 +447,8 @@
         { "category": 0 }
       ]
     },
-    "NonConvectiveWind": {
-      "name": "NonConvectiveWind",
+    "Wind": {
+      "name": "Wind",
       "days": [
         {
           "image": "https://www.weather.gov/images/okx/ghwo/WindDay1.jpg",

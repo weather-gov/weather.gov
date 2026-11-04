@@ -17,7 +17,7 @@ type Timestamp = string
 type LocalityCode = string
 
 // A string that represents a risk type key,
-// such as "ExcessiveRainfall" or "NonConvectiveWind"
+// such as "ExcessiveRainfall" or "Wind"
 type RiskTypeKey = string
 
 // A string that represents the string version of an
@@ -231,7 +231,7 @@ type SourceChicklet struct {
 *     "Lightning": 1,
 *     "ExcessiveRainfall": 0,
 *     "ExtremeHeat": 0,
-*     "NonConvectiveWind": 0,
+*     "Wind": 0,
 *     "Fog": 0,
 *     "FireWeather": 0,
 *     "CoastalFlood": 0,
@@ -270,7 +270,7 @@ type SourceGHWOLocality struct {
 *     "Lightning": 1,
 *     "ExcessiveRainfall": 0,
 *     "ExtremeHeat": 0,
-*     "NonConvectiveWind": 0,
+*     "Wind": 0,
 *     "Fog": 0,
 *     "FireWeather": 0,
 *     "CoastalFlood": 0,
@@ -288,7 +288,7 @@ type SourceGHWOLocality struct {
 *     "Lightning": 1,
 *     "ExcessiveRainfall": 0,
 *     "ExtremeHeat": 0,
-*     "NonConvectiveWind": 0,
+*     "Wind": 0,
 *     "Fog": 0,
 *     "FireWeather": 0,
 *     "CoastalFlood": 0,
