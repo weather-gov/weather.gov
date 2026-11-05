@@ -14,6 +14,9 @@ import {
 const pointLogger = logger.child({ subsystem: "point" });
 
 export const DEFAULT_POINTS_CACHE_TTL = 120;
+
+// 5 km, covers Tobi at 4.7 km
+export const NEAREST_COUNTY_MAX_DISTANCE = 5000;
 const POSTGRES_UNDEFINED_TABLE = "42P01";
 
 /**
@@ -108,6 +111,32 @@ export const getClosestPlace = async (latitude, longitude) => {
         ST_Contains(c.shape, ${pointGeom})
       LIMIT 1`,
     )
+    // PW/FM/MH points like Yap and Majuro sit just outside every polygon
+    .then((result) => {
+      if (
+        (Array.isArray(result.rows) && result.rows.length > 0) ||
+        !isInPacificZoneExtent(latitude, longitude)
+      ) {
+        return result;
+      }
+      return db.query(
+        `
+        SELECT
+          c.countyname,c.countyfips,
+          s.state,s.name,s.fips
+        FROM (
+          SELECT countyname,countyfips,state_id,
+            ST_Distance(shape::geography, ${pointGeom}::geography) AS distance
+          FROM weathergov_geo_counties
+          ORDER BY shape <-> ${pointGeom}
+          LIMIT 1
+        ) c
+        INNER JOIN weathergov_geo_states s
+        ON (s.id=c.state_id)
+        WHERE c.distance <= $1`,
+        [NEAREST_COUNTY_MAX_DISTANCE],
+      );
+    })
     .then((result) => {
       if (Array.isArray(result.rows) && result.rows.length > 0) {
         const {

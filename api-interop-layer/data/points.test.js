@@ -450,5 +450,35 @@ describe("point method", () => {
       expect(db.query.calledWith(zoneQuery)).to.be.true;
       expect(db.query.calledWith(gridpointQuery)).to.be.true;
     });
+
+    it("falls back to the nearest county when no polygon contains the point", async () => {
+      const nearestQuery = sinon.match(/ST_Distance\(shape::geography/);
+      db.query.withArgs(sinon.match(/FROM weathergov_geo_places/i)).resolves({
+        rows: [{ name: "Majuro", timezone: "Pacific/Majuro" }],
+      });
+      db.query
+        .withArgs(sinon.match(/ST_Contains\(c\.shape/))
+        .resolves({ rows: [] });
+      db.query.withArgs(nearestQuery).resolves({
+        rows: [
+          {
+            state: "MH",
+            name: "Marshall Islands",
+            countyname: "Majuro",
+            countyfips: "100",
+            fips: "68",
+          },
+        ],
+      });
+
+      const actual = await points(7.09, 171.38);
+
+      expect(db.query.calledWith(nearestQuery, [5000])).to.be.true;
+      expect(actual.place).to.include({
+        state: "MH",
+        county: "Majuro",
+        fullName: "Majuro, MH",
+      });
+    });
   });
 });
