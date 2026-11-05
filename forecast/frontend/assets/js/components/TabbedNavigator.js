@@ -38,12 +38,13 @@ class TabbedNavigator extends HTMLElement {
     }
 
     // Intercept click events on Alert links at the
-    // top of the page and handle them in this component
-    Array.from(document.querySelectorAll("wx-point-alert-links a")).forEach(
-      (alertAnchor) => {
-        alertAnchor.addEventListener("click", this.handleAlertAnchorClick);
-      },
-    );
+    // top of the page and handle them in this component.
+    // We only want this behavior when we are in HTMX mode.
+    Array.from(
+      document.querySelectorAll(`wx-point-alert-links[htmx-mode="true"] a`),
+    ).forEach((alertAnchor) => {
+      alertAnchor.addEventListener("click", this.handleAlertAnchorClick);
+    });
 
     // Intercept click events on Alert spans that are in tab
     // containers controlled by this component
