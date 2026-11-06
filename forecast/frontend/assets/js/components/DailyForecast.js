@@ -154,10 +154,13 @@ class DailyForecast extends HTMLElement {
     // Unfortunately, due to the way these toggles are currently
     // implements -- which is partially the fault of USWDS patterns --
     // the event target can either be a heading element (h3) _or_
-    // a button that is the direct child of the heading element.
-    let button = event.target;
-    if (!event.target.matches("button")) {
-      button = event.target.querySelector("button");
+    // a button that is the direct child of the heading element _or_
+    // any nested element within the button itself.
+    const button =
+      event.target.closest("button") ||
+      event.currentTarget.querySelector("button");
+    if (!button) {
+      return;
     }
 
     const isExpanded = button.getAttribute("aria-expanded") === "true";

@@ -3,18 +3,12 @@
 const clickHandler = (event) => {
   event.preventDefault();
   event.stopPropagation();
-  // Depending on a tap, click, or keyboard selection of the h3/button,
-  // the target of the click event can change.
-  // We check to see which of the elements is the target
-  const targetIsButton = event.target.matches("button");
-  let button;
-  let h3;
-  if (targetIsButton) {
-    button = event.target;
-    h3 = button.parentElement;
-  } else {
-    button = event.target.querySelector("button");
-    h3 = event.target;
+  // The listener is attached to the heading, so use currentTarget rather
+  // than target (which may be nested text, an icon, or the button itself).
+  const h3 = event.currentTarget;
+  const button = event.target.closest("button") || h3.querySelector("button");
+  if (!button) {
+    return;
   }
   const isExpanded = h3.getAttribute("data-expanded") === "true";
   h3.setAttribute("data-expanded", !isExpanded);
