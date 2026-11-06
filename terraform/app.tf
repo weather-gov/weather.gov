@@ -55,9 +55,10 @@ resource "cloudfoundry_app" "app" {
     WEB_DB_MAX_CONNECTIONS      = var.web_db_max_connections
     WEB_GEVENT_WORKERS          = var.web_gevent_workers
     MARINE_COASTAL_EXPERIMENTAL = var.marine_coastal_experimental
-    POINT_FORECAST_HTMX = var.point_forecast_htmx
-    POINT_FORECAST_HTMX_A_B = var.point_forecast_htmx_a_b
-    AWS_RUM_APP_ID = var.aws_rum_app_id
+    POINT_FORECAST_HTMX         = var.point_forecast_htmx
+    POINT_FORECAST_HTMX_A_B     = var.point_forecast_htmx_a_b
+    AWS_RUM_APP_ID              = var.aws_rum_app_id
+    AWS_RUM_APP_ALIAS           = var.aws_rum_app_alias
   }
 
   service_bindings = [

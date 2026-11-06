@@ -11,6 +11,7 @@ GIT_SHA_HASH = os.getenv("GIT_SHA_HASH")
 TIMING_CONTEXT = ContextVar("timings", default=None)
 
 AWS_RUM_APP_ID = os.getenv("AWS_RUM_APP_ID")
+AWS_RUM_APP_ALIAS = os.getenv("AWS_RUM_APP_ALIAS")
 
 def route_info(request):
     """Return a dict of extra info that will be available to all templates."""
@@ -53,6 +54,7 @@ def global_navigation(request):  # noqa: ARG001
 
 def aws_rum_settings(request): # noqa: ARG001
     """Return information needed for AWS RUM javascript."""
-    if AWS_RUM_APP_ID:
-        return { "aws_rum_app_id": AWS_RUM_APP_ID }
-    return { "aws_rum_app_id": None }
+    return {
+        "aws_rum_app_id": AWS_RUM_APP_ID,
+        "aws_rum_app_alias": AWS_RUM_APP_ALIAS,
+    }
