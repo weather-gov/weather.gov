@@ -16,12 +16,11 @@ const getRUMApplicationId = () => {
  */
 const config = {
   sessionSampleRate: 1.0,
-  identityPoolId: "us-east-1:d53843c8-350a-4c14-a929-8c0b2844cf62",
   endpoint: "https://dataplane.rum.us-east-1.amazonaws.com",
   telemetries: ["performance", "errors", "http"],
   allowCookies: true,
   enableXRay: false,
-  signing: true, // If you have a public resource policy and wish to send unsigned requests please set this to false
+  signing: false, // If you have a public resource policy and wish to send unsigned requests please set this to false
   disableAutoPageView: true,
   customEvents: { enabled: true },
 };
