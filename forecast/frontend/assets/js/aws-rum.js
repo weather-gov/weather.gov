@@ -12,6 +12,19 @@ const getRUMApplicationId = () => {
 };
 
 /**
+ * Pull the application alias from a specific meta tag, if the tag is there.
+ * If it is not present, the given environment is not set up for RUM.
+ */
+const getRUMApplicationAlias = () => {
+  const tag = document.querySelector(`meta[data-name="aws-rum-app-alias"]`);
+  if (!tag || !tag.getAttribute("content")) {
+    console.warn(`No valid RUM application alias found in markup.`);
+    return null;
+  }
+  return tag.getAttribute("content");
+};
+
+/**
  * General configuration for our environment(s)
  */
 const config = {
@@ -23,6 +36,7 @@ const config = {
   signing: false, // If you have a public resource policy and wish to send unsigned requests please set this to false
   disableAutoPageView: true,
   customEvents: { enabled: true },
+  alias: getRUMApplicationAlias(),
 };
 
 /**

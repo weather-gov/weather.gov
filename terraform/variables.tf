@@ -238,3 +238,9 @@ variable "aws_rum_app_id" {
   default     = ""
   description = "Application ID to use for AWS RUM"
 }
+
+variable "aws_rum_app_alias" {
+  type        = string
+  default     = ""
+  description = "Application alias for use in AWS RUM"
+}
