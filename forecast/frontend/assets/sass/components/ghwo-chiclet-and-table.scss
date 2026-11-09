@@ -7,7 +7,7 @@
 
 $hazard-hover-lightness-adjustment: -30%;
 
-@for $level from 0 through 5 {
+@for $level from 0 through 4 {
   .ghwo-chiclet[data-risk-level="#{$level}"] {
     background-color: hazard-color($level);
     border-color: hazard-color($level);
@@ -17,131 +17,46 @@ $hazard-hover-lightness-adjustment: -30%;
 .ghwo-chiclet[data-risk-level="1"] {
   $base-color: hazard-color(1);
 
-  &:hover {
-    background-color: color.adjust(
-      $base-color,
-      $lightness: $hazard-hover-lightness-adjustment
-    );
-    border-color: color.adjust(
-      $base-color,
-      $lightness: $hazard-hover-lightness-adjustment
-    );
-  }
-
-  &[role="button"]:hover {
-    background-color: color.adjust(
-      $base-color,
-      $lightness: $hazard-hover-lightness-adjustment
-    );
-    border-color: color.adjust(
-      $base-color,
-      $lightness: $hazard-hover-lightness-adjustment
-    );
-  }
-
+  &:hover,
+  &[role="button"]:hover,
   &[role="button"]:active,
   &[role="button"][aria-pressed="true"] {
-    background-color: color.adjust(
-      $base-color,
-      $lightness: $hazard-hover-lightness-adjustment
-    );
-    border-color: color("green-50v");
+    background-color: #777608;
+    border-color: #947100;
   }
 }
 
 .ghwo-chiclet[data-risk-level="2"] {
-  $base-color: hazard-color(2);
-
-  &:hover {
-    background-color: color.adjust(
-      $base-color,
-      $lightness: $hazard-hover-lightness-adjustment
-    );
-    border-color: color.adjust(
-      $base-color,
-      $lightness: $hazard-hover-lightness-adjustment
-    );
-  }
-
-  &[role="button"]:hover {
-    background-color: color.adjust(
-      $base-color,
-      $lightness: $hazard-hover-lightness-adjustment
-    );
-    border-color: color.adjust(
-      $base-color,
-      $lightness: $hazard-hover-lightness-adjustment
-    );
-  }
-
+  &:hover,
+  &[role="button"]:hover,
   &[role="button"]:active,
   &[role="button"][aria-pressed="true"] {
-    background-color: color.adjust(
-      $base-color,
-      $lightness: $hazard-hover-lightness-adjustment
-    );
-    border-color: color("yellow-50v");
+    color: white;
+    background-color: #da6506;
+    border-color: #8c471c;
   }
 }
 
 .ghwo-chiclet[data-risk-level="3"] {
-  $base-color: hazard-color(3);
+  color: white;
 
-  &:hover {
-    background-color: color.adjust(
-      $base-color,
-      $lightness: $hazard-hover-lightness-adjustment
-    );
-    border-color: color.adjust(
-      $base-color,
-      $lightness: $hazard-hover-lightness-adjustment
-    );
-  }
-
-  &[role="button"]:hover {
-    background-color: color.adjust(
-      $base-color,
-      $lightness: $hazard-hover-lightness-adjustment
-    );
-    border-color: color.adjust(
-      $base-color,
-      $lightness: $hazard-hover-lightness-adjustment
-    );
-  }
-
+  &:hover,
+  &[role="button"]:hover,
   &[role="button"]:active,
   &[role="button"][aria-pressed="true"] {
-    background-color: color.adjust(
-      $base-color,
-      $lightness: $hazard-hover-lightness-adjustment
-    );
-    border-color: color("orange-60v");
+    background-color: #510c02;
+    border-color: #5c1111;
   }
 }
 
 .ghwo-chiclet[data-risk-level="4"] {
-  $base-color: hazard-color(4);
-
   color: white;
 
-  &[role="button"]:hover {
-    background-color: color.adjust(
-      $base-color,
-      $lightness: $hazard-hover-lightness-adjustment
-    );
-    border-color: color.adjust(
-      $base-color,
-      $lightness: $hazard-hover-lightness-adjustment
-    );
-  }
-
+  &[role="button"]:hover,
   &[role="button"]:active,
   &[role="button"][aria-pressed="true"] {
-    background-color: color.adjust(
-      $base-color,
-      $lightness: $hazard-hover-lightness-adjustment
-    );
-    border-color: color("red-80v");
+    background-color: #4e1455;
+    border-color: #481441;
   }
 }
 
