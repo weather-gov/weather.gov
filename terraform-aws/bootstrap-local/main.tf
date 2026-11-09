@@ -45,11 +45,38 @@ resource "aws_vpc" "main" {
   }
 }
 
-resource "aws_subnet" "private" {
+resource "aws_subnet" "private-1" {
   vpc_id            = aws_vpc.main.id
   cidr_block        = "10.0.1.0/24"
 
   tags = {
-    Name = "weathergov-${var.env}-private-subnet-local"
+    Name = "weathergov-${var.env}-private-subnet-local-1"
+  }
+}
+
+resource "aws_subnet" "private-2" {
+  vpc_id            = aws_vpc.main.id
+  cidr_block        = "10.0.2.0/24"
+
+  tags = {
+    Name = "weathergov-${var.env}-private-subnet-local-2"
+  }
+}
+
+resource "aws_subnet" "private-3" {
+  vpc_id            = aws_vpc.main.id
+  cidr_block        = "10.0.3.0/24"
+
+  tags = {
+    Name = "weathergov-${var.env}-private-subnet-local-3"
+  }
+}
+
+resource "aws_subnet" "private-4" {
+  vpc_id            = aws_vpc.main.id
+  cidr_block        = "10.0.4.0/24"
+
+  tags = {
+    Name = "weathergov-${var.env}-private-subnet-local-4"
   }
 }
