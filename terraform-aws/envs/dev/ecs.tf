@@ -16,6 +16,19 @@ locals {
       valueFrom = "${aws_db_instance.main.master_user_secret[0].secret_arn}:password::"
     },
   ]
+
+  # some ECS services require access to cache.
+  cache_environment = [
+    { name = "REDIS_HOST", value = aws_elasticache_serverless_cache.valkey.endpoint[0].address },
+    { name = "REDIS_PORT", value = tostring(aws_elasticache_serverless_cache.valkey.endpoint[0].port) },
+  ]
+
+  cache_secrets = [
+    {
+      name      = "REDIS_PASSWORD"
+      valueFrom = aws_secretsmanager_secret.valkey.arn
+    },
+  ]
 }
 
 resource "aws_ecs_cluster" "main" {
@@ -99,6 +112,7 @@ resource "aws_ecs_task_definition" "services" {
       environment = concat(
         [for name, value in each.value.environment : { name = name, value = value }],
         local.task_db_environment,
+        each.value.requires_cache ? local.cache_environment : [],
       )
 
       secrets = concat(
@@ -108,6 +122,7 @@ resource "aws_ecs_task_definition" "services" {
           name      = name
           valueFrom = aws_secretsmanager_secret.service[name].arn
         }],
+        each.value.requires_cache ? local.cache_secrets : []
       )
 
       logConfiguration = {
@@ -171,7 +186,7 @@ resource "aws_scheduler_schedule" "schedules" {
     mode = "OFF"
   }
 
-  schedule_expression = each.value.scheduler
+  schedule_expression          = each.value.scheduler
   schedule_expression_timezone = "America/New_York"
 
   target {

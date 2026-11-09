@@ -112,10 +112,11 @@ variable "services" {
     memory = number
     # special case alerts, since it's not weathergov-<env>-alerts but rather
     # weathergov-<env>-tasks-alerts.
-    repository    = optional(string)
-    desired_count = optional(number, 0)
-    environment   = optional(map(string), {})
-    secrets       = optional(list(string), [])
+    repository     = optional(string)
+    desired_count  = optional(number, 0)
+    environment    = optional(map(string), {})
+    secrets        = optional(list(string), [])
+    requires_cache = optional(bool, false)
   }))
 
   default = {
@@ -132,6 +133,10 @@ variable "services" {
     interop = {
       cpu    = 256
       memory = 512
+      environment = {
+        API_INTEROP_PRODUCTION = "true"
+      }
+      requires_cache = true
     }
 
     django = {
