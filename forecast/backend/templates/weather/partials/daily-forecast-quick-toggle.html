@@ -62,12 +62,19 @@
           </span>
         </div>
       {% endif %}
-      <div class="wx-quick-low width-auto">
-        <span class="usa-sr-only">{% trans_with_args "daily-forecast.aria.low-of.01" degrees=low %}</span>
-        <span aria-hidden="true" class="wx-quick-temp display-block">
-          {{ low }}<span class="wx-degree">&deg;F</span>
-        </span>
-      </div>
+      {% if low is None %}
+        <div class="wx-quick-low width-auto">
+          <span class="usa-sr-only">{% trans "daily-forecast.labels.low.01" %}</span>
+          <span class="wx-quick-temp display-block">{% trans "abbreviations.not-applicable.01" %}</span>
+        </div>
+      {% else %}
+        <div class="wx-quick-low width-auto">
+          <span class="usa-sr-only">{% trans_with_args "daily-forecast.aria.low-of.01" degrees=low %}</span>
+          <span aria-hidden="true" class="wx-quick-temp display-block">
+            {{ low }}<span class="wx-degree">&deg;F</span>
+          </span>
+        </div>
+      {% endif %}
     </div>
     <span class="wx-toggler-add-icon usa-icon--size-3 display-block tablet:display-none text-primary">
       <svg class="usa-icon usa-icon--size-3"
