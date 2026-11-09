@@ -25,6 +25,10 @@
     <header role="banner">
       {% include "weather/partials/site-branding.html" %}
     </header>
+    {% if not hide_site_nav %}
+      {# Keep navigation outside the banner header so USWDS does not hide it from screen readers. #}
+      {% include "weather/partials/site-navigation.html" %}
+    {% endif %}
     <main role="main" class="flex-1">
       <a id="main-content" tabindex="-1"></a>
       {% block page_content %}{% endblock %}
