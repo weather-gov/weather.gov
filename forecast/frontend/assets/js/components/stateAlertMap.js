@@ -12,6 +12,7 @@ const MAP_ID = "wx-state-alert-map";
 
 // Get Metadata from the script tag we added to alerts.html
 const meta = JSON.parse(document.getElementById("state-metadata").textContent);
+const { trans } = meta;
 
 // Kick off at module load so the fetches overlap the Leaflet script load
 const geobufRequests = Promise.all([
@@ -21,7 +22,6 @@ const geobufRequests = Promise.all([
 
 /** HTML shown inside a popup when clicking on an alert icon on the map. */
 const getPopupHTML = (eventSlug, eventName, countiesCount) => {
-  const { trans } = meta;
   const container = document.createElement("div");
   container.classList.add("text-center");
 
@@ -65,7 +65,6 @@ const getPopupHTML = (eventSlug, eventName, countiesCount) => {
 
 const setupStateMap = async () => {
   const loader = document.getElementById("wx_map_loader");
-
   // Fetch Data from internal endpoints
   try {
     // Wait for GIS layers
@@ -79,6 +78,10 @@ const setupStateMap = async () => {
       maxZoom: 15,
       outline: boundary,
       autoPan: true,
+      zoomOutTitle: trans.map_zoom_out_title,
+      zoomInTitle: trans.map_zoom_in_title,
+      expandTitle: trans.map_expand_title,
+      collapseTitle: trans.map_collapse_title,
       onExpandToggle: (container) => {
         container.classList.toggle("wx-state-alert-map-container__expanded");
       },

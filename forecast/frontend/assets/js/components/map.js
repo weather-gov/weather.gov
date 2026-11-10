@@ -88,3 +88,14 @@ export const createBaseMap = (elementId, options) => {
 
   return map;
 };
+
+/** Attach custom zoom control to the map. Should have the map initiated with zoomControl: false in options */
+export const addZoomControls = (map, { zoomOutTitle, zoomInTitle }) => {
+  const L = window.L;
+  L.control
+    .zoom({
+      zoomInTitle: zoomInTitle ?? "Zoom in",
+      zoomOutTitle: zoomOutTitle ?? "Zoom out",
+    })
+    .addTo(map);
+};

@@ -1,5 +1,5 @@
 const { test, expect } = require("@playwright/test");
-const services = require("../urls.js");
+const services = require("../../urls.js");
 
 const { describe, beforeEach, beforeAll } = test;
 
