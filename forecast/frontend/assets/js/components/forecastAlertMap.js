@@ -1,3 +1,4 @@
+import { addZoomControls, createBaseMap } from "./map.js";
 import { checkForLeaflet } from "./util.js";
 
 const setupMap = (alert) => {
@@ -5,24 +6,20 @@ const setupMap = (alert) => {
 
   const geoJSON = JSON.parse(decodeURIComponent(alert.dataset.geoJson));
   const alertId = alert.dataset.alertId;
+  const zoomInTitle = alert.dataset.zoomIn;
+  const zoomOutTitle = alert.dataset.zoomOut;
 
   const lat = Number.parseFloat(alert.dataset.lat);
   const lon = Number.parseFloat(alert.dataset.lon);
 
-  const map = L.map(`wx_alert_map_${alertId}`).setView([lat, lon], 8);
+  const map = createBaseMap(`wx_alert_map_${alertId}`, { zoomControl: false });
 
-  // Leaflet is managed by a Ukrainian team. The default attribution they put on
-  // maps includes a Ukrainian flag to show their national pride. But as an
-  // official website of the US Government, that might not be appropriate for
-  // us, so we remove the flag.
-  map.attributionControl.setPrefix(
-    "<a href='https://leafletjs.com' title='A JavaScript library for interactive maps'>Leaflet</a>",
-  );
+  map.setView([lat, lon], 8);
 
-  L.esri.Vector.vectorBasemapLayer("arcgis/streets", {
-    apiKey:
-      "AAPK1dd93729edc54e84ade1ea5dc0f4f9d3EPexfd5qirlO3QtHGBj5JQL7iUYHQOb4yLjfKEYFLcyN9PlMd87lMjjv8D3DxDsQ",
-  }).addTo(map);
+  addZoomControls(map, {
+    zoomOutTitle: zoomOutTitle,
+    zoomInTitle: zoomInTitle,
+  });
 
   const alertType = alert.dataset.alertName.split(" ").pop();
   if (alertType === "Warning") {

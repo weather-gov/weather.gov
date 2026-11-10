@@ -314,11 +314,18 @@ msgstr "Something went wrong loading this page. Please try again in a few minute
 msgid "forecast.labels.alerts.01"
 msgstr "Alerts"
 
+msgid "forecast.alerts.map-zoomin.01"
+msgstr "Zoom in {alert_title} map"
+
+msgid "forecast.alerts.map-zoomout.01"
+msgstr "Zoom out {alert_title} map"
+
 msgid "forecast.labels.seven-days.01"
 msgstr "7 Days"
 
 msgid "forecast.labels.maps.01"
 msgstr "Maps"
+
 msgid "forecast.labels.analysis.01"
 msgstr "Analysis"
 
@@ -1157,6 +1164,18 @@ msgstr "No alerts for {county}, for the next 5 days"
 msgid "county.alert-accordions.no-alerts-for-day.01"
 msgstr "No alerts for {county}, on {day}"
 
+msgid "county.alerts.map-zoomin.01"
+msgstr "Zoom in county alert map"
+
+msgid "county.alerts.map-zoomout.01"
+msgstr "Zoom out county alert map"
+
+msgid "county.alerts.map-expand.01"
+msgstr "Expand county alert map to full-screen width"
+
+msgid "county.alerts.map-collapse.01"
+msgstr "Collapse county alert map to original size"
+
 msgid "alerts.titles.with-index.01"
 msgstr "%(event)s %(day)s (#%(index)s)"
 
@@ -1373,6 +1392,18 @@ msgstr "Expand {subdivision}"
 
 msgid "state.alerts.map-failure.01"
 msgstr "Map failed to load"
+
+msgid "state.alerts.map-zoomin.01"
+msgstr "Zoom in state alert map"
+
+msgid "state.alerts.map-zoomout.01"
+msgstr "Zoom out state alert map"
+
+msgid "state.alerts.map-expand.01"
+msgstr "Expand state alert map to full-screen width"
+
+msgid "state.alerts.map-collapse.01"
+msgstr "Collapse state alert map to original size"
 
 msgid "state.alerts.none-period.01"
 msgstr "No active alerts for this period."

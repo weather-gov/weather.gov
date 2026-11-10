@@ -1,4 +1,4 @@
-import { createBaseMap, shiftAleutians } from "./map.js";
+import { addZoomControls, createBaseMap, shiftAleutians } from "./map.js";
 
 const ICON_URLS = {
   warning: "/public/images/weather/wx_alerticon_circle_warning.svg",
@@ -53,6 +53,10 @@ export const createAlertMap = ({
   outline,
   alerts,
   autoPan,
+  zoomOutTitle,
+  zoomInTitle,
+  expandTitle,
+  collapseTitle,
   onExpandToggle,
 }) => {
   const L = window.L;
@@ -68,6 +72,12 @@ export const createAlertMap = ({
     zoomDelta: 1,
     zoomSnap: 0.5,
     maxZoom,
+    zoomControl: false,
+  });
+
+  addZoomControls(map, {
+    zoomOutTitle: zoomOutTitle,
+    zoomInTitle: zoomInTitle,
   });
 
   /** A custom expand/shrink button for the map container. */
@@ -88,12 +98,12 @@ export const createAlertMap = ({
 
     buttonSetToExpand: function () {
       this.button.innerHTML = `<svg role="img" aria-hidden="true" class="width-full height-full"><use xlink:href="/public/images/uswds/sprite.svg#zoom_out_map"></use></svg>`;
-      this.button.setAttribute("aria-label", `Expand the ${name} alert map`);
+      this.button.setAttribute("aria-label", `${expandTitle}`);
     },
 
     buttonSetToCollapse: function () {
       this.button.innerHTML = `<svg role="img" aria-hidden="true" class="width-full height-full"><use xlink:href="/public/images/spritesheet.svg#wx_zoom-in-map"></use></svg>`;
-      this.button.setAttribute("aria-label", `Collapse the ${name} alert map`);
+      this.button.setAttribute("aria-label", `${collapseTitle}`);
     },
 
     _resize: function () {

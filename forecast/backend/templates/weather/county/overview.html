@@ -9,7 +9,13 @@
   <script id="county-metadata" type="application/json">
     {
       "countyFips": "{{ countyfips }}",
-      "isBinary": {{ is_binary|yesno:"true,false" }}
+      "isBinary": {{ is_binary|yesno:"true,false" }},
+      "trans": {
+        "map_zoom_out_title": "{{'county.alerts.map-zoomout.01' | t }}",
+        "map_zoom_in_title": "{{'county.alerts.map-zoomin.01' | t }}",
+        "map_expand_title": "{{'county.alerts.map-expand.01' | t }}",
+        "map_collapse_title": "{{'county.alerts.map-collapse.01' | t }}"
+      }
     }
   </script>
 {% endblock %}

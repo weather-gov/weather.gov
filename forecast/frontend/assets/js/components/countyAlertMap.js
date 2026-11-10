@@ -6,6 +6,7 @@ import { checkForLeaflet } from "./util.js";
 const MAP_ID = "wx_county_alert_map";
 
 const meta = JSON.parse(document.getElementById("county-metadata").textContent);
+const { trans } = meta;
 
 // Kick off at module load so the fetches overlap the Leaflet script load
 const geobufRequests = meta.isBinary
@@ -101,6 +102,10 @@ const setupMap = async () => {
       maxZoom: 18,
       outline: json.county.shape,
       autoPan: false,
+      zoomOutTitle: trans.map_zoom_out_title,
+      zoomInTitle: trans.map_zoom_in_title,
+      expandTitle: trans.map_expand_title,
+      collapseTitle: trans.map_collapse_title,
       onExpandToggle: (container) => {
         container.parentElement.classList.toggle("tablet:grid-col-7");
         container.classList.toggle("wx-county-alert-map-container__expanded");
