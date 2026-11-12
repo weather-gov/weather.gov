@@ -6,6 +6,9 @@ resource "aws_db_instance" "main" {
   # conflicts with the password argument in the AWS provider schema.
   manage_master_user_password = null
   password                    = local.ministack_db_password
+
+  # ministack sets to null by default which causes conflicts when rebuilding
+  max_allocated_storage = 20
 }
 
 locals {
