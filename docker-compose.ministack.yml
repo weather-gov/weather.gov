@@ -1,36 +1,53 @@
+name: weathergov-ministack
+
 services:
+  stackport:
+    image: davireis/stackport:latest
+    ports:
+      - "8084:8080"
+    environment:
+      - AWS_ENDPOINT_URL=http://ministack:4566
+      - AWS_ACCESS_KEY_ID=mock_key
+      - AWS_SECRET_ACCESS_KEY=mock_secret
+      - AWS_REGION=us-east-1
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "python",
+          "-c",
+          "import urllib.request; urllib.request.urlopen('http://localhost:8080/api/health')",
+        ]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+    restart: unless-stopped
+    depends_on:
+      ministack:
+        condition: service_healthy
+    networks:
+      - ministack
+
   ministack:
     image: ministackorg/ministack:full
     container_name: ministack
     environment:
-      # - PERSIST_STATE=1
-      # - S3_PERSIST=1
-      # - RDS_PERSIST=1
+      - PERSIST_STATE=1
+      - S3_PERSIST=1
+      - RDS_PERSIST=1
       - LOG_LEVEL=INFO
       - LAMBDA_EXECUTOR=docker
-      - DOCKER_NETWORK=weathergov-django_weather.gov
+      - MINISTACK_IMAGE_PREFIX=weathergov-ministack
+      - DOCKER_NETWORK=weathergov-ministack_ministack
     ports:
       - 4566:4566
       - 443:443
     volumes:
-      # - ./data/state:/tmp/ministack-state # necessary only if we persist the state
-      # - ./data/s3:/tmp/ministack-data/s3 # necessary only if we persist the S3 data
-      # - ./data/rds:/tmp/ministack-data/rds # necessary only if we persist the RDS data
+      - ./ministack-data/state:/tmp/ministack-state
+      - ./ministack-data/s3:/tmp/ministack-data/s3
+      - ./ministack-data/rds:/tmp/ministack-data/rds
       - /var/run/docker.sock:/var/run/docker.sock
     networks:
-      - ministack
-      # Ensure the RDS containers' target network exists before Terraform runs.
-      - weather.gov
-
-  web:
-    environment:
-      AWS_ENDPOINT_URL: http://ministack:4566
-      AWS_ACCESS_KEY_ID: mock_key
-      AWS_SECRET_ACCESS_KEY: mock_secret
-      AWS_DEFAULT_REGION: us-east-1
-    networks:
-      - ministack
-    depends_on:
       - ministack
 
 networks:

@@ -59,10 +59,10 @@ aws ecs wait tasks-stopped \
 echo "migration task ${TASK_ID} stopped"
 
 # disabled because we do not have perms for logs:FilterLogEvents
-# echo "=== task output"
-# aws logs tail /ecs/weathergov-dev-django \
-#     --log-stream-names "django/django/${TASK_ID}"
-# echo "=== end task output"
+echo "=== task output"
+aws logs tail /ecs/weathergov-dev-django \
+    --log-stream-names "django/django/${TASK_ID}" || echo "(not available)"
+echo "=== end task output"
 
 # now that the task has stopped, we need to check the container's exit code (if
 # extant) to see if we actually succeeded or not. note that if the exit code is

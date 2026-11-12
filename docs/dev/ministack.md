@@ -37,10 +37,6 @@ Other handy URLs:
 
 `just ministack` calls `just ministack-terraform apply -auto-approve`. 
 
-MiniStack starts its emulated RDS database in a Docker container. The
-`DOCKER_NETWORK` setting in `docker-compose.ministack.yml` must match the network
-created by the base Compose project (`weathergov-django_weather.gov`).
-
 The local Terraform recipe uses plain `terraform` with the AWS endpoint set to
 MiniStack and mock credentials. It passes a local backend config enabling
 path-style S3 requests. Without that setting, the S3 backend uses a virtual-host

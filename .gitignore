@@ -93,3 +93,6 @@ forecast/frontend/public/
 /tasks/**/*.test
 /tasks/bin/*
 /tasks/pkg/mod/cache/
+
+# ministack
+/ministack-data
