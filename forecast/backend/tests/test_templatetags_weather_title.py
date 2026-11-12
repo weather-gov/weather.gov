@@ -56,3 +56,24 @@ class TestTemplateTagWeatherTitle(TestCase):
             "\n        "
         )
         self.assertEqual(actual, expected)
+
+    def test_set_title_with_meta_error(self):
+        """Test that error pages with meta error set has a translated title."""
+        for meta_error in [("error_404", "404"), ("error_500", "500")]:
+            with self.subTest(meta_error=meta_error):
+                context = {"meta_error": meta_error[0]}
+                actual = weather_title.set_title_and_description(context)
+                self.assertIn(f"<title>{meta_error[1]} | This Agency</title>", actual)
+
+    def test_set_title_for_deprecated_paths(self):
+        """Test that error pages for deprecated paths have translated titles."""
+        for meta_error in [
+            ("deprecated_office", {"wfo": "XYZ"}, "404"),
+            ("deprecated_point", {}, "404"),
+            ("deprecated_county_pages", {}, "404"),
+            ("deprecated_place", {}, "404"),
+        ]:
+            with self.subTest(meta_error=meta_error):
+                context = {"meta_error": meta_error[0]}
+                actual = weather_title.set_title_and_description(context)
+                self.assertIn(f"<title>{meta_error[2]} | This Agency</title>", actual)

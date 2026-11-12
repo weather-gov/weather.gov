@@ -18,8 +18,10 @@ from ._helpers import get_redirect_for_afd_queries
 
 MAX_DEGREE_DECIMALS = 3
 
+
 def decimal_redirect(view_func):
     """Wrap any point location view handler to limit lat/lon decimals."""
+
     @wraps(view_func)
     def _decimal_redirect(request, lat, lon):
         # If there are more than 3 decimal places in the latitude, we redirect.
@@ -56,29 +58,39 @@ def decimal_redirect(view_func):
             )
 
         return view_func(request, lat, lon)
+
     return _decimal_redirect
+
+
+def check_marine(point, lat, lon):
+    """Check if marine point, then check if coastal is allowed, else raise error."""
+    allow_coastal = settings.MARINE_COASTAL_EXPERIMENTAL
+    if point.get("grid", {}).get("type") == "marine":
+        if not (allow_coastal and point["grid"].get("marineType") == "coastal"):
+            raise Http404(
+                {
+                    "error": True,
+                    "status": 404,
+                    "reason": "marine-point",
+                    "point": {
+                        "latitude": lat,
+                        "longitude": lon,
+                    },
+                }
+            )
+
 
 @cache_control(max_age=120, smax_age=120, public=True)
 @decimal_redirect
-def point_location(request, lat, lon):  # noqa: C901
+def point_location(_, lat, lon):  # noqa: C901
     """Render the forecast for a given latitude & longitude."""
-    allow_coastal = settings.MARINE_COASTAL_EXPERIMENTAL
-
     point = interop.get_point_forecast(lat, lon)
-    fullname = point.get("place", {}).get("fullName", None)
-
-    # Check if there was an error retrieving alerts from the cache/background process
-    alerts_error = point.get("alerts", {}).get("metadata", {}).get("error", False)
-
-    context = {"point": point, "alerts_error": alerts_error, "title_trans_args": {"fullName": fullname}}
 
     if "status" in point and point["status"] == HTTPStatus.NOT_FOUND:
         raise Http404(point)
 
     # If a marine point, check if coastal is allowed, else block all marine
-    if "grid" in point and "type" in point["grid"] and point["grid"]["type"] == "marine":
-        if not (allow_coastal and point["grid"].get("marineType") == "coastal"):
-            return render(request, "errors/404/marine-point.html", context, status=404)
+    check_marine(point, lat, lon)
 
     # If there is not latitude and longitude data in the returned
     # point dict, we need to add it from the url params
@@ -98,7 +110,7 @@ def point_location(request, lat, lon):  # noqa: C901
                 kwargs={
                     "lat": lat,
                     "lon": lon,
-                }
+                },
             )
         )
 
@@ -109,9 +121,10 @@ def point_location(request, lat, lon):  # noqa: C901
             kwargs={
                 "lat": lat,
                 "lon": lon,
-            }
+            },
         )
     )
+
 
 @cache_control(max_age=120, smax_age=120, public=True)
 @decimal_redirect
@@ -125,7 +138,6 @@ def point_location_alerts(request, lat, lon):
     # from the db directly from Django, or create a smaller
     # interop endpoint for retrieving only the information we need
     # for this endpoint
-    allow_coastal = settings.MARINE_COASTAL_EXPERIMENTAL
     point = interop.get_point_forecast(lat, lon)
     fullname = point.get("place", {}).get("fullName", None)
 
@@ -149,9 +161,7 @@ def point_location_alerts(request, lat, lon):
         point["isAlaska"] = wfo.code.lower() in ["afc", "afg", "ajk"]
 
     # If a marine point, check if coastal is allowed, else block all marine
-    if "grid" in point and "type" in point["grid"] and point["grid"]["type"] == "marine":
-        if not (allow_coastal and point["grid"].get("marineType") == "coastal"):
-            return render(request, "errors/404/marine-point.html", context, status=404)
+    check_marine(point, lat, lon)
 
     # If there is not latitude and longitude data in the returned
     # point dict, we need to add it from the url params
@@ -170,16 +180,19 @@ def point_location_alerts(request, lat, lon):
                 kwargs={
                     "lat": lat,
                     "lon": lon,
-                }
+                },
             )
         )
 
     if is_htmx_request(request):
         # In this case, we only render and return the partial
         # we need for alert tab content
-        markup = render_as_htmx("weather/point/alerts-tab-content.html", {
-            "alerts": alert_items,
-        })
+        markup = render_as_htmx(
+            "weather/point/alerts-tab-content.html",
+            {
+                "alerts": alert_items,
+            },
+        )
         return HttpResponse(markup, content_type="text/html")
 
     add_county_label(point)
@@ -192,7 +205,7 @@ def point_location_alerts(request, lat, lon):
             "weather/point/alerts-with-htmx.html",
             {
                 **context,
-            }
+            },
         )
 
     return render(
@@ -207,10 +220,9 @@ def point_location_alerts(request, lat, lon):
 @cache_control(max_age=120, smax_age=120, public=True)
 @decimal_redirect
 @vary_on_headers("HX-Request")
-def point_location_today(request, lat, lon): # noqa: C901
+def point_location_today(request, lat, lon):  # noqa: C901
     """Render the today tab page for the point location."""
     use_htmx = should_use_htmx_for_point(request)
-    allow_coastal = settings.MARINE_COASTAL_EXPERIMENTAL
 
     point = interop.get_point_forecast(lat, lon)
     fullname = point.get("place", {}).get("fullName", None)
@@ -229,9 +241,7 @@ def point_location_today(request, lat, lon): # noqa: C901
         raise Http404(point)
 
     # If a marine point, check if coastal is allowed, else block all marine
-    if "grid" in point and "type" in point["grid"] and point["grid"]["type"] == "marine":
-        if not (allow_coastal and point["grid"].get("marineType") == "coastal"):
-            return render(request, "errors/404/marine-point.html", context, status=404)
+    check_marine(point, lat, lon)
 
     # If there is not latitude and longitude data in the returned
     # point dict, we need to add it from the url params
@@ -268,9 +278,13 @@ def point_location_today(request, lat, lon): # noqa: C901
     if is_htmx_request(request):
         # In this case, only render the partial needed
         # for the tab content
-        markup = render_as_htmx("weather/point/today-tab-content.html", {
-            **context,
-        }, localtz)
+        markup = render_as_htmx(
+            "weather/point/today-tab-content.html",
+            {
+                **context,
+            },
+            localtz,
+        )
         return HttpResponse(markup, content_type="text/html")
 
     add_county_label(point)
@@ -283,7 +297,7 @@ def point_location_today(request, lat, lon): # noqa: C901
             "weather/point/today-with-htmx.html",
             {
                 **context,
-            }
+            },
         )
 
     return render(
@@ -298,11 +312,9 @@ def point_location_today(request, lat, lon): # noqa: C901
 @cache_control(max_age=120, smax_age=120, public=True)
 @decimal_redirect
 @vary_on_headers("HX-Request")
-def point_location_seven_day(request, lat, lon): # noqa: C901
+def point_location_seven_day(request, lat, lon):  # noqa: C901
     """Render the 7-day detailed forecast for the point location."""
     use_htmx = should_use_htmx_for_point(request)
-    allow_coastal = settings.MARINE_COASTAL_EXPERIMENTAL
-
 
     point = interop.get_point_forecast(lat, lon)
     fullname = point.get("place", {}).get("fullName", None)
@@ -321,9 +333,7 @@ def point_location_seven_day(request, lat, lon): # noqa: C901
         raise Http404(point)
 
     # If a marine point, check if coastal is allowed, else block all marine
-    if "grid" in point and "type" in point["grid"] and point["grid"]["type"] == "marine":
-        if not (allow_coastal and point["grid"].get("marineType") == "coastal"):
-            return render(request, "errors/404/marine-point.html", context, status=404)
+    check_marine(point, lat, lon)
 
     # If there is not latitude and longitude data in the returned
     # point dict, we need to add it from the url params
@@ -349,7 +359,6 @@ def point_location_seven_day(request, lat, lon): # noqa: C901
         wfo = WFO.objects.get(code=WFO.normalize_code(code))
         point["wfo"] = wfo
         point["isAlaska"] = wfo.code.lower() in ["afc", "afg", "ajk"]
-
 
     if is_htmx_request(request):
         # In this case, only render the partial markup
@@ -375,7 +384,7 @@ def point_location_seven_day(request, lat, lon): # noqa: C901
             "weather/point/seven-day-with-htmx.html",
             {
                 **context,
-            }
+            },
         )
 
     return render(
@@ -386,13 +395,13 @@ def point_location_seven_day(request, lat, lon): # noqa: C901
         },
     )
 
+
 @cache_control(max_age=120, smax_age=120, public=True)
 @decimal_redirect
 @vary_on_headers("HX-Request")
 def point_location_maps(request, lat, lon):
     """Render radar and satellite for a point location."""
     use_htmx = should_use_htmx_for_point(request)
-    allow_coastal = settings.MARINE_COASTAL_EXPERIMENTAL
 
     point = interop.get_point_forecast(lat, lon)
     fullname = point.get("place", {}).get("fullName", None)
@@ -410,10 +419,8 @@ def point_location_maps(request, lat, lon):
     if point.get("status") == HTTPStatus.NOT_FOUND:
         raise Http404(point)
 
-
-    if point.get("grid", {}).get("type") == "marine":
-        if not (allow_coastal and point["grid"].get("marineType") == "coastal"):
-            return render(request, "errors/404/marine-point.html", context, status=404)
+    # If a marine point, check if coastal is allowed, else block all marine
+    check_marine(point, lat, lon)
 
     # If there is not latitude and longitude data in the returned
     # point dict, we need to add it from the url params
@@ -440,7 +447,6 @@ def point_location_maps(request, lat, lon):
         point["wfo"] = wfo
         point["isAlaska"] = wfo.code.lower() in ["afc", "afg", "ajk"]
 
-
     if is_htmx_request(request):
         # In this case, only render the partial markup
         # needed for the tab's content
@@ -464,7 +470,7 @@ def point_location_maps(request, lat, lon):
             "weather/point/maps-with-htmx.html",
             {
                 **context,
-            }
+            },
         )
 
     return render(
@@ -475,13 +481,13 @@ def point_location_maps(request, lat, lon):
         },
     )
 
+
 @cache_control(max_age=120, smax_age=120, public=True)
 @decimal_redirect
 @vary_on_headers("HX-Request")
-def point_location_analysis(request, lat, lon): # noqa: C901
+def point_location_analysis(request, lat, lon):  # noqa: C901
     """Render the analysis tab page for the points location."""
     use_htmx = should_use_htmx_for_point(request)
-    allow_coastal = settings.MARINE_COASTAL_EXPERIMENTAL
 
     point = interop.get_point_forecast(lat, lon)
     fullname = point.get("place", {}).get("fullName", None)
@@ -500,9 +506,7 @@ def point_location_analysis(request, lat, lon): # noqa: C901
         raise Http404(point)
 
     # If a marine point, check if coastal is allowed, else block all marine
-    if "grid" in point and "type" in point["grid"] and point["grid"]["type"] == "marine":
-        if not (allow_coastal and point["grid"].get("marineType") == "coastal"):
-            return render(request, "errors/404/marine-point.html", context, status=404)
+    check_marine(point, lat, lon)
 
     # If there is not latitude and longitude data in the returned
     # point dict, we need to add it from the url params
@@ -567,7 +571,7 @@ def point_location_analysis(request, lat, lon): # noqa: C901
             {
                 "weather_story": weather_story,
                 **context,
-            }
+            },
         )
 
     return render(

@@ -22,7 +22,7 @@ def handle_404(request, exception=None):
         return render(
             request,
             "errors/404/county-error.html",
-            context=context,
+            context={**context, "meta_error": "error_404"},
             status=404,
         )
 
@@ -36,7 +36,7 @@ def handle_404(request, exception=None):
             return render(
                 request,
                 "errors/404/point-out-of-bounds.html",
-                context=args,
+                context={**args, "meta_error": "error_404"},
                 status=404,
             )
 
@@ -48,15 +48,25 @@ def handle_404(request, exception=None):
             return render(
                 request,
                 "errors/404/point-not-supported.html",
-                context=args,
+                context={**args, "meta_error": "error_404"},
                 status=404,
+            )
+
+        # If the reason is marine-point, then the point is a marine point
+        # and is currently not supported.
+        if "reason" in args and args["reason"] == "marine-point":
+            return render(
+                request,
+                "errors/404/marine-point.html",
+                context={**args, "meta_error": "error_404"},
+                status=404
             )
 
     # If we didn't render any other 404 handlers, render the generic one.
     return render(
         request,
         "errors/404/generic.html",
-        context=context,
+        context={**context, "meta_error": "error_404"},
         status=404,
     )
 
@@ -66,6 +76,6 @@ def handle_500(request, _=None):
     return render(
         request,
         "errors/500.html",
-        context={},
+        context={"meta_error": "error_500"},
         status=500,
     )

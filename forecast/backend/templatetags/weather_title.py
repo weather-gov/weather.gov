@@ -22,10 +22,16 @@ def set_title_and_description(context):
     """
     page = context.get("page", {})
     request = context.get("request", None)
+    meta_error = context.get("meta_error", None)
     page_title = ""
     description = ""
-
-    if isinstance(page, dict) and request and request.resolver_match:
+    if meta_error:
+        # handle an error page from Django
+        key_for_title = f"site.meta.titles.{meta_error}"
+        key_for_descr = f"site.meta.description.{meta_error}"
+        page_title = _(key_for_title) % {}
+        description = _(key_for_descr) % {}
+    elif isinstance(page, dict) and request and request.resolver_match:
         # this is a Django managed page
         url_name = request.resolver_match.url_name
         key_for_title = f"site.meta.titles.{url_name}"
@@ -46,7 +52,6 @@ def set_title_and_description(context):
         description = getattr(page, "meta_description", "")
 
     agency_name = getattr(settings, "AGENCY_NAME", "")
-
 
     if page_title == agency_name:
         title = agency_name

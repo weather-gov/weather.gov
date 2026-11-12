@@ -1017,23 +1017,33 @@ msgid "site.meta.description.coastal_conditions"
 msgstr "View local weather conditions for %(zone)s from the National Weather Service."
 
 msgid "site.meta.titles.deprecated_office"
-msgstr "Error: Page Not Found"
+msgstr "404"
 msgid "site.meta.description.deprecated_office"
 msgstr "Visit beta.weather.gov for the latest NWS forecast for your area."
 
 msgid "site.meta.titles.deprecated_place"
-msgstr "Error: Page Not Found"
+msgstr "404"
 msgid "site.meta.description.deprecated_place"
 msgstr "Visit beta.weather.gov for the latest NWS forecast for your area."
 
 msgid "site.meta.titles.deprecated_point"
-msgstr "Error: Page Not Found"
+msgstr "404"
 msgid "site.meta.description.deprecated_point"
 msgstr "Visit beta.weather.gov for the latest NWS forecast for your area."
 
 msgid "site.meta.titles.deprecated_county_pages"
-msgstr "Error: Page Not Found"
+msgstr "404"
 msgid "site.meta.description.deprecated_county_pages"
+msgstr "Visit beta.weather.gov for the latest NWS forecast for your area."
+
+msgid "site.meta.titles.error_404"
+msgstr "404"
+msgid "site.meta.description.error_404"
+msgstr "Visit beta.weather.gov for the latest NWS forecast for your area."
+
+msgid "site.meta.titles.error_500"
+msgstr "500"
+msgid "site.meta.description.error_500"
 msgstr "Visit beta.weather.gov for the latest NWS forecast for your area."
 
 msgid "ghwo.selector.label.state.01"
