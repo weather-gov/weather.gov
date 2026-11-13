@@ -224,8 +224,6 @@ services:
     environment:
       API_URL: http://api-proxy:8081
       WEB_URL: http://web:8080
-      #API_URL: https://api-proxy-weathergov-test.app.cloud.gov
-      #WEB_URL: https://weathergov-test.app.cloud.gov
     profiles: ["utility"]
 
   node:

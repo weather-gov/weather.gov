@@ -58,10 +58,6 @@
 .on_manual_nec_deploy:
   - if: $CI_PIPELINE_SOURCE == "web" && $CONFIRM_NEC_DEPLOY == "NEC"
 
-# deploy to the test env
-.on_manual_deploy_test:
-  - if: $CI_PIPELINE_SOURCE == "web" && $DEPLOY_TO_ENVIRONMENT == "test"
-
 # deploy to the staging env
 .on_manual_deploy_staging:
   - if: $CI_PIPELINE_SOURCE == "web" && $DEPLOY_TO_ENVIRONMENT == "staging"
