@@ -56,7 +56,7 @@ const getDevelopmentPoolLimits = () => {
 };
 
 export const getDatabaseConnectionInfo = () => {
-  if (process.env.API_INTEROP_PRODUCTION) {
+  if (process.env.API_INTEROP_CLOUDGOV) {
     // we are in a cloud.gov environment and must retrieve credentials from
     // the VCAP_SERVICES environment variable
     const vcap = JSON.parse(process.env.VCAP_SERVICES);
@@ -70,6 +70,20 @@ export const getDatabaseConnectionInfo = () => {
       port: db.credentials.port,
       ssl: true,
       ...prodPoolLimits,
+    };
+  }
+
+  if (process.env.API_INTEROP_NEC) {
+    return {
+      user: process.env.DB_USERNAME,
+      password: process.env.DB_PASSWORD,
+      database: process.env.DB_NAME,
+      host: process.env.DB_HOST,
+      port: process.env.DB_PORT,
+      ssl: true,
+      // hard-coded for now. we will eventually move to RDS proxy.
+      min: isMainThread ? 2 : 1,
+      max: isMainThread ? 20 : 2,
     };
   }
 

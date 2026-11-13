@@ -47,7 +47,7 @@ describe("database utility", () => {
   it("uses VCAP data if in production", () => {
     delete process.env.API_DB_MAX_CONNECTIONS;
 
-    process.env.API_INTEROP_PRODUCTION = "true";
+    process.env.API_INTEROP_CLOUDGOV = "true";
     process.env.VCAP_SERVICES = JSON.stringify({
       "aws-rds": [
         {
@@ -77,6 +77,6 @@ describe("database utility", () => {
       max: 195,
     });
 
-    delete process.env.API_INTEROP_PRODUCTION;
+    delete process.env.API_INTEROP_CLOUDGOV;
   });
 });

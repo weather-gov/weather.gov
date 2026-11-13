@@ -18,7 +18,7 @@ export const enableBackgroundProcessing = () => {
   const isPrimaryWorker =
     !process.env.NODE_APP_INSTANCE || process.env.NODE_APP_INSTANCE === "0";
 
-  return process.env.API_INTEROP_PRODUCTION
+  return process.env.API_INTEROP_CLOUDGOV
     ? process.env.CF_INSTANCE_INDEX == 0 && isPrimaryWorker && isMainThread
     : isMainThread;
 };

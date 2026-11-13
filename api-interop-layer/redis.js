@@ -15,10 +15,6 @@ if (process.env.DISABLE_REDIS && process.env.DISABLE_REDIS === "true") {
   DISABLE_REDIS = true;
 }
 
-// We need to know whether to use TLS or not
-// For local dev, we don't
-const protocol = process.env.API_INTEROP_PRODUCTION ? "rediss" : "redis";
-
 // Let's lazy set the connection info, since
 // that will  not change in a single environment
 let CONNECTION_INFO;
@@ -40,9 +36,9 @@ export const getRedisConnectionInfo = () => {
     return CONNECTION_INFO;
   }
 
-  if (process.env.API_INTEROP_PRODUCTION) {
+  if (process.env.API_INTEROP_CLOUDGOV) {
     USE_REDIS = true;
-    redisLogger.info("interop is using redis for cache in prod");
+    redisLogger.info("cloudgov: interop is using redis for cache in prod");
     // we are in a cloud.gov environment and must retrieve credentials from
     // the VCAP_SERVICES environment variable
     const vcap = JSON.parse(process.env.VCAP_SERVICES);
@@ -51,12 +47,25 @@ export const getRedisConnectionInfo = () => {
       password: db.credentials.password,
       host: db.credentials.host,
       port: db.credentials.port,
+      protocol: "rediss",
     };
     return CONNECTION_INFO;
   }
 
   const REQUIRED_ENV_VARS = ["REDIS_HOST", "REDIS_PORT", "REDIS_PASSWORD"];
   const missing = REQUIRED_ENV_VARS.some((varName) => !process.env[varName]);
+
+  if (!missing && process.env.API_INTEROP_NEC) {
+    USE_REDIS = true;
+    redisLogger.info("nec: interop is using redis for cache in prod");
+    CONNECTION_INFO = {
+      password: process.env["REDIS_PASSWORD"],
+      host: process.env["REDIS_HOST"],
+      port: process.env["REDIS_PORT"],
+      protocol: "rediss",
+    };
+    return CONNECTION_INFO;
+  }
 
   if (missing) {
     redisLogger.warn("redis is DISABLED for cache");
@@ -71,6 +80,7 @@ export const getRedisConnectionInfo = () => {
     password: process.env["REDIS_PASSWORD"],
     host: process.env["REDIS_HOST"],
     port: process.env["REDIS_PORT"],
+    protocol: "redis",
   };
 
   return CONNECTION_INFO;
@@ -100,10 +110,19 @@ export const getRedisClient = async () => {
     if (!connectionInfo) {
       return null;
     }
-    const { password, host, port } = connectionInfo;
-    const url = `${protocol}://default:${password}@${host}:${port}`;
-    redisLogger.info({ url }, "connecting");
-    client = await createClient({ url })
+    const { protocol, password, host, port } = connectionInfo;
+    if (process.env.API_INTEROP_NEC) {
+      // NEC passwords cannot be passed via url.
+      client = createClient({
+        password,
+        socket: { host, port: Number(port), tls: true },
+      });
+    } else {
+      // require a url for everything else.
+      const url = `${protocol}://default:${password}@${host}:${port}`;
+      client = createClient({ url });
+    }
+    await client
       .on("error", (err) => {
         redisLogger.error({ err }, "Client error");
       })

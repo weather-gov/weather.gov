@@ -134,7 +134,7 @@ variable "services" {
       cpu    = 256
       memory = 512
       environment = {
-        API_INTEROP_PRODUCTION = "true"
+        API_INTEROP_NEC = "true"
       }
       requires_cache = true
     }

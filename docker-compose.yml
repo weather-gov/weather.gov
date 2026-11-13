@@ -48,7 +48,6 @@ services:
       POSTGRES_PASSWORD: drupal
       INTEROP_URL: "http://api-interop-layer:8082/"
       API_URL: "http://api-proxy:8081/"
-      GHWO_URL: "http://api-proxy:8081/"
       DEBUG_PORT: 34235
       DJANGO_SETTINGS_MODULE: backend.config.settings.dev
       ENABLE_OPENTELEMETRY: true
@@ -128,7 +127,6 @@ services:
       DB_HOST: database
       DB_PORT: 5432
       API_URL: ${API_URL:-http://api-proxy:8081}
-      GHWO_URL: ${GHWO_URL:-http://api-proxy:8081}
       SATELLITE_URL: ${SATELLITE_URL:-http://api-proxy:8081}
       RADAR_URL: ${RADAR_URL:-http://api-proxy:8081}
       API_KEY: ${API_KEY:-}
