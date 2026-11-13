@@ -45,7 +45,6 @@ CSRF_TRUSTED_ORIGINS = [
 ]
 
 ALLOWED_HOSTS = [
-    "weathergov-test.app.cloud.gov",
     "weathergov-staging.app.cloud.gov",
     "beta.weather.gov",
 ]

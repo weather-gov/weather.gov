@@ -22,7 +22,6 @@ DEBUG = False
 TESTING = True
 
 ALLOWED_HOSTS = [
-    "weathergov-test.app.cloud.gov",
     "weathergov-staging.app.cloud.gov",
     "beta.weather.gov",
 ]
