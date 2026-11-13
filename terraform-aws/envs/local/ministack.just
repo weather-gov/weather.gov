@@ -115,9 +115,21 @@ ministack-controlled-burn: ministack-down && ministack
 # Shut down ministack cleanly.
 [group("ministack")]
 ministack-down:
+    docker compose -f "{{ justfile_directory() }}/docker-compose.ministack.dev.yml" down -v --remove-orphans
     docker compose -f "{{ justfile_directory() }}/docker-compose.ministack.yml" down -v --remove-orphans
     # make sure we remove only ministack-related containers.
     docker ps -aq --filter label=ministack | xargs -r docker rm -f
     # ministack-data/ is written as root, so clear it from inside a container.
     # delete only the contents: the bind-mount points themselves can't be removed.
     docker compose -f "{{ justfile_directory() }}/docker-compose.ministack.yml" run --rm --no-deps --entrypoint sh ministack -c 'rm -rf /tmp/ministack-state/* /tmp/ministack-data/s3/* /tmp/ministack-data/rds/*'
+
+# Dump the service environment variables for local dev purposes
+[group("ministack")]
+ministack-env service:
+    "{{ justfile_directory() }}"/terraform-aws/envs/local/scripts/ministack-env.sh {{service}}
+
+# Start up the interop service in ministack for dev.
+[group("ministack")]
+ministack-dev-interop:
+    just ministack-env interop >"{{ justfile_directory() }}/.env.interop.dev"
+    docker compose -f "{{ justfile_directory() }}/docker-compose.ministack.dev.yml" up interop

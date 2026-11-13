@@ -1,0 +1,25 @@
+name: weathergov-ministack-dev
+
+# this docker-compose is intended for local dev purposes while developing in an
+# AWS simulated environment (ministack).
+services:
+  interop:
+    image: localhost:4566/weathergov-dev-interop:dev
+    volumes:
+      - ./api-interop-layer:/app
+      - /app/node_modules
+    ports:
+      - 18082:8082
+    environment:
+      - PORT=8082
+    env_file:
+      - path: .env.interop.dev
+        format: raw
+    command: node --watch main.js
+    networks:
+      - ministack
+
+networks:
+  ministack:
+    name: weathergov-ministack_ministack
+    external: true
