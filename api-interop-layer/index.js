@@ -10,22 +10,6 @@ import getTimer, {
   groupPointBatches,
 } from "./util/performance.js";
 
-const REQUIRED_ENV_VARS = ["API_URL", "GHWO_URL"];
-
-const ensureEnvironmentVariables = () => {
-  const missing = [];
-  logger.info("Checking for required environment variables...");
-  REQUIRED_ENV_VARS.forEach((varName) => {
-    if (!process.env[varName]) {
-      missing.push(varName);
-    }
-  });
-  if (missing.length) {
-    logger.error({ missing }, "required environment variables not found");
-    process.exit(-1);
-  }
-};
-
 let session = null;
 let profiling = false;
 
@@ -82,10 +66,6 @@ export const main = async () => {
     process.emit("SHUTDOWN");
     setTimeout(() => done(), 300);
   });
-
-  // Check that required environment
-  // variables are set
-  ensureEnvironmentVariables();
 
   server.setErrorHandler((err, _, reply) => {
     logger.error({ err }, "unhandled error");

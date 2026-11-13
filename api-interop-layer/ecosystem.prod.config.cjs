@@ -9,6 +9,6 @@ module.exports = {
     args: "--update-env",
     interpreter_args: enableNewRelic ? "--experimental-loader newrelic/esm-loader.mjs -r newrelic" : "",
     watch: ["**/*.js"],
-    API_INTEROP_PRODUCTION: true
+    API_INTEROP_CLOUDGOV: true
   }]
 }

@@ -10,20 +10,6 @@ const LEVEL_NAMES = {
   fatal: "CRITICAL",
 };
 
-const transport = pino.transport({
-  serializers: {
-    req: pino.stdSerializers.req,
-    res: pino.stdSerializers.res,
-  },
-  targets: [
-    {
-      target: "pino/file",
-      options: { destination: 1 }, // fd 1 is stdout
-      level: process.env.LOG_LEVEL || "info",
-    },
-  ],
-});
-
 export const logger = pino(
   {
     base: { service: "api-interop-layer" },
@@ -35,8 +21,13 @@ export const logger = pino(
         };
       },
     },
+    level: process.env.LOG_LEVEL || "info",
+    serializers: {
+      req: pino.stdSerializers.req,
+      res: pino.stdSerializers.res,
+    },
   },
-  transport,
+  process.stdout,
 );
 
 export default { logger };

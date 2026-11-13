@@ -10,7 +10,7 @@ import {
 describe("redis utilities", () => {
   let redisClient, createClient, redis, sandbox;
 
-  let _API_INTEROP_PRODUCTION;
+  let _API_INTEROP_CLOUDGOV;
   let _VCAP_SERVICES;
   let _DISABLE_REDIS;
 
@@ -24,14 +24,11 @@ describe("redis utilities", () => {
       },
       expire: sandbox.stub(),
     };
+    redisClient.on = sandbox.stub().returns(redisClient);
+    redisClient.connect = sandbox.stub().resolves(redisClient);
+    createClient = sandbox.stub().returns(redisClient);
 
-    createClient = sandbox.stub().returns({
-      on: sandbox
-        .stub()
-        .returns({ connect: sandbox.stub().resolves(redisClient) }),
-    });
-
-    _API_INTEROP_PRODUCTION = process.env.API_INTEROP_PRODUCTION;
+    _API_INTEROP_CLOUDGOV = process.env.API_INTEROP_CLOUDGOV;
     _VCAP_SERVICES = process.env.VCAP_SERVICES;
     _DISABLE_REDIS = process.env.DISABLE_REDIS;
 
@@ -39,7 +36,7 @@ describe("redis utilities", () => {
     // will simply not initialize and all the convenience methods
     // will quietly bail out. That is correct, but it doesn't help
     // us with testing. :P So, fake data to the rescue.
-    process.env.API_INTEROP_PRODUCTION = "true";
+    process.env.API_INTEROP_CLOUDGOV = "true";
     process.env.VCAP_SERVICES = JSON.stringify({
       "aws-elasticache-redis": [
         {
@@ -65,7 +62,7 @@ describe("redis utilities", () => {
   after(async () => {
     sandbox.restore();
     // Whatever it used to be, put it back.
-    process.env.API_INTEROP_PRODUCTION = _API_INTEROP_PRODUCTION;
+    process.env.API_INTEROP_CLOUDGOV = _API_INTEROP_CLOUDGOV;
     process.env.VCAP_SERVICES = _VCAP_SERVICES;
     process.env.DISABLE_REDIS = _DISABLE_REDIS;
     await quibble.reset();
@@ -77,6 +74,7 @@ describe("redis utilities", () => {
       password: "Walt sent me",
       host: "Ink and Paint Club",
       port: "Red Car",
+      protocol: "rediss",
     });
   });
 
