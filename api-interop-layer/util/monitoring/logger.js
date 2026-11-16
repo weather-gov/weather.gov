@@ -10,6 +10,13 @@ const LEVEL_NAMES = {
   fatal: "CRITICAL",
 };
 
+// if we get WARNING or CRITICAL then we want to convert to the pino equivalent.
+// note that pino will throw an error if it doesn't recognize the level.
+export const apiLogLevel = (name = "info") => {
+  const level = name.toLowerCase();
+  return { warning: "warn", critical: "fatal" }[level] ?? level;
+};
+
 export const logger = pino(
   {
     base: { service: "api-interop-layer" },
@@ -21,7 +28,7 @@ export const logger = pino(
         };
       },
     },
-    level: process.env.LOG_LEVEL || "info",
+    level: apiLogLevel(process.env.LOG_LEVEL || "info"),
     serializers: {
       req: pino.stdSerializers.req,
       res: pino.stdSerializers.res,
