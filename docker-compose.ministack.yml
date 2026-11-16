@@ -31,22 +31,48 @@ services:
   ministack:
     image: ministackorg/ministack:full
     container_name: ministack
+    # Expose MiniStack readiness to Compose dependencies.
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "python",
+          "-c",
+          "import urllib.request; urllib.request.urlopen('http://localhost:4566/_ministack/health', timeout=3)",
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 30s
     environment:
       - PERSIST_STATE=1
       - S3_PERSIST=1
       - RDS_PERSIST=1
       - LOG_LEVEL=INFO
+      # Podman's Docker-compatible API also uses the docker executor.
       - LAMBDA_EXECUTOR=docker
       - MINISTACK_IMAGE_PREFIX=weathergov-ministack
+      - DOCKER_HOST=unix:///var/run/docker.sock
       - DOCKER_NETWORK=weathergov-ministack_ministack
     ports:
       - 4566:4566
-      - 443:443
+      # Rootless Podman cannot publish privileged host port 443.
+      - 8443:443
     volumes:
       - ./ministack-data/state:/tmp/ministack-state
       - ./ministack-data/s3:/tmp/ministack-data/s3
       - ./ministack-data/rds:/tmp/ministack-data/rds
-      - /var/run/docker.sock:/var/run/docker.sock
+      # Resolve this path on the engine host (the VM on macOS).
+      # Podman Machine exposes /var/run/docker.sock as a compatibility symlink.
+      - type: bind
+        source: ${MINISTACK_CONTAINER_SOCKET:-/var/run/docker.sock}
+        target: /var/run/docker.sock
+        bind:
+          create_host_path: false
+    # Allow access to the engine socket on SELinux-enabled Podman machines.
+    # Socket access already grants control over this local container engine.
+    security_opt:
+      - label=disable
     networks:
       - ministack
 

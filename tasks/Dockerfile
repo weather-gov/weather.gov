@@ -1,4 +1,4 @@
-FROM golang:1.26.5-bookworm AS builder
+FROM --platform=linux/amd64 golang:1.26.5-bookworm AS builder
 
 WORKDIR /src
 COPY . .
@@ -10,7 +10,7 @@ RUN --mount=type=cache,target=/root/.cache/go-build \
     CGO_ENABLED=0 GOOS=linux go build -o /out/wpcprob ./cmd/wpcprob && \
     CGO_ENABLED=0 GOOS=linux go build -o /out/gridcache ./cmd/gridcache
 
-FROM debian:bookworm-slim
+FROM --platform=linux/amd64 debian:bookworm-slim
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 

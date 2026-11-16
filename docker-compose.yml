@@ -1,5 +1,7 @@
 name: weathergov-django
 
+# Fluent Bit tails k8s-file logs from the local Podman machine storage.
+
 # yaml anchor to avoid re-using otel creds
 x-env-creds: &otel-env
   OTEL_EXPORTER_OTLP_TRACES_ENDPOINT: "http://openobserve:5080/api/default/v1/traces"
@@ -27,6 +29,8 @@ services:
       POSTGRES_DB: weathergov
     ports:
       - 5432:5432
+    logging:
+      driver: k8s-file
 
   web:
     build:
@@ -76,14 +80,8 @@ services:
       nofile:
         soft: 65536
         hard: 65536
-    links:
-      - database
     logging:
-      driver: fluentd
-      options:
-        fluentd-address: "localhost:24224"
-        fluentd-async: "true"
-        tag: "weathergov.django"
+      driver: k8s-file
 
   api-proxy:
     build:
@@ -104,11 +102,7 @@ services:
         soft: 65536
         hard: 65536
     logging:
-      driver: fluentd
-      options:
-        fluentd-address: "localhost:24224"
-        fluentd-async: "true"
-        tag: "weathergov.api-proxy"
+      driver: k8s-file
 
   api-interop-layer:
     build:
@@ -178,9 +172,6 @@ services:
       MARINE_COASTAL_EXPERIMENTAL: false
     networks:
       - weather.gov
-    links:
-      - database
-      - api-proxy
     ports:
       - 8082:8082
       - 9229:9229
@@ -192,11 +183,7 @@ services:
         soft: 65536
         hard: 65536
     logging:
-      driver: fluentd
-      options:
-        fluentd-address: "localhost:24224"
-        fluentd-async: "true"
-        tag: "weathergov.api-interop-layer"
+      driver: k8s-file
 
   uswds:
     build:
@@ -253,6 +240,8 @@ services:
       - ./redis-data:/redis-data
     networks:
       - weather.gov
+    logging:
+      driver: k8s-file
 
   openobserve:
     image: public.ecr.aws/zinclabs/openobserve:latest
@@ -324,11 +313,7 @@ services:
       - database
       - api-proxy
     logging:
-      driver: fluentd
-      options:
-        fluentd-address: "localhost:24224"
-        fluentd-async: "true"
-        tag: "weathergov.tasks-cron"
+      driver: k8s-file
 
 networks:
   weather.gov:
