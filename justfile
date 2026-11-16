@@ -36,12 +36,12 @@ copy-tables-from-beta-to-staging:
 # Build USWDS and our styles together
 [group("building")]
 css:
-    docker compose run --rm uswds npx --no-install gulp compile
+    podman compose run --rm uswds npx --no-install gulp compile
 
 # Build SVG assets that are assembled programmatically
 [group("building")]
 svg:
-    docker compose --profile utility \
+    podman compose --profile utility \
       run --rm \
       -v "{{ justfile_directory() }}/forecast/frontend":"/app/forecast/frontend" \
       -v "{{ justfile_directory() }}/scripts:/app/scripts" \
@@ -53,60 +53,60 @@ svg:
 # Export packages from pyproject.toml to requirements.txt
 [group("building")]
 uv:
-    docker compose exec web bash -c "pip install uv && uv export --no-dev --format requirements.txt>requirements.txt"
+    podman compose exec web bash -c "pip install uv && uv export --no-dev --format requirements.txt>requirements.txt"
 
 # Export dev packages from pyproject.toml to requirements.txt
 [group("building")]
 uv-dev:
-    docker compose exec web bash -c "pip install uv && uv export --group dev --format requirements.txt>requirements.dev.txt"
+    podman compose exec web bash -c "pip install uv && uv export --group dev --format requirements.txt>requirements.dev.txt"
 
 ##### Django/django management #####
 # Generate static assets
 [group("django management")]
 collectstatic:
-    docker compose exec web python manage.py collectstatic
+    podman compose exec web python manage.py collectstatic
 
 # Create a Wagtail superuser/admin
 [group("django management")]
 create-superuser:
-    docker compose exec web python manage.py createsuperuser
+    podman compose exec web python manage.py createsuperuser
 
 # Create any new Django migrations, as necessary
 [group("django management")]
 make-migrations:
-    docker compose exec web python manage.py makemigrations
+    podman compose exec web python manage.py makemigrations
 
 # Apply Django migrations
 [group("django management")]
 migrate:
-    docker compose exec web python manage.py migrate
+    podman compose exec web python manage.py migrate
 
 # Restart Django
 [group("django management")]
 django-restart:
-    docker compose restart web
+    podman compose restart web
 
 # Get a Python shell in the Django container
 [group("django management")]
 shell:
-    docker compose exec web python manage.py shell
+    podman compose exec web python manage.py shell
 
 # Compile translation messages
 [group("django management")]
 compile-messages:
-    docker compose exec web python manage.py compilemessages
+    podman compose exec web python manage.py compilemessages
 
 ##### Caching #####
 # Drop all alerts from the alerts cache table
 [group("cache management")]
 clear-alert-cache:
-    docker compose exec database bash -c "psql \"postgresql://\$POSTGRES_USER:\$POSTGRES_PASSWORD@database/\$POSTGRES_DB\" -c \"UPDATE weathergov_geo_alerts_cache SET hash=id,alertjson=jsonb_set(alertjson::jsonb,'{hash}',quote_ident(id::text)::jsonb);\""
-    docker compose restart api-interop-layer
+    podman compose exec database bash -c "psql \"postgresql://\$POSTGRES_USER:\$POSTGRES_PASSWORD@database/\$POSTGRES_DB\" -c \"UPDATE weathergov_geo_alerts_cache SET hash=id,alertjson=jsonb_set(alertjson::jsonb,'{hash}',quote_ident(id::text)::jsonb);\""
+    podman compose restart api-interop-layer
 
 # Drop all ghwo records from the temp table
 [group("cache management")]
 clear-risk-data:
-    docker compose exec database bash -c "psql \"postgresql://\$POSTGRES_USER:\$POSTGRES_PASSWORD@database/\$POSTGRES_DB\" -c \"TRUNCATE TABLE weathergov_temp_ghwo;\""
+    podman compose exec database bash -c "psql \"postgresql://\$POSTGRES_USER:\$POSTGRES_PASSWORD@database/\$POSTGRES_DB\" -c \"TRUNCATE TABLE weathergov_temp_ghwo;\""
 
 ##### Code quality #####
 # Format Javascript
@@ -114,7 +114,7 @@ clear-risk-data:
 [script]
 format-js *files:
     if [[ -z "{{ files }}" ]]; then
-      docker compose --profile utility \
+      podman compose --profile utility \
         run --rm \
         -v "{{ justfile_directory() }}/.prettierignore":"/app/.prettierignore" \
         -v "{{ justfile_directory() }}/prettier.config.js":"/app/prettier.config.js" \
@@ -127,7 +127,7 @@ format-js *files:
         node \
         npx --no-install prettier -w --list-different 'forecast/frontend/**/assets/**/*.js' 'tests/**/*.js' '*.js' 'api-interop-layer/**/*.js' '.gitlab-ci.yml' '.gitlab/**/*.yml'
     else
-      docker compose --profile utility \
+      podman compose --profile utility \
         run --rm \
         -v "{{ justfile_directory() }}/.prettierignore":"/app/.prettierignore" \
         -v "{{ justfile_directory() }}/prettier.config.js":"/app/prettier.config.js" \
@@ -150,7 +150,7 @@ format-python *files:
     else
       target="{{ files }}"
     fi
-    docker compose exec web python -m ruff --config pyproject.toml format $target
+    podman compose exec web python -m ruff --config pyproject.toml format $target
 
 # Format stylesheets
 [group("code quality")]
@@ -161,7 +161,7 @@ format-style *files:
     else
       target="{{ files }}"
     fi
-    docker compose --profile utility \
+    podman compose --profile utility \
       run --rm \
       -v "{{ justfile_directory() }}/forecast/frontend":"/app" \
       node \
@@ -172,9 +172,9 @@ format-style *files:
 [script]
 format-template *files:
     if [[ -z "{{ files }}" ]]; then
-      docker compose exec web djlint backend/templates/ --reformat --extension=html || true
+      podman compose exec web djlint backend/templates/ --reformat --extension=html || true
     else
-      docker compose exec web djlint {{ files }} --reformat --extension=html || true
+      podman compose exec web djlint {{ files }} --reformat --extension=html || true
     fi
 
 # Lints and formats Python and HTML templates in one go
@@ -193,7 +193,7 @@ lint-js *files:
     else
       target="{{ files }}"
     fi
-    docker compose --profile utility \
+    podman compose --profile utility \
       run --rm \
       -v "{{ justfile_directory() }}/eslint.config.js":"/app/eslint.config.js" \
       -v "{{ justfile_directory() }}/api-interop-layer":"/app/api-interop-layer" \
@@ -213,7 +213,7 @@ lint-python *files:
     else
       target="{{ files }}"
     fi
-    docker compose exec web python -m ruff --config pyproject.toml check --fix $target
+    podman compose exec web python -m ruff --config pyproject.toml check --fix $target
 
 # Lint Sass stylesheets
 [group("code quality")]
@@ -224,7 +224,7 @@ lint-style *files:
     else
       target="{{ files }}"
     fi
-    docker compose --profile utility \
+    podman compose --profile utility \
       run --rm \
       -v "{{ justfile_directory() }}":"/app" \
       node \
@@ -239,11 +239,11 @@ lint-template *files:
     else
       target="{{ files }}"
     fi
-    docker compose exec web djlint $target --extension=html
+    podman compose exec web djlint $target --extension=html
 
 [group("code quality")]
 gitlab-sast:
-    docker run --rm \
+    podman run --rm \
     -v "$PWD:/tmp/app" \
     -w /tmp/app \
     -e SAST_EXCLUDED_PATHS="spec,test,tests,tmp,forecast/frontend/assets/js/uswds*.js,forecast/frontend/assets/js/third-party,forecast/frontend/assets/js/cmi-radar*.js,forecast/frontend/public/js" \
@@ -261,19 +261,19 @@ validate-terraform:
 # Run goimports on the files in the tasks directory
 [group("code quality")]
 go-imports:
-    docker compose run --rm tasks-dev go run golang.org/x/tools/cmd/goimports@latest -w .
+    podman compose run --rm tasks-dev go run golang.org/x/tools/cmd/goimports@latest -w .
 
 # Run go vet across all packages
 [group("code quality")]
 go-vet:
-    docker compose run --rm tasks-dev go vet ./...
+    podman compose run --rm tasks-dev go vet ./...
 
 ##### Testing #####
 alias a11y := test-a11y
 # Run automated accessibility testing in Playwright
 [group("testing")]
 test-a11y:
-    docker compose \
+    podman compose \
       run --rm \
       playwright \
       npx --no-install playwright test --output /reports/a11y a11y
@@ -281,14 +281,14 @@ test-a11y:
 # Run collectstatic which is required for Django tests
 [group("testing")]
 test-collectstatic:
-    docker compose run --rm web python manage.py collectstatic --noinput
+    podman compose run --rm web python manage.py collectstatic --noinput
 
 # Run Django tests
 [group("testing")]
 [script]
 test-django arg="": test-collectstatic
     if [ "{{ arg }}" == "debug" ]; then
-      docker compose \
+      podman compose \
         run --rm \
         -v "{{ justfile_directory() }}/reports/django":"/reports" \
         -e BREAK=true \
@@ -297,7 +297,7 @@ test-django arg="": test-collectstatic
         web \
         bash -c "coverage run manage.py test backend spatial noaa_saml risk_data; coverage html -d /reports"
     else
-      docker compose \
+      podman compose \
         run --rm \
         -v "{{ justfile_directory() }}/reports/django":"/reports" \
         web \
@@ -308,7 +308,7 @@ alias ee := test-e2e
 # Run end-to-end browser testing in Playwright
 [group("testing")]
 test-e2e:
-    docker compose \
+    podman compose \
     run --rm \
     playwright \
     npx --no-install playwright test --output /reports/end-to-end e2e
@@ -321,7 +321,7 @@ test-interop arg="":
     if [ "{{ arg }}" == "debug" ]; then
       inspect="--inspect-brk=0.0.0.0:2992"
     fi
-    docker compose \
+    podman compose \
       run --rm \
       -v "{{ justfile_directory() }}/reports/interop":"/reports" \
       -e LOG_LEVEL=silent \
@@ -342,7 +342,7 @@ alias wc := test-web-components
 # Run web component testing
 [group("testing")]
 test-web-components:
-    docker compose --profile utility \
+    podman compose --profile utility \
       run --rm \
       -v "{{ justfile_directory() }}/reports/web-components":"/reports" \
       -v "{{ justfile_directory() }}/forecast/frontend":"/app/frontend" \
@@ -355,83 +355,83 @@ test-web-components:
 # Starts up all the containers, prepares the databases, and loads initial data
 [group("dev environment management")]
 init: && migrate load-spatial django-restart
-    docker compose up -d
+    podman compose up -d
     sleep 15
 
 # Starts a PlantUML server container listening on localhost:8180
 [group("dev environment management")]
 plantuml:
-    docker compose --profile utility start plantuml
+    podman compose --profile utility start plantuml
 
 # Rebuild a specific container, or all of them!
 [group("dev environment management")]
 rebuild target="":
-    docker compose stop {{ target }} && docker compose rm -f {{ target }} && docker compose build {{ target }} && docker compose up -d
+    podman compose stop {{ target }} && podman compose rm -f {{ target }} && podman compose build {{ target }} && podman compose up -d
 
 # Stops the PlantUML server
 [group("dev environment management")]
 stop-plantuml:
-    docker compose --profile utility stop plantuml
+    podman compose --profile utility stop plantuml
 
 # Destroys all containers, databases, and volumes and starts over fresh and clean
 [group("dev environment management")]
 zap: && init
-    docker compose down -v --remove-orphans
+    podman compose down -v --remove-orphans
 
 alias scorched-earth := controlled-burn
 # Does what zap does, plus destroys spatial data and docker images
 [group("dev environment management")]
 controlled-burn: && init
-    docker compose down -v --rmi all --remove-orphans
+    podman compose down -v --rmi all --remove-orphans
 
 # Load spatial data; pass "clean" for clean load
 [group("spatial data loading")]
 [script]
 load-spatial arg="": && clear-alert-cache
     if [ "{{ arg }}" = "clean" ]; then
-      docker compose exec web python manage.py loadspatial --force
+      podman compose exec web python manage.py loadspatial --force
     else
-      docker compose exec web python manage.py loadspatial
+      podman compose exec web python manage.py loadspatial
     fi
 # Load just states spatial data.
 [group("spatial data loading")]
 load-states:
-    docker compose exec web python manage.py loadspatial --states
+    podman compose exec web python manage.py loadspatial --states
 # Load just CWA spatial data.
 [group("spatial data loading")]
 load-cwas:
-    docker compose exec web python manage.py loadspatial --cwas
+    podman compose exec web python manage.py loadspatial --cwas
 # Load just counties spatial data.
 [group("spatial data loading")]
 load-counties: && clear-alert-cache
-    docker compose exec web python manage.py loadspatial --counties
+    podman compose exec web python manage.py loadspatial --counties
 # Load just zones spatial data.
 [group("spatial data loading")]
 load-zones: && clear-alert-cache
-    docker compose exec web python manage.py loadspatial --zones
+    podman compose exec web python manage.py loadspatial --zones
 # Load just place spatial data.
 [group("spatial data loading")]
 load-places:
-    docker compose exec web python manage.py loadspatial --places
+    podman compose exec web python manage.py loadspatial --places
 # Load grid points
 [group("spatial data loading")]
 load-gridpoints path:
-    docker compose exec web python manage.py loadgridpoints /code/{{ path }}
+    podman compose exec web python manage.py loadgridpoints /code/{{ path }}
 
 [group("logging")]
 logs:
-    docker compose logs -f fluent-bit
+    podman compose logs -f fluent-bit
 
 # Run any command in the go container. All args passed through
 # Example: just lets go run <something>
 [group("golang")]
 lets *args:
-    docker compose run --rm tasks-dev {{ args }}
+    podman compose run --rm tasks-dev {{ args }}
 
 # Run the GHWO program  without compiling (interpreted)
 [group("golang")]
 go-run-ghwo:
-    docker compose run --rm  \
+    podman compose run --rm  \
     -e DB_HOST=database \
     -e DB_PORT=5432 \
     -e DB_NAME=weathergov \
@@ -443,7 +443,7 @@ go-run-ghwo:
 # Run the alerts program without compiling (interpreted)
 [group("golang")]
 go-run-alerts:
-    docker compose run --rm  \
+    podman compose run --rm  \
     -e DB_HOST=database \
     -e DB_PORT=5432 \
     -e DB_NAME=weathergov \
@@ -455,44 +455,44 @@ go-run-alerts:
 # Run the gridcache heat interval program without compiling (interpreted)
 [group("golang")]
 go-run-gridcache:
-    docker compose run --rm tasks-dev go run /tasks/cmd/gridcache/main.go
+    podman compose run --rm tasks-dev go run /tasks/cmd/gridcache/main.go
 
 # Compile the GHWO program
 [group("golang")]
 go-build-ghwo:
-    docker compose run --rm tasks-dev go build -o /tasks/bin/ghwo /tasks/cmd/ghwo/main.go
+    podman compose run --rm tasks-dev go build -o /tasks/bin/ghwo /tasks/cmd/ghwo/main.go
 
 # Compile the alerts program
 [group("golang")]
 go-build-alerts:
-    docker compose run --rm tasks-dev go build -o /tasks/bin/alerts /tasks/cmd/alerts/main.go
+    podman compose run --rm tasks-dev go build -o /tasks/bin/alerts /tasks/cmd/alerts/main.go
 
 # Compile the gridcache heat interval program
 [group("golang")]
 go-build-gridcache:
-    docker compose run --rm tasks-dev go build -o /tasks/bin/gridcache /tasks/cmd/gridcache/main.go
+    podman compose run --rm tasks-dev go build -o /tasks/bin/gridcache /tasks/cmd/gridcache/main.go
 
 # Compile the WPC program
 [group("golang")]
 go-build-wpcprob:
-    docker compose run --rm tasks-dev go build -o /tasks/bin/wpcprob /tasks/cmd/wpcprob/main.go
+    podman compose run --rm tasks-dev go build -o /tasks/bin/wpcprob /tasks/cmd/wpcprob/main.go
 
 # Compile all programs
 [group("golang")]
 go-build-check:
-    docker compose run --rm tasks-dev go build ./...
+    podman compose run --rm tasks-dev go build ./...
 
 # Run all the tests
 [group("golang")]
 go-test:
-    docker compose run --rm tasks-dev go test -v ./...
+    podman compose run --rm tasks-dev go test -v ./...
 
 alias test-go := go-test
 
 # Run the WPC probabilistic precip program against the newest published cycle
 [group("golang")]
 go-run-wpcprob:
-    docker build -t wpcprob-tasks -f tasks/Dockerfile tasks/
-    docker run --rm --network "$(docker network ls --filter name=weather.gov -q | head -1)" \
+    podman build -t wpcprob-tasks -f tasks/Dockerfile tasks/
+    podman run --rm --network "$(podman network ls --filter name=weather.gov -q | head -1)" \
         -e DB_HOST=database -e DB_PORT=5432 -e DB_NAME=weathergov -e DB_USERNAME=drupal -e DB_PASSWORD=drupal \
         --entrypoint /usr/local/bin/wpcprob wpcprob-tasks -latest

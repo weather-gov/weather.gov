@@ -2,13 +2,12 @@
 
 ## Getting started
 
-We use Docker to take care of all the heavy lifting for setup and configuration
+We use Podman to take care of all the heavy lifting for setup and configuration
 and we use [Just](https://github.com/casey/just) as a command runner to simplify
 our most common needs with starting, clearing caches, importing/exporting,
 configuration, etc.
 
-To get up and running quickly with Docker, ensure you have Docker installed and
-then:
+To get up and running quickly with Podman, ensure you have the Podman CLI and Podman Desktop installed (instructions found [here](podman.md)) and configured and then:
 
 1. Clone this repository into a new directory and `cd` into it.
 2. Install [Just](https://github.com/casey/just?tab=readme-ov-file#packages).

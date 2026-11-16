@@ -5,16 +5,42 @@
 set fallback := true
 
 # Initializes the local stack, prepares the databases, and loads initial data.
+# The first time you run this, make sure to first set up the local registry 
+# with just ministack-registry-setup (after starting podman)
 [group("ministack")]
-ministack: ministack-images && ministack-push-all ministack-migrate ministack-load-spatial
+ministack: ministack-images
     # Brings up the ministack container and applies the local Terraform bootstrap configuration.
-    docker compose -f "{{ justfile_directory() }}/docker-compose.ministack.yml" up -d --wait ministack
+    podman compose -f "{{ justfile_directory() }}/docker-compose.ministack.yml" up -d --wait ministack
     cd "{{ justfile_directory() }}/terraform-aws/bootstrap-local" && terraform init -backend=false && terraform apply -auto-approve
-    sleep 5
+    # Bootstrap only the registries before starting ECS services.
+    just ministack-terraform apply -auto-approve -target=aws_ecr_repository.ministack
+    just ministack-push-all
     just ministack-terraform apply -auto-approve
-    sleep 5
+    just ministack-migrate
+    just ministack-load-spatial
     # After initial terraform bootstrapping, init the rest of our containers and services.
-    docker compose -f "{{ justfile_directory() }}/docker-compose.ministack.yml" up -d
+    podman compose -f "{{ justfile_directory() }}/docker-compose.ministack.yml" up -d
+
+# Allow the MiniStack HTTP registry in the default rootless macOS Podman machine.
+[group("ministack")]
+[script]
+ministack-registry-setup:
+        podman machine ssh '
+            set -eu
+            dir="$HOME/.config/containers/registries.conf.d"
+            config="$dir/weathergov-ministack.conf"
+            mkdir -p "$dir"
+            if [ -e "$config" ]; then
+                if ! printf "[[registry]]\nlocation = \"localhost:4566\"\ninsecure = true\n" | cmp -s - "$config"; then
+                    echo "Refusing to overwrite existing registry configuration: $config" >&2
+                    exit 1
+                fi
+            else
+                printf "[[registry]]\nlocation = \"localhost:4566\"\ninsecure = true\n" > "$config"
+            fi
+            systemctl --user restart podman.service
+            echo "MiniStack HTTP registry configured for this Podman machine user."
+        '
 
 # Use symlinked dev resources with the ministack-only override file to spin up local environment.
 [group("ministack")]
@@ -36,10 +62,10 @@ ministack-images:
     # we need to override the ministack images because ministack does not support
     # postgis. to do this, we use the MINISTACK_IMAGE_PREFIX and swap in postgis for
     # postgres. valkey is unchanged.
-    docker pull --platform linux/amd64 postgis/postgis:17-3.5-alpine
-    docker tag postgis/postgis:17-3.5-alpine weathergov-ministack/postgres:17-alpine
-    docker pull --platform linux/amd64 valkey/valkey:9.0-alpine
-    docker tag valkey/valkey:9.0-alpine weathergov-ministack/valkey/valkey:9.0-alpine
+    podman pull --platform linux/amd64 postgis/postgis:17-3.5-alpine
+    podman tag postgis/postgis:17-3.5-alpine weathergov-ministack/postgres:17-alpine
+    podman pull valkey/valkey:9.0-alpine
+    podman tag valkey/valkey:9.0-alpine weathergov-ministack/valkey/valkey:9.0-alpine
 
 # Run django migrations
 [group("ministack")]
@@ -57,56 +83,58 @@ ministack-load-spatial:
     echo "ministack: loading spatial data is not implemented yet"
 
 # Push all prod images to the ministack ECR repositories.
+# Before you run this, make sure you've set Podman to use http for the local registry
+# by running just ministack-registry-setup
 [group("ministack")]
 ministack-push-all: ministack-push-django ministack-push-interop ministack-push-alerts ministack-push-ghwo ministack-push-gridcache ministack-push-wpcprob
 
 # Push the django prod image to the corresponding ministack ECR repository.
 [group("ministack")]
 ministack-push-django:
-    docker build -f forecast/Dockerfile.prod -t localhost:4566/weathergov-dev-django:dev forecast/
-    docker push localhost:4566/weathergov-dev-django:dev
+    podman build -f forecast/Dockerfile.prod -t localhost:4566/weathergov-dev-django:dev forecast/
+    podman push localhost:4566/weathergov-dev-django:dev
 
 # Push the interop prod image to the corresponding ministack ECR repository.
 [group("ministack")]
 ministack-push-interop:
-    docker build -f api-interop-layer/Dockerfile.prod -t localhost:4566/weathergov-dev-interop:dev api-interop-layer/
-    docker push localhost:4566/weathergov-dev-interop:dev
+    podman build -f api-interop-layer/Dockerfile.prod -t localhost:4566/weathergov-dev-interop:dev api-interop-layer/
+    podman push localhost:4566/weathergov-dev-interop:dev
 
 # Push the alerts task prod image to the corresponding ministack ECR repository.
 [group("ministack")]
 ministack-push-alerts:
-    docker build -f tasks/Dockerfile.prod -t localhost:4566/weathergov-dev-tasks-alerts:dev --build-arg TASK=alerts tasks/
-    docker push localhost:4566/weathergov-dev-tasks-alerts:dev
+    podman build -f tasks/Dockerfile.prod -t localhost:4566/weathergov-dev-tasks-alerts:dev --build-arg TASK=alerts tasks/
+    podman push localhost:4566/weathergov-dev-tasks-alerts:dev
 
 # Push the ghwo task prod image to the corresponding ministack ECR repository.
 [group("ministack")]
 ministack-push-ghwo:
-    docker build -f tasks/Dockerfile.prod -t localhost:4566/weathergov-dev-tasks-ghwo:dev --build-arg TASK=ghwo tasks/
-    docker push localhost:4566/weathergov-dev-tasks-ghwo:dev
+    podman build -f tasks/Dockerfile.prod -t localhost:4566/weathergov-dev-tasks-ghwo:dev --build-arg TASK=ghwo tasks/
+    podman push localhost:4566/weathergov-dev-tasks-ghwo:dev
 
 # Push the gridcache task prod image to the corresponding ministack ECR repository.
 [group("ministack")]
 ministack-push-gridcache:
-    docker build -f tasks/Dockerfile.prod -t localhost:4566/weathergov-dev-tasks-gridcache:dev --build-arg TASK=gridcache tasks/
-    docker push localhost:4566/weathergov-dev-tasks-gridcache:dev
+    podman build -f tasks/Dockerfile.prod -t localhost:4566/weathergov-dev-tasks-gridcache:dev --build-arg TASK=gridcache tasks/
+    podman push localhost:4566/weathergov-dev-tasks-gridcache:dev
 
 # Push the wpcprob task prod image to the corresponding ministack ECR repository.
 [group("ministack")]
 ministack-push-wpcprob:
-    docker build -f tasks/Dockerfile.wpcprob.prod -t localhost:4566/weathergov-dev-tasks-wpcprob:dev tasks/
-    docker push localhost:4566/weathergov-dev-tasks-wpcprob:dev
+    podman build -f tasks/Dockerfile.wpcprob.prod -t localhost:4566/weathergov-dev-tasks-wpcprob:dev tasks/
+    podman push localhost:4566/weathergov-dev-tasks-wpcprob:dev
 
 # Destroys all containers, databases, and volumes and starts over fresh and clean with ministack
 [group("ministack")]
 ministack-zap: ministack-down && ministack
 
 alias ministack-cb := ministack-controlled-burn
-# Removes ministack fully, including its Docker images and terraform state.
+# Removes ministack fully, including its images and terraform state.
 [group("ministack")]
 ministack-controlled-burn: ministack-down && ministack
-    docker compose -f "{{ justfile_directory() }}/docker-compose.ministack.yml" down --rmi all --remove-orphans
+    podman compose -f "{{ justfile_directory() }}/docker-compose.ministack.yml" down --rmi all --remove-orphans
     # filter for postgres and valkey/valkey and our own prod ministack images
-    docker images -q --filter 'reference=weathergov-ministack/*' --filter 'reference=weathergov-ministack/*/*' --filter 'reference=localhost:4566/*' | xargs -r docker rmi -f
+    podman images -q --filter 'reference=weathergov-ministack/*' --filter 'reference=weathergov-ministack/*/*' --filter 'reference=localhost:4566/*' | xargs -r podman rmi -f
     # Also go ahead and remove all the terraform state and cache and lock files, so it's truly a clean slate
     rm -rf "{{ justfile_directory() }}/terraform-aws/bootstrap-local/.terraform" "{{ justfile_directory() }}/terraform-aws/envs/local/.terraform"
     rm -f "{{ justfile_directory() }}/terraform-aws/bootstrap-local/terraform.tfstate" "{{ justfile_directory() }}/terraform-aws/bootstrap-local/terraform.tfstate.backup"
@@ -115,13 +143,13 @@ ministack-controlled-burn: ministack-down && ministack
 # Shut down ministack cleanly.
 [group("ministack")]
 ministack-down:
-    docker compose -f "{{ justfile_directory() }}/docker-compose.ministack.dev.yml" down -v --remove-orphans
-    docker compose -f "{{ justfile_directory() }}/docker-compose.ministack.yml" down -v --remove-orphans
+    podman compose -f "{{ justfile_directory() }}/docker-compose.ministack.dev.yml" down -v --remove-orphans
+    podman compose -f "{{ justfile_directory() }}/docker-compose.ministack.yml" down -v --remove-orphans
     # make sure we remove only ministack-related containers.
-    docker ps -aq --filter label=ministack | xargs -r docker rm -f
+    podman ps -aq --filter label=ministack | xargs -r podman rm -f
     # ministack-data/ is written as root, so clear it from inside a container.
     # delete only the contents: the bind-mount points themselves can't be removed.
-    docker compose -f "{{ justfile_directory() }}/docker-compose.ministack.yml" run --rm --no-deps --entrypoint sh ministack -c 'rm -rf /tmp/ministack-state/* /tmp/ministack-data/s3/* /tmp/ministack-data/rds/*'
+    podman compose -f "{{ justfile_directory() }}/docker-compose.ministack.yml" run --rm --no-deps --entrypoint sh ministack -c 'rm -rf /tmp/ministack-state/* /tmp/ministack-data/s3/* /tmp/ministack-data/rds/*'
 
 # Dump the service environment variables for local dev purposes
 [group("ministack")]
@@ -132,4 +160,4 @@ ministack-env service:
 [group("ministack")]
 ministack-dev-interop:
     just ministack-env interop >"{{ justfile_directory() }}/.env.interop.dev"
-    docker compose -f "{{ justfile_directory() }}/docker-compose.ministack.dev.yml" up interop
+    podman compose -f "{{ justfile_directory() }}/docker-compose.ministack.dev.yml" up interop
