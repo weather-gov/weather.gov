@@ -83,7 +83,7 @@ const pageGroups = (path) => {
   // rename endpoints for clarity on the RUM side
   switch (what) {
     case "forecast/point":
-      return "forecast";
+      return "point-forecast";
     case "forecast/county":
       return "county";
     case "forecast/state":
