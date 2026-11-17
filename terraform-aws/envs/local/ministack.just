@@ -59,13 +59,13 @@ ministack-terraform *args="plan":
 # Replace ministack default images for postgis support
 [group("ministack")]
 ministack-images:
-    # we need to override the ministack images because ministack does not support
-    # postgis. to do this, we use the MINISTACK_IMAGE_PREFIX and swap in postgis for
-    # postgres. valkey is unchanged.
+    # we need to override the ministack images because ministack does not
+    # support postgis. to do this, we use the MINISTACK_IMAGE_PREFIX and swap in
+    # postgis for postgres. valkey also needs to have the libjson module enabled
+    # so use the overlay.
     podman pull --platform linux/amd64 postgis/postgis:17-3.5-alpine
     podman tag postgis/postgis:17-3.5-alpine weathergov-ministack/postgres:17-alpine
-    podman pull valkey/valkey:9.0-alpine
-    podman tag valkey/valkey:9.0-alpine weathergov-ministack/valkey/valkey:9.0-alpine
+    podman build -t weathergov-ministack/valkey/valkey:9.0-alpine - <"{{ justfile_directory() }}/terraform-aws/envs/local/Dockerfile.overlay.valkey"
 
 # Run django migrations
 [group("ministack")]
@@ -96,8 +96,21 @@ ministack-push-django:
 
 # Push the interop prod image to the corresponding ministack ECR repository.
 [group("ministack")]
+[script("bash")]
 ministack-push-interop:
-    podman build -f api-interop-layer/Dockerfile.prod -t localhost:4566/weathergov-dev-interop:dev api-interop-layer/
+    set -euo pipefail
+    cd "{{ justfile_directory() }}"
+    # we must override our interop prod image to inject ministack CA certs. but,
+    # first, build the production image itself:
+    podman build -f api-interop-layer/Dockerfile.prod -t weathergov-ministack/interop:prod api-interop-layer/
+    # setup a temp dir to stash ministack certs.
+    ca_dir=$(mktemp -d)
+    trap 'rm -rf "$ca_dir"' EXIT
+    # grab ministack certs. these certs must be retrieved at _run time_ as these
+    # are dynamically generated. if ministack is not up then this will fail.
+    curl -fsS http://localhost:4566/_ministack/rds/ca.pem http://localhost:4566/_ministack/elasticache/ca.pem >"$ca_dir/ca.pem"
+    # re-build the overlay image with the ministack certs
+    podman build -f terraform-aws/envs/local/Dockerfile.overlay.interop -t localhost:4566/weathergov-dev-interop:dev "$ca_dir"
     podman push localhost:4566/weathergov-dev-interop:dev
 
 # Push the alerts task prod image to the corresponding ministack ECR repository.

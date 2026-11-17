@@ -1,0 +1,10 @@
+# syntax=docker/dockerfile:1
+#
+# setup interop to trust ministack CAs instead of AWS'. the build context must
+# have ca.pem from a running ministack (ministack generates CAs on demand)
+# otherwise this image will fail to build.
+
+FROM weathergov-ministack/interop:prod
+
+COPY ca.pem /etc/ssl/certs/ministack-ca.pem
+ENV NODE_EXTRA_CA_CERTS=/etc/ssl/certs/ministack-ca.pem
