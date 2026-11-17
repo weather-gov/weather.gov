@@ -91,12 +91,28 @@ describe("briefing module", () => {
   });
 
   it("returns an error object if the briefing fetch is unsuccessful", async () => {
-    // briefing.js catch block: logs error and returns { error: true }
+    // briefing.js catch block: logs error and returns an error with a status
     response.statusCode = 500;
 
     const actual = await getDataForBriefing("ABC");
 
-    expect(actual).to.eql({ error: true });
+    expect(actual).to.eql({
+      error: true,
+      status: 500,
+      reason: "Request failed: 500",
+    });
+  });
+
+  it("maps an upstream 403 to a 429", async () => {
+    response.statusCode = 403;
+
+    const actual = await getDataForBriefing("ABC");
+
+    expect(actual).to.eql({
+      error: true,
+      status: 429,
+      reason: "Request failed: 403",
+    });
   });
 
   describe("cache tests", () => {
