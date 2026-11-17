@@ -57,7 +57,16 @@ export const getBriefing = async (wfo) => {
 
     // Log actual failures (500s, Network errors, etc.)
     briefingsLogger.error({ err: e, wfo }, "Error getting briefing packet");
-    return { error: true };
+
+    // And the route needs to report a status error as well.
+    let apiStatus = e.cause?.statusCode || 502;
+
+    // special case: if we get a 403 then the API is under load. report a 429 in that case.
+    if (apiStatus == 403) {
+      apiStatus = 429;
+    }
+
+    return { error: true, status: apiStatus, reason: e.message };
   }
 };
 

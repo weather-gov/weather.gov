@@ -161,7 +161,23 @@ export const main = async () => {
         }
 
         if (error) {
-          logger.error({ err: error });
+          // the route handler returned an error, which we also want to log for
+          // overall log visibility, this helps when multiple routes fall over
+          // (such as when the API becomes unavailable).
+          const errorContext = {
+            route: url,
+            url: request.url,
+            params: request.params,
+            status: status ?? 200,
+          };
+          if (error instanceof Error) {
+            errorContext.err = error;
+          } else if (typeof error === "string") {
+            errorContext.reason = error;
+          } else if (data?.reason || data?.message) {
+            errorContext.reason = data.reason ?? data.message;
+          }
+          logger.error(errorContext, "route handler error");
         }
 
         if (status) {

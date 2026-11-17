@@ -41,7 +41,7 @@ const fetchStations = async (wfo, x, y) => {
     );
 
     if (!Array.isArray(data.features) || data.features.length === 0) {
-      return { error: true };
+      return { error: true, reason: "no stations found" };
     }
 
     const result = data.features.slice(0, 3);
@@ -61,7 +61,7 @@ const fetchStations = async (wfo, x, y) => {
       throw e;
     }
 
-    return { error: true };
+    return { error: true, reason: "api error" };
   }
 };
 
@@ -130,15 +130,12 @@ export default async (
     : await fetchStations(wfo, x, y);
 
   if (stations.error) {
-    observationsLogger.warn(
-      {
-        error: true,
-        wfo,
-        x,
-        y,
-      },
-      "Failed to get a list of stations",
-    );
+    if (stations.reason !== "api error") {
+      observationsLogger.warn(
+        { wfo, x, y, reason: stations.reason ?? "no stations found" },
+        "Failed to get a list of stations",
+      );
+    }
     return {
       error: true,
       message: "Failed to find an approved observation station",
