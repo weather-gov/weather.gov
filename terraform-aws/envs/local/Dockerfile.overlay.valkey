@@ -1,0 +1,7 @@
+# syntax=docker/dockerfile:1
+#
+# override valkey so that we load in the libjson module
+
+FROM valkey/valkey-bundle:9.0-alpine
+
+ENV VALKEY_EXTRA_FLAGS="--loadmodule /usr/lib/valkey/libjson.so"

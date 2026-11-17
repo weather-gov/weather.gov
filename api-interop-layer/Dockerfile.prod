@@ -29,6 +29,9 @@ RUN curl -fsSL https://nodejs.org/dist/v${NODE_VERSION}/node-v${NODE_VERSION}-li
     tar -C /usr/local --strip-components=1 -xJf node.tar.xz && \
     rm node.tar.xz
 
+# retrieve AWS' global certificate bundle for TLS/SSL access
+RUN curl -fsSL https://truststore.pki.rds.amazonaws.com/global/global-bundle.pem -o /etc/ssl/certs/extra-aws-ca.pem
+
 WORKDIR /build
 COPY ./package.json .
 COPY ./package-lock.json .
@@ -43,7 +46,12 @@ FROM --platform=linux/amd64 ubuntu:24.04 AS runtime
 
 # /app is owned by 1001:1001 as per documentation, so we have to chown.
 WORKDIR /app
-COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
+
+# copy over certificates, including AWS' global certificate bundle
+COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/extra-aws-ca.pem /etc/ssl/certs/
+# make sure node can pick up this extra CA
+ENV NODE_EXTRA_CA_CERTS=/etc/ssl/certs/extra-aws-ca.pem
+
 COPY --from=builder --chown=1001:1001 /build /app
 # manually copy over because kaniko prevents /usr/local/sbin
 COPY --from=builder /usr/local/bin /usr/local/bin
