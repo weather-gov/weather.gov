@@ -18,17 +18,21 @@ before(async () => {
   // This component uses the window.matchMedia capability
   // so we need to stub it out
   window.matchMedia = stub();
-  window.matchMedia.returns({ matches: true, addEventListener: stub() });
+  window.matchMedia.returns({
+    matches: true,
+    addEventListener: stub(),
+    removeEventListener: stub(),
+  });
 });
 
 describe("DailyForecast.js component tests", () => {
   describe("Loading and saving cached state", () => {
     const defaultMarkup = `<wx-daily-forecast cache="true">
-    <nav class="wx-quick-forecast">
-        <a class="wx-quick-forecast-item" href="#day1" id="day1-quick-forecast-button"></a>
-        <a class="wx-quick-forecast-item" href="#day2" id="day2-quick-forecast-button"></a>
-        <a class="wx-quick-forecast-item" href="#day3" id="day3-quick-forecast-button"></a>
-    </nav>
+    <div class="wx-quick-forecast" data-tablist-label="Daily forecast">
+      <button type="button" class="wx-quick-forecast-item" id="day1-quick-forecast-button"><time id="day1-date">Today 11/02</time></button>
+      <button type="button" class="wx-quick-forecast-item" id="day2-quick-forecast-button"><time id="day2-date">Tuesday 11/03</time></button>
+      <button type="button" class="wx-quick-forecast-item" id="day3-quick-forecast-button"><time id="day3-date">Wednesday 11/04</time></button>
+    </div>
     <ol class="wx-forecast-list">
         <li class="wx-daily-forecast-list-item">
             <div class="wx-daily-forecast-list-item-inner" id="day1-inner">
@@ -236,14 +240,15 @@ describe("DailyForecast.js component tests", () => {
     });
   });
 
-  describe("Initialization without anchor navigation", () => {
+  // AI-assisted regression coverage for native, responsive day tabs.
+  describe("Responsive day tabs", () => {
     const markup = `<wx-daily-forecast cache="true">
-      <nav class="wx-quick-forecast">
-        <a class="wx-quick-forecast-item" href="#day1" id="day1-link"><span>Today</span></a>
-        <a class="wx-quick-forecast-item" href="#day2" id="day2-link"><span>Tomorrow</span></a>
-      </nav>
+      <div class="wx-quick-forecast" data-tablist-label="Daily forecast">
+        <button type="button" class="wx-quick-forecast-item" id="day1-tab"><time id="day1-date"><span>Today</span> 11/02</time><span>Sunny High 70 Low 50</span></button>
+        <button type="button" class="wx-quick-forecast-item" id="day2-tab"><time id="day2-date"><span>Tuesday</span> 11/03</time><span>Cloudy High 65 Low 45</span></button>
+      </div>
       <ol class="wx-forecast-list">
-        <li><div class="wx-daily-forecast-list-item-inner" id="day1-inner"></div></li>
+        <li><div class="wx-daily-forecast-list-item-inner" id="day1-inner"><button class="details-tab" role="tab">Table</button><input></div></li>
         <li><div class="wx-daily-forecast-list-item-inner" id="day2-inner"></div></li>
       </ol>
     </wx-daily-forecast>`;
@@ -251,26 +256,31 @@ describe("DailyForecast.js component tests", () => {
     afterEach(() => {
       document.body.innerHTML = "";
       sandbox.restore();
-      window.matchMedia.returns({ matches: true, addEventListener: stub() });
+      window.matchMedia.returns({
+        matches: true,
+        addEventListener: stub(),
+        removeEventListener: stub(),
+      });
     });
 
     for (const desktop of [true, false]) {
       for (const cached of [true, false]) {
-        it(`selects the ${cached ? "cached" : "first"} day on ${desktop ? "desktop" : "mobile"} without clicking an anchor`, () => {
+        it(`selects the ${cached ? "cached" : "first"} day on ${desktop ? "desktop" : "mobile"} without clicking a button`, () => {
           window.matchMedia.returns({
             matches: desktop,
             addEventListener: stub(),
+            removeEventListener: stub(),
           });
           const container = document.createElement("div");
           container.innerHTML = markup;
           const component = container.querySelector("wx-daily-forecast");
-          const links = Array.from(component.querySelectorAll("a"));
+          const links = Array.from(
+            component.querySelectorAll(".wx-quick-forecast-item"),
+          );
           const clicks = links.map((link) => sandbox.spy(link, "click"));
           sandbox
             .stub(component, "getCachedState")
-            .returns(
-              cached ? { quickForecastItem: { id: "day2-link" } } : null,
-            );
+            .returns(cached ? { quickForecastItem: { id: "day2-tab" } } : null);
           sandbox.stub(component, "setCachedStateItem");
           const initialUrl = window.location.href;
 
@@ -280,7 +290,10 @@ describe("DailyForecast.js component tests", () => {
           links.forEach((link, index) => {
             expect(clicks[index].callCount).to.equal(0);
             expect(link.getAttribute("aria-selected")).to.equal(
-              String(index === selectedIndex),
+              desktop ? String(index === selectedIndex) : null,
+            );
+            expect(link.getAttribute("tabindex")).to.equal(
+              desktop ? (index === selectedIndex ? "0" : "-1") : null,
             );
             expect(
               component
@@ -306,10 +319,10 @@ describe("DailyForecast.js component tests", () => {
       }
     }
 
-    it("selects the clicked day when a desktop link's child is clicked", () => {
+    it("selects the clicked day when a desktop button's child is clicked", () => {
       document.body.innerHTML = markup;
       const component = document.querySelector("wx-daily-forecast");
-      const link = component.querySelector("#day2-link");
+      const link = component.querySelector("#day2-tab");
       const event = new window.MouseEvent("click", {
         bubbles: true,
         cancelable: true,
@@ -317,13 +330,179 @@ describe("DailyForecast.js component tests", () => {
 
       link.querySelector("span").dispatchEvent(event);
 
-      expect(event.defaultPrevented).to.equal(true);
+      expect(event.defaultPrevented).to.equal(false);
       expect(link.getAttribute("aria-selected")).to.equal("true");
+      expect(link.getAttribute("tabindex")).to.equal("0");
+      expect(
+        component.querySelector("#day1-tab").getAttribute("tabindex"),
+      ).to.equal("-1");
       expect(
         component
           .querySelector("#day2-inner")
           .getAttribute("data-tabpanel-active"),
       ).to.equal("true");
+    });
+
+    it("labels the tablist and names focusable panels with only the day and date", () => {
+      document.body.innerHTML = markup;
+      const component = document.querySelector("wx-daily-forecast");
+      const tablist = component.querySelector(".wx-quick-forecast");
+      expect(tablist.getAttribute("role")).to.equal("tablist");
+      expect(tablist.getAttribute("aria-label")).to.equal("Daily forecast");
+      for (const day of [1, 2]) {
+        const tab = component.querySelector(`#day${day}-tab`);
+        const panel = component.querySelector(`#day${day}-inner`);
+        expect(tab.tagName).to.equal("BUTTON");
+        expect(tab.type).to.equal("button");
+        expect(tab.getAttribute("role")).to.equal("tab");
+        expect(tab.getAttribute("aria-controls")).to.equal(panel.id);
+        expect(panel.getAttribute("role")).to.equal("tabpanel");
+        const label = tab.querySelector("time");
+        expect(panel.getAttribute("aria-labelledby")).to.equal(label.id);
+        expect(
+          document.getElementById(panel.getAttribute("aria-labelledby")),
+        ).to.equal(label);
+        expect(label.textContent).to.equal(
+          day === 1 ? "Today 11/02" : "Tuesday 11/03",
+        );
+        expect(tab.textContent).to.include(
+          day === 1 ? "Sunny High 70 Low 50" : "Cloudy High 65 Low 45",
+        );
+        expect(panel.getAttribute("tabindex")).to.equal("0");
+      }
+    });
+
+    it("removes desktop semantics on mobile and restores the selected day on desktop", () => {
+      document.body.innerHTML = markup;
+      const component = document.querySelector("wx-daily-forecast");
+      component.querySelector("#day2-tab").click();
+      component.desktopQuery.matches = false;
+      component.handleDesktopMediaChange();
+
+      const tablist = component.querySelector(".wx-quick-forecast");
+      expect(tablist.hasAttribute("role")).to.equal(false);
+      expect(tablist.hasAttribute("aria-label")).to.equal(false);
+      component.querySelectorAll(".wx-quick-forecast-item").forEach((tab) => {
+        for (const attribute of [
+          "role",
+          "aria-controls",
+          "aria-selected",
+          "tabindex",
+        ]) {
+          expect(tab.hasAttribute(attribute), attribute).to.equal(false);
+        }
+      });
+      component
+        .querySelectorAll(".wx-daily-forecast-list-item-inner")
+        .forEach((panel) => {
+          for (const attribute of ["role", "aria-labelledby", "tabindex"]) {
+            expect(panel.hasAttribute(attribute), attribute).to.equal(false);
+          }
+        });
+      component.querySelector("#day1-tab").click();
+      expect(
+        component.querySelector("#day2-inner").dataset.tabpanelActive,
+      ).to.equal("true");
+
+      component.desktopQuery.matches = true;
+      component.handleDesktopMediaChange();
+      expect(
+        component.querySelector("#day2-tab").getAttribute("aria-selected"),
+      ).to.equal("true");
+      expect(
+        component.querySelector("#day2-tab").getAttribute("tabindex"),
+      ).to.equal("0");
+      expect(
+        component.querySelector("#day1-tab").getAttribute("tabindex"),
+      ).to.equal("-1");
+    });
+
+    for (const [key, start, end] of [
+      ["ArrowRight", 1, 2],
+      ["ArrowRight", 2, 1],
+      ["ArrowLeft", 2, 1],
+      ["ArrowLeft", 1, 2],
+      ["Home", 2, 1],
+      ["End", 1, 2],
+    ]) {
+      it(`${key} moves focus from day ${start} to day ${end} without activating it`, () => {
+        document.body.innerHTML = markup;
+        const component = document.querySelector("wx-daily-forecast");
+        const startTab = component.querySelector(`#day${start}-tab`);
+        startTab.click();
+        startTab.focus();
+        const event = new window.KeyboardEvent("keydown", {
+          key,
+          bubbles: true,
+          cancelable: true,
+        });
+        startTab.dispatchEvent(event);
+        expect(event.defaultPrevented).to.equal(true);
+        expect(document.activeElement).to.equal(
+          component.querySelector(`#day${end}-tab`),
+        );
+        expect(startTab.getAttribute("aria-selected")).to.equal("true");
+        expect(startTab.getAttribute("tabindex")).to.equal("0");
+      });
+    }
+
+    for (const key of [" ", "Enter"]) {
+      it(`leaves ${JSON.stringify(key)} activation to the native button`, () => {
+        document.body.innerHTML = markup;
+        const tab = document.querySelector("#day2-tab");
+        const click = sandbox.spy(tab, "click");
+        const event = new window.KeyboardEvent("keydown", {
+          key,
+          code: key === " " ? "Space" : "Enter",
+          bubbles: true,
+          cancelable: true,
+        });
+        tab.dispatchEvent(event);
+        expect(event.defaultPrevented).to.equal(false);
+        expect(click.callCount).to.equal(0);
+      });
+    }
+
+    it("does not intercept keyboard events from forecast content or nested tabs", () => {
+      document.body.innerHTML = markup;
+      for (const selector of [".details-tab", "input"]) {
+        const target = document.querySelector(selector);
+        target.focus();
+        for (const key of [
+          "ArrowLeft",
+          "ArrowRight",
+          "Home",
+          "End",
+          " ",
+          "Enter",
+        ]) {
+          const event = new window.KeyboardEvent("keydown", {
+            key,
+            bubbles: true,
+            cancelable: true,
+          });
+          target.dispatchEvent(event);
+          expect(event.defaultPrevented).to.equal(false);
+          expect(document.activeElement).to.equal(target);
+        }
+      }
+    });
+
+    it("does not handle tab keyboard events in mobile mode", () => {
+      document.body.innerHTML = markup;
+      const component = document.querySelector("wx-daily-forecast");
+      component.desktopQuery.matches = false;
+      component.handleDesktopMediaChange();
+      const tab = component.querySelector("#day1-tab");
+      tab.focus();
+      const event = new window.KeyboardEvent("keydown", {
+        key: "ArrowRight",
+        bubbles: true,
+        cancelable: true,
+      });
+      tab.dispatchEvent(event);
+      expect(event.defaultPrevented).to.equal(false);
+      expect(document.activeElement).to.equal(tab);
     });
   });
 });

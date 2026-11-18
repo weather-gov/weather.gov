@@ -63,6 +63,10 @@ class DailyForecast extends HTMLElement {
 
     this.removeEventListener("keydown", this.handleKeys);
     window.removeEventListener("wx-tab-focused", this.handleDetailsToggle);
+    this.desktopQuery.removeEventListener(
+      "change",
+      this.handleDesktopMediaChange,
+    );
   }
 
   /**
@@ -208,20 +212,38 @@ class DailyForecast extends HTMLElement {
       this.forecastList.querySelectorAll(".wx-daily-forecast-list-item-inner"),
     ).forEach((item) => {
       item.setAttribute("role", "tabpanel");
+      item.setAttribute("tabindex", "0");
       panelRefs.push(item.id);
     });
+
+    // Keep the selected day across desktop/mobile transitions without
+    // changing the cached state before loadCachedState has restored it.
+    const activeIndex = Array.from(
+      this.forecastList.querySelectorAll(".wx-daily-forecast-list-item-inner"),
+    ).findIndex((item) => item.getAttribute("data-tabpanel-active") === "true");
 
     // Set up the tablist and tab roles for the
     // quick forecast and its nav items
     this.quickForecastEl = this.querySelector(".wx-quick-forecast");
     this.quickForecastEl.setAttribute("role", "tablist");
+    this.quickForecastEl.setAttribute(
+      "aria-label",
+      this.quickForecastEl.dataset.tablistLabel,
+    );
     Array.from(
       this.quickForecastEl.querySelectorAll(".wx-quick-forecast-item"),
     ).forEach((item, idx) => {
       item.setAttribute("role", "tab");
       item.setAttribute("aria-controls", panelRefs[idx]);
+      const selected = idx === (activeIndex < 0 ? 0 : activeIndex);
+      item.setAttribute("aria-selected", String(selected));
+      item.setAttribute("tabindex", selected ? "0" : "-1");
       const correspondingPanel = document.getElementById(panelRefs[idx]);
-      correspondingPanel.setAttribute("aria-labelledby", item.id);
+      // Name the panel with only the day/date, not the full summary.
+      correspondingPanel.setAttribute(
+        "aria-labelledby",
+        item.querySelector("time").id,
+      );
     });
 
     // Bind even handlers for click on tabs
@@ -243,6 +265,10 @@ class DailyForecast extends HTMLElement {
    * This method cleans up those attributes as needed.
    */
   undoTabMode() {
+    this.quickForecastEl = this.querySelector(".wx-quick-forecast");
+    this.quickForecastEl.removeAttribute("role");
+    this.quickForecastEl.removeAttribute("aria-label");
+
     // Remove all tabpanel roles/aria
     Array.from(
       this.querySelectorAll(
@@ -251,6 +277,7 @@ class DailyForecast extends HTMLElement {
     ).forEach((item) => {
       item.removeAttribute("role");
       item.removeAttribute("aria-labelledby");
+      item.removeAttribute("tabindex");
     });
 
     // Remove all tab roles/aria
@@ -258,6 +285,9 @@ class DailyForecast extends HTMLElement {
       (item) => {
         item.removeAttribute("role");
         item.removeAttribute("aria-controls");
+        item.removeAttribute("aria-selected");
+        item.removeAttribute("tabindex");
+        item.removeEventListener("click", this.tabClickHandler);
       },
     );
   }
@@ -277,19 +307,15 @@ class DailyForecast extends HTMLElement {
   }
 
   /**
-   * Click handler for quick-forecast nav link elements.
-   * Overrides the normal (in page linking) behavior, and
-   * operates as a tab, toggling attributes as needed to
-   * show/hide appropriate tabpanels
+   * Activate the clicked day tab. Enter and Space use native button clicks.
    */
   tabClickHandler(event) {
-    event.preventDefault();
     this.selectDay(event.currentTarget);
   }
 
   /**
-   * Select a day without clicking its anchor or changing the URL.
-   * Match links to panels by order, since mobile links have no aria-controls.
+   * Select a day without clicking its button or changing the URL.
+   * Match buttons to panels by order, since mobile buttons have no aria-controls.
    */
   selectDay(quickForecastItem) {
     const items = Array.from(this.querySelectorAll(".wx-quick-forecast-item"));
@@ -301,10 +327,15 @@ class DailyForecast extends HTMLElement {
       return;
     }
 
-    if (quickForecastItem.getAttribute("aria-selected") !== "true") {
-      items.forEach((item) => item.setAttribute("aria-selected", "false"));
-      quickForecastItem.setAttribute("aria-selected", "true");
+    if (this.desktopQuery.matches) {
+      items.forEach((item) => {
+        const selected = item === quickForecastItem;
+        item.setAttribute("aria-selected", String(selected));
+        item.setAttribute("tabindex", selected ? "0" : "-1");
+      });
+    }
 
+    if (correspondingPanel.getAttribute("data-tabpanel-active") !== "true") {
       // Update panel data attributes, used for showing/hiding
       // the tabs
       panels.forEach((item) =>
@@ -357,37 +388,44 @@ class DailyForecast extends HTMLElement {
    * WCAG tabs pattern
    */
   handleKeys(event) {
-    if (event.code === "Space") {
-      // Space selects the item
-      event.target.click();
-      event.preventDefault();
-    } else if (event.code === "ArrowRight") {
-      // Move to the next element in the nav list.
-      // If we are already on the last one, loop back to
-      // the first one.
-      if (event.target.matches(":last-child")) {
-        this.querySelector(".wx-quick-forecast-item:first-child").focus();
-      } else {
-        event.target.nextElementSibling.focus();
-      }
-    } else if (event.code === "ArrowLeft") {
-      // Move to the previous element in the nav list.
-      // If we are already on the first element, loop
-      // around to the last one.
-      if (event.target.matches(":first-child")) {
-        this.querySelector(".wx-quick-forecast-item:last-child").focus();
-      } else {
-        event.target.previousElementSibling.focus();
-      }
-    } else if (event.code === "Home") {
-      // Move focus to the first nav item
-      this.querySelector(".wx-quick-forecast-item:first-child").focus();
-      event.preventDefault();
-    } else if (event.code === "End") {
-      // Move focus to the last nav item
-      this.querySelector(".wx-quick-forecast-item:last-child").focus();
-      event.preventDefault();
+    const tab = event.target.closest('.wx-quick-forecast-item[role="tab"]');
+    if (
+      !this.desktopQuery.matches ||
+      !tab ||
+      !this.quickForecastEl.contains(tab)
+    ) {
+      return;
     }
+
+    const tabs = Array.from(
+      this.quickForecastEl.querySelectorAll(
+        '.wx-quick-forecast-item[role="tab"]',
+      ),
+    );
+    const index = tabs.indexOf(tab);
+    let targetIndex;
+    switch (event.key) {
+      // Move focus to the next tab, or to the first if on the last tab
+      case "ArrowRight":
+        targetIndex = (index + 1) % tabs.length;
+        break;
+      // Move focus to the previous tab, or to the last if on the first tab
+      case "ArrowLeft":
+        targetIndex = (index - 1 + tabs.length) % tabs.length;
+        break;
+      // Move focus to the first tab
+      case "Home":
+        targetIndex = 0;
+        break;
+      // Move focus to the last tab
+      case "End":
+        targetIndex = tabs.length - 1;
+        break;
+      default:
+        return;
+    }
+    event.preventDefault();
+    tabs[targetIndex].focus();
   }
 }
 

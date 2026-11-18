@@ -4,9 +4,9 @@
 -- Used by: backend.templatetags.weather_partials.radar
 {% endcomment %}
 <div aria-hidden="true" wx-outer-radar-container>
-  <{{ heading_level }} class="{{ heading_class }}">
+  <h{{ heading_level }} class="{{ heading_class }}">
   {% trans "radar.labels.radar.01" %}
-  </{{ heading_level }}>
+  </h{{ heading_level }}>
   {% include "weather/partials/radar-timestamp.html" %}
   <div id="wx-radar-error-container" class="display-none padding-0">
     {% render_non_critical_error_component component_name="radar" %}
@@ -32,13 +32,12 @@
     {# Radar Legend #}
     <div class="padding-2 wx-radar-legend">
       <div class="usa-accordion wx-accordion-light">
-        <h4 class="usa-accordion__heading">
+        <h{{ heading_level|add:1 }} class="usa-accordion__heading">
           <button class="usa-accordion__button"
                   type="button"
-                  tabindex="-1"
                   aria-expanded="false"
                   aria-controls="radar-legend">{% trans "radar.labels.legend.01" %}</button>
-        </h4>
+        </h{{ heading_level|add:1 }}>
         <table class="usa-accordion__content usa-table usa-table--borderless margin-top-0 wx-radar-legend"
                tabindex="0"
                id="radar-legend"

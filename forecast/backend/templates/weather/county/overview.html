@@ -127,7 +127,7 @@
   <div id="radar-enable"
        class="grid-container tablet:padding-x-2 desktop:padding-x-4 padding-x-0 margin-bottom-4">
       <div class="grid-col-12 wx-radar-wrapper">
-        {% radar bounds=data.bounds|json_encode large_map="true" timezone=data.public.county.timezone heading_level="h2" heading_class="text-normal text-primary-darker padding-x-2 tablet:padding-x-0 margin-top-3 margin-bottom-2" %}
+        {% radar bounds=data.bounds|json_encode large_map="true" timezone=data.public.county.timezone heading_level="2" heading_class="text-normal text-primary-darker padding-x-2 tablet:padding-x-0 margin-top-3 margin-bottom-2" %}
       </div>
   </div>
   {% include 'weather/county/county-area-resources.html' %}

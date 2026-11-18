@@ -15,7 +15,7 @@
          tabindex="0"
          {% if alerts|length > 0 %} data-has-alerts="true" {% else %} data-has-alerts="false" {% endif %}>
     <caption class="usa-sr-only">
-      {% trans_with_args "hourly-table.aria.table-description.01" day=dayNumericString month=monthNumericString %}
+      {% trans_with_args "hourly-table.aria.table-description.02" date=hours.0.time|date:"m/d" %}
     </caption>
     <tbody data-table-section="time-alerts"
            class="border-bottom-1px border-base-light">
@@ -26,7 +26,7 @@
         </th>
         {% for period in hours %}
           <th scope="col">
-            <time datetime="{{ period.time|date:"c" }}"
+            <time datetime="{{ period.time|date:'c' }}"
                   class="font-family-mono font-mono-xs text-base-lightest">
               {{ period.time|date:"g A" }}
             </time>

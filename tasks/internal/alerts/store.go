@@ -23,7 +23,7 @@ const (
 	wgs84          = 4326
 	webMercator    = 3857
 	simplifyMeters = 200
-	geoJSONDigits = 6
+	geoJSONDigits  = 6
 )
 
 var (

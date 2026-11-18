@@ -15,7 +15,7 @@ describe("Point forecast › 7 Days tab", () => {
   });
 
   beforeEach(async ({ page }) => {
-    await page.goto(services.webApp("/forecast/point/34.749/-92.275/#daily"), {
+    await page.goto(services.webApp("/forecast/point/34.749/-92.275/7-day"), {
       waitUntil: "load",
     });
   });
@@ -175,7 +175,9 @@ describe("Point forecast › 7 Days tab", () => {
         const index = await alert.evaluate((c) => c.cellIndex);
 
         await expect(index).toEqual(1); // zero-indexed
-        await expect(alert).toHaveAttribute("colspan", "4");
+        // The exact number of columns varies based on time of day the test is run
+        // so just verify that it's more than 1 column
+        await expect(alert).toHaveAttribute("colspan", /^(?:[2-9]|[1-9]\d+)$/);
       });
 
       describe("When I tap the Red Flag alert", () => {
@@ -187,13 +189,15 @@ describe("Point forecast › 7 Days tab", () => {
           await link.tap();
 
           const tab = page.getByRole("tab", { name: "Alerts" });
-          await expect(tab).toHaveAttribute("aria-expanded", "true");
+          await expect(tab).toHaveAttribute("data-selected", "true");
 
           const heading = page.getByRole("heading", {
             name: "Red Flag Warning",
           });
           await expect(heading).toBeVisible();
-          const toggle = page.getByRole("button", { name: "Red Flag Warning" });
+          const toggle = page
+            .getByRole("button", { name: "Red Flag Warning" })
+            .first();
           await expect(toggle).toHaveAttribute("aria-expanded", "true");
         });
       });
@@ -208,8 +212,13 @@ describe("Point forecast › 7 Days tab", () => {
         });
         const spacing = alert.locator("//preceding-sibling::td");
 
-        await expect(spacing).toHaveAttribute("colspan", "3");
-        await expect(alert).toHaveAttribute("colspan", "6");
+        // The exact number of columns varies based on time of day the test is run
+        // so just verify that it's more than 1 column
+        await expect(spacing).toHaveAttribute(
+          "colspan",
+          /^(?:[2-9]|[1-9]\d+)$/,
+        );
+        await expect(alert).toHaveAttribute("colspan", /^(?:[2-9]|[1-9]\d+)$/);
       });
 
       test("I expect a blizzard warning starting tomorrow", async ({

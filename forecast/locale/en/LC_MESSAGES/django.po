@@ -152,6 +152,9 @@ msgstr "Condition: {description}"
 msgid "daily-forecast.aria.high-not-applicable.01"
 msgstr "High temperature not applicable"
 
+msgid "daily-forecast.aria.day-tabs.01"
+msgstr "Daily forecast tab navigation"
+
 msgid "daily-forecast.aria.high-of.01"
 msgstr "High of {degrees}℉"
 
@@ -217,6 +220,12 @@ msgstr "Charts"
 
 msgid "daily-forecast.button.details-toggle-table.01"
 msgstr "Table"
+
+msgid "daily-forecast.button.aria-label.details-toggle-charts.01"
+msgstr "Hourly charts"
+
+msgid "daily-forecast.button.aria-label.details-toggle-table.01"
+msgstr "Hourly table"
 
 msgid "daily-forecast.text.usa-gov-site.01"
 msgstr "Official website of the United States government"
@@ -488,8 +497,8 @@ msgstr "scroll left"
 msgid "hourly-table.aria.scroll-right.01"
 msgstr "scroll right"
 
-msgid "hourly-table.aria.table-description.01"
-msgstr "Detailed hourly weather data for {month}/{day}. The rows are weather variables, the columns are hours."
+msgid "hourly-table.aria.table-description.02"
+msgstr "Detailed hourly weather data for {date}. The rows are weather variables, the columns are hours."
 
 msgid "hourly-table.labels.condition.01"
 msgstr "Condition"
