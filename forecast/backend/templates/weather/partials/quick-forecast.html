@@ -1,11 +1,11 @@
 {% comment %}
 -- Template purpose:
---   Display the navigation bar on the "7 Days" tab which links to each day.
+--   Display the day selectors on the "7 Days" tab.
 -- Used by: partials/forecast.html
 {% endcomment %}
-<nav class="wx-quick-forecast grid-col-12 margin-bottom-2"
-     aria-label="{{'daily forecast tab navigation'}}">
+<div class="wx-quick-forecast grid-col-12 margin-bottom-2"
+     data-tablist-label="{% trans 'daily-forecast.aria.day-tabs.01' %}">
   {% for day in days %}
     {% quick_forecast_link_item day=day first=forloop.first %}
   {% endfor %}
-</nav>
+</div>

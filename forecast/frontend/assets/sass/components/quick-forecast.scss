@@ -32,9 +32,14 @@
 
     padding: units(1.5);
     text-decoration: none;
-    border-bottom: 1px solid color("base-lighter");
+    border: 1px solid color("base-lighter");
     position: relative;
-    border-right: 1px solid color("base-lighter");
+
+    &:focus-visible {
+      outline: units("05") solid color("blue-40v");
+      outline-offset: units("05");
+      z-index: 101;
+    }
 
     &:hover::after {
       display: block;
@@ -52,7 +57,7 @@
       border-right: none;
     }
 
-    hr {
+    .wx-quick-forecast-divider {
       display: block;
       border: none;
       border-bottom: 1px solid color("base-lighter");

@@ -19,7 +19,7 @@ describe("Point forecast › 7 Days tab", () => {
 
     // wait on tab nav instead of the entire page
     await page
-      .getByRole("tablist", { name: "daily forecast tab navigation" })
+      .getByRole("tablist", { name: "Daily forecast tab navigation" })
       .waitFor();
   });
 
@@ -31,7 +31,7 @@ describe("Point forecast › 7 Days tab", () => {
     test("I expect 7 days to choose from", async ({ page }) => {
       const lastDayName = seventh();
       const list = page.getByRole("tablist", {
-        name: "daily forecast tab navigation",
+        name: "Daily forecast tab navigation",
       });
       const buttons = list.getByRole("tab");
 
@@ -52,7 +52,7 @@ describe("Point forecast › 7 Days tab", () => {
         page,
       }) => {
         const list = page.getByRole("tablist", {
-          name: "daily forecast tab navigation",
+          name: "Daily forecast tab navigation",
         });
         const buttons = list.getByRole("tab");
         await buttons.first().focus();
@@ -73,7 +73,7 @@ describe("Point forecast › 7 Days tab", () => {
         page,
       }) => {
         const list = page.getByRole("tablist", {
-          name: "daily forecast tab navigation",
+          name: "Daily forecast tab navigation",
         });
         const buttons = list.getByRole("tab");
         await buttons.last().focus();
@@ -94,7 +94,7 @@ describe("Point forecast › 7 Days tab", () => {
         page,
       }) => {
         const list = page.getByRole("tablist", {
-          name: "daily forecast tab navigation",
+          name: "Daily forecast tab navigation",
         });
         const buttons = list.getByRole("tab");
         await buttons.nth(3).focus();
@@ -107,7 +107,7 @@ describe("Point forecast › 7 Days tab", () => {
         page,
       }) => {
         const list = page.getByRole("tablist", {
-          name: "daily forecast tab navigation",
+          name: "Daily forecast tab navigation",
         });
         const buttons = list.getByRole("tab");
         await buttons.nth(3).focus();
@@ -122,7 +122,7 @@ describe("Point forecast › 7 Days tab", () => {
         page,
       }) => {
         const list = page.getByRole("tablist", {
-          name: "daily forecast tab navigation",
+          name: "Daily forecast tab navigation",
         });
         const buttons = list.getByRole("tab");
         await buttons.nth(1).focus();
@@ -142,7 +142,7 @@ describe("Point forecast › 7 Days tab", () => {
         page,
       }) => {
         const list = page.getByRole("tablist", {
-          name: "daily forecast tab navigation",
+          name: "Daily forecast tab navigation",
         });
         const dayButtons = list.getByRole("tab");
 
@@ -222,7 +222,9 @@ describe("Point forecast › 7 Days tab", () => {
         const index = await alert.evaluate((c) => c.cellIndex);
 
         await expect(index).toEqual(1); // zero-indexed
-        await expect(alert).toHaveAttribute("colspan", "4");
+        // The exact number of columns varies based on time of day the test is run
+        // so just verify that it's more than 1 column
+        await expect(alert).toHaveAttribute("colspan", /^(?:[2-9]|[1-9]\d+)$/);
       });
 
       describe("When I click the Red Flag alert", () => {
@@ -232,13 +234,15 @@ describe("Point forecast › 7 Days tab", () => {
           await link.click();
 
           const tab = page.getByRole("tab", { name: "Alerts" });
-          await expect(tab).toHaveAttribute("aria-expanded", "true");
+          await expect(tab).toHaveAttribute("data-selected", "true");
 
           const heading = page.getByRole("heading", {
             name: "Red Flag Warning",
           });
           await expect(heading).toBeVisible();
-          const toggle = page.getByRole("button", { name: "Red Flag Warning" });
+          const toggle = page
+            .getByRole("button", { name: "Red Flag Warning" })
+            .first();
           await expect(toggle).toHaveAttribute("aria-expanded", "true");
         });
       });
@@ -251,8 +255,13 @@ describe("Point forecast › 7 Days tab", () => {
         });
         const spacing = alert.locator("//preceding-sibling::td");
 
-        await expect(spacing).toHaveAttribute("colspan", "3");
-        await expect(alert).toHaveAttribute("colspan", "6");
+        // The exact number of columns varies based on time of day the test is run
+        // so just verify that it's more than 1 column
+        await expect(spacing).toHaveAttribute(
+          "colspan",
+          /^(?:[2-9]|[1-9]\d+)$/,
+        );
+        await expect(alert).toHaveAttribute("colspan", /^(?:[2-9]|[1-9]\d+)$/);
       });
 
       test("I expect a blizzard warning starting tomorrow", async ({
