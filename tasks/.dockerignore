@@ -1,4 +1,15 @@
-Dockerfile.*
-# cloud.gov specific files.
-Procfile
-.profile
+# ignore all by default.
+*
+
+# allow only what is COPY'd in the Dockerfile{.prod,.wpcprob.prod}.
+!go.mod
+!go.sum
+!crontab
+
+# explicitly allow these extensions
+!cmd/**/*.go
+!internal/**/*.go
+
+# exclude, not needed for images. directory excludes need the trailing `/**`.
+**/*_test.go
+**/test_data/**

@@ -1,11 +1,36 @@
-.ruff_cache/
-*.pyc
-frontend/public
-frontend/node_modules
-Dockerfile.*
-# cloud.gov specific files.
-Procfile
-apt.yml
-run.sh
-runtime.txt
-# end
+# ignore all by default.
+*
+
+# allow only what is COPY'd in the Dockerfile.{dev,ci,uswds.dev}.
+!requirements.txt
+!requirements.dev.txt
+!frontend/package.json
+!frontend/package-lock.json
+
+# Dockerfile.prod copies the whole context, so allow what the app needs to run,
+# compilemessages, and collectstatic.
+!manage.py
+!gunicorn.conf.py
+!newrelic.ini
+!tracing.py
+!locale/
+!frontend/assets/
+
+# explicitly allow these extensions
+!backend/**/*.py
+!backend/**/*.html
+# robots.txt and llms.txt are served as templates.
+!backend/templates/*.txt
+# loaded by migrations.
+!backend/fixtures/*.json
+!backend/bundler/default_bundles/*.zip
+!noaa_saml/**/*.py
+!risk_data/**/*.py
+!spatial/**/*.py
+# the rest of __cache is downloaded shapefiles; only this one is checked in.
+!spatial/management/commands/__cache/us.cities500.txt.zip
+
+# exclude, not needed for images. directory excludes need the trailing `/**`,
+**/tests/**
+**/tests.py
+**/__pycache__/**
