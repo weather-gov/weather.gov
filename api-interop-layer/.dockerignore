@@ -1,2 +1,20 @@
-Dockerfile.*
-ecosystem.*.js
+# ignore all by default.
+*
+
+# allow only what is COPY'd in the Dockerfile.{dev,prod}.
+!package.json
+!package-lock.json
+
+!*.js
+!newrelic.cjs
+
+# explicitly allow these extensions
+!data/**/*.js
+!data/**/*.ohm
+!data/**/*.txt
+!routes/**/*.js
+!util/**/*.js
+!util/**/*.json
+
+# exclude, not needed for images
+**/*.test.js

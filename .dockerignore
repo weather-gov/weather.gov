@@ -1,0 +1,10 @@
+# ignore all by default.
+*
+
+# allow only what is COPY'd in the Dockerfile.*s.
+!package.json
+!package-lock.json
+!api-interop-layer/package.json
+!api-interop-layer/package-lock.json
+!api-proxy/package.json
+!api-proxy/package-lock.json
