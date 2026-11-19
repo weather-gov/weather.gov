@@ -8,6 +8,15 @@
 !*.js
 !newrelic.cjs
 
+# podman and docker treat `**` differently. so include the directories (and
+# every file in them), drop every file, then allow the wanted extensions back.
+!data/**/
+!routes/**/
+!util/**/
+data/**/*.*
+routes/**/*.*
+util/**/*.*
+
 # explicitly allow these extensions
 !data/**/*.js
 !data/**/*.ohm
