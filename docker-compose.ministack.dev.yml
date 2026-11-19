@@ -15,6 +15,7 @@ services:
     env_file:
       - path: .env.interop.dev
         format: raw
+        required: false
     command: node --watch main.js
     networks:
       - ministack

@@ -16,6 +16,17 @@
 !locale/
 !frontend/assets/
 
+# podman and docker treat `**` differently. so include the directories (and
+# every file in them), drop every file, then allow the wanted extensions back.
+!backend/**/
+!noaa_saml/**/
+!risk_data/**/
+!spatial/**/
+backend/**/*.*
+noaa_saml/**/*.*
+risk_data/**/*.*
+spatial/**/*.*
+
 # explicitly allow these extensions
 !backend/**/*.py
 !backend/**/*.html
