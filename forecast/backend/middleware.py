@@ -31,7 +31,7 @@ class TooManyRequestsMiddleware:
         Django server exceptions (as normal).
         """
         if isinstance(exception, Http429):
-            response = render(request, "errors/429.html")
+            response = render(request, "errors/429.html", {"meta_error": "error_429"})
             response.status_code = 429
             return response
         return None
@@ -62,7 +62,7 @@ class GatewayTimeoutMiddleware:
         Django server exceptions (as normal).
         """
         if isinstance(exception, Http504):
-            response = render(request, "errors/504.html")
+            response = render(request, "errors/504.html", {"meta_error": "error_504"})
             response.status_code = 504
             return response
         return None
