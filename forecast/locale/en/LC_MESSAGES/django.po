@@ -1449,6 +1449,21 @@ msgstr "See List of {subdivision}"
 msgid "coastal.heading.index.01"
 msgstr "Find Coastal Zone Forecast"
 
+msgid "coastal.heading.index-toggle.01"
+msgstr "Search by"
+
+msgid "coastal.label.index-toggle-map.01"
+msgstr "Map"
+
+msgid "coastal.label.index-toggle-list.01"
+msgstr "List"
+
+msgid "coastal.heading.index-map-coming.01"
+msgstr "Map view is not yet available."
+
+msgid "coastal.heading.index-list-coming.01"
+msgstr "List view is not yet available."
+
 msgid "coastal.heading.coming.01"
 msgstr "Coastal zone forecast coming soon."
 
