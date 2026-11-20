@@ -74,7 +74,6 @@ INSTALLED_APPS = [
     "django.contrib.sitemaps",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "rest_framework",
     "csp",
     # Wagtail dependencies
     "wagtail.contrib.forms",

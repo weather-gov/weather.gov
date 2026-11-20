@@ -17,5 +17,8 @@
     "esbuild": "^0.25.0",
     "js-yaml": "^4.3.2",
     "sass": "^1.77.8"
+  },
+  "overrides": {
+    "postcss": "^8.5.23"
   }
 }
