@@ -6,13 +6,38 @@
 {% block head_js %}
   {% comment %} Place holder for coastal js {% endcomment %}
 {% endblock %}
+
+{% block page_end_js %}
+  <script type="module" src="{% static 'js/coastal/index.html.js' %}"></script>
+{% endblock %}
+
 {% block page_content %}
   <div class="grid-container">
     <div class="grid-row">
       <div class="grid-col-12">
         <h1 class="font-sans-2xl text-primary-dark text-normal">{{"coastal.heading.index.01"|t}}</h1>
-        <p>{{"coastal.heading.coming.01"|t}}</p>
       </div>
     </div>
+      <h2 class="text-normal font-sans-sm margin-bottom-1">{{ "coastal.heading.index-toggle.01" | t }}</h2>
+      <wx-tabs id="coastal-toggle" class="grid-row">
+        <div class="usa-button-group usa-button-group--segmented grid-row grid-col tablet:grid-col-8 desktop:grid-col-6" role="tablist">
+          <button 
+              id="coastal-toggle-map"
+              type="button" 
+              class="usa-button flex-fill" 
+              role="tab" 
+              aria-controls="coastal-toggle-panel-map"
+              aria-selected="true">{{ "coastal.label.index-toggle-map.01" | t }}</button>
+          <button 
+              id="coastal-toggle-list"
+              type="button" 
+              class="usa-button flex-fill" 
+              role="tab" 
+              aria-controls="coastal-toggle-panel-list"
+              aria-selected="false">{{ "coastal.label.index-toggle-list.01" | t }}</button>
+        </div>
+      </wx-tabs>
+    {% coastal_index_map %}
+    {% coastal_index_list %}
   </div>
 {% endblock %}

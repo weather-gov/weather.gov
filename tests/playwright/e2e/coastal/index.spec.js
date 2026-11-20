@@ -3,7 +3,7 @@ const services = require("../../urls.js");
 
 const { describe, beforeEach, beforeAll } = test;
 
-describe("Marine Coastal > Index List", () => {
+describe("Marine Coastal > Index", () => {
   beforeAll(async ({ request }) => {
     const response = await request.get(
       services.apiProxy("/proxy/play/testing"),
@@ -23,7 +23,11 @@ describe("Marine Coastal > Index List", () => {
         level: 1,
         name: "Find Coastal Zone Forecast",
       });
+      const mapTab = page.getByRole("tab", { name: "Map" });
+      const listTab = page.getByRole("tab", { name: "List" });
       await expect(heading).toBeVisible();
+      await expect(mapTab).toBeVisible();
+      await expect(listTab).toBeVisible();
     });
   });
 });

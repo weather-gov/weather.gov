@@ -373,6 +373,15 @@ def weather_icon(icon_name, size="sm", color_mode="light", **kwargs):
 
     return result
 
+@register.inclusion_tag("weather/partials/coastal-index-list.html")
+def coastal_index_list():
+    """Return HTML markeup for rendering list of coastal zones."""
+    return {}
+
+@register.inclusion_tag("weather/partials/coastal-index-map.html")
+def coastal_index_map():
+    """Return HTML markeup for map with coastal zones."""
+    return {}
 
 @register.inclusion_tag("errors/partials/non-critical-component-error.html")
 def render_non_critical_error_component(
