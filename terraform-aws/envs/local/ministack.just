@@ -5,10 +5,8 @@
 set fallback := true
 
 # Initializes the local stack, prepares the databases, and loads initial data.
-# The first time you run this, make sure to first set up the local registry 
-# with just ministack-registry-setup (after starting podman)
 [group("ministack")]
-ministack: ministack-images
+ministack: ministack-registry-setup ministack-images
     # Brings up the ministack container and applies the local Terraform bootstrap configuration.
     podman compose -f "{{ justfile_directory() }}/docker-compose.ministack.yml" up -d --wait ministack
     cd "{{ justfile_directory() }}/terraform-aws/bootstrap-local" && terraform init -backend=false && terraform apply -auto-approve
@@ -21,11 +19,12 @@ ministack: ministack-images
     # After initial terraform bootstrapping, init the rest of our containers and services.
     podman compose -f "{{ justfile_directory() }}/docker-compose.ministack.yml" up -d
 
-# Allow the MiniStack HTTP registry in the default rootless macOS Podman machine.
+# Allow the MiniStack HTTP registry for rootless Podman (macOS or Linux)
 [group("ministack")]
 [script]
 ministack-registry-setup:
-        podman machine ssh '
+        set -eu
+        setup='
             set -eu
             dir="$HOME/.config/containers/registries.conf.d"
             config="$dir/weathergov-ministack.conf"
@@ -41,6 +40,12 @@ ministack-registry-setup:
             systemctl --user restart podman.service
             echo "MiniStack HTTP registry configured for this Podman machine user."
         '
+        # double escape \{\{ due to just
+        if [ "$(podman info --format '{{{{.Host.ServiceIsRemote}}')" = "true" ]; then
+            podman machine ssh "$setup"
+        else
+            sh -c "$setup"
+        fi
 
 # Use symlinked dev resources with the ministack-only override file to spin up local environment.
 [group("ministack")]
@@ -61,10 +66,9 @@ ministack-terraform *args="plan":
 ministack-images:
     # we need to override the ministack images because ministack does not
     # support postgis. to do this, we use the MINISTACK_IMAGE_PREFIX and swap in
-    # postgis for postgres. valkey also needs to have the libjson module enabled
-    # so use the overlay.
-    podman pull --platform linux/amd64 postgis/postgis:17-3.5-alpine
-    podman tag postgis/postgis:17-3.5-alpine weathergov-ministack/postgres:17-alpine
+    # postgis for postgres (see the overlay). valkey also needs to have the
+    # libjson module enabled so use the overlay.
+    podman build --platform linux/amd64 --pull=newer -t weathergov-ministack/postgres:17-alpine - <"{{ justfile_directory() }}/terraform-aws/envs/local/Dockerfile.overlay.postgres"
     podman build -t weathergov-ministack/valkey/valkey:9.0-alpine - <"{{ justfile_directory() }}/terraform-aws/envs/local/Dockerfile.overlay.valkey"
 
 # Run django migrations
@@ -80,7 +84,8 @@ ministack-migrate:
 # Run spatial data migrations
 [group("ministack")]
 ministack-load-spatial:
-    echo "ministack: loading spatial data is not implemented yet"
+    just ministack-env django >"{{ justfile_directory() }}/.env.django.dev"
+    podman compose -f "{{ justfile_directory() }}/docker-compose.ministack.dev.yml" run --rm --no-deps --user root web python manage.py loadspatial
 
 # Push all prod images to the ministack ECR repositories.
 # Before you run this, make sure you've set Podman to use http for the local registry
@@ -174,3 +179,11 @@ ministack-env service:
 ministack-dev-interop:
     just ministack-env interop >"{{ justfile_directory() }}/.env.interop.dev"
     podman compose -f "{{ justfile_directory() }}/docker-compose.ministack.dev.yml" up interop
+
+# Start up the django service in ministack for dev.
+[group("ministack")]
+ministack-dev-django:
+    just ministack-env django >"{{ justfile_directory() }}/.env.django.dev"
+    # for dev, override static files, since these are otherwise baked in the prod image.
+    podman compose -f "{{ justfile_directory() }}/docker-compose.ministack.dev.yml" run --rm --no-deps --user root web python manage.py collectstatic --noinput
+    podman compose -f "{{ justfile_directory() }}/docker-compose.ministack.dev.yml" up web

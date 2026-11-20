@@ -1,0 +1,8 @@
+# syntax=docker/dockerfile:1
+#
+# override postgres so that we load in postgis with max_connections to mirror
+# our AWS environment
+FROM docker.io/postgis/postgis:17-3.5-alpine
+
+# initdb writes this into postgresql.conf when the database is first created.
+ENV POSTGRES_INITDB_ARGS="-c max_connections=900"

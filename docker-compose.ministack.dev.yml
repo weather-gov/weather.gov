@@ -12,11 +12,31 @@ services:
       - 18082:8082
     environment:
       - PORT=8082
+      - API_DB_MAX_CONNECTIONS=10 # for local dev
     env_file:
       - path: .env.interop.dev
         format: raw
         required: false
     command: node --watch main.js
+    networks:
+      - ministack
+
+  web:
+    image: localhost:4566/weathergov-dev-django:dev
+    volumes:
+      - ./forecast:/app
+    ports:
+      - 18080:8080
+    environment:
+      # for now, hard code these addresses since we're not fully setup in NEC
+      - NEC_ADDRESS=http://localhost:18080
+      - INTEROP_URL=http://interop:8082
+      - WEB_DB_MAX_CONNECTIONS=10 # for local dev
+    env_file:
+      - path: .env.django.dev
+        format: raw
+        required: false
+    command: python manage.py runserver 0.0.0.0:8080
     networks:
       - ministack
 
