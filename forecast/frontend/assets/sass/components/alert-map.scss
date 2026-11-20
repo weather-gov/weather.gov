@@ -29,7 +29,8 @@ div.wx_alert_map_legend--county {
   border: 2px dashed color("primary-darkest");
 }
 
-.wx-county-alert-map-container {
+.wx-county-alert-map-container,
+.wx-coastal-alert-map-container {
   aspect-ratio: 8/9 !important;
   height: auto !important;
   width: auto !important;
@@ -91,27 +92,32 @@ div.wx_alert_map_legend--county {
   }
 }
 
-.wx-county-alert-map-container.wx-county-alert-map-container__expanded {
+.wx-county-alert-map-container.wx-county-alert-map-container__expanded,
+.wx-coastal-alert-map-container.wx-coastal-alert-map-container__expanded {
   aspect-ratio: 3/5 !important;
   height: auto !important;
   width: auto !important;
 }
 
 @include at-media("tablet") {
-  .wx-county-alert-map-container {
+  .wx-county-alert-map-container,
+  .wx-coastal-alert-map-container {
     aspect-ratio: 4/3 !important;
 
-    &.wx-county-alert-map-container__expanded {
+    &.wx-county-alert-map-container__expanded,
+    &.wx-coastal-alert-map-container__expanded {
       aspect-ratio: 5/6 !important;
     }
   }
 }
 
 @include at-media("desktop") {
-  .wx-county-alert-map-container {
+  .wx-county-alert-map-container,
+  .wx-coastal-alert-map-container {
     aspect-ratio: 4/3 !important;
 
-    &.wx-county-alert-map-container__expanded {
+    &.wx-county-alert-map-container__expanded,
+    &.wx-coastal-alert-map-container__expanded {
       aspect-ratio: 3/2 !important;
     }
   }

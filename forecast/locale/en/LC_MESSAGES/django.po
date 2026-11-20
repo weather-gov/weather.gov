@@ -1454,6 +1454,30 @@ msgstr "Conditions"
 msgid "coastal.heading.alerts.01"
 msgstr "Alerts"
 
+msgid "coastal.alerts.description.01"
+msgstr "The map shows active alerts for your selected coastal zone and its neighbors. There may be more alerts in zones that are farther away."
+
+msgid "coastal.alerts.map-zoomin.01"
+msgstr "Zoom in on the coastal zone map"
+
+msgid "coastal.alerts.map-zoomout.01"
+msgstr "Zoom out on the coastal zone map"
+
+msgid "coastal.alerts.map-label.01"
+msgstr "Map of the selected coastal zone"
+
+msgid "coastal.alerts.map-selected-zone.01"
+msgstr "Selected Coastal Zone"
+
+msgid "coastal.alert-accordions.no-alerts.01"
+msgstr "No active alerts for {zone_name}."
+
+msgid "coastal.alert-accordions.no-nearby-alerts.01"
+msgstr "No active alerts for nearby zones."
+
+msgid "coastal.heading.nearby-alerts.01"
+msgstr "Nearby Alerts"
+
 msgid "coastal.heading.forecast.01"
 msgstr "Forecast"
 

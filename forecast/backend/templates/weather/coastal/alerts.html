@@ -5,32 +5,75 @@
 -- Url: https://beta.weather.gov/forecast/marine/coastal/ANZ500/alerts/
 {% endcomment %}
 {% block head_js %}
-  {% comment %} Place holder for any needed coastal js {% endcomment %}
+  {{ zone_shape|json_script:"coastal-zone-shape" }}
 {% endblock %}
-
 {% block page_end_js %}
   <script type="module" src="{% static 'js/coastal/alerts.html.js' %}"></script>
+  {% include "weather/scripts/leaflet.html" %}
+  {% if is_binary %}
+    {% include "weather/scripts/geobuf.html" %}
+  {% endif %}
 {% endblock %}
-
 {% block page_head_css %}
+  <link rel="stylesheet"
+        type="text/css"
+        href="{% static 'css/leaflet.css' %}" />
+  <link rel="stylesheet"
+        type="text/css"
+        href="{% static 'css/leaflet.markercluster@1.4.1.css' %}" />
+  <link rel="stylesheet"
+        type="text/css"
+        href="{% static 'css/MarkerCluster.Default@1.4.1.css' %}" />
   <!-- Prefetch for other tab pages -->
   <link rel="prefetch" href="{% url 'coastal_alerts' zone_id=zone_id %}" />
   <link rel="prefetch" href="{% url 'coastal_forecast' zone_id=zone_id %}" />
   <link rel="prefetch" href="{% url 'coastal_conditions' zone_id=zone_id %}" />
 {% endblock %}
-
 {% block page_content %}
   <div class="height-full">
     {% include 'weather/coastal/name.html' with zone_name=zone.name zone_id=zone_id %}
     <wx-tabbed-nav class="flex-1 display-flex flex-column position-relative flex-1" id="coastal-page-tabbed-nav">
-      {% include "weather/coastal/tabs.html" with url_name=request.resolver_match.url_name %}
+    {% include "weather/coastal/tabs.html" with url_name=request.resolver_match.url_name %}
     </wx-tabbed-nav>
-    <div class="grid-container">
+    <div class="bg-base-lightest padding-bottom-4">
+      <div class="grid-container">
       <div class="grid-row">
         <div class="grid-col-12">
-          <h2 class="font-sans-2xl text-primary-dark text-normal">{{"coastal.heading.alerts.01"|t}}</h2>
-          <p>{{"coastal.heading.coming.01"|t}}</p>
+          <h2 class="text-normal text-primary-darker margin-bottom-2">{{"coastal.heading.alerts.01"|t}}</h2>
         </div>
+      </div>
+      <div class="grid-row grid-gap">
+        <div class="grid-col-12 tablet-lg:grid-col-7">
+          <div class="line-height-sans-4 margin-bottom-2">{{"coastal.alerts.description.01"|t}}</div>
+          {% include 'weather/partials/coastal-alerts-map.html' with levels=data.alert_levels %}
+        </div>
+        <div class="grid-col-12 tablet-lg:grid-col-5">
+          {% if alerts_error %}
+            {% render_non_critical_error_component component_name="alerts" %}
+          {% else %}
+            <div id="coastal-alert-container">
+              <wx-alerts class="wx-alerts-coastal margin-top-2 tablet-lg:margin-top-0">
+              {% if alerts|length > 0 %}
+                {% for alert in alerts %}
+                  {% include "weather/partials/alert-accordion.html" with alert=alert icon="true" alert_days=alert.alertDays %}
+                {% endfor %}
+              {% else %}
+                <div data-no-alerts-day="0" class="line-height-sans-4 margin-top-2 tablet-lg:margin-top-0">{% trans_with_args "coastal.alert-accordions.no-alerts.01" zone_name=zone.name %}</div>
+              {% endif %}
+              </wx-alerts>
+            </div>
+          {% endif %}
+        </div>
+      </div>
+      <div class="grid-row">
+        <div class="grid-col-12">
+          <h2 class="text-normal text-primary-darker margin-bottom-2">{{"coastal.heading.nearby-alerts.01"|t}}</h2>
+            <div id="coastal-nearby-alert-container">
+              <!-- TODO: This section will be built similar to the state alerts, grouped by alert type -->
+              <div class="line-height-sans-4 margin-top-2 tablet-lg:margin-top-0">{% trans_with_args "coastal.alert-accordions.no-nearby-alerts.01" %}</div>
+            </div>
+        </div>
+      </div>
       </div>
     </div>
   </div>

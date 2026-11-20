@@ -7,3 +7,4 @@
 import "../page.html.js";
 
 import "../components/Tabs.js";
+import "../components/coastalAlertMap.js";
