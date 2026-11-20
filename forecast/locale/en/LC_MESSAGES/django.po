@@ -1055,6 +1055,16 @@ msgstr "500"
 msgid "site.meta.description.error_500"
 msgstr "Visit beta.weather.gov for the latest NWS forecast for your area."
 
+msgid "site.meta.titles.error_429"
+msgstr "429"
+msgid "site.meta.description.error_429"
+msgstr "Visit beta.weather.gov for the latest NWS forecast for your area."
+
+msgid "site.meta.titles.error_504"
+msgstr "504"
+msgid "site.meta.description.error_504"
+msgstr "Visit beta.weather.gov for the latest NWS forecast for your area."
+
 msgid "ghwo.selector.label.state.01"
 msgstr "Select State"
 

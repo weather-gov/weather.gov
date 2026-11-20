@@ -1,6 +1,23 @@
 notebook:
-    docker build -t beta-viz .
-    docker run --rm -it -p 8888:8888 -v "$PWD:/work" beta-viz
+    podman build -t beta-viz .
+    podman run --rm -it -p 8888:8888 -v "$PWD:/work" beta-viz
 
 load-test:
   BETA_WEATHER_BASE_URI=http://localhost:8080 k6 run ./beta_weather_load_test.js
+
+generate-counties:
+  podman compose -f {{justfile_directory()}}/../../docker-compose.yml exec -T web \
+    python manage.py shell --no-imports -c "import json; from spatial.models import WeatherCounties; print(json.dumps(list(WeatherCounties.objects.order_by('countyfips').values_list('countyfips', flat=True)), indent=4))" \
+    > {{justfile_directory()}}/data/counties.json
+
+generate-states:
+  podman compose -f {{justfile_directory()}}/../../docker-compose.yml exec -T web \
+    python manage.py shell --no-imports -c "import json; from spatial.models import WeatherStates; print(json.dumps(list(WeatherStates.objects.exclude(state__isnull=True).order_by('state').values_list('state', flat=True)), indent=4))" \
+    > {{justfile_directory()}}/data/states.json
+
+generate-coastal-zones:
+  podman compose -f {{justfile_directory()}}/../../docker-compose.yml exec -T web \
+    python manage.py shell --no-imports -c "import json; from spatial.models import WeatherZone; print(json.dumps(sorted(z.rsplit('/', 1)[-1] for z in WeatherZone.objects.filter(type='marine:coastal').values_list('id', flat=True)), indent=4))" \
+    > {{justfile_directory()}}/data/coastal_zones.json
+
+generate-all: generate-counties generate-states generate-coastal-zones
