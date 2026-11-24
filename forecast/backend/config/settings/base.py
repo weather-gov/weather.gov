@@ -269,6 +269,7 @@ WAGTAILDOCS_SERVE_METHOD = "redirect"
 WAGTAILIMAGES_EXTENSIONS = ["jpg", "jpeg", "png", "gif", "heic", "svg"]
 WAGTAILIMAGES_MAX_UPLOAD_SIZE = 500 * 1024  # 500 KB (10 MB is the default)
 WAGTAILIMAGES_MAX_IMAGE_PIXELS = 5000000  # 5 megapixels (128 is the default)
+WAGTAIL_AUTOSAVE_INTERVAL = 0  # Disable Wagtail Autosave
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
