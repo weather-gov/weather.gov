@@ -333,7 +333,9 @@ func (s *SourceGHWOLocality) UnmarshalJSON(bytes []byte) error {
 			// the RiskLevels map and populate with the correct type
 			riskLevels := make(map[RiskTypeKey]int)
 			for riskTypeKey, level := range val.(map[string]interface{}) {
-				riskLevels[riskTypeKey] = int(level.(float64))
+				if IsValidRiskKey(riskTypeKey) {
+					riskLevels[riskTypeKey] = int(level.(float64))
+				}
 			}
 			countyData.RiskLevels = riskLevels
 			s.DataByTime = append(s.DataByTime, countyData)

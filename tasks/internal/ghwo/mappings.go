@@ -2,6 +2,7 @@ package ghwo
 
 import (
 	"fmt"
+	"slices"
 	"strings"
 )
 
@@ -119,6 +120,28 @@ var KeyToRiskNameMapping = map[string]string{
 // Create the reverse lookup mapping from key
 // names to full risk names
 var RiskNameToKeyMap = createReverseMapping(KeyToRiskNameMapping)
+
+// An array of strings of valid Risk keys.
+// These are the only risks that we consider for display
+// in the system
+func getValidRiskKeys() []string {
+	result := make([]string, 0)
+	for key, _ := range KeyToRiskNameMapping {
+		result = append(
+			result,
+			key,
+		)
+	}
+	return result
+}
+
+var ValidRiskKeys = getValidRiskKeys()
+
+// Helper method that determines if something is a
+// valid Risk key.
+func IsValidRiskKey(key string) bool {
+	return slices.Contains(ValidRiskKeys, key)
+}
 
 // Maps the canonical 2 or 3 letter state/territory
 // abbreviates code to the name of the state as used

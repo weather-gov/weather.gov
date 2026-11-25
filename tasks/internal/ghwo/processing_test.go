@@ -2,6 +2,7 @@ package ghwo
 
 import (
 	"encoding/json"
+	"github.com/google/go-cmp/cmp"
 	"os"
 	"reflect"
 	"slices"
@@ -867,9 +868,6 @@ func TestProcessDays(t *testing.T) {
         "color": "#222",
         "levelName": "two",
         "definition": "lots"
-      },
-      "Meatball": {
-        "category": 2
       }
     }
   },
@@ -886,9 +884,6 @@ func TestProcessDays(t *testing.T) {
         "color": "#111",
         "levelName": "one",
         "definition": "some"
-      },
-      "Meatball": {
-        "category": 1
       }
     }
   },
@@ -896,8 +891,8 @@ func TestProcessDays(t *testing.T) {
     "timestamp": "1978-12-06T13:30:00+00:00",
     "dayNumber": 3,
     "composite": {
-      "max": 3,
-      "scaled": 0.6
+      "max": 0,
+      "scaled": 0
     },
     "risks": {
       "SevereThunderstorm": {
@@ -905,9 +900,6 @@ func TestProcessDays(t *testing.T) {
         "color": "#000",
         "levelName": "zero",
         "definition": "none"
-      },
-      "Meatball": {
-        "category": 3
       }
     }
   }
@@ -936,9 +928,8 @@ func TestProcessDays(t *testing.T) {
 		actual, _ := testGHWOData.GetRiskDays(processedLegend)
 
 		if !reflect.DeepEqual(actual, expected) {
-			actualStr, _ := json.MarshalIndent(actual, "", "\t")
-			t.Errorf("Actual (%T) does not equal Expected (%T)", actual, expected)
-			t.Errorf("Expected %s to equal %s", string(actualStr), expectedJson)
+			diff := cmp.Diff(actual, expected)
+			t.Errorf("Expected structs to be equal:\n%s", diff)
 		}
 	})
 
