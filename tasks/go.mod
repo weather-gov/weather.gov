@@ -4,6 +4,7 @@ go 1.26.5
 
 require (
 	github.com/cloudfoundry-community/go-cfenv v1.18.0
+	github.com/google/go-cmp v0.7.0
 	github.com/jackc/pgx/v5 v5.10.0
 	github.com/newrelic/go-agent/v3 v3.44.2
 	github.com/wroge/wgs84/v2 v2.0.0-alpha.19
